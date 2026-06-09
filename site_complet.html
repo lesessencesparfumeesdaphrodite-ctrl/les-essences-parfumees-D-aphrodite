@@ -1,0 +1,3225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Les Essences Parfumées d'Aphrodite – Créations artisanales en plâtre résine, faites main, personnalisées et sur commande. Vases, plateaux, bougeoirs, décorations uniques à Irigny (Lyon)."/>
+  <meta name="keywords" content="plâtre résine, créations artisanales, fait main, personnalisé, décoration, vase, plateau, bougeoir, Lyon, Irigny"/>
+  <title>Les Essences Parfumées d'Aphrodite – Créations Artisanales en Plâtre Résine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── RESET & VARIABLES ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --beige:      #F5EDE3;
+      --blanc:      #FDFAF7;
+      --terracotta: #C4856A;
+      --teal:       #5B9E96;
+      --dore:       #C9A96E;
+      --dore-clair: #E8D5A8;
+      --brun:       #2C1810;
+      --brun-moyen: #6B4226;
+      --gris:       #8A7A70;
+      --rose:       #E8C4B8;
+      --shadow:     0 4px 20px rgba(44,24,16,0.08);
+      --shadow-lg:  0 12px 40px rgba(44,24,16,0.14);
+      --radius:     14px;
+      --radius-sm:  8px;
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--blanc);
+      color: var(--brun);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── TERRAZZO PATTERN ── */
+    .terrazzo-bg {
+      background-color: var(--beige);
+      background-image:
+        radial-gradient(ellipse 6px 3px at 10% 20%, rgba(196,133,106,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 4px 2px at 25% 60%, rgba(91,158,150,0.4) 0%, transparent 100%),
+        radial-gradient(ellipse 8px 3px at 40% 15%, rgba(201,169,110,0.45) 0%, transparent 100%),
+        radial-gradient(ellipse 5px 2px at 55% 75%, rgba(196,133,106,0.35) 0%, transparent 100%),
+        radial-gradient(ellipse 7px 3px at 70% 30%, rgba(91,158,150,0.4) 0%, transparent 100%),
+        radial-gradient(ellipse 4px 2px at 85% 55%, rgba(201,169,110,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 6px 2px at 15% 85%, rgba(232,196,184,0.6) 0%, transparent 100%),
+        radial-gradient(ellipse 5px 3px at 90% 10%, rgba(196,133,106,0.4) 0%, transparent 100%),
+        radial-gradient(ellipse 3px 2px at 50% 45%, rgba(91,158,150,0.3) 0%, transparent 100%),
+        radial-gradient(ellipse 7px 2px at 78% 80%, rgba(232,196,184,0.5) 0%, transparent 100%);
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(253,250,247,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,169,110,0.25);
+      box-shadow: 0 2px 20px rgba(44,24,16,0.06);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      line-height: 1.1;
+    }
+    .nav-logo-top {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--dore);
+    }
+    .nav-logo-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brun);
+      letter-spacing: 0.5px;
+    }
+    .nav-logo-sub {
+      font-family: 'Dancing Script', cursive;
+      font-size: 12px;
+      color: var(--terracotta);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--brun-moyen);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 30px;
+      transition: var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--beige);
+      color: var(--terracotta);
+    }
+
+    .nav-cart-btn {
+      position: relative;
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 8px 18px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-cart-btn:hover { background: var(--brun-moyen); transform: translateY(-1px); }
+    .cart-count {
+      background: white;
+      color: var(--terracotta);
+      border-radius: 50%;
+      width: 20px; height: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--brun);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ── PAGES ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      padding-top: 70px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-terrazzo {
+      position: absolute;
+      inset: 0;
+      background-color: #F0E6D8;
+      background-image:
+        radial-gradient(ellipse 12px 5px at 8% 18%, rgba(196,133,106,0.6) 0%, transparent 100%),
+        radial-gradient(ellipse 8px 4px at 18% 72%, rgba(91,158,150,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 14px 5px at 32% 10%, rgba(201,169,110,0.55) 0%, transparent 100%),
+        radial-gradient(ellipse 9px 4px at 42% 85%, rgba(196,133,106,0.4) 0%, transparent 100%),
+        radial-gradient(ellipse 11px 5px at 58% 28%, rgba(91,158,150,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 7px 3px at 68% 65%, rgba(232,196,184,0.6) 0%, transparent 100%),
+        radial-gradient(ellipse 13px 5px at 78% 12%, rgba(201,169,110,0.45) 0%, transparent 100%),
+        radial-gradient(ellipse 6px 3px at 88% 50%, rgba(196,133,106,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 10px 4px at 25% 45%, rgba(232,196,184,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 8px 4px at 92% 80%, rgba(91,158,150,0.4) 0%, transparent 100%),
+        radial-gradient(ellipse 5px 2px at 50% 55%, rgba(196,133,106,0.35) 0%, transparent 100%),
+        radial-gradient(ellipse 9px 4px at 3% 60%, rgba(201,169,110,0.5) 0%, transparent 100%);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(253,250,247,0.85) 0%, rgba(245,237,227,0.7) 50%, rgba(245,237,227,0.5) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .hero-text { }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,169,110,0.15);
+      border: 1px solid rgba(201,169,110,0.4);
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dore);
+      margin-bottom: 20px;
+    }
+    .hero-badge::before { content: '✦'; }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 58px);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--brun);
+      margin-bottom: 10px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero-subtitle {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(18px, 2.5vw, 26px);
+      color: var(--teal);
+      margin-bottom: 20px;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--gris);
+      line-height: 1.8;
+      margin-bottom: 32px;
+      max-width: 460px;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .hero-pill {
+      background: white;
+      border: 1px solid rgba(196,133,106,0.3);
+      border-radius: 30px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brun-moyen);
+      letter-spacing: 0.5px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 14px 28px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover { background: var(--brun-moyen); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(196,133,106,0.4); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--brun);
+      border: 2px solid var(--dore);
+      border-radius: 30px;
+      padding: 12px 26px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-secondary:hover { background: var(--dore); color: white; transform: translateY(-2px); }
+
+    .hero-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 12px;
+    }
+
+    .hero-img-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .hero-img-card:first-child {
+      grid-column: 1 / -1;
+      height: 260px;
+    }
+    .hero-img-card:not(:first-child) { height: 160px; }
+    .hero-img-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .hero-img-card:hover img { transform: scale(1.04); }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .hero-stat {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .hero-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--terracotta);
+    }
+    .hero-stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-top: 2px;
+    }
+
+    /* ── VALEURS ── */
+    .section-valeurs {
+      padding: 80px 24px;
+      background: white;
+    }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--dore);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 700;
+      color: var(--brun);
+      line-height: 1.25;
+    }
+    .section-title em { font-style: italic; color: var(--terracotta); }
+    .section-desc {
+      margin-top: 14px;
+      font-size: 15px;
+      color: var(--gris);
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
+    }
+
+    .valeurs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+    .valeur-card {
+      background: var(--beige);
+      border-radius: var(--radius);
+      padding: 28px 22px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .valeur-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .valeur-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .valeur-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brun);
+      margin-bottom: 8px;
+    }
+    .valeur-desc { font-size: 13px; color: var(--gris); line-height: 1.6; }
+
+    /* ── FINITIONS ── */
+    .section-finitions {
+      padding: 80px 24px;
+    }
+    .finitions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .finition-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: var(--transition);
+      cursor: default;
+    }
+    .finition-card:hover { border-color: var(--dore); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .finition-swatch {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      border: 3px solid white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+    .finition-name { font-size: 13px; font-weight: 700; color: var(--brun); margin-bottom: 4px; }
+    .finition-price { font-size: 12px; color: var(--gris); }
+
+    /* ── BOUTIQUE ── */
+    .boutique-header {
+      padding: 100px 24px 40px;
+      background: var(--beige);
+      text-align: center;
+    }
+
+    .boutique-filters {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .filter-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .filter-scroll::-webkit-scrollbar { display: none; }
+
+    .filter-btn {
+      flex-shrink: 0;
+      background: white;
+      border: 2px solid rgba(201,169,110,0.3);
+      border-radius: 30px;
+      padding: 8px 18px;
+      font-family: 'Lato', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--brun-moyen);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      color: white;
+    }
+
+    .produits-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .produit-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+    .produit-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+
+    .produit-img-wrap {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      background: var(--beige);
+    }
+    .produit-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .produit-card:hover .produit-img-wrap img { transform: scale(1.06); }
+
+    .produit-badge-fait-main {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: var(--terracotta);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 30px;
+    }
+
+    .produit-body {
+      padding: 16px 18px 20px;
+    }
+    .produit-categorie {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .produit-nom {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brun);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .produit-prix-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .produit-prix-from { font-size: 11px; color: var(--gris); }
+    .produit-prix {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--terracotta);
+    }
+    .produit-prix-unit { font-size: 12px; color: var(--gris); }
+
+    .produit-finitions {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .fin-chip {
+      background: var(--beige);
+      border-radius: 20px;
+      padding: 3px 9px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--brun-moyen);
+    }
+
+    .btn-voir {
+      width: 100%;
+      background: var(--beige);
+      border: 2px solid var(--dore);
+      border-radius: 30px;
+      padding: 9px;
+      font-family: 'Lato', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--brun);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-voir:hover { background: var(--terracotta); border-color: var(--terracotta); color: white; }
+
+    /* ── MODAL PRODUIT ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44,24,16,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: white;
+      border-radius: 20px;
+      max-width: 860px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: 0 30px 80px rgba(44,24,16,0.25);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0); }
+
+    .modal-imgs {
+      position: relative;
+      background: var(--beige);
+      border-radius: 20px 0 0 20px;
+      overflow: hidden;
+      min-height: 350px;
+    }
+    .modal-img-main {
+      width: 100%; height: 100%;
+      min-height: 350px;
+      object-fit: cover;
+    }
+    .modal-thumbs {
+      position: absolute;
+      bottom: 12px; left: 12px;
+      display: flex;
+      gap: 8px;
+    }
+    .modal-thumb {
+      width: 48px; height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+    }
+    .modal-thumb.active, .modal-thumb:hover { border-color: var(--dore); }
+
+    .modal-info { padding: 32px 28px; overflow-y: auto; }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--brun);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 10;
+    }
+    .modal-close:hover { background: var(--terracotta); color: white; }
+
+    .modal-cat {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .modal-nom {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--brun);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .modal-desc {
+      font-size: 14px;
+      color: var(--gris);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .modal-dims {
+      background: var(--beige);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--brun-moyen);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .modal-dims strong { color: var(--brun); }
+
+    .modal-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--brun);
+      margin-bottom: 10px;
+    }
+    .modal-finitions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .fin-btn {
+      background: var(--beige);
+      border: 2px solid transparent;
+      border-radius: 30px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brun-moyen);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .fin-btn:hover { border-color: var(--dore); }
+    .fin-btn.selected { background: var(--terracotta); border-color: var(--terracotta); color: white; }
+
+    .modal-prix-display {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--terracotta);
+      margin-bottom: 8px;
+    }
+    .modal-prix-note {
+      font-size: 12px;
+      color: var(--gris);
+      margin-bottom: 20px;
+    }
+
+    .modal-qty-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .qty-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--brun); }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 2px solid rgba(201,169,110,0.4);
+      border-radius: 30px;
+      overflow: hidden;
+    }
+    .qty-btn {
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brun);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .qty-btn:hover { background: var(--beige); }
+    .qty-val {
+      min-width: 36px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brun);
+      border-left: 1px solid rgba(201,169,110,0.3);
+      border-right: 1px solid rgba(201,169,110,0.3);
+      padding: 6px 4px;
+    }
+
+    .modal-perso {
+      margin-bottom: 20px;
+    }
+    .modal-perso label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--brun);
+      margin-bottom: 8px;
+    }
+    .modal-perso textarea {
+      width: 100%;
+      border: 2px solid rgba(201,169,110,0.3);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      color: var(--brun);
+      resize: none;
+      outline: none;
+      transition: var(--transition);
+      height: 80px;
+    }
+    .modal-perso textarea:focus { border-color: var(--dore); }
+
+    .modal-add-btn {
+      width: 100%;
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 14px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 10px;
+    }
+    .modal-add-btn:hover { background: var(--brun-moyen); transform: translateY(-1px); }
+
+    .modal-info-bar {
+      background: var(--beige);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .modal-info-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--gris);
+    }
+    .modal-info-item span:first-child { font-size: 14px; }
+
+    /* ── PANIER ── */
+    .panier-page {
+      padding: 100px 24px 80px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .panier-empty {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .panier-empty-icon { font-size: 60px; margin-bottom: 20px; }
+    .panier-empty h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--brun);
+      margin-bottom: 10px;
+    }
+    .panier-empty p { color: var(--gris); margin-bottom: 24px; }
+
+    .panier-items { margin-bottom: 30px; }
+    .panier-item {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+    .panier-item-img {
+      width: 70px; height: 70px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: var(--beige);
+      flex-shrink: 0;
+    }
+    .panier-item-info { flex: 1; min-width: 0; }
+    .panier-item-nom {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brun);
+      margin-bottom: 3px;
+    }
+    .panier-item-detail { font-size: 12px; color: var(--gris); }
+    .panier-item-perso { font-size: 11px; color: var(--teal); font-style: italic; margin-top: 2px; }
+    .panier-item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .panier-item-prix {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--terracotta);
+    }
+    .panier-item-del {
+      background: none;
+      border: none;
+      color: var(--gris);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+    .panier-item-del:hover { color: #c0392b; background: #fdf0f0; }
+
+    .panier-recap {
+      background: white;
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .panier-recap-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--gris);
+      border-bottom: 1px solid rgba(201,169,110,0.15);
+    }
+    .panier-recap-row.total {
+      border-bottom: none;
+      padding-top: 14px;
+      margin-top: 4px;
+    }
+    .panier-recap-row.total span:first-child {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--brun);
+    }
+    .panier-recap-row.total span:last-child {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--terracotta);
+    }
+
+    .livraison-options {
+      margin-bottom: 20px;
+    }
+    .livraison-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      border: 2px solid rgba(201,169,110,0.25);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .livraison-option:hover { border-color: var(--dore); }
+    .livraison-option.selected { border-color: var(--terracotta); background: rgba(196,133,106,0.05); }
+    .livraison-option input { accent-color: var(--terracotta); width: 16px; height: 16px; }
+    .livraison-option-info { flex: 1; }
+    .livraison-option-nom { font-size: 14px; font-weight: 700; color: var(--brun); }
+    .livraison-option-desc { font-size: 12px; color: var(--gris); }
+    .livraison-option-prix { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--terracotta); }
+
+    .paiement-section {
+      background: white;
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .paiement-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--brun);
+      margin-bottom: 16px;
+    }
+    .paiement-methodes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .paiement-badge {
+      background: var(--beige);
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brun-moyen);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .paypal-note {
+      background: linear-gradient(135deg, #FFF8E1, #FFF3CD);
+      border: 1px solid #F0C040;
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #6B4226;
+      line-height: 1.6;
+    }
+
+    .btn-commander {
+      width: 100%;
+      background: linear-gradient(135deg, var(--terracotta), var(--brun-moyen));
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 16px;
+      font-family: 'Lato', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 12px;
+    }
+    .btn-commander:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(196,133,106,0.5); }
+
+    .commander-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--gris);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--brun);
+      color: rgba(253,250,247,0.8);
+      padding: 60px 24px 30px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+    }
+    .footer-brand .footer-tagline {
+      font-family: 'Dancing Script', cursive;
+      font-size: 14px;
+      color: var(--dore-clair);
+      margin-bottom: 16px;
+    }
+    .footer-brand p { font-size: 13px; line-height: 1.8; max-width: 280px; }
+    .footer-contact { margin-top: 16px; font-size: 13px; }
+    .footer-contact a { color: var(--dore-clair); text-decoration: none; }
+    .footer-contact a:hover { color: white; }
+
+    .footer-col h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--dore-clair);
+      margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a {
+      font-size: 13px;
+      color: rgba(253,250,247,0.7);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .footer-col ul li a:hover { color: white; padding-left: 4px; }
+
+    .footer-social {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .social-link {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .social-link:hover { background: var(--terracotta); transform: translateY(-2px); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+    }
+    .footer-bottom a { color: var(--dore-clair); text-decoration: none; }
+    .footer-bottom a:hover { color: white; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--brun);
+      color: white;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-icon { font-size: 18px; }
+
+    /* ── MENTIONS LÉGALES ── */
+    .legal-page {
+      padding: 100px 24px 80px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .legal-page h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--brun);
+      margin-bottom: 30px;
+    }
+    .legal-page h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--brun);
+      margin: 28px 0 12px;
+    }
+    .legal-page p, .legal-page li {
+      font-size: 14px;
+      color: var(--gris);
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+    .legal-page ul { padding-left: 20px; }
+
+    /* ── CONTACT MODAL ── */
+    .contact-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44,24,16,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .contact-overlay.open { opacity: 1; pointer-events: all; }
+    .contact-box {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 30px 80px rgba(44,24,16,0.25);
+      position: relative;
+    }
+    .contact-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--brun);
+      margin-bottom: 6px;
+    }
+    .contact-box p { font-size: 14px; color: var(--gris); margin-bottom: 24px; }
+    .contact-field { margin-bottom: 16px; }
+    .contact-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--brun);
+      margin-bottom: 6px;
+    }
+    .contact-field input, .contact-field textarea, .contact-field select {
+      width: 100%;
+      border: 2px solid rgba(201,169,110,0.3);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      color: var(--brun);
+      outline: none;
+      transition: var(--transition);
+      background: white;
+    }
+    .contact-field input:focus, .contact-field textarea:focus, .contact-field select:focus {
+      border-color: var(--dore);
+    }
+    .contact-field textarea { resize: none; height: 100px; }
+    .contact-submit {
+      width: 100%;
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 14px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 8px;
+    }
+    .contact-submit:hover { background: var(--brun-moyen); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 70px; left: 0; right: 0;
+        background: rgba(253,250,247,0.98);
+        padding: 16px 24px;
+        border-bottom: 1px solid rgba(201,169,110,0.2);
+        box-shadow: var(--shadow);
+      }
+      .hero-content { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .hero-title { font-size: 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .modal-box { grid-template-columns: 1fr; max-height: 95vh; }
+      .modal-imgs { border-radius: 20px 20px 0 0; min-height: 250px; }
+      .modal-img-main { min-height: 250px; }
+      .produits-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+    }
+    @media (max-width: 480px) {
+      .footer-inner { grid-template-columns: 1fr; }
+      .hero-ctas { flex-direction: column; }
+      .hero-stats { grid-template-columns: repeat(3,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" onclick="showPage('accueil')">
+      <span class="nav-logo-top">Les Essences</span>
+      <span class="nav-logo-main">Parfumées d'Aphrodite</span>
+      <span class="nav-logo-sub">Plâtre Résine Artisanal</span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" onclick="showPage('accueil')" class="active" id="nav-accueil">Accueil</a></li>
+      <li><a href="#" onclick="showPage('boutique')" id="nav-boutique">Boutique</a></li>
+      <li><a href="#" onclick="showContact()" id="nav-contact">Contact</a></li>
+    </ul>
+
+    <button class="nav-cart-btn" onclick="showPage('panier')">
+      🛒 Panier
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════
+     PAGE ACCUEIL
+════════════════════════════════════════════════════════ -->
+<div id="page-accueil" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-terrazzo"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">Fabrication artisanale française</div>
+        <h1 class="hero-title">
+          Décorations<br><em>uniques & personnalisées</em><br>en Plâtre Résine
+        </h1>
+        <p class="hero-subtitle">Chaque pièce est unique, comme vous.</p>
+        <p class="hero-desc">
+          Bienvenue chez <strong>Les Essences Parfumées d'Aphrodite</strong>. Chaque création est fabriquée à la main avec passion, personnalisée selon vos envies et traitée pour durer. Des pièces qui subliment votre intérieur et racontent votre histoire.
+        </p>
+        <div class="hero-pills">
+          <span class="hero-pill">✋ Fait Main</span>
+          <span class="hero-pill">🎨 Personnalisable</span>
+          <span class="hero-pill">💧 Imperméabilisé</span>
+          <span class="hero-pill">✨ Verni</span>
+          <span class="hero-pill">📦 Sur commande</span>
+        </div>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="showPage('boutique')">✦ Découvrir la boutique</button>
+          <button class="btn-secondary" onclick="showContact()">Nous contacter</button>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-img-grid">
+          <div class="hero-img-card">
+            <img src="https://images.sumup.com/img_6VJK44ZDDC8MHVCYD6Z0YGJ2E7/image.png"
+                 alt="Porte-bijoux main artisanal en plâtre résine"
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22260%22%3E%3Crect width=%22600%22 height=%22260%22 fill=%22%23F5EDE3%22/%3E%3Ctext x=%2250%25%22 y=%2248%25%22 text-anchor=%22middle%22 fill=%22%23C4856A%22 font-size=%2250%22%3E🏺%3C/text%3E%3Ctext x=%2250%25%22 y=%2268%25%22 text-anchor=%22middle%22 fill=%22%23C9A96E%22 font-size=%2216%22 font-family=%22Georgia%22%3ECréations Artisanales%3C/text%3E%3C/svg%3E'"/>
+          </div>
+          <div class="hero-img-card">
+            <img src="https://images.sumup.com/img_5J4MS3D1DE9Y4RPSYXR16ZHM35/image.png"
+                 alt="Plateau boisson artisanal en plâtre résine"
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22160%22%3E%3Crect width=%22300%22 height=%22160%22 fill=%22%23EDE0D4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 fill=%22%23C4856A%22 font-size=%2236%22%3E🍽️%3C/text%3E%3C/svg%3E'"/>
+          </div>
+          <div class="hero-img-card">
+            <img src="https://images.sumup.com/img_4B2P0VPDMT92NRM73GR5DW0J2K/image.png"
+                 alt="Création plâtre résine personnalisée"
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22160%22%3E%3Crect width=%22300%22 height=%22160%22 fill=%22%23E8D8C8%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 fill=%22%235B9E96%22 font-size=%2236%22%3E🕯️%3C/text%3E%3C/svg%3E'"/>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num">90+</div>
+            <div class="hero-stat-label">Créations</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">8</div>
+            <div class="hero-stat-label">Finitions</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">7j</div>
+            <div class="hero-stat-label">Délai fab.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALEURS -->
+  <section class="section-valeurs">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">Notre engagement</div>
+        <h2 class="section-title">Un artisanat pensé<br><em>avec cœur & passion</em></h2>
+        <p class="section-desc">Chaque création naît d'un savoir-faire artisanal unique, façonné à la main avec des matériaux de qualité et traité pour sublimer votre intérieur.</p>
+      </div>
+      <div class="valeurs-grid">
+        <div class="valeur-card">
+          <div class="valeur-icon">✋</div>
+          <div class="valeur-title">Fait Main</div>
+          <div class="valeur-desc">Chaque pièce est sculptée et façonnée à la main, une par une, avec soin et passion.</div>
+        </div>
+        <div class="valeur-card">
+          <div class="valeur-icon">🎨</div>
+          <div class="valeur-title">Personnalisable</div>
+          <div class="valeur-desc">Couleurs, finitions, styles… chaque création est adaptée à vos goûts et envies.</div>
+        </div>
+        <div class="valeur-card">
+          <div class="valeur-icon">💎</div>
+          <div class="valeur-title">Pièce Unique</div>
+          <div class="valeur-desc">Aucune création n'est identique. Votre pièce est exclusive et inimitable.</div>
+        </div>
+        <div class="valeur-card">
+          <div class="valeur-icon">💧</div>
+          <div class="valeur-title">Imperméabilisé</div>
+          <div class="valeur-desc">Traitement imperméabilisant et vernis pour une durabilité et une finition de qualité.</div>
+        </div>
+        <div class="valeur-card">
+          <div class="valeur-icon">📦</div>
+          <div class="valeur-title">Sur Commande</div>
+          <div class="valeur-desc">Votre création est fabriquée après votre commande. Délai d'environ 5 à 7 jours.</div>
+        </div>
+        <div class="valeur-card">
+          <div class="valeur-icon">🇫🇷</div>
+          <div class="valeur-title">Fabrication Française</div>
+          <div class="valeur-desc">Créé avec passion à Irigny, près de Lyon. Un artisanat local et authentique.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINITIONS -->
+  <section class="section-finitions terrazzo-bg">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">Personnalisation</div>
+        <h2 class="section-title">8 finitions pour<br><em>une création qui vous ressemble</em></h2>
+        <p class="section-desc">Choisissez parmi nos finitions exclusives. Le prix de base correspond à la finition Brut ; chaque finition supérieure ajoute un supplément.</p>
+      </div>
+      <div class="finitions-grid">
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:#E8D8C4;"></div>
+          <div class="finition-name">Brut</div>
+          <div class="finition-price">Prix de base</div>
+        </div>
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:linear-gradient(135deg,#C4856A,#E8A882);"></div>
+          <div class="finition-name">Couleur</div>
+          <div class="finition-price">Prix base +1€</div>
+        </div>
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:linear-gradient(135deg,#5B9E96,#C4856A);"></div>
+          <div class="finition-name">Double couleur</div>
+          <div class="finition-price">Prix base +3€</div>
+        </div>
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:linear-gradient(135deg,#E8D8C4 30%,#D4C0A8 31%,#C8B498 60%,#E8D8C4 61%);"></div>
+          <div class="finition-name">Marbré</div>
+          <div class="finition-price">Prix base +4€</div>
+        </div>
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:#E8D8C4;background-image:radial-gradient(3px 2px at 20% 30%,#C4856A 0%,transparent 100%),radial-gradient(4px 2px at 60% 70%,#5B9E96 0%,transparent 100%),radial-gradient(3px 2px at 80% 20%,#C9A96E 0%,transparent 100%),radial-gradient(2px 2px at 40% 60%,#b87a8a 0%,transparent 100%);"></div>
+          <div class="finition-name">Terrazzo</div>
+          <div class="finition-price">Prix base +5€</div>
+        </div>
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:linear-gradient(135deg,#E8D8C4 50%,#C4856A 50%);"></div>
+          <div class="finition-name">½ Marbré / ½ Couleur</div>
+          <div class="finition-price">Prix base +6€</div>
+        </div>
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:linear-gradient(135deg,#E8D8C4 50%,#5B9E96 50%);background-image:radial-gradient(3px 2px at 25% 25%,#C4856A 0%,transparent 100%);"></div>
+          <div class="finition-name">½ Terrazzo / ½ Couleur</div>
+          <div class="finition-price">Prix base +7€</div>
+        </div>
+        <div class="finition-card">
+          <div class="finition-swatch" style="background:linear-gradient(135deg,#E8D8C4 50%,#5B9E96 50%);"></div>
+          <div class="finition-name">½ Marbré / ½ Terrazzo</div>
+          <div class="finition-price">Prix base +7€</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section style="padding:70px 24px;text-align:center;background:white;">
+    <div class="section-eyebrow" style="text-align:center;">Prête à créer votre pièce unique ?</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,42px);color:var(--brun);margin:12px 0 16px;line-height:1.2;">Explorez notre boutique<br><em style="color:var(--terracotta);font-style:italic;">et commandez sur mesure</em></h2>
+    <p style="color:var(--gris);font-size:15px;max-width:500px;margin:0 auto 32px;line-height:1.8;">Plus de 90 créations vous attendent, toutes personnalisables. Choisissez votre finition préférée et recevez votre pièce unique sous 7 jours.</p>
+    <button class="btn-primary" onclick="showPage('boutique')" style="font-size:16px;padding:16px 36px;">✦ Voir toutes les créations</button>
+  </section>
+
+</div><!-- /page-accueil -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     PAGE BOUTIQUE
+════════════════════════════════════════════════════════ -->
+<div id="page-boutique" class="page">
+  <div class="boutique-header terrazzo-bg">
+    <div class="section-eyebrow">Notre collection</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);color:var(--brun);margin:8px 0 10px;">La Boutique</h1>
+    <p style="color:var(--gris);font-size:15px;max-width:500px;margin:0 auto;">Toutes nos créations artisanales en plâtre résine, personnalisables selon vos envies.</p>
+  </div>
+
+  <div class="boutique-filters">
+    <div class="filter-scroll" id="filterBtns"></div>
+  </div>
+
+  <div class="produits-grid" id="produitsGrid"></div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     PAGE PANIER
+════════════════════════════════════════════════════════ -->
+<div id="page-panier" class="page">
+  <div class="panier-page">
+    <div class="section-header" style="text-align:left;margin-bottom:30px;">
+      <div class="section-eyebrow">Mon panier</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:32px;color:var(--brun);">Récapitulatif</h1>
+    </div>
+    <div id="panierContent"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     PAGE MENTIONS LÉGALES
+════════════════════════════════════════════════════════ -->
+<div id="page-mentions" class="page">
+  <div class="legal-page">
+    <h1>Mentions Légales</h1>
+    <h2>Éditeur du site</h2>
+    <p><strong>Les Essences Parfumées d'Aphrodite</strong><br/>
+    Zulay MARQUES<br/>
+    N° SIRET : 890 868 656 00012<br/>
+    69540 Irigny, Rhône (69)<br/>
+    Téléphone : 06 22 41 84 63<br/>
+    Email : les.essences.parfumees.d.aphrodite@gmail.com</p>
+    <h2>Activité</h2>
+    <p>Vendeuse à Domicile Indépendante (VDI) et créatrice artisanale de décorations en plâtre résine personnalisées.</p>
+    <h2>Propriété intellectuelle</h2>
+    <p>L'ensemble du contenu de ce site (textes, images, créations présentées) est la propriété exclusive de Les Essences Parfumées d'Aphrodite. Toute reproduction ou utilisation sans autorisation préalable est interdite.</p>
+    <h2>Responsabilité</h2>
+    <p>Les créations en plâtre résine sont imperméabilisées et vernies mais ne sont pas totalement étanches. Elles ne doivent pas être immergées dans l'eau. Nous déclinons toute responsabilité en cas d'utilisation inadaptée.</p>
+    <h2>Données personnelles</h2>
+    <p>Les informations collectées lors de vos commandes sont utilisées uniquement dans le cadre du traitement de votre commande. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ce droit, contactez-nous à l'adresse email mentionnée ci-dessus.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     PAGE CGV
+════════════════════════════════════════════════════════ -->
+<div id="page-cgv" class="page">
+  <div class="legal-page">
+    <h1>Conditions Générales de Vente</h1>
+    <h2>1. Objet</h2>
+    <p>Les présentes CGV régissent les ventes de créations artisanales en plâtre résine proposées par Les Essences Parfumées d'Aphrodite (Zulay MARQUES, SIRET 890 868 656 00012).</p>
+    <h2>2. Produits</h2>
+    <p>Toutes nos créations sont fabriquées à la main, en plâtre résine, imperméabilisées et vernies. Chaque pièce est unique. En raison du processus artisanal, deux pièces ne peuvent être parfaitement identiques.</p>
+    <h2>3. Commandes & personnalisation</h2>
+    <p>Toutes les commandes sont personnalisées et fabriquées sur mesure. Les instructions de personnalisation (couleur, finition, prénom, etc.) doivent être précisées dans le champ "Message" lors de la commande. <strong>Aucune annulation, retour ou échange n'est possible sur les produits personnalisés</strong>, conformément à l'article L221-28 du Code de la consommation.</p>
+    <h2>4. Prix</h2>
+    <p>Les prix affichés sont en euros TTC. Les frais de livraison sont calculés lors du récapitulatif de commande en fonction du mode de livraison choisi.</p>
+    <h2>5. Délais de fabrication et livraison</h2>
+    <p>Chaque commande est fabriquée sur mesure. Le délai de fabrication est d'environ <strong>5 à 7 jours ouvrés</strong> à compter de la confirmation de paiement. Ce délai peut varier selon la complexité de la personnalisation demandée.</p>
+    <h2>6. Livraison</h2>
+    <ul>
+      <li><strong>Livraison à domicile (Colissimo)</strong> : délai habituel de 2 à 5 jours ouvrés après expédition.</li>
+      <li><strong>Livraison en point relais</strong> : délai habituel de 2 à 4 jours ouvrés après expédition.</li>
+      <li><strong>Remise en main propre</strong> : sur rendez-vous à Irigny (69540).</li>
+    </ul>
+    <h2>7. Paiement</h2>
+    <p>Le règlement s'effectue par carte bancaire ou via PayPal (dont PayPal en 4 fois sans frais, sous réserve d'éligibilité). Le paiement est sécurisé.</p>
+    <h2>8. Entretien</h2>
+    <p>Les créations sont imperméabilisées et vernies. Elles résistent aux éclaboussures légères mais ne doivent pas être immergées dans l'eau. Nettoyage recommandé avec un chiffon légèrement humide.</p>
+    <h2>9. Litiges</h2>
+    <p>En cas de litige, une solution amiable sera privilégiée. À défaut d'accord, les tribunaux compétents seront ceux du ressort de Lyon.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">Les Essences Parfumées d'Aphrodite</div>
+      <div class="footer-tagline">Chaque pièce est unique, comme vous.</div>
+      <p>Créations artisanales en plâtre résine, faites main et personnalisées à Irigny (69). Chaque pièce est unique, imperméabilisée et vernie avec soin.</p>
+      <div class="footer-contact">
+        <div>📞 <a href="tel:0622418463">06 22 41 84 63</a></div>
+        <div>✉️ <a href="mailto:les.essences.parfumees.d.aphrodite@gmail.com">les.essences.parfumees.d.aphrodite@gmail.com</a></div>
+        <div>📍 69540 Irigny, Rhône</div>
+      </div>
+      <div class="footer-social">
+        <a href="https://facebook.com/1K3z3N5fJf" target="_blank" class="social-link" title="Facebook">📘</a>
+        <a href="https://instagram.com/essences.parfumees.d.aphrodite" target="_blank" class="social-link" title="Instagram">📸</a>
+        <a href="https://wa.me/0622418463" target="_blank" class="social-link" title="WhatsApp">💬</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('accueil')">Accueil</a></li>
+        <li><a href="#" onclick="showPage('boutique')">Boutique</a></li>
+        <li><a href="#" onclick="showPage('panier')">Panier</a></li>
+        <li><a href="#" onclick="showContact()">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Catégories</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('boutique','Accessoires')">Accessoires</a></li>
+        <li><a href="#" onclick="showPage('boutique','Art de la table')">Art de la table</a></li>
+        <li><a href="#" onclick="showPage('boutique','Bougeoirs & Porte-bougies')">Bougeoirs</a></li>
+        <li><a href="#" onclick="showPage('boutique','Décorations')">Décorations</a></li>
+        <li><a href="#" onclick="showPage('boutique','Vases')">Vases</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Informations</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('cgv')">CGV</a></li>
+        <li><a href="#" onclick="showPage('mentions')">Mentions légales</a></li>
+        <li><a href="#" onclick="showContact()">Nous contacter</a></li>
+        <li><a href="https://wa.me/0622418463" target="_blank">WhatsApp</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div>© 2026 Les Essences Parfumées d'Aphrodite — SIRET 890 868 656 00012</div>
+    <div>
+      <a href="#" onclick="showPage('mentions')">Mentions légales</a> ·
+      <a href="#" onclick="showPage('cgv')">CGV</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL PRODUIT -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-imgs" id="modalImgs">
+      <img class="modal-img-main" id="modalImgMain" src="" alt=""/>
+      <div class="modal-thumbs" id="modalThumbs"></div>
+    </div>
+    <div class="modal-info" id="modalInfo"></div>
+    <button class="modal-close" onclick="closeModal(null,true)">✕</button>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="contact-overlay" id="contactOverlay" onclick="closeContact(event)">
+  <div class="contact-box">
+    <button class="modal-close" onclick="closeContact(null,true)" style="position:absolute;top:16px;right:16px;">✕</button>
+    <h2>Nous contacter</h2>
+    <p>Une question sur une création ? Une commande spéciale ? Écrivez-nous !</p>
+    <div class="contact-field">
+      <label>Votre nom</label>
+      <input type="text" placeholder="Marie Dupont" id="contactNom"/>
+    </div>
+    <div class="contact-field">
+      <label>Email</label>
+      <input type="email" placeholder="marie@email.fr" id="contactEmail"/>
+    </div>
+    <div class="contact-field">
+      <label>Sujet</label>
+      <select id="contactSujet">
+        <option>Question sur une création</option>
+        <option>Commande personnalisée</option>
+        <option>Suivi de commande</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="contact-field">
+      <label>Message</label>
+      <textarea placeholder="Votre message..." id="contactMessage"></textarea>
+    </div>
+    <button class="contact-submit" onclick="sendContact()">Envoyer le message ✦</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <span id="toastMsg">Produit ajouté au panier</span>
+</div>
+
+<script>
+// ============================================================
+// DONNÉES PRODUITS - Les Essences Parfumées d'Aphrodite
+// ============================================================
+
+// Règle de tarification des finitions (supplément par rapport au prix brut)
+const SUPPLEMENTS_FINITIONS = {
+  "Brut": 0,
+  "Couleur": 1,
+  "Double couleur": 3,
+  "Marbré": 4,
+  "Terrazzo": 5,
+  "Moitié Marbré / Moitié Couleur": 6,
+  "Moitié Terrazzo / Moitié Couleur": 7,
+  "Moitié Marbré / Moitié Terrazzo": 7
+};
+
+// Finitions standard (la plupart des produits)
+const FINITIONS_STANDARD = ["Brut", "Couleur", "Marbré", "Terrazzo"];
+// Finitions étendues (produits avec plus d'options)
+const FINITIONS_ETENDUES = ["Brut", "Couleur", "Double couleur", "Marbré", "Terrazzo", "Moitié Marbré / Moitié Couleur", "Moitié Terrazzo / Moitié Couleur", "Moitié Marbré / Moitié Terrazzo"];
+
+const PRODUITS = [
+  // ── ACCESSOIRES ──────────────────────────────────────────
+  {
+    id: "porte-bijoux-main",
+    nom: "Porte-bijoux Main",
+    categorie: "Accessoires",
+    prix_brut: 26,
+    finitions: FINITIONS_STANDARD,
+    description: "Porte-bijoux fabriqué à la main, avec une main sculptée intégrée à un plateau. Range vos bijoux tout en apportant une touche décorative élégante à votre coiffeuse, chambre ou salle de bain.",
+    dimensions: "Hauteur totale (main incluse) : ≃ 37,8 cm | Main : ≃ 16,1 cm (largeur) | Support : ≃ 18,8 cm × 9,6 cm",
+    delai: "5 à 7 jours",
+    image: "https://images.sumup.com/img_6VJK44ZDDC8MHVCYD6Z0YGJ2E7/image.png",
+    images: [
+      "https://images.sumup.com/img_6VJK44ZDDC8MHVCYD6Z0YGJ2E7/image.png",
+      "https://images.sumup.com/img_4B2P0VPDMT92NRM73GR5DW0J2K/image.png",
+      "https://images.sumup.com/img_6VR40JJXBY8KJSZZJVQGHP2CKS/image.png"
+    ]
+  },
+  {
+    id: "porte-savon",
+    nom: "Porte-savon",
+    categorie: "Accessoires",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Porte-savon artisanal en plâtre résine, imperméabilisé et verni. Apporte une touche décorative dans votre salle de bain ou cuisine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "https://images.sumup.com/img_placeholder/image.png",
+    images: []
+  },
+
+  // ── ART DE LA TABLE ──────────────────────────────────────
+  {
+    id: "4-coupelles-coeur",
+    nom: "4 Coupelles Cœur",
+    categorie: "Art de la table",
+    prix_brut: 8,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble de 4 coupelles en forme de cœur, faites main en plâtre résine. Idéales pour présenter des mignardises, des bijoux ou pour décorer votre table.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "4-coupelles-epure",
+    nom: "4 Coupelles Épuré",
+    categorie: "Art de la table",
+    prix_brut: 8,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble de 4 coupelles au design épuré, faites main en plâtre résine. Parfaites pour un art de la table élégant et minimaliste.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "4-sous-verres-epure-support",
+    nom: "4 Sous-verres Épuré avec support",
+    categorie: "Art de la table",
+    prix_brut: 15,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble de 4 sous-verres au design épuré avec leur support, faits main en plâtre résine. Imperméabilisés et vernis pour une utilisation optimale.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "4-sous-verres-essence-support",
+    nom: "4 Sous-verres Essence avec support",
+    categorie: "Art de la table",
+    prix_brut: 14,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble de 4 sous-verres modèle Essence avec leur support, faits main en plâtre résine. Élégants et fonctionnels.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "4-sous-verres-facette-support",
+    nom: "4 Sous-verres Facette avec support",
+    categorie: "Art de la table",
+    prix_brut: 15,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble de 4 sous-verres modèle Facette avec leur support, faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "plateau-boisson",
+    nom: "Plateau Boisson",
+    categorie: "Art de la table",
+    prix_brut: 37,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau rond fait main, idéal pour l'apéritif ou une pause rafraîchissante. 6 encoches pour verres ou coupes et 1 encoche centrale pour bouteille ou carafe.",
+    dimensions: "Plateau : ≃ 24,5 cm × 24,5 cm | Encoches verres : ≃ 5,8 cm | Encoche bouteille : ≃ 7,3 cm",
+    delai: "5 à 7 jours",
+    image: "https://images.sumup.com/img_5J4MS3D1DE9Y4RPSYXR16ZHM35/image.png",
+    images: [
+      "https://images.sumup.com/img_5J4MS3D1DE9Y4RPSYXR16ZHM35/image.png",
+      "https://images.sumup.com/img_39139TJGHZ8C7V9FQJK28Y5045/image.png",
+      "https://images.sumup.com/img_42D8D1ENEP85XBDEHSD0A93DZ0/image.png"
+    ]
+  },
+
+  // ── BOÎTES & RANGEMENTS ──────────────────────────────────
+  {
+    id: "coeur-14",
+    nom: "Cœur (boîte)",
+    categorie: "Boîtes & Rangements décoratifs",
+    prix_brut: 14,
+    finitions: FINITIONS_STANDARD,
+    description: "Boîte décorative en forme de cœur, faite main en plâtre résine. Parfaite pour ranger vos bijoux ou petits trésors.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "nid-abeille",
+    nom: "Nid d'abeille",
+    categorie: "Boîtes & Rangements décoratifs",
+    prix_brut: 15,
+    finitions: FINITIONS_STANDARD,
+    description: "Boîte décorative en nid d'abeille, faite main en plâtre résine. Design géométrique et élégant.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+
+  // ── BOUGEOIRS & PORTE-BOUGIES ────────────────────────────
+  {
+    id: "canneles",
+    nom: "Cannelés",
+    categorie: "Bougeoirs & Porte-bougies",
+    prix_brut: 8,
+    finitions: FINITIONS_STANDARD,
+    description: "Bougeoir au design cannelé, fait main en plâtre résine. Apporte une lumière douce et une ambiance chaleureuse à votre intérieur.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "double-jeu",
+    nom: "Double Jeu",
+    categorie: "Bougeoirs & Porte-bougies",
+    prix_brut: 10,
+    finitions: FINITIONS_STANDARD,
+    description: "Bougeoir double fait main en plâtre résine. Élégant et original pour une ambiance lumineuse.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "socle-duo-sillage",
+    nom: "Socle Duo Sillage",
+    categorie: "Bougeoirs & Porte-bougies",
+    prix_brut: 15,
+    finitions: FINITIONS_STANDARD,
+    description: "Socle duo pour bougies chandelle, fait main en plâtre résine. Design élégant pour une ambiance douce.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "socle-epure",
+    nom: "Socle Épuré",
+    categorie: "Bougeoirs & Porte-bougies",
+    prix_brut: 8,
+    finitions: FINITIONS_STANDARD,
+    description: "Socle épuré pour bougie, fait main en plâtre résine. Minimaliste et chic.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "socle-essence",
+    nom: "Socle Essence",
+    categorie: "Bougeoirs & Porte-bougies",
+    prix_brut: 10,
+    finitions: FINITIONS_STANDARD,
+    description: "Socle Essence pour bougie, fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "socle-sillage-chandelle",
+    nom: "Socle Sillage Chandelle",
+    categorie: "Bougeoirs & Porte-bougies",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Socle pour bougie chandelle, fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "socle-trio-sillage",
+    nom: "Socle Trio Sillage",
+    categorie: "Bougeoirs & Porte-bougies",
+    prix_brut: 13,
+    finitions: FINITIONS_STANDARD,
+    description: "Socle trio pour bougies chandelle, fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+
+  // ── DÉCORATIONS ──────────────────────────────────────────
+  {
+    id: "bouddha",
+    nom: "Bouddha",
+    categorie: "Décorations",
+    prix_brut: 13,
+    finitions: FINITIONS_STANDARD,
+    description: "Figurine Bouddha décorative faite main en plâtre résine. Symbole de sérénité et de bien-être pour votre intérieur.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "coeur-5",
+    nom: "Cœur petit",
+    categorie: "Décorations",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Cœur décoratif fait main en plâtre résine. Symbole d'amour et de douceur pour décorer votre intérieur.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "coeur-6",
+    nom: "Cœur",
+    categorie: "Décorations",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Cœur décoratif fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "coeur-fleur",
+    nom: "Cœur Fleur",
+    categorie: "Décorations",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Cœur décoratif avec motif floral, fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "coeur-promesse",
+    nom: "Cœur Promesse",
+    categorie: "Décorations",
+    prix_brut: 4,
+    finitions: FINITIONS_STANDARD,
+    description: "Cœur Promesse décoratif fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "coeur-roses",
+    nom: "Cœur Roses",
+    categorie: "Décorations",
+    prix_brut: 2,
+    finitions: FINITIONS_STANDARD,
+    description: "Petit cœur avec motif roses, fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "coeur-union",
+    nom: "Cœur Union",
+    categorie: "Décorations",
+    prix_brut: 4,
+    finitions: FINITIONS_STANDARD,
+    description: "Cœur Union décoratif fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "couple-3d-enlace",
+    nom: "Couple 3D Enlacé",
+    categorie: "Décorations",
+    prix_brut: 8,
+    finitions: FINITIONS_STANDARD,
+    description: "Figurine couple 3D enlacé, faite main en plâtre résine. Une belle déclaration d'amour pour offrir ou s'offrir.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "decoration-arbre-de-vie",
+    nom: "Décoration Arbre de Vie",
+    categorie: "Décorations",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration Arbre de Vie fait main en plâtre résine. Symbole de force et d'épanouissement.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "decoration-coeur-enlace-infini",
+    nom: "Décoration Cœur Enlacé avec l'Infini",
+    categorie: "Décorations",
+    prix_brut: 4,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration cœur enlacé avec le symbole de l'infini, faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "decoration-coeurs-entrelaces",
+    nom: "Décoration Cœurs Entrelacés",
+    categorie: "Décorations",
+    prix_brut: 4,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration cœurs entrelacés faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "decoration-fleur-de-lotus",
+    nom: "Décoration Fleur de Lotus",
+    categorie: "Décorations",
+    prix_brut: 3,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration fleur de lotus faite main en plâtre résine. Symbole de pureté et de renaissance.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "douceur",
+    nom: "Douceur",
+    categorie: "Décorations",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration Douceur faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "feuille-ginkgo",
+    nom: "Feuille de Ginkgo",
+    categorie: "Décorations",
+    prix_brut: 8,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration feuille de ginkgo faite main en plâtre résine. Un symbole de longévité et de résilience.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "feuille-marronnier",
+    nom: "Feuille de Marronnier",
+    categorie: "Décorations",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration feuille de marronnier faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "feuille-sauge",
+    nom: "Feuille de Sauge",
+    categorie: "Décorations",
+    prix_brut: 4,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration feuille de sauge faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "fille-aux-roses",
+    nom: "Fille aux Roses",
+    categorie: "Décorations",
+    prix_brut: 9,
+    finitions: FINITIONS_STANDARD,
+    description: "Figurine fille aux roses faite main en plâtre résine. Poétique et délicate.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "fille-meditation",
+    nom: "Fille Méditation",
+    categorie: "Décorations",
+    prix_brut: 13,
+    finitions: FINITIONS_STANDARD,
+    description: "Figurine fille en méditation faite main en plâtre résine. Un symbole de sérénité et d'introspection.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "fille-penseuse",
+    nom: "Fille Penseuse",
+    categorie: "Décorations",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Figurine fille penseuse faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "fille-silencieuse",
+    nom: "Fille Silencieuse",
+    categorie: "Décorations",
+    prix_brut: 9,
+    finitions: FINITIONS_STANDARD,
+    description: "Figurine fille silencieuse faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "fleur-6",
+    nom: "Fleur",
+    categorie: "Décorations",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration florale faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "fleur-de-lotus",
+    nom: "Fleur de Lotus",
+    categorie: "Décorations",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Fleur de lotus décorative faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "infini-double-coeurs",
+    nom: "Infini Double Cœurs",
+    categorie: "Décorations",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration infini double cœurs faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "mains-ouvertes",
+    nom: "Mains Ouvertes",
+    categorie: "Décorations",
+    prix_brut: 29,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration mains ouvertes faite main en plâtre résine. Une pièce sculpturale unique et puissante.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "mot-family",
+    nom: "Mot décoratif \"Family\"",
+    categorie: "Décorations",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Mot décoratif \"Family\" fait main en plâtre résine. Un beau message pour votre intérieur.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "mot-home",
+    nom: "Mot décoratif \"Home\"",
+    categorie: "Décorations",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Mot décoratif \"Home\" fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "mot-love",
+    nom: "Mot décoratif \"Love\"",
+    categorie: "Décorations",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Mot décoratif \"Love\" fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "mot-love-coeurs",
+    nom: "Mot décoratif \"Love\" Cœurs",
+    categorie: "Décorations",
+    prix_brut: 9,
+    finitions: FINITIONS_STANDARD,
+    description: "Mot décoratif \"Love\" avec cœurs, fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "noeud-papillon",
+    nom: "Nœud Papillon",
+    categorie: "Décorations",
+    prix_brut: 15,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration nœud papillon faite main en plâtre résine. Élégante et originale.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "noeud-ruban-9",
+    nom: "Nœud Ruban",
+    categorie: "Décorations",
+    prix_brut: 9,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration nœud ruban faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "noeud-ruban-6",
+    nom: "Nœud Ruban petit",
+    categorie: "Décorations",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Petite décoration nœud ruban faite main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "ourson-coeur",
+    nom: "Ourson Cœur",
+    categorie: "Décorations",
+    prix_brut: 4,
+    finitions: FINITIONS_STANDARD,
+    description: "Ourson cœur décoratif fait main en plâtre résine. Doux et attachant.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "ourson-noeud-ruban",
+    nom: "Ourson Nœud Ruban",
+    categorie: "Décorations",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Ourson avec nœud ruban fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "ourson-rose",
+    nom: "Ourson Rose",
+    categorie: "Décorations",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Ourson rose décoratif fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "plume",
+    nom: "Plume",
+    categorie: "Décorations",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration plume faite main en plâtre résine. Légère et poétique.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "trio-coeurs-fleuris",
+    nom: "Trio de Cœurs Fleuris",
+    categorie: "Décorations",
+    prix_brut: 17,
+    finitions: FINITIONS_STANDARD,
+    description: "Trio de cœurs fleuris faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "trio-coeurs-tisses",
+    nom: "Trio de Cœurs Tissés",
+    categorie: "Décorations",
+    prix_brut: 15,
+    finitions: FINITIONS_STANDARD,
+    description: "Trio de cœurs tissés faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "visage-naturel",
+    nom: "Visage Naturel",
+    categorie: "Décorations",
+    prix_brut: 11,
+    finitions: FINITIONS_STANDARD,
+    description: "Décoration visage naturel faite main en plâtre résine. Sculpturale et moderne.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+
+  // ── ORGANISATEURS & POTS ─────────────────────────────────
+  {
+    id: "epure-5",
+    nom: "Épuré (pot)",
+    categorie: "Organisateurs & Pots",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Pot épuré fait main en plâtre résine. Idéal pour organiser vos espaces.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "epure-6",
+    nom: "Épuré grand (pot)",
+    categorie: "Organisateurs & Pots",
+    prix_brut: 6,
+    finitions: FINITIONS_STANDARD,
+    description: "Grand pot épuré fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "essence-5",
+    nom: "Essence (pot)",
+    categorie: "Organisateurs & Pots",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Pot Essence fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "essence-4",
+    nom: "Essence petit (pot)",
+    categorie: "Organisateurs & Pots",
+    prix_brut: 4,
+    finitions: FINITIONS_STANDARD,
+    description: "Petit pot Essence fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "essence-camelias",
+    nom: "Essence Camélias",
+    categorie: "Organisateurs & Pots",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Pot Essence Camélias fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "essence-mandala",
+    nom: "Essence Mandala",
+    categorie: "Organisateurs & Pots",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Pot Essence Mandala fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "essence-relief-ondule",
+    nom: "Essence Relief Ondulé",
+    categorie: "Organisateurs & Pots",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Pot Essence avec relief ondulé, fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+
+  // ── PLATEAUX & VIDE-POCHES ───────────────────────────────
+  {
+    id: "eclipse",
+    nom: "Éclipse",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 12,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Éclipse fait main en plâtre résine. Design original en forme d'éclipse.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "elance",
+    nom: "Élancé",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 10,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau élancé fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "etoile-filante",
+    nom: "Étoile Filante",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 14,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Étoile Filante fait main en plâtre résine. Forme originale et élégante.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "evasion",
+    nom: "Évasion",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 21,
+    finitions: FINITIONS_ETENDUES,
+    description: "Grand plateau Évasion fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "facette-plateau",
+    nom: "Facette (plateau)",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 5,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Facette fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "harmonie",
+    nom: "Harmonie",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 19,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Harmonie fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "hybride",
+    nom: "Hybride",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 10,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Hybride fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "lunes-etoiles",
+    nom: "Lunes & Étoiles",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 11,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Lunes & Étoiles fait main en plâtre résine. Design lunaire et poétique.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "pureté",
+    nom: "Pureté",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 8,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Pureté fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "serenite",
+    nom: "Sérénité",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 10,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Sérénité fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "sillon-13",
+    nom: "Sillon grand",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 13,
+    finitions: FINITIONS_ETENDUES,
+    description: "Grand plateau Sillon fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "sillon-9",
+    nom: "Sillon",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 9,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Sillon fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "tornade",
+    nom: "Tornade",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 19,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Tornade fait main en plâtre résine. Forme tourbillonnante originale.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "vague-ondulee",
+    nom: "Vague Ondulée",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 15,
+    finitions: FINITIONS_ETENDUES,
+    description: "Plateau Vague Ondulée fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "vagues-grand",
+    nom: "Vagues (grand modèle)",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 11,
+    finitions: FINITIONS_ETENDUES,
+    description: "Grand plateau Vagues fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "vagues-petit",
+    nom: "Vagues (petit modèle)",
+    categorie: "Plateaux & Vide-poches",
+    prix_brut: 7,
+    finitions: FINITIONS_ETENDUES,
+    description: "Petit plateau Vagues fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+
+  // ── VASES ────────────────────────────────────────────────
+  {
+    id: "ensemble-evolution",
+    nom: "Ensemble Évolution",
+    categorie: "Vases",
+    prix_brut: 17,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble de vases Évolution faits main en plâtre résine. Un trio harmonieux pour décorer votre intérieur.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "ensemble-sillon-27a",
+    nom: "Ensemble Sillon (A)",
+    categorie: "Vases",
+    prix_brut: 27,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble Sillon de vases faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "ensemble-sillon-27b",
+    nom: "Ensemble Sillon (B)",
+    categorie: "Vases",
+    prix_brut: 27,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble Sillon de vases faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "ensemble-sillon-27c",
+    nom: "Ensemble Sillon (C)",
+    categorie: "Vases",
+    prix_brut: 27,
+    finitions: FINITIONS_STANDARD,
+    description: "Ensemble Sillon de vases faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "evolution-duo",
+    nom: "Évolution Duo",
+    categorie: "Vases",
+    prix_brut: 7,
+    finitions: FINITIONS_STANDARD,
+    description: "Duo de vases Évolution faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "evolution-solo",
+    nom: "Évolution Solo",
+    categorie: "Vases",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Vase Évolution solo fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "evolution-trio",
+    nom: "Évolution Trio",
+    categorie: "Vases",
+    prix_brut: 10,
+    finitions: FINITIONS_STANDARD,
+    description: "Trio de vases Évolution faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "facette-vase",
+    nom: "Facette (vase)",
+    categorie: "Vases",
+    prix_brut: 5,
+    finitions: FINITIONS_STANDARD,
+    description: "Vase Facette fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "fleur-vase",
+    nom: "Fleur (vase)",
+    categorie: "Vases",
+    prix_brut: 20,
+    finitions: FINITIONS_STANDARD,
+    description: "Grand vase Fleur fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "sillon-vase",
+    nom: "Sillon (vase)",
+    categorie: "Vases",
+    prix_brut: 13,
+    finitions: FINITIONS_STANDARD,
+    description: "Vase Sillon fait main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  },
+  {
+    id: "trio-sillon",
+    nom: "Trio Sillon",
+    categorie: "Vases",
+    prix_brut: 17,
+    finitions: FINITIONS_STANDARD,
+    description: "Trio de vases Sillon faits main en plâtre résine.",
+    dimensions: "",
+    delai: "5 à 7 jours",
+    image: "",
+    images: []
+  }
+];
+
+// Calcul du prix selon la finition choisie
+function getPrix(produit, finition) {
+  const supplement = SUPPLEMENTS_FINITIONS[finition] || 0;
+  return (produit.prix_brut + supplement).toFixed(2);
+}
+
+// Récupérer les produits par catégorie (tri alphabétique)
+function getProduitsByCategorie(categorie) {
+  return PRODUITS
+    .filter(p => p.categorie === categorie)
+    .sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+}
+
+// Toutes les catégories triées
+const CATEGORIES = [...new Set(PRODUITS.map(p => p.categorie))].sort((a, b) => a.localeCompare(b, 'fr'));
+
+// Image placeholder
+const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23F5EDE3'/%3E%3Ctext x='50%25' y='45%25' text-anchor='middle' fill='%23C4856A' font-size='40'%3E🏺%3C/text%3E%3Ctext x='50%25' y='62%25' text-anchor='middle' fill='%23C9A96E' font-size='14' font-family='Georgia'%3EPhoto à venir%3C/text%3E%3C/svg%3E";
+
+</script>
+<script>
+// ══════════════════════════════════════════════════════════
+// ÉTAT GLOBAL
+// ══════════════════════════════════════════════════════════
+let panier = JSON.parse(localStorage.getItem('panier_aphrodite') || '[]');
+let categorieActive = 'Tout';
+let produitModal = null;
+let finitionSelectionnee = null;
+let qteModal = 1;
+
+const LIVRAISONS = [
+  { id: 'colissimo', nom: 'Livraison à domicile (Colissimo)', desc: 'Délai : 2-5 jours après expédition', prix: 6.90 },
+  { id: 'relais',    nom: 'Livraison en point relais',        desc: 'Délai : 2-4 jours après expédition', prix: 4.90 },
+  { id: 'main',      nom: 'Remise en main propre',            desc: 'Sur rendez-vous à Irigny (69)',       prix: 0 },
+];
+let livraisonChoisie = 'colissimo';
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+function showPage(id, filtre) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const el = document.getElementById('page-' + id);
+  if (el) { el.classList.add('active'); window.scrollTo(0,0); }
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  if (id === 'boutique') { renderBoutique(filtre || 'Tout'); }
+  if (id === 'panier') renderPanier();
+  document.getElementById('navLinks').classList.remove('open');
+  return false;
+}
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════════════════
+// BOUTIQUE
+// ══════════════════════════════════════════════════════════
+function renderBoutique(filtre) {
+  categorieActive = filtre || 'Tout';
+
+  // Filtres
+  const btns = document.getElementById('filterBtns');
+  const cats = ['Tout', ...CATEGORIES];
+  btns.innerHTML = cats.map(c =>
+    `<button class="filter-btn ${c===categorieActive?'active':''}" onclick="renderBoutique('${c}')">${c}</button>`
+  ).join('');
+
+  // Produits
+  const grid = document.getElementById('produitsGrid');
+  let liste = categorieActive === 'Tout'
+    ? [...PRODUITS].sort((a,b) => a.nom.localeCompare(b.nom,'fr'))
+    : getProduitsByCategorie(categorieActive);
+
+  grid.innerHTML = liste.map(p => {
+    const imgSrc = p.image || PLACEHOLDER_IMG;
+    const prix = p.prix_brut;
+    const chips = p.finitions.slice(0,4).map(f => `<span class="fin-chip">${f}</span>`).join('');
+    return `
+    <div class="produit-card" onclick="openModal('${p.id}')">
+      <div class="produit-img-wrap">
+        <img src="${imgSrc}" alt="${p.nom}" loading="lazy"
+             onerror="this.src='${PLACEHOLDER_IMG}'"/>
+        <span class="produit-badge-fait-main">Fait Main</span>
+      </div>
+      <div class="produit-body">
+        <div class="produit-categorie">${p.categorie}</div>
+        <div class="produit-nom">${p.nom}</div>
+        <div class="produit-prix-wrap">
+          <span class="produit-prix-from">à partir de</span>
+          <span class="produit-prix">${prix}€</span>
+          <span class="produit-prix-unit">(finition Brut)</span>
+        </div>
+        <div class="produit-finitions">${chips}</div>
+        <button class="btn-voir">Voir & personnaliser →</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// MODAL PRODUIT
+// ══════════════════════════════════════════════════════════
+function openModal(id) {
+  const p = PRODUITS.find(x => x.id === id);
+  if (!p) return;
+  produitModal = p;
+  finitionSelectionnee = p.finitions[0];
+  qteModal = 1;
+
+  const overlay = document.getElementById('modalOverlay');
+  const imgMain = document.getElementById('modalImgMain');
+  const thumbs  = document.getElementById('modalThumbs');
+  const info    = document.getElementById('modalInfo');
+
+  // Image principale
+  const mainImg = p.image || PLACEHOLDER_IMG;
+  imgMain.src = mainImg;
+  imgMain.alt = p.nom;
+
+  // Miniatures
+  const imgs = p.images && p.images.length > 1 ? p.images : [mainImg];
+  thumbs.innerHTML = imgs.map((src, i) =>
+    `<img class="modal-thumb${i===0?' active':''}" src="${src}" alt="${p.nom} ${i+1}"
+          onerror="this.style.display='none'"
+          onclick="changeImg('${src}', this)"/>`
+  ).join('');
+
+  // Info
+  info.innerHTML = buildModalInfo(p);
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function buildModalInfo(p) {
+  const prix = parseFloat(getPrix(p, finitionSelectionnee));
+  const fBtns = p.finitions.map(f => {
+    const sup = SUPPLEMENTS_FINITIONS[f];
+    const label = sup > 0 ? `${f} (+${sup}€)` : f;
+    return `<button class="fin-btn${f===finitionSelectionnee?' selected':''}"
+              onclick="selectFinition('${f}')">${label}</button>`;
+  }).join('');
+
+  const dims = p.dimensions
+    ? `<div class="modal-dims"><strong>📐 Dimensions :</strong><br/>${p.dimensions.replace(/\|/g,'<br/>')}</div>`
+    : '';
+
+  return `
+    <div class="modal-cat">${p.categorie}</div>
+    <div class="modal-nom">${p.nom}</div>
+    <p class="modal-desc">${p.description}</p>
+    ${dims}
+    <div class="modal-label">Choisir une finition</div>
+    <div class="modal-finitions" id="modalFinBtns">${fBtns}</div>
+    <div class="modal-prix-display" id="modalPrixDisplay">${prix.toFixed(2)} €</div>
+    <p class="modal-prix-note">Finition : <strong>${finitionSelectionnee}</strong></p>
+    <div class="modal-qty-row">
+      <span class="qty-label">Quantité</span>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="changeQte(-1)">−</button>
+        <span class="qty-val" id="qteVal">1</span>
+        <button class="qty-btn" onclick="changeQte(1)">+</button>
+      </div>
+    </div>
+    <div class="modal-perso">
+      <label>Personnalisation (optionnel)</label>
+      <textarea id="persoMsg" placeholder="Précisez vos couleurs, prénom, texte ou instructions spéciales…"></textarea>
+    </div>
+    <button class="modal-add-btn" onclick="addToCart()">🛒 Ajouter au panier</button>
+    <div class="modal-info-bar">
+      <div class="modal-info-item"><span>⏱️</span><span>Fabrication : ${p.delai}</span></div>
+      <div class="modal-info-item"><span>💧</span><span>Imperméabilisé & verni</span></div>
+      <div class="modal-info-item"><span>✋</span><span>Fait main</span></div>
+    </div>`;
+}
+
+function changeImg(src, el) {
+  document.getElementById('modalImgMain').src = src;
+  document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function selectFinition(f) {
+  if (!produitModal) return;
+  finitionSelectionnee = f;
+  const prix = parseFloat(getPrix(produitModal, f));
+  document.getElementById('modalPrixDisplay').textContent = prix.toFixed(2) + ' €';
+  document.querySelectorAll('.fin-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent.startsWith(f));
+  });
+  // Mise à jour note
+  const note = document.querySelector('.modal-prix-note');
+  if (note) note.innerHTML = `Finition : <strong>${f}</strong>`;
+}
+
+function changeQte(delta) {
+  qteModal = Math.max(1, qteModal + delta);
+  document.getElementById('qteVal').textContent = qteModal;
+}
+
+function closeModal(event, force) {
+  if (force || (event && event.target === document.getElementById('modalOverlay'))) {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    produitModal = null;
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// PANIER
+// ══════════════════════════════════════════════════════════
+function addToCart() {
+  if (!produitModal) return;
+  const perso = document.getElementById('persoMsg')?.value || '';
+  const prix = parseFloat(getPrix(produitModal, finitionSelectionnee));
+  const item = {
+    id: produitModal.id + '_' + finitionSelectionnee + '_' + Date.now(),
+    produitId: produitModal.id,
+    nom: produitModal.nom,
+    finition: finitionSelectionnee,
+    prix: prix,
+    qte: qteModal,
+    perso: perso,
+    image: produitModal.image || PLACEHOLDER_IMG
+  };
+  panier.push(item);
+  savePanier();
+  closeModal(null, true);
+  showToast('✅', `"${produitModal.nom}" ajouté au panier !`);
+}
+
+function removeFromCart(id) {
+  panier = panier.filter(i => i.id !== id);
+  savePanier();
+  renderPanier();
+}
+
+function savePanier() {
+  localStorage.setItem('panier_aphrodite', JSON.stringify(panier));
+  updateCartCount();
+}
+
+function updateCartCount() {
+  const total = panier.reduce((s, i) => s + i.qte, 0);
+  document.getElementById('cartCount').textContent = total;
+}
+
+function renderPanier() {
+  const el = document.getElementById('panierContent');
+  if (panier.length === 0) {
+    el.innerHTML = `
+      <div class="panier-empty">
+        <div class="panier-empty-icon">🛒</div>
+        <h2>Votre panier est vide</h2>
+        <p>Découvrez nos créations artisanales et trouvez la pièce unique qui vous ressemble.</p>
+        <button class="btn-primary" onclick="showPage('boutique')">✦ Voir la boutique</button>
+      </div>`;
+    return;
+  }
+
+  const sousTotal = panier.reduce((s,i) => s + i.prix * i.qte, 0);
+  const livraison = LIVRAISONS.find(l => l.id === livraisonChoisie);
+  const fraisLiv = livraison ? livraison.prix : 0;
+  const total = sousTotal + fraisLiv;
+
+  const itemsHtml = panier.map(i => `
+    <div class="panier-item">
+      <img class="panier-item-img" src="${i.image}" alt="${i.nom}"
+           onerror="this.src='${PLACEHOLDER_IMG}'"/>
+      <div class="panier-item-info">
+        <div class="panier-item-nom">${i.nom}</div>
+        <div class="panier-item-detail">Finition : ${i.finition} · Qté : ${i.qte}</div>
+        ${i.perso ? `<div class="panier-item-perso">✏️ "${i.perso}"</div>` : ''}
+      </div>
+      <div class="panier-item-right">
+        <div class="panier-item-prix">${(i.prix * i.qte).toFixed(2)} €</div>
+        <button class="panier-item-del" onclick="removeFromCart('${i.id}')" title="Supprimer">🗑️</button>
+      </div>
+    </div>`).join('');
+
+  const livraisonsHtml = LIVRAISONS.map(l => `
+    <div class="livraison-option${livraisonChoisie===l.id?' selected':''}" onclick="chooseLivraison('${l.id}')">
+      <input type="radio" name="livraison" ${livraisonChoisie===l.id?'checked':''}/>
+      <div class="livraison-option-info">
+        <div class="livraison-option-nom">${l.nom}</div>
+        <div class="livraison-option-desc">${l.desc}</div>
+      </div>
+      <div class="livraison-option-prix">${l.prix === 0 ? 'Gratuit' : l.prix.toFixed(2)+' €'}</div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="panier-items">${itemsHtml}</div>
+    <div class="section-eyebrow" style="margin-bottom:12px;">Mode de livraison</div>
+    <div class="livraison-options">${livraisonsHtml}</div>
+    <div class="panier-recap">
+      <div class="panier-recap-row"><span>Sous-total</span><span>${sousTotal.toFixed(2)} €</span></div>
+      <div class="panier-recap-row"><span>Frais de livraison</span><span>${fraisLiv===0?'Gratuit':fraisLiv.toFixed(2)+' €'}</span></div>
+      <div class="panier-recap-row total"><span>Total</span><span>${total.toFixed(2)} €</span></div>
+    </div>
+    <div class="paiement-section">
+      <div class="paiement-title">Modes de paiement acceptés</div>
+      <div class="paiement-methodes">
+        <div class="paiement-badge">💳 Carte bancaire</div>
+        <div class="paiement-badge">🅿️ PayPal</div>
+        <div class="paiement-badge">🅿️ PayPal 4x</div>
+      </div>
+      <div class="paypal-note">
+        ℹ️ <strong>Comment payer ?</strong> Après validation de votre commande, vous serez redirigé vers PayPal pour finaliser le paiement en toute sécurité. Vous pouvez payer par carte bancaire ou avec votre compte PayPal. L'option <em>PayPal en 4 fois sans frais</em> est disponible sous réserve d'éligibilité.
+      </div>
+    </div>
+    <button class="btn-commander" onclick="commander()">✦ Valider ma commande — ${total.toFixed(2)} €</button>
+    <div class="commander-note">🔒 Paiement sécurisé · Chaque pièce est fabriquée sur mesure</div>`;
+}
+
+function chooseLivraison(id) {
+  livraisonChoisie = id;
+  renderPanier();
+}
+
+function commander() {
+  if (panier.length === 0) return;
+  const livraison = LIVRAISONS.find(l => l.id === livraisonChoisie);
+  const sousTotal = panier.reduce((s,i) => s + i.prix * i.qte, 0);
+  const total = sousTotal + (livraison ? livraison.prix : 0);
+
+  // Construction du résumé pour email
+  const lignes = panier.map(i =>
+    `${i.nom} (${i.finition}) x${i.qte} = ${(i.prix*i.qte).toFixed(2)}€${i.perso?' | Note: '+i.perso:''}`
+  ).join('%0A');
+  const body = `Bonjour Zulay,%0A%0AJe souhaite passer commande :%0A%0A${lignes}%0A%0ALivraison : ${livraison?.nom || ''} (${livraison?.prix===0?'Gratuit':livraison?.prix+'€'})%0ATotal : ${total.toFixed(2)}€%0A%0AMerci !`;
+  const mailto = `mailto:les.essences.parfumees.d.aphrodite@gmail.com?subject=Commande Les Essences Parfumées d'Aphrodite&body=${body}`;
+  window.location.href = mailto;
+}
+
+// ══════════════════════════════════════════════════════════
+// CONTACT
+// ══════════════════════════════════════════════════════════
+function showContact() {
+  document.getElementById('contactOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeContact(event, force) {
+  if (force || (event && event.target === document.getElementById('contactOverlay'))) {
+    document.getElementById('contactOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+function sendContact() {
+  const nom   = document.getElementById('contactNom').value;
+  const email = document.getElementById('contactEmail').value;
+  const sujet = document.getElementById('contactSujet').value;
+  const msg   = document.getElementById('contactMessage').value;
+  if (!nom || !email || !msg) { alert('Merci de remplir tous les champs.'); return; }
+  const body = `Nom : ${nom}%0AEmail : ${email}%0A%0AMessage :%0A${msg}`;
+  window.location.href = `mailto:les.essences.parfumees.d.aphrodite@gmail.com?subject=${encodeURIComponent(sujet)}&body=${body}`;
+  closeContact(null, true);
+  showToast('✉️', 'Message envoyé !');
+}
+
+// ══════════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════════
+function showToast(icon, msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+updateCartCount();
+</script>
+
+</body>
+</html>
