@@ -1,0 +1,4 @@
+FERME=OUI
+DEBUT=2026-08-01
+FIN=2026-08-26
+MESSAGE=Nous sommes actuellement en congés annuels jusqu'au 26 août. La boutique reste consultable, mais les commandes seront de nouveau possibles à partir du 27 août. Merci de votre compréhension, à très bientôt !
