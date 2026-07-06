@@ -5125,17 +5125,18 @@ const LIVS = [
 let panier = JSON.parse(localStorage.getItem('pan_aph4')||'[]');
 
 // ══════════ NOUVEAUX PRODUITS (fichier séparé, sans toucher à index.html) ══════════
-// Zulay (ou Claude) ajoute les nouveaux produits dans "nouveaux-produits.json".
-// Ils sont automatiquement affichés dans leur catégorie ET dans "Nouveautés"
-// pendant 30 jours à partir de leur date d'ajout, puis restent uniquement
-// dans leur catégorie.
-let DATES_AJOUT = {}; // { id_produit: "AAAA-MM-JJ" }
+// Zulay (ou Claude) ajoute les nouveaux produits dans "nouveaux-produits.json",
+// avec une "datePublication" (peut être dans le futur : le produit reste invisible
+// jusqu'à cette date, puis apparaît tout seul, dans sa catégorie ET dans
+// "Nouveautés" pendant 30 jours à partir de cette même date, puis reste
+// uniquement dans sa catégorie.
+let DATES_PUBLICATION = {}; // { id_produit: "AAAA-MM-JJ" }
 
 function estRecent(id){
-  const date = DATES_AJOUT[id];
+  const date = DATES_PUBLICATION[id];
   if(!date) return false;
   const jours = (Date.now() - new Date(date).getTime()) / (1000*60*60*24);
-  return jours <= 30;
+  return jours >= 0 && jours <= 30;
 }
 
 async function chargerNouveauxProduits(){
@@ -5143,10 +5144,14 @@ async function chargerNouveauxProduits(){
     const res = await fetch('nouveaux-produits.json?t=' + Date.now());
     if(!res.ok) return;
     const nouveaux = await res.json();
+    const aujourdhui = new Date().toISOString().slice(0,10);
     let ajout = false;
     nouveaux.forEach(prod=>{
-      const { dateAjout, ...produitPropre } = prod;
-      if(dateAjout) DATES_AJOUT[prod.id] = dateAjout;
+      const { datePublication, ...produitPropre } = prod;
+      // Produit pas encore publié (date future) → on l'ignore complètement pour l'instant,
+      // il n'apparaît nulle part tant que sa date n'est pas arrivée.
+      if(datePublication && datePublication > aujourdhui) return;
+      if(datePublication) DATES_PUBLICATION[prod.id] = datePublication;
       if(!P.some(x=>x.id===prod.id)){
         P.push(produitPropre);
         ajout = true;
