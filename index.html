@@ -5072,6 +5072,7 @@ const P = [
     "n": "Pêche gorgée de soleil",
     "c": "Créations Signature",
     "p": 30.0,
+    "vendu": true,
     "f": ["Pièce unique"],
     "finPrix": {"Pièce unique": 30.0},
     "d": "Une page blanche entre mes mains… C'est ainsi qu'est née cette création.\n\nPêche gorgée de soleil est une Création Signature imaginée en un seul exemplaire — une pièce unique qui ne sera jamais reproduite.\n\nElle est le fruit d'un subtil mélange de blanc, de pêche, de jaune, d'orange et de délicates touches rosées, inspiré des derniers rayons d'un soleil d'été.\n\nChaque nuance se dévoile avec douceur pour offrir une création chaleureuse, lumineuse et intemporelle.\n\nPlus qu'un simple objet décoratif, cette création raconte une histoire… et elle est prête à accueillir la vôtre.",
@@ -5122,7 +5123,28 @@ const LIVS = [
 // ══════════════════════════
 // ÉTAT
 // ══════════════════════════
+// ══════════ OPTIONS TEMPORAIREMENT INDISPONIBLES ══════════
+// Fichier séparé "options-indisponibles.txt" : Zulay y écrit le nom exact
+// d'un parfum ou d'une couleur (comme affiché sur le site), un par ligne,
+// pour le griser temporairement (rupture de stock), sans toucher à
+// index.html. Il suffit d'effacer la ligne pour le rendre à nouveau
+// disponible.
 let panier = JSON.parse(localStorage.getItem('pan_aph4')||'[]');
+let NOMS_INDISPONIBLES = new Set();
+
+async function chargerIndisponibles(){
+  try{
+    const res = await fetch('options-indisponibles.txt?t=' + Date.now());
+    if(!res.ok) return;
+    const txt = await res.text();
+    NOMS_INDISPONIBLES = new Set(
+      txt.split('\n').map(l=>l.trim().toLowerCase()).filter(l=>l)
+    );
+  }catch(e){ /* si le fichier n'existe pas encore, tout reste disponible normalement */ }
+}
+function estIndispo(nom){
+  return NOMS_INDISPONIBLES.has(String(nom||'').trim().toLowerCase());
+}
 
 // ══════════ NOUVEAUX PRODUITS (fichier séparé, sans toucher à index.html) ══════════
 // Zulay (ou Claude) ajoute les nouveaux produits dans "nouveaux-produits.json",
@@ -5367,9 +5389,10 @@ function renderBoutique(cat, _skipHistory){
           const etoiles=[1,2,3,4,5].map(i=>`<span style="color:${i<=Math.round(moy)?'#f4a623':'#d0ccc8'};font-size:13px">★</span>`).join('');
           return `<div class="pc" onclick="openMo('${pr.id}')">
             <div class="pi">
-              <img src="${pr.img||PH}" alt="${pr.n}" loading="lazy" onerror="this.src='${PH}'"/>
+              <img src="${pr.img||PH}" alt="${pr.n}" loading="lazy" onerror="this.src='${PH}'" style="${pr.vendu?'filter:grayscale(35%);opacity:.85':''}"/>
+              ${pr.vendu ? `<span style="position:absolute;top:14px;right:-32px;transform:rotate(45deg);background:#B4544A;color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;padding:4px 40px;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:2">VENDU</span>` : ''}
               <span class="pb-badge">Fait Main</span>
-              <span class="pb-delai">✦ Dispo immédiat</span>
+              <span class="pb-delai">${pr.vendu ? '✕ Pièce vendue' : '✦ Dispo immédiat'}</span>
             </div>
             <div class="pb">
               <div class="pc-cat">${pr.c}</div>
@@ -5381,7 +5404,7 @@ function renderBoutique(cat, _skipHistory){
                 <span style="color:var(--terra);font-weight:700;font-size:15px">${pr.p.toFixed(0)}€</span>
                 <span style="font-size:11px;color:#999;margin-left:4px">(Pièce unique)</span>
               </div>
-              <button class="btn-voir">VOIR &amp; COMMANDER →</button>
+              <button class="btn-voir">${pr.vendu ? 'VOIR LA CRÉATION →' : 'VOIR & COMMANDER →'}</button>
             </div>
           </div>`;
         }).join('')}</div>`
@@ -5479,9 +5502,10 @@ function renderBoutique(cat, _skipHistory){
       ? `<div class="pg">${liste.map(pr=>`
         <div class="pc" onclick="openMo('${pr.id}')">
           <div class="pi">
-            <img src="${getImg(pr)}" alt="${pr.n}" loading="lazy" onerror="this.src='${PH}'"/>
+            <img src="${getImg(pr)}" alt="${pr.n}" loading="lazy" onerror="this.src='${PH}'" style="${pr.vendu?'filter:grayscale(35%);opacity:.85':''}"/>
+            ${pr.vendu ? `<span style="position:absolute;top:14px;right:-32px;transform:rotate(45deg);background:#B4544A;color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;padding:4px 40px;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:2">VENDU</span>` : ''}
             <span class="pb-badge">Fait Main</span>
-          <span class="pb-delai">⏱ 5-7 jours</span>
+          <span class="pb-delai">${pr.vendu ? '✕ Pièce vendue' : '⏱ 5-7 jours'}</span>
           </div>
           <div class="pb">
             <div class="pc-cat">${pr.c}</div>
@@ -5570,10 +5594,11 @@ function palHtml(key, label) {
   // Cercles des 24 familles
   const famBtns = NUANCIER.map((fam, fi) => {
     const isSel = famSelIdx === fi;
+    const indispo = estIndispo(fam.nom);
     return `<button class="pal-fam-btn${isSel?' sel-fam':''}"
-      style="background:${getCoulFamille(fam)}${fam.nom==='Blanc'?';border:1px solid #ddd':''}"
-      title="${fam.nom}"
-      onclick="selFamille('${key}',${fi})"></button>`;
+      style="background:${getCoulFamille(fam)}${fam.nom==='Blanc'?';border:1px solid #ddd':''}${indispo?';opacity:.3;filter:grayscale(100%);cursor:not-allowed':''}"
+      title="${fam.nom}${indispo?' — Rupture de stock':''}"
+      ${indispo?'disabled':`onclick="selFamille('${key}',${fi})"`}></button>`;
   }).join('');
 
   // Sous-nuancier si une famille est sélectionnée ET qu'elle a une sous-palette
@@ -5811,12 +5836,16 @@ function buildMo(pr,mainImg){
       }
     </div>
     </div>
-    ${buildOptionsHtml(pr)}
+    ${pr.vendu ? '' : buildOptionsHtml(pr)}
+    ${pr.vendu ? `<div style="background:#FDF6F0;border:2px solid #B4544A;border-radius:12px;padding:16px;text-align:center;margin:10px 0">
+      <div style="font-size:15px;font-weight:700;color:#B4544A;margin-bottom:4px">✕ Cette pièce unique a déjà trouvé preneuse</div>
+      <div style="font-size:12.5px;color:var(--brun)">Chaque création étant unique, celle-ci ne sera pas reproduite à l'identique. Contactez-moi pour une création similaire, personnalisée rien que pour vous.</div>
+    </div>` : `
     <div class="m-perso">
       <label>Message de personnalisation (optionnel)</label>
       <textarea id="persoMsg" placeholder="Précisez vos souhaits supplémentaires, prénom, texte…"></textarea>
-    </div>
-    <button class="m-add" id="btn-add-cart" onclick="addCart()">${_itemEnModification ? '✏️ Valider la modification' : '🛒 Ajouter au panier'}</button>
+    </div>`}
+    <button class="m-add" id="btn-add-cart" onclick="addCart()" ${pr.vendu ? 'disabled style="opacity:.5;cursor:not-allowed;background:#B4544A"' : ''}>${pr.vendu ? '✕ Vendu' : (_itemEnModification ? '✏️ Valider la modification' : '🛒 Ajouter au panier')}</button>
     <div class="m-infobar">
       <div class="m-ii">✋ <span>Fait main</span></div>
       <div class="m-ii">🎨 <span>Personnalisé</span></div>
@@ -5948,10 +5977,10 @@ function selSocle(id){
 function buildExclusifOption(pid, hasFP, hasFT, feuilleOnly=false, hasPierres=false){
   // Choix du type (1 seul parmi les options disponibles)
   const typeBtns = [
-    hasFP ? `<button class="opt-btn${optExclusif==='feuille'?' sel':''}" onclick="selExclusif('feuille')">✨ Feuille métallique (or)</button>` : '',
-    (hasFP && !feuilleOnly) ? `<button class="opt-btn${optExclusif==='paillette'?' sel':''}" onclick="selExclusif('paillette')">🌟 Paillettes</button>` : '',
-    hasFT ? `<button class="opt-btn${optExclusif==='feutre'?' sel':''}" onclick="selExclusif('feutre')">🖊️ Feutre métallique</button>` : '',
-    hasPierres ? `<button class="opt-btn${optExclusif==='pierres'?' sel':''}" onclick="selExclusif('pierres')">💎 Pierres fluorescentes (+2.50€)</button>` : '',
+    hasFP ? `<button class="opt-btn${optExclusif==='feuille'?' sel':''}" ${estIndispo('Feuille métallique')?'disabled title="Rupture de stock" style="opacity:.4;cursor:not-allowed"':`onclick="selExclusif('feuille')"`}>✨ Feuille métallique (or)${estIndispo('Feuille métallique')?' — Rupture de stock':''}</button>` : '',
+    (hasFP && !feuilleOnly) ? `<button class="opt-btn${optExclusif==='paillette'?' sel':''}" ${estIndispo('Paillettes')?'disabled title="Rupture de stock" style="opacity:.4;cursor:not-allowed"':`onclick="selExclusif('paillette')"`}>🌟 Paillettes${estIndispo('Paillettes')?' — Rupture de stock':''}</button>` : '',
+    hasFT ? `<button class="opt-btn${optExclusif==='feutre'?' sel':''}" ${estIndispo('Feutre métallique')?'disabled title="Rupture de stock" style="opacity:.4;cursor:not-allowed"':`onclick="selExclusif('feutre')"`}>🖊️ Feutre métallique${estIndispo('Feutre métallique')?' — Rupture de stock':''}</button>` : '',
+    hasPierres ? `<button class="opt-btn${optExclusif==='pierres'?' sel':''}" ${estIndispo('Pierres fluorescentes')?'disabled title="Rupture de stock" style="opacity:.4;cursor:not-allowed"':`onclick="selExclusif('pierres')"`}>💎 Pierres fluorescentes (+2.50€)${estIndispo('Pierres fluorescentes')?' — Rupture de stock':''}</button>` : '',
   ].filter(Boolean).join('');
 
   let detail = '';
@@ -5983,9 +6012,10 @@ function buildExclusifOption(pid, hasFP, hasFT, feuilleOnly=false, hasPierres=fa
     const fCapHtml = '<div class="photo-capsules">'+fCaps.map(c=>{
       const sel=optFeuilleCoul===c.id;
       const img=FEUILLE_IMGS[c.id]||'Feuille_métallique_Or.png';
-      return `<div class="photo-cap${sel?' sel-cap':''}" onclick="selFeuilleCoul('${c.id}')" title="${c.nom}"
-        style="background:url('${img}') center center / cover no-repeat">
-        <span class="photo-cap-label">${c.nom}</span>
+      const indispo=estIndispo('Feuille '+c.nom);
+      return `<div class="photo-cap${sel?' sel-cap':''}" ${indispo?'':`onclick="selFeuilleCoul('${c.id}')"`} title="${c.nom}${indispo?' — Rupture de stock':''}"
+        style="background:url('${img}') center center / cover no-repeat${indispo?';opacity:.3;filter:grayscale(100%);cursor:not-allowed':''}">
+        <span class="photo-cap-label">${c.nom}${indispo?' ✕':''}</span>
       </div>`;
     }).join('')+'</div>';
     detail = `<div class="opt-detail">
@@ -6022,9 +6052,10 @@ function buildExclusifOption(pid, hasFP, hasFT, feuilleOnly=false, hasPierres=fa
     const pCapHtml = '<div class="photo-capsules">'+pCaps.map(c=>{
       const sel=optPailletCoul===c.id;
       const img=PAILLETTE_IMGS[c.id]||'Paillette_Or.png';
-      return `<div class="photo-cap${sel?' sel-cap':''}" onclick="selPailletCoul('${c.id}')" title="${c.nom}"
-        style="background:url('${img}') center center / cover no-repeat">
-        <span class="photo-cap-label">${c.nom}</span>
+      const indispo=estIndispo('Paillette '+c.nom);
+      return `<div class="photo-cap${sel?' sel-cap':''}" ${indispo?'':`onclick="selPailletCoul('${c.id}')"`} title="${c.nom}${indispo?' — Rupture de stock':''}"
+        style="background:url('${img}') center center / cover no-repeat${indispo?';opacity:.3;filter:grayscale(100%);cursor:not-allowed':''}">
+        <span class="photo-cap-label">${c.nom}${indispo?' ✕':''}</span>
       </div>`;
     }).join('')+'</div>';
     detail = `<div class="opt-detail">
@@ -6058,9 +6089,10 @@ function buildExclusifOption(pid, hasFP, hasFT, feuilleOnly=false, hasPierres=fa
     const ftCapHtml = '<div class="photo-capsules">'+ftCaps.map(c=>{
       const sel=optFeutreCoul===c.id;
       const img=FEUTRE_IMGS[c.id]||'Feutre_métallique_Or.png';
-      return `<div class="photo-cap${sel?' sel-cap':''}" onclick="selFeutreCoul('${c.id}')" title="${c.nom}"
-        style="background:url('${img}') center center / cover no-repeat">
-        <span class="photo-cap-label">${c.nom}</span>
+      const indispo=estIndispo('Feutre '+c.nom);
+      return `<div class="photo-cap${sel?' sel-cap':''}" ${indispo?'':`onclick="selFeutreCoul('${c.id}')"`} title="${c.nom}${indispo?' — Rupture de stock':''}"
+        style="background:url('${img}') center center / cover no-repeat${indispo?';opacity:.3;filter:grayscale(100%);cursor:not-allowed':''}">
+        <span class="photo-cap-label">${c.nom}${indispo?' ✕':''}</span>
       </div>`;
     }).join('')+'</div>';
     detail = `<div class="opt-detail">
@@ -6191,9 +6223,10 @@ function buildCoulCoeurOption(){
   // Même système que la palette nuancier (petites pastilles rondes)
   const famBtns = NUANCIER.map(fam=>{
     const sel = optCoulCoeur===fam.id;
-    return `<div class="pal-fam-btn${sel?' sel-fam':''}" onclick="selCoulCoeur(${fam.id})"
-      style="background:${getCoulFamille(fam)};width:32px;height:32px;border-radius:50%;border:${sel?'3px solid var(--brun)':'2px solid rgba(0,0,0,0.1)'};cursor:pointer;transition:transform .15s;flex-shrink:0"
-      title="${fam.nom}"></div>`;
+    const indispo = estIndispo(fam.nom);
+    return `<div class="pal-fam-btn${sel?' sel-fam':''}" ${indispo?'':`onclick="selCoulCoeur(${fam.id})"`}
+      style="background:${getCoulFamille(fam)};width:32px;height:32px;border-radius:50%;border:${sel?'3px solid var(--brun)':'2px solid rgba(0,0,0,0.1)'};cursor:${indispo?'not-allowed':'pointer'};transition:transform .15s;flex-shrink:0${indispo?';opacity:.3;filter:grayscale(100%)':''}"
+      title="${fam.nom}${indispo?' — Rupture de stock':''}"></div>`;
   }).join('');
   const selFam = optCoulCoeur ? NUANCIER.find(f=>f.id===optCoulCoeur) : null;
   return `<div class="opt-block">
@@ -6213,7 +6246,10 @@ function refreshOptions(){
 }
 
 function buildParfumOption(){
-  const opts = PARFUMS.map(p=>`<option value="${p.id}"${parfumSel===p.id?' selected':''}>${p.nom} (+${PARFUM_PRIX.toFixed(2)} €)</option>`).join('');
+  const opts = PARFUMS.map(p=>{
+    const indispo = estIndispo(p.nom);
+    return `<option value="${p.id}"${parfumSel===p.id?' selected':''}${indispo?' disabled':''}>${p.nom} (+${PARFUM_PRIX.toFixed(2)} €)${indispo?' — Rupture de stock':''}</option>`;
+  }).join('');
   let detail = '';
   if(parfumSel){
     const p = PARFUMS.find(x=>x.id===parfumSel);
@@ -6350,6 +6386,10 @@ function closeMo(e,force){
 // ══════════════════════════
 function addCart(){
   if(!prodModal)return;
+  if(prodModal.vendu){
+    showToast('✕', 'Cette pièce unique est déjà vendue.');
+    return;
+  }
   if(boutiqueFermee){
     showToast('🌴', boutiqueFermeeMsg);
     return;
@@ -7163,6 +7203,7 @@ window.addEventListener('popstate', (e)=>{
 document.addEventListener('DOMContentLoaded', () => {
   chargerFermeture();
   chargerNouveauxProduits();
+  chargerIndisponibles();
 
   // Initialiser l'état historique au chargement (pour que Précédent fonctionne depuis l'accueil)
   history.replaceState({page:'accueil', cat:null}, '', window.location.pathname);
