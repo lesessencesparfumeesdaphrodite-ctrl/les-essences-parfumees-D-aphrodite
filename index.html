@@ -5391,13 +5391,15 @@ function renderBoutique(cat, _skipHistory){
       <div class="cg-grid">${cats.map(c=>{
         const nb=P.filter(x=>x.c===c).length;
         const img=CAT_IMGS[c];
-        const countTxt = nb===0 ? 'Bientôt disponible' : `${nb} création${nb>1?'s':''}`;
+        const nbReel = c==='Nouveautés' ? P.filter(x=>estRecent(x.id)).length : nb;
+        const countTxt = nbReel===0 ? (c==='Nouveautés' ? 'Bientôt disponible' : `${nbReel} création${nbReel>1?'s':''}`) : `${nbReel} création${nbReel>1?'s':''}`;
+        const aNouveau = c!=='Nouveautés' && P.some(x=>x.c===c && estRecent(x.id));
         return `<div class="cc2" onclick="showPage('boutique','${c}')">
           ${img
             ?`<img class="cc2-img" src="${img}" alt="${c}" onerror="this.outerHTML='&lt;div class=&quot;cc2-img cc2-img-ph&quot;&gt;✦&lt;/div&gt;'">`
             :`<div class="cc2-img cc2-img-ph">✦</div>`}
           <div class="cc2-b">
-            <div class="cc2-n">${c}</div>
+            <div class="cc2-n">${c}${aNouveau ? ' <span style="display:inline-block;background:#B4544A;color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px;padding:1px 6px;border-radius:8px;vertical-align:middle;">NEW</span>' : ''}</div>
             <div class="cc2-count">${countTxt}</div>
           </div>
         </div>`;
