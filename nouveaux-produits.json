@@ -8,12 +8,12 @@
     "finPrix": {"Brut": 7.0, "Uni": 8.0, "Marbré": 11.0},
     "d": "Ce pot Garçon Rêveur est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif pour accueillir une petite plante, une bougie LED, des stylos, de petits accessoires ou encore des fleurs séchées. Son design tendre et poétique apportera une touche de douceur et d'originalité à une entrée, un bureau, une étagère, une table de chevet ou toute autre pièce de votre intérieur.",
     "dim": "Dimensions (H × L) : ≃ 9,7 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon_Rêveur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon_Rêveur2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon%20Rêveur1.png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon%20Rêveur2.png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon_Rêveur_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon_Rêveur_Uni.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon_Rêveur_Marbré.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon%20Rêveur1.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon%20Rêveur%20Uni.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon%20Rêveur%20Marbré.jpg"
     },
     "datePublication": "2026-07-07"
   },
@@ -29,9 +29,9 @@
     "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur1.png",
     "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur2.png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur_Uni.png",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur_Marbré.png"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur%20Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur%20Uni.png",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur%20Marbré.png"
     }
   }
 ]
