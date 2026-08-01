@@ -1,4 +1,4 @@
 FERME=OUI
 DEBUT=2026-08-01
 FIN=2026-08-26
-MESSAGE=Nous sommes actuellement en congés d'été jusqu'au 26 août 2026.inclus La boutique reste consultable, mais les commandes seront de nouveau possibles à partir du 26 août 2026 08H00. Merci de votre compréhension, à très bientôt !
+MESSAGE=Nous sommes actuellement en congés d'été jusqu'au 26 août 2026 inclus. La boutique reste consultable, mais les commandes seront de nouveau possibles à partir du 26 août 2026 08H00. Merci de votre compréhension. À très bientôt !
