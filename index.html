@@ -183,7 +183,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-slide{min-width:100%;position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center}
 .carr-duo{display:flex;gap:0;width:100%;justify-content:center;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
 .carr-duo-img{width:50%;aspect-ratio:1/1;object-fit:contain;display:block;background:white}
-.carr-mosaic{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;width:100%;aspect-ratio:1/1;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:white}
+.carr-mosaic{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;width:100%;aspect-ratio:2/1;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:white}
 .carr-mosaic-img{width:100%;height:100%;object-fit:cover;display:block;background:white}
 .carr-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(44,24,16,.70));border-radius:0 0 var(--r-sm) var(--r-sm);text-align:center;padding:32px 16px 14px;pointer-events:none}
 .carr-label-cat{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:4px}
@@ -200,7 +200,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
   .carr-section{padding:0 0 32px}
   .carr-duo{gap:8px;border-radius:var(--r-sm);box-shadow:var(--sh)}
   .carr-duo-img{width:calc(50% - 4px);border-radius:0}
-  .carr-mosaic{gap:2px;border-radius:var(--r-sm)}
+  .carr-mosaic{gap:1px;border-radius:var(--r-sm)}
   .carr-label{position:static;background:transparent;padding:10px 8px 4px;pointer-events:auto}
   .carr-label-cat{color:var(--terra)}
   .carr-label-cta{color:var(--brun);font-size:14px}
@@ -298,6 +298,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .pi img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
 .pc:hover .pi img{transform:scale(1.05)}
 .pb-badge{position:absolute;top:9px;left:9px;background:var(--terra);color:white;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:30px}
+.pb-new{position:absolute;top:9px;right:9px;background:#B4544A;color:white;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:30px;z-index:2}
 .pb-delai{position:absolute;bottom:9px;right:9px;background:rgba(44,24,16,.7);color:white;font-size:8px;font-weight:700;padding:2px 7px;border-radius:20px;backdrop-filter:blur(4px)}
 .pb{padding:13px 14px 16px}
 .pc-cat{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
@@ -5157,10 +5158,11 @@ function updateCategoryBadges(){
   const catsAvecNouveau = new Set(
     P.filter(pr => estRecent(pr.id)).map(pr => pr.c)
   );
+  const yATouteNouveaute = P.some(pr => estRecent(pr.id));
   document.querySelectorAll('[data-cat]').forEach(el => {
     const cat = el.getAttribute('data-cat');
     let badge = el.querySelector('.badge-new');
-    if(cat !== 'Nouveautés' && catsAvecNouveau.has(cat)){
+    if(cat==='Nouveautés' ? yATouteNouveaute : catsAvecNouveau.has(cat)){
       if(!badge){
         badge = document.createElement('span');
         badge.className = 'badge-new';
@@ -5429,7 +5431,7 @@ function renderBoutique(cat, _skipHistory){
         const img=CAT_IMGS[c];
         const nbReel = c==='Nouveautés' ? P.filter(x=>estRecent(x.id)).length : nb;
         const countTxt = nbReel===0 ? (c==='Nouveautés' ? 'Bientôt disponible' : `${nbReel} création${nbReel>1?'s':''}`) : `${nbReel} création${nbReel>1?'s':''}`;
-        const aNouveau = c!=='Nouveautés' && P.some(x=>x.c===c && estRecent(x.id));
+        const aNouveau = c==='Nouveautés' ? P.some(x=>estRecent(x.id)) : P.some(x=>x.c===c && estRecent(x.id));
         return `<div class="cc2" onclick="showPage('boutique','${c}')">
           ${img
             ?`<img class="cc2-img" src="${img}" alt="${c}" onerror="this.outerHTML='&lt;div class=&quot;cc2-img cc2-img-ph&quot;&gt;✦&lt;/div&gt;'">`
@@ -5456,6 +5458,7 @@ function renderBoutique(cat, _skipHistory){
               <img src="${pr.img||PH}" alt="${pr.n}" loading="lazy" onerror="this.src='${PH}'" style="${pr.vendu?'filter:grayscale(35%);opacity:.85':''}"/>
               ${pr.vendu ? `<span style="position:absolute;top:14px;right:-32px;transform:rotate(45deg);background:#B4544A;color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;padding:4px 40px;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:2">VENDU</span>` : ''}
               <span class="pb-badge">Fait Main</span>
+              ${estRecent(pr.id) ? `<span class="pb-new">NEW</span>` : ''}
               <span class="pb-delai">${pr.vendu ? '✕ Pièce vendue' : '✦ Dispo immédiat'}</span>
             </div>
             <div class="pb">
@@ -5569,6 +5572,7 @@ function renderBoutique(cat, _skipHistory){
             <img src="${getImg(pr)}" alt="${pr.n}" loading="lazy" onerror="this.src='${PH}'" style="${pr.vendu?'filter:grayscale(35%);opacity:.85':''}"/>
             ${pr.vendu ? `<span style="position:absolute;top:14px;right:-32px;transform:rotate(45deg);background:#B4544A;color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;padding:4px 40px;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:2">VENDU</span>` : ''}
             <span class="pb-badge">Fait Main</span>
+            ${estRecent(pr.id) ? `<span class="pb-new">NEW</span>` : ''}
           <span class="pb-delai">${pr.vendu ? '✕ Pièce vendue' : '⏱ 5-7 jours'}</span>
           </div>
           <div class="pb">
