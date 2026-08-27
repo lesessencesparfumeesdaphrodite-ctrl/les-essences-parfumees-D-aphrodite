@@ -183,7 +183,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-slide{min-width:100%;position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center}
 .carr-duo{display:flex;gap:0;width:100%;justify-content:center;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
 .carr-duo-img{width:50%;aspect-ratio:1/1;object-fit:contain;display:block;background:white}
-.carr-mosaic{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;width:100%;aspect-ratio:2/1;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:white}
+.carr-mosaic{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:2px;width:100%;aspect-ratio:2/1;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:white}
 .carr-mosaic-img{width:100%;height:100%;object-fit:cover;display:block;background:white}
 .carr-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(44,24,16,.70));border-radius:0 0 var(--r-sm) var(--r-sm);text-align:center;padding:32px 16px 14px;pointer-events:none}
 .carr-label-cat{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:4px}
@@ -7225,7 +7225,7 @@ function initCarr() {
     <div class="carr-slide" onclick="showPage('boutique','${d.cat.replace(/'/g,"\\'")}')">
       ${visuel}
       <div class="carr-label">
-        <div class="carr-label-cat">✦ ${d.label ? d.label : d.cat}</div>
+        <div class="carr-label-cat"${d.label ? ' style="font-size:15px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.6)"' : ''}>✦ ${d.label ? d.label : d.cat}</div>
         <div class="carr-label-cta">Découvrir la collection →</div>
       </div>
     </div>`;
