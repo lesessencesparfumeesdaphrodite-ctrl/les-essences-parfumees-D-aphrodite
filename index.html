@@ -7215,7 +7215,8 @@ function initCarr() {
   const dots = document.getElementById('carrDots');
   if (!track || !dots) return;
   track.innerHTML = CARR_DATA.map((d, i) => {
-    const visuel = (d.mosaic && d.mosaic.length)
+    const estMosaic = d.mosaic && d.mosaic.length;
+    const visuel = estMosaic
       ? `<div class="carr-mosaic">${d.mosaic.map(src=>`<img class="carr-mosaic-img" src="${src}" alt="${d.cat}" onerror="this.style.display='none'"/>`).join('')}</div>`
       : `<div class="carr-duo">
         <img class="carr-duo-img" src="${d.img1}" alt="${d.cat}" onerror="this.style.display='none'"/>
@@ -7224,9 +7225,9 @@ function initCarr() {
     return `
     <div class="carr-slide" onclick="showPage('boutique','${d.cat.replace(/'/g,"\\'")}')">
       ${visuel}
-      <div class="carr-label">
-        <div class="carr-label-cat"${d.label ? ' style="font-size:15px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.6)"' : ''}>✦ ${d.label ? d.label : d.cat}</div>
-        <div class="carr-label-cta">Découvrir la collection →</div>
+      <div class="carr-label"${estMosaic ? ' style="position:static;background:transparent;padding:10px 8px 4px"' : ''}>
+        <div class="carr-label-cat"${estMosaic ? ' style="color:var(--terra)"' : ''}>✦ ${d.label ? d.label : d.cat}</div>
+        <div class="carr-label-cta"${estMosaic ? ' style="color:var(--brun)"' : ''}>Découvrir la collection →</div>
       </div>
     </div>`;
   }).join('');
@@ -7247,7 +7248,7 @@ function carrNav(dir) {
 }
 
 function startCarrTimer() {
-  carrTimer = setInterval(() => goCarr(carrIdx + 1), 4000);
+  carrTimer = setInterval(() => goCarr(carrIdx + 1), 7000);
 }
 
 function clearCarrTimer() {
