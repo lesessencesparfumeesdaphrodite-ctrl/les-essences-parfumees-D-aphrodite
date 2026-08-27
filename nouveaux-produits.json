@@ -4,17 +4,27 @@
     "n": "Planche service Sillage",
     "c": "Art de la table",
     "p": 33.0,
-    "f": ["Brut", "Uni", "Marbré", "Terrazzo"],
-    "finPrix": { "Brut": 33.0, "Uni": 34.0, "Marbré": 37.0, "Terrazzo": 38.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Marbré",
+      "Terrazzo"
+    ],
+    "finPrix": {
+      "Brut": 33.0,
+      "Uni": 34.0,
+      "Marbré": 37.0,
+      "Terrazzo": 38.0
+    },
     "d": "Cette planche de présentation Sillage est fabriquée à la main, personnalisée et unique. Elle habille avec élégance vos apéritifs, plateaux de charcuterie ou de fromages. Attention : il ne s'agit pas d'une planche à découper.",
     "dim": "Dimensions (L × l) : ≃ 34,2 cm × ≃ 21 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche_service_Sillage1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche_service_Sillage2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage1.png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage2.png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche_service_Sillage_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche_service_Sillage_Uni.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche_service_Sillage_Marbré.jpg",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche_service_Sillage_Terrazzo.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage Uni.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage Marbré.jpg",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage Terrazzo.jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -23,17 +33,27 @@
     "n": "Cœur Élancé",
     "c": "Plateaux & Vide-poches",
     "p": 4.0,
-    "f": ["Brut", "Uni", "Marbré", "Terrazzo"],
-    "finPrix": { "Brut": 4.0, "Uni": 5.0, "Marbré": 8.0, "Terrazzo": 9.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Marbré",
+      "Terrazzo"
+    ],
+    "finPrix": {
+      "Brut": 4.0,
+      "Uni": 5.0,
+      "Marbré": 8.0,
+      "Terrazzo": 9.0
+    },
     "d": "Ce cœur Élancé est fabriqué à la main, personnalisé et unique. Il trouve sa place comme élément de décoration, vide-poche pour vos bijoux ou petit rangement du quotidien.",
     "dim": "Dimensions (L × l) : ≃ 9,8 cm × ≃ 10,9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Elancé1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Elancé2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur Elancé1.png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur Elancé2.png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Elancé_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Elancé_Uni.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Elancé_Marbré.jpg",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Elancé_Terrazzo.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur Elancé Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur Elancé Uni.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur Elancé Marbré.jpg",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur Elancé Terrazzo.jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -42,18 +62,30 @@
     "n": "Coquillages Enlacés",
     "c": "Plateaux & Vide-poches",
     "p": 5.0,
-    "f": ["Brut", "Uni", "Bicolore", "Marbré", "Terrazzo"],
-    "finPrix": { "Brut": 5.0, "Uni": 6.0, "Bicolore": 8.0, "Marbré": 9.0, "Terrazzo": 10.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Bicolore",
+      "Marbré",
+      "Terrazzo"
+    ],
+    "finPrix": {
+      "Brut": 5.0,
+      "Uni": 6.0,
+      "Bicolore": 8.0,
+      "Marbré": 9.0,
+      "Terrazzo": 10.0
+    },
     "d": "Ce duo de coquillages enlacés est fabriqué à la main, personnalisé et unique. Il se glisse aussi bien en décoration qu'en vide-poche pour vos bijoux ou petits objets.",
     "dim": "Dimensions (L × l) : ≃ 10,3 cm × ≃ 15,2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage_Enlacé1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage_Enlacé2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé1.png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé2.png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage_Enlacé_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage_Enlacé_Uni.jpg",
-      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage_Enlacé_Bicolore.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage_Enlacé_Marbré.jpg",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage_Enlacé_Terrazzo.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé Uni.jpg",
+      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé Bicolore.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé Marbré.jpg",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé Terrazzo.jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -62,16 +94,24 @@
     "n": "Essence Lunaire",
     "c": "Organisateurs & Pots",
     "p": 7.0,
-    "f": ["Brut", "Uni", "Marbré"],
-    "finPrix": { "Brut": 7.0, "Uni": 8.0, "Marbré": 11.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Marbré"
+    ],
+    "finPrix": {
+      "Brut": 7.0,
+      "Uni": 8.0,
+      "Marbré": 11.0
+    },
     "d": "Ce pot Essence Lunaire est fabriqué à la main, personnalisé et unique. Il accueille une plante grasse, une bougie ou se pose simplement comme objet de décoration.",
     "dim": "Dimensions (H × l × Ouverture) : ≃ 6 cm × ≃ 9 cm × ≃ 5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Lunaire1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Lunaire2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire1.png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire2.png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Lunaire_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Lunaire_Uni.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Lunaire_Marbré.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire Uni.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire Marbré.jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -80,17 +120,27 @@
     "n": "Essence Élancé",
     "c": "Plateaux & Vide-poches",
     "p": 7.0,
-    "f": ["Brut", "Uni", "Marbré", "Terrazzo"],
-    "finPrix": { "Brut": 7.0, "Uni": 8.0, "Marbré": 11.0, "Terrazzo": 12.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Marbré",
+      "Terrazzo"
+    ],
+    "finPrix": {
+      "Brut": 7.0,
+      "Uni": 8.0,
+      "Marbré": 11.0,
+      "Terrazzo": 12.0
+    },
     "d": "Ce plateau Essence Élancé est fabriqué à la main, personnalisé et unique. Il sert de décoration ou de vide-poche pour vos bijoux et petits objets du quotidien.",
     "dim": "Dimensions (L × l) : ≃ 18,4 cm × ≃ 9,9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Elancé1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Elancé2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé1.png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé2.png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Elancé_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Elancé_Uni.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Elancé_Marbré.png",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Elancé_Terrazzo.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé Uni.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé Marbré.png",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé Terrazzo.jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -99,17 +149,27 @@
     "n": "Pétales de fleur",
     "c": "Plateaux & Vide-poches",
     "p": 5.0,
-    "f": ["Brut", "Uni", "Marbré", "Terrazzo"],
-    "finPrix": { "Brut": 5.0, "Uni": 6.0, "Marbré": 9.0, "Terrazzo": 10.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Marbré",
+      "Terrazzo"
+    ],
+    "finPrix": {
+      "Brut": 5.0,
+      "Uni": 6.0,
+      "Marbré": 9.0,
+      "Terrazzo": 10.0
+    },
     "d": "Ce plateau Pétales de fleur est fabriqué à la main, personnalisé et unique. Il se prête à la décoration comme au rangement de vos bijoux en vide-poche.",
     "dim": "Dimensions (L × l) : ≃ 12 cm × ≃ 11 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales_de_fleur1_.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales_de_fleur2_.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur1 .png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur2 .png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales_de_fleur_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales_de_fleur_Uni.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales_de_fleur_Marbré.jpg",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales_de_fleur_Terrazzo_.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur Uni.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur Marbré.jpg",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur Terrazzo .jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -118,17 +178,27 @@
     "n": "Plateau de Service Essence Relief ondulé",
     "c": "Art de la table",
     "p": 24.0,
-    "f": ["Brut", "Uni", "Bicolore", "Marbré"],
-    "finPrix": { "Brut": 24.0, "Uni": 25.0, "Bicolore": 27.0, "Marbré": 28.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Bicolore",
+      "Marbré"
+    ],
+    "finPrix": {
+      "Brut": 24.0,
+      "Uni": 25.0,
+      "Bicolore": 27.0,
+      "Marbré": 28.0
+    },
     "d": "Ce plateau de service Essence Relief ondulé est fabriqué à la main, personnalisé et unique. Il accompagne vos apéritifs, plateaux de charcuterie ou de fromages. Attention : il ne s'agit pas d'une surface de découpe.",
     "dim": "Dimensions (L × l) : ≃ 30 cm × ≃ 30 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_de_Service_Essence_Relief_ondulé1_.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_de_Service_Essence_Relief_ondulé2_.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé1 .png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé2 .png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_de_Service_Essence_Relief_ondulé_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_de_Service_Essence_Relief_ondulé_Uni.jpg",
-      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_de_Service_Essence_Relief_ondulé_Bicolore.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_de_Service_Essence_Relief_ondulé_Marbré.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé Uni.jpg",
+      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé Bicolore.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé Marbré.jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -137,18 +207,30 @@
     "n": "Plateau de Service Taï Chi",
     "c": "Art de la table",
     "p": 14.0,
-    "f": ["Brut", "Uni", "Bicolore", "Marbré", "Terrazzo"],
-    "finPrix": { "Brut": 14.0, "Uni": 15.0, "Bicolore": 17.0, "Marbré": 18.0, "Terrazzo": 19.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Bicolore",
+      "Marbré",
+      "Terrazzo"
+    ],
+    "finPrix": {
+      "Brut": 14.0,
+      "Uni": 15.0,
+      "Bicolore": 17.0,
+      "Marbré": 18.0,
+      "Terrazzo": 19.0
+    },
     "d": "Ce plateau de service Taï Chi, à la silhouette inspirée du symbole yin et yang, est fabriqué à la main, personnalisé et unique. Il accompagne vos apéritifs, charcuteries, fromages, bonbons ou crudités.",
     "dim": "Dimensions (L × l) : ≃ 20,8 cm × ≃ 20,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_Taï_Chi1_.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_Taï_Chi2_.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi1 .png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi2 .png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_Taï_Chi_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_Taï_Chi_Uni.png",
-      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_Taï_Chi_Bicolore.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_Taï_Chi_Marbré.png",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_Taï_Chi_Terrazzo.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi Uni.png",
+      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi Bicolore.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi Marbré.png",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi Terrazzo.jpg"
     },
     "datePublication": "2026-08-27"
   },
@@ -157,17 +239,27 @@
     "n": "Repose-cuillère Alizé",
     "c": "Art de la table",
     "p": 9.0,
-    "f": ["Brut", "Uni", "Marbré", "Terrazzo"],
-    "finPrix": { "Brut": 9.0, "Uni": 10.0, "Marbré": 13.0, "Terrazzo": 14.0 },
+    "f": [
+      "Brut",
+      "Uni",
+      "Marbré",
+      "Terrazzo"
+    ],
+    "finPrix": {
+      "Brut": 9.0,
+      "Uni": 10.0,
+      "Marbré": 13.0,
+      "Terrazzo": 14.0
+    },
     "d": "Ce repose-cuillère Alizé est fabriqué à la main, personnalisé et unique. Pratique en cuisine, il accueille vos ustensiles pendant la préparation de vos plats.",
     "dim": "Dimensions (L × l × É) : ≃ 23,37 cm × ≃ 11,94 cm × ≃ 4,57 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère_Alizé1_.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère_Alizé2_.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé1 .png",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé2 .png",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère_Alizé_Brut.png",
-      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère_Alizé_Uni.jpg",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère_Alizé_Marbré.jpg",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère_Alizé_Terrazzo.jpg"
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé Brut.png",
+      "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé Uni.jpg",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé Marbré.jpg",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé Terrazzo.jpg"
     },
     "datePublication": "2026-08-27"
   }
