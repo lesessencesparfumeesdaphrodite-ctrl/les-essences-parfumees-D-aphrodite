@@ -5210,7 +5210,41 @@ async function chargerNouveauxProduits(){
       renderBoutique(catActive, true);
     }
     updateCategoryBadges();
+    await chargerLibelleNouveaute();
   }catch(e){ /* si le fichier n'existe pas encore, rien de grave, le site fonctionne normalement */ }
+}
+
+// ══════ VIGNETTE CARROUSEL "NOUVEAUTÉ DU MOIS" ══════
+// S'appuie sur les MÊMES produits "récents" (estRecent) que le badge NEW
+// et la catégorie Nouveautés : apparaît et disparaît automatiquement,
+// exactement en même temps qu'eux (30 jours depuis leur datePublication).
+// Le libellé ("Nouveauté du mois de septembre", etc.) vient du fichier
+// texte nouveaute-carrousel.txt, modifiable via crayon GitHub (comme
+// fermeture.txt), à mettre à jour à chaque nouveau lot de nouveautés.
+async function chargerLibelleNouveaute(){
+  try{
+    const recents = P.filter(x=>estRecent(x.id));
+    if(recents.length===0) return; // pas de nouveauté active en ce moment
+    if(CARR_DATA.some(d=>d.cat==='Nouveautés')) return; // déjà ajoutée
+
+    let libelle = 'Nouveautés du moment';
+    try{
+      const res = await fetch('nouveaute-carrousel.txt?t=' + Date.now());
+      if(res.ok){
+        const txt = await res.text();
+        const m = txt.match(/LIBELLE\s*=\s*(.+)/);
+        if(m && m[1].trim()) libelle = m[1].trim();
+      }
+    }catch(e){ /* pas de fichier -> libellé par défaut */ }
+
+    const img1 = recents[0]?.img;
+    const img2 = recents[1]?.img || recents[0]?.img2 || img1;
+    if(!img1) return;
+
+    CARR_DATA.unshift({ cat: 'Nouveautés', label: libelle, img1, img2 });
+    clearCarrTimer();
+    initCarr();
+  }catch(e){ /* en cas de souci, le carrousel reste simplement inchangé */ }
 }
 
 // ══════════ FERMETURE TEMPORAIRE (congés / maintenance) ══════════
@@ -7177,7 +7211,7 @@ function initCarr() {
         <img class="carr-duo-img" src="${d.img2}" alt="${d.cat}" onerror="this.style.display='none'"/>
       </div>
       <div class="carr-label">
-        <div class="carr-label-cat">✦ ${d.cat}</div>
+        <div class="carr-label-cat">✦ ${d.label ? d.label : d.cat}</div>
         <div class="carr-label-cta">Découvrir la collection →</div>
       </div>
     </div>`).join('');

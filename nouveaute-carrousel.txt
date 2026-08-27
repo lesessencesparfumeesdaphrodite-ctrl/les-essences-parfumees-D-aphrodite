@@ -1,0 +1,1 @@
+LIBELLE=Nouveauté du mois de septembre
