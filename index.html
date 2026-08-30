@@ -5245,6 +5245,7 @@ async function chargerNouveauxProduits(){
 // Le libellé ("Nouveauté du mois de septembre", etc.) vient du fichier
 // texte nouveaute-carrousel.txt, modifiable via crayon GitHub (comme
 // fermeture.txt), à mettre à jour à chaque nouveau lot de nouveautés.
+const PHOTO_NOUVEAUTE_MISE_EN_AVANT = 'https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nouveaute.png';
 async function chargerLibelleNouveaute(){
   try{
     const recents = P.filter(x=>estRecent(x.id));
@@ -5263,9 +5264,10 @@ async function chargerLibelleNouveaute(){
 
     const mosaic = recents.map(x=>x.img).filter(Boolean).slice(0,9);
     if(!mosaic.length) return;
-    // 10ᵉ vignette de mise en avant, même style que les autres (photo + texte),
-    // pour arriver à 10 (5+5) plutôt que 9 (5+4)
-    mosaic.unshift(mosaic[0]);
+    // 1ère case de la mosaïque (en haut à gauche) : visuel dédié "NOUVEAUTÉ"
+    // (et non une photo produit dupliquée), pour arriver à 10 cases (5+5)
+    // au lieu de 9 (5+4) et éviter le trou dans la grille.
+    mosaic.unshift(PHOTO_NOUVEAUTE_MISE_EN_AVANT);
 
     CARR_DATA.unshift({ cat: 'Nouveautés', label: libelle, mosaic, miseEnAvant: true });
     clearCarrTimer();
@@ -7241,9 +7243,7 @@ function initCarr() {
     const estMosaic = d.mosaic && d.mosaic.length;
     const visuel = estMosaic
       ? `<div class="carr-mosaic-frame"><div class="carr-mosaic">${d.mosaic.map((src,mi)=>
-          (d.miseEnAvant && mi===0)
-            ? `<div class="carr-mosaic-cell"><img class="carr-mosaic-img" src="${src}" alt="Nouveauté" onerror="this.style.display='none'"/><span class="carr-mosaic-tag">Nouveauté</span></div>`
-            : `<img class="carr-mosaic-img" src="${src}" alt="${d.cat}" onerror="this.style.display='none'"/>`
+          `<img class="carr-mosaic-img" src="${src}" alt="${(d.miseEnAvant && mi===0) ? 'Nouveauté' : d.cat}" onerror="this.style.display='none'"/>`
         ).join('')}</div></div>`
       : `<div class="carr-duo">
         <img class="carr-duo-img" src="${d.img1}" alt="${d.cat}" onerror="this.style.display='none'"/>
