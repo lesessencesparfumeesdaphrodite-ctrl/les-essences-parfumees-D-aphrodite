@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"/>
+<title>Outil — Les Essences Parfumées d'Aphrodite</title>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Outil"/>
+<meta name="theme-color" content="#6B1F2A"/>
+<link rel="apple-touch-icon" href="data:image/png;base64,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"/>
+<link rel="icon" href="data:image/png;base64,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"/>
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%20%22Outil%20%E2%80%94%20Les%20Essences%20Parfum%C3%A9es%20d%27Aphrodite%22%2C%20%22short_name%22%3A%20%22Outil%22%2C%20%22start_url%22%3A%20%22.%22%2C%20%22display%22%3A%20%22standalone%22%2C%20%22background_color%22%3A%20%22%23FBF6EF%22%2C%20%22theme_color%22%3A%20%22%236B1F2A%22%2C%20%22icons%22%3A%20%5B%7B%22src%22%3A%20%22data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAODklEQVR4nO3dy3ElxRaG0YLGD8bgAr60A0xwoEc4gA3tCzZgTUfcQd3oUEggVZ2Tj535rzW8cYM%2BypL2l5lHjx9%2B//nXA4A8P85%2BAQDMIQAAoQQAIJQAAIQSAIBQAgAQSgAAQgkAQCgBAAglAAChBAAglAAAhBIAgFACABBKAABCCQBAKAEACCUAAKEEACCUAACEEgCAUD/NfgFL%2Bvznt9kvAXjt65dPs1/CYn74/edfZ7%2BG0sx6WJoqvEMAXjPxYWN68JIA/J%2B5D1GU4AgPgKEPHMExCA2A0Q%2B8EpiBrACY%2B8CHckqQEgCjH7glIQObB8DcB560cQm2DYDRDzS0ZQY2DMCY0b/lZwOsyxf%2BA7YKQKfPgM0eOeQwE963TwDaPultHjBwMiLe2iEArZ7rHk8U%2BJChcVo%2BAM8/yNUfIfCw8AGycACefHJLPzagrcx5smoAnnlaiz4qoLe0wbJeAB5%2BQis%2BHmCKkDmzWAAeeyprPRKgiO0HzkoBeOBhLPQkgJo2njxrBGD7DgOV7TqCFgjAxvkFFrLfLKoegLsrXny5gdXtNJR%2BnP0C3rPTQgN7uDtnKv9m4rongFurZvQDg20wo4qeADZYWWBvtyZPzXNAxQCY/sASVm9AuSug62tk9ANFLDq4ap0AFl1EINz1iVTqHFAoAKY/sK4VG1AlAKY/sLrlGlAiAKY/sIe1GjD/TeCLq2D0AwtZYrJNPgEssUYAd12cWnPPASWugN5n%2BgMrqj%2B7ZgagwhUYwFwTJ%2BG0ALj8AbZX/CJoTgBMfyBE5QbUfQ/A9Af2UHaaTQjAldCVXS%2BAB1yZaeMPAaMDYPoDmQo2oO4VEABdDQ2A7T%2BQrNohYFwATH%2BAUg0odAVk%2BgMJ6sy6QQHwQ78A142ZmSMC4PIH4KUiF0ElroBMfyBNhbnXPQAufwAe03t%2Bzj8BVMggwHjTp1/fANj%2BAzyj6xSdfAKYHkCAibb9k5Afhsv0B/hwEvY7BMx/DwCAKaYFwPYf4DRrHvYKgLd/AVrpNFF/6vEf/ZDtP9O9%2BoryOclcX7982uQPwtj%2BU9nnP7%2B9/RT91/8R6ujx%2BTnnBABTfPgldP4fnAYIMeFNYF9dTHF9A%2BUowBTjZ2P7APjiAeih%2BXQdfQKw/WeKu1859jFMMXhCNg6ALxuAftrOWD8JzP4e%2B5qxm2F7QwPg/gfgfSPnpBMAQKiWAXBkBuit4aQddwJw/wNwxbBp6QqI/T325WTLwvaaBcD9D8AYreatEwAR7m7nbf9JMCgAvpwArhszM50ASHH9K8p%2BhRB%2BHTRBzsn%2Bzv2p0U%2BUNicA7wCzkK9fPr0d9P/6P0JZTabuiBOArysK8mlJcQP%2BSKT3AABCCQBAKAEACCUAAKEEACBUgwD4HlCA8Z6fvd1PAL7ZDuAxveenKyCAUAIAEEoAAEL5ZXAs769//p71T//xy2%2Bz/ml4nhMAQCgBAAglAAChBAAglAAAhBIAgFACABBKAABCCQBAKAEACCUAAKEEACCUAACEEgCAUAIAEEoAAEIJAEAoAQAIJQAAoQQAIJQAAIQSAIBQAgAQSgBY21///B37r8OTBAAglACwsAob8AqvAR4jAAChBAAglACwqjp3L3VeCdwiAAChBIAlVdt0V3s9cIUAAIQSAIBQAsB6at631HxV8A4BAAglACym8ka78muDtwQAIJQAAIQSAFZS/46l/iuE7wQAIJQAsIxVNtervE4QAIBQAgAQSgBYw1r3Kmu9WmIJAEAoAWABK26oV3zNpBEAgFACQHXrbqXXfeWEEACAUAJAaatvold//exNAABCCQB17bF93uOjYEsCABBKAChqp43zTh8LOxEAgFACQEX7bZn3%2B4jYgAAAhBIAytl1s7zrx8W6BAAglABQy97b5L0/OpYjAAChBIBCEjbICR8jqxAAgFACQBU5W%2BOcj5TiBAAglABQQtqmOO3jpSYBAAglAMyXuR3O/KgpRQAAQgkAkyVvhJM/dioQAIBQAsBMtsBWgIkEACCUADCNze/JOjCLAACEEgDmsO19yWowhQAAhBIAJrDhfcuaMJ4AAIQSAEaz1f0vVobBBAAglAAwlE3u%2B6wPIwkAQCgBYBzb2yusEsMIAEAoAWAQG9vrrBVjCABAKAFgBFvau6wYAwgAQCgBoDub2cdYN3oTAIBQAkBftrHPsHp0JQAAoQSAjmxgn2cN6UcAAEIJAL3YurZiJelEAABCCQBd2LS2ZT3pQQAAQgkA7dmu9mBVaU4AAEIJAI3ZqPZjbWlLAABCCQBAKAEACCUAAKEEACCUAACEEgCAUAIAEEoAAEIJAEAoAaAlv6ugNytMQwIAEEoAAEIJAEAoAQAIJQAAoQQAIJQAAIQSAIBQAgAQSgAAQgkAQCgBAAglAAChBAAglAAAhBIAgFACABBKAABCCQBAKAGgGX%2BudgzrTCsCABBKAABCCQBAKAEACCUAAKEEACCUAACEEgCAUAIAEEoAAEIJAEAoAQAIJQAAoQQAIJQAAIQSAIBQAgAQSgAAQgkAQCgBoA1/qHYkq00TAgAQSgAAQgkAQCgBAAglAAChBAAglAAAhBIAgFACABBKAABCCQBAKAEACCUAAKEEACCUAACEEgCAUAIAEEoAAEIJAEAoAaABf6J2PGvO8wQAIJQAAIQSAIBQAgAQSgAAQgkAQCgBAAglAAChBAAglAAAhBIAGvjjl99mv4Q41pznCQBAKAEACCUAtOFGYiSrTRMCABBKAABCCQDNuJcYwzrTigAAhBIAgFACABBKAGjJ9XRvVpiGBAAglAAAhBIAGnNH0Y%2B1pS0BAAglAAChBID23FT0YFVpTgAAQgkAQCgBoAv3FW1ZT3oQAIBQAgAQSgDoxa1FK1aSTgQAIJQAAIQSAIBQAkBHLq%2BfZw3pRwAAQgkAQCgBoC83GM%2BwenQlAAChBAAglADQnXuMx1g3ehMAgFACABBKABjBbcZdVowBBAAglAAAhBIABnGncZ21YgwBAAglAAChBIBx3GxcYZUYRgAAQgkAQCgBAAglAAzlgvt91oeRBAAglAAAhBIARnPL8V%2BsDIMJAEAoAQAIJQBM4K7jLWvCeAIAEEoAAEIJAHO48XjJajCFAACEEgCAUALANO49TtaBWQQAIJQAAIQSAIBQAsBMrr%2BtABMJAEAoAQAIJQBMlnwHkvyxU4EAAIQSAIBQAsB8mTchmR81pQgAQKifZr8AOA7bYZjBCQAglAAAhBIAgFACABBKAABCCQBAKN8GylM%2B//lt9ktI9/XLp9kvgVUJAA8y%2Bos4H4QM8ABXQDzC9K/GE%2BEBAsBtZk1Nngt3CQD3mDKVeTrcIgAAoQSAG2ww6/OMuE4AAEIJAEAoAQAIJQAAoQSAG/y4aX2eEdcJAEAoAeAeG8zKPB1uEQBuM2Vq8ly4SwB4hFlTjSfCA/w6aB50Thw/dzqd0c/DBICnmD6wLldAAKEEACCUAACEEgCAUAIAEEoAAEIJAEAoAQAIJQAAoQQAIJQAAIQSAIBQAgAQSgAAQgkAQCgBAAglAAChBAAglAAAhBIAgFACABBKAABCCQBAqO4B%2BPznt97/BMCWes/PBgH4%2BuXT8/8RAG55fva6AgIIJQAAoQQAIJQAAIQSAIBQIwLgO0EB7howOdsEwHeCAozUZOq6AgIIJQAAoQYFwNsAANeNmZlOAAChmgXA%2B8AAY7Sat04AAKHGBcDbAABXDJuWLQPgFgigt4aT1hUQQKihAXALBPC%2BkXPSCQAgVOMAeBsAoJ%2B2M3b0CcAtEMB/GTwh2wfAIQCgh%2BbTdcJ7AA4BAG%2BNn43eBAYI1SUAboEA2uoxV%2BecANwCAbw0ZSr2CoBDAEArnSbqtPcAHAIATrPmoTeBAUJ1DMCHZxaHAIAPJ2G/G/XJJwANAJLNnYF9A%2BCtYIBndJ2i898DcAgAMk2fft0D4BAA8Jje83P%2BCeAokEGAwSrMvREBuBKxCmsBMMaViTfg%2BmTQCcBFEMB1Y2ZmiSugk0MAkKDOrBsXABdBAEUuf05DTwAaACQrNf2PUldAAIw0OgAOAUCmatv/Y8oJQAOANAWn/1H5CkgDgD2UnWZzAnAxdGVXDeCii3Nsyg9LTTsBaACwvcrT/5h7BeTHgwEmTsK67wF85xAArKj%2B7JocABdBwJaKX/6cfvj9518n/vOn6/PdrRFQ3EIDrcQV0PVVcBQAKlto%2Bh9FAnBoALC%2Btab/UScAhwYAK1tu%2Bh%2BlAnBoALCmFaf/UeRN4FduDfdSqwmkWXpe1ToBnG6tkaMAMMvS0/%2BoGYBDA4DyVp/%2BR80roO/uTvaaSwxsZpvRVPQEcLq7ao4CQG/bTP%2Bj%2BAng9MBYr7ziwKL2m0ULBOB4dGtffOmBVew6gtYIwGm//AL1bTx5VgrAsW%2BHgYK2HziLBeB44p3ehZ4KMFfInFkvAKdnvuFnrScEDJM2WFYNwPH0N32u%2BLSATjLnycIBOD3/vf%2BLPjngeeEDZPkAHO1%2B/mvpBwlcZ2icdgjAqe2PAa/%2BXIFXjIi39gnA0e1XQezxpCGQmfC%2BrQJwGvMbgbb5DIA9%2BMJ/wIYBOPnFcEBDm43%2B07YBOMkA8KQtR/9p8wB8pwTALRvP/e9SAnCSAeBDCaP/lBWA75QAeCVn7n8XGoCTDABH5Og/RQfgJTGAKLFD/yUBeE0JYGPm/ksC8AE9gKWZ%2BO8QgEeoAhRk1t8lAAChfpz9AgCYQwAAQgkAQCgBAAglAAChBAAglAAAhBIAgFACABBKAABCCQBAKAEACCUAAKEEACCUAACEEgCAUAIAEEoAAEIJAEAoAQAI9T94nLNUpOD8UAAAAABJRU5ErkJggg%3D%3D%22%2C%20%22sizes%22%3A%20%22512x512%22%2C%20%22type%22%3A%20%22image/png%22%7D%5D%7D"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bordeaux:#6B1F2A;
+  --bordeaux-dark:#4E1620;
+  --prune:#4A1942;
+  --or:#C9A227;
+  --or-clair:#E5C158;
+  --creme:#FBF6EF;
+  --creme-carte:#FFFFFF;
+  --taupe:#4A3F3A;
+  --taupe-clair:#8A7D74;
+  --ligne:#E8DFD3;
+  --vert-ok:#3F6B4A;
+  --radius:16px;
+  --radius-sm:10px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  background:var(--creme);
+  color:var(--taupe);
+  font-family:'Work Sans',sans-serif;
+  font-size:15px;
+  line-height:1.45;
+  overscroll-behavior-y:none;
+}
+h1,h2,h3,.serif{font-family:'Fraunces',serif;}
+button{font-family:inherit;}
+input,select,textarea{font-family:inherit;}
+
+#app{
+  max-width:520px;
+  margin:0 auto;
+  min-height:100vh;
+  display:none;
+  flex-direction:column;
+  position:relative;
+  background:var(--creme);
+}
+#app.unlocked{display:flex;}
+
+/* ---------- TOP BAR ---------- */
+.topbar{
+  background:var(--bordeaux);
+  color:#fff;
+  padding:16px 18px 14px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  border-bottom:3px solid var(--or);
+}
+.topbar h1{
+  margin:0;
+  font-size:19px;
+  font-weight:600;
+  letter-spacing:.2px;
+}
+.topbar .sub{
+  font-size:12px;
+  color:#E9D3C9;
+  margin-top:2px;
+}
+.searchwrap{
+  margin-top:12px;
+  position:relative;
+}
+.searchwrap input{
+  width:100%;
+  padding:10px 14px 10px 36px;
+  border-radius:20px;
+  border:none;
+  background:rgba(255,255,255,.16);
+  color:#fff;
+  font-size:14px;
+  outline:none;
+}
+.searchwrap input::placeholder{color:#E9D3C9;}
+.searchwrap svg{
+  position:absolute;
+  left:12px;top:50%;transform:translateY(-50%);
+  width:15px;height:15px;
+  stroke:#E9D3C9;
+}
+
+/* ---------- CATEGORY CHIPS ---------- */
+.chips{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:12px 14px;
+  scrollbar-width:none;
+  background:var(--creme);
+  position:sticky;
+  top:0;
+  z-index:15;
+}
+.chips::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto;
+  padding:7px 14px;
+  border-radius:20px;
+  background:#fff;
+  border:1px solid var(--ligne);
+  color:var(--taupe);
+  font-size:12.5px;
+  font-weight:600;
+  white-space:nowrap;
+  cursor:pointer;
+}
+.chip.active{
+  background:var(--bordeaux);
+  border-color:var(--bordeaux);
+  color:#fff;
+}
+.chip .n{opacity:.65;font-weight:500;margin-left:4px;}
+
+/* ---------- PRODUCT GRID ---------- */
+.content{flex:1;padding:4px 14px 100px;}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.card{
+  background:var(--creme-carte);
+  border-radius:var(--radius);
+  border:1px solid var(--ligne);
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+}
+.card .thumb{
+  aspect-ratio:1/1;
+  background:linear-gradient(145deg,#F4E9D8,#EAD9C2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;
+  position:relative;
+  overflow:hidden;
+}
+.card .thumb img{width:100%;height:100%;object-fit:cover;}
+.card .body{padding:9px 10px 11px;}
+.card .cat{font-size:10px;color:var(--taupe-clair);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.card .nom{
+  font-family:'Fraunces',serif;
+  font-size:14px;
+  font-weight:600;
+  color:var(--bordeaux-dark);
+  margin:3px 0 6px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  line-height:1.25;
+  min-height:35px;
+}
+.card .prix{
+  font-size:15px;
+  font-weight:700;
+  color:var(--or);
+}
+.card .prix .lbl{font-size:10px;color:var(--taupe-clair);font-weight:500;margin-left:4px;}
+
+.emptystate{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--taupe-clair);
+}
+.emptystate .em{font-size:36px;margin-bottom:10px;}
+
+/* ---------- FAB ---------- */
+.fab{
+  position:fixed;
+  right:calc(50% - 260px + 20px);
+  bottom:88px;
+  width:56px;height:56px;
+  border-radius:50%;
+  background:var(--or);
+  color:var(--bordeaux-dark);
+  border:none;
+  font-size:26px;
+  box-shadow:0 6px 16px rgba(107,31,42,.35);
+  display:flex;align-items:center;justify-content:center;
+  z-index:30;
+  cursor:pointer;
+}
+@media (max-width:560px){
+  .fab{right:20px;}
+}
+
+/* ---------- RESPONSIVE: TABLET & DESKTOP ---------- */
+@media (min-width:760px){
+  #app{max-width:820px;}
+  .content{padding-left:22px;padding-right:22px;}
+  .grid{grid-template-columns:repeat(3,1fr);gap:16px;}
+  .chips{flex-wrap:wrap;overflow:visible;padding-left:22px;padding-right:22px;}
+  .topbar{padding-left:24px;padding-right:24px;}
+  .fab{right:calc(50vw - 410px + 22px);}
+  .overlay{
+    max-width:640px;
+    top:4vh;bottom:4vh;left:50%;right:auto;
+    transform:translateX(-50%);
+    border-radius:22px;
+    box-shadow:0 24px 70px rgba(30,10,15,.4);
+    overflow:hidden;
+  }
+  .fiche-head{border-radius:22px 22px 0 0;}
+  .totalbar{padding-bottom:14px;}
+}
+@media (min-width:1180px){
+  #app{max-width:1180px;}
+  .grid{grid-template-columns:repeat(4,1fr);gap:18px;}
+  .fab{right:calc(50vw - 590px + 22px);}
+}
+
+.backdrop{
+  position:fixed;inset:0;
+  background:rgba(30,10,15,.5);
+  z-index:99;
+  display:none;
+}
+.backdrop.show{display:block;}
+@media (max-width:759px){
+  .backdrop{display:none !important;}
+}
+
+/* ---------- BOTTOM NAV ---------- */
+.bottomnav{
+  position:sticky;
+  bottom:0;
+  background:#fff;
+  border-top:1px solid var(--ligne);
+  display:flex;
+  z-index:25;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.navbtn{
+  flex:1;
+  border:none;
+  background:none;
+  padding:10px 4px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:var(--taupe-clair);
+  font-size:11px;
+  font-weight:600;
+  cursor:pointer;
+}
+.navbtn .ic{font-size:20px;}
+.navbtn.active{color:var(--bordeaux);}
+
+/* ---------- FICHE (full screen overlay) ---------- */
+.overlay{
+  position:fixed;inset:0;
+  background:var(--creme);
+  z-index:100;
+  display:none;
+  flex-direction:column;
+  max-width:520px;
+  margin:0 auto;
+}
+.overlay.open{display:flex;}
+.fiche-head{
+  background:var(--bordeaux);
+  color:#fff;
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  position:sticky;top:0;z-index:5;
+  border-bottom:3px solid var(--or);
+}
+.iconbtn{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  border:none;color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex:0 0 auto;
+}
+.fiche-head .titlewrap{flex:1;min-width:0;}
+.fiche-head .titlewrap .cat{font-size:11px;color:#E9D3C9;font-weight:600;text-transform:uppercase;}
+.fiche-head .titlewrap input.nomInput{
+  background:none;border:none;color:#fff;
+  font-family:'Fraunces',serif;font-size:17px;font-weight:600;
+  width:100%;padding:0;outline:none;
+}
+.fiche-body{flex:1;overflow-y:auto;padding:16px 16px 40px;}
+
+.thumb-lg{
+  width:100%;aspect-ratio:4/3;
+  border-radius:var(--radius);
+  background:linear-gradient(145deg,#F4E9D8,#EAD9C2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;
+  margin-bottom:16px;
+  overflow:hidden;
+  position:relative;
+}
+.thumb-lg img{width:100%;height:100%;object-fit:cover;}
+
+.section{
+  background:#fff;
+  border:1px solid var(--ligne);
+  border-radius:var(--radius);
+  padding:14px 15px;
+  margin-bottom:14px;
+}
+.section h3{
+  margin:0 0 11px;
+  font-size:13px;
+  font-weight:700;
+  color:var(--bordeaux);
+  display:flex;align-items:center;gap:6px;
+}
+.section h3 .ic{font-size:15px;}
+
+.field{margin-bottom:10px;}
+.field:last-child{margin-bottom:0;}
+.field label{
+  display:block;
+  font-size:11.5px;
+  color:var(--taupe-clair);
+  font-weight:600;
+  margin-bottom:4px;
+}
+.field input, .field select, .field textarea{
+  width:100%;
+  padding:9px 11px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--ligne);
+  background:var(--creme);
+  color:var(--taupe);
+  font-size:14px;
+  outline:none;
+}
+.field input:focus, .field select:focus, .field textarea:focus{border-color:var(--or);}
+.field textarea{resize:vertical;min-height:44px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+.calcline{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 0;
+  font-size:13.5px;
+  border-bottom:1px dashed var(--ligne);
+}
+.calcline:last-child{border-bottom:none;}
+.calcline .k{color:var(--taupe-clair);}
+.calcline .v{font-weight:600;color:var(--taupe);}
+.calcline.total .v{color:var(--bordeaux);font-size:15px;}
+
+/* finish pills */
+.pillgrid{display:flex;flex-wrap:wrap;gap:7px;}
+.pill{
+  padding:7px 12px;
+  border-radius:20px;
+  border:1.5px solid var(--ligne);
+  background:var(--creme);
+  font-size:12.5px;
+  font-weight:600;
+  cursor:pointer;
+  color:var(--taupe);
+}
+.pill .sup{opacity:.65;font-weight:500;}
+.pill.sel{
+  background:var(--bordeaux);
+  border-color:var(--bordeaux);
+  color:#fff;
+}
+
+/* extras */
+.extra-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--ligne);
+}
+.extra-row:last-child{border-bottom:none;}
+.extra-row .info{flex:1;min-width:0;padding-right:8px;}
+.extra-row .info .n{font-size:13.5px;font-weight:600;}
+.extra-row .info .p{font-size:11.5px;color:var(--taupe-clair);}
+.stepper{display:flex;align-items:center;gap:0;flex:0 0 auto;}
+.stepper button{
+  width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--ligne);
+  background:#fff;color:var(--bordeaux);
+  font-size:16px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.stepper .qty{width:26px;text-align:center;font-weight:700;font-size:14px;}
+
+.totalbar{
+  position:sticky;bottom:0;
+  background:#fff;
+  border-top:1px solid var(--ligne);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:5;
+}
+.totalbar .lbl{font-size:11.5px;color:var(--taupe-clair);font-weight:600;}
+.totalbar .amt{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--bordeaux);}
+.totalbar button.reset{
+  background:none;border:1px solid var(--ligne);color:var(--taupe-clair);
+  border-radius:20px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;
+}
+
+.actionsrow{display:flex;gap:10px;margin-top:6px;}
+.btn{
+  flex:1;
+  padding:11px;
+  border-radius:var(--radius-sm);
+  border:none;
+  font-weight:700;
+  font-size:13.5px;
+  cursor:pointer;
+  text-align:center;
+}
+.btn.primary{background:var(--bordeaux);color:#fff;}
+.btn.ghost{background:#fff;border:1.5px solid var(--ligne);color:var(--taupe);}
+.btn.danger{background:#fff;border:1.5px solid #C86A6A;color:#B94545;}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;bottom:110px;transform:translateX(-50%);
+  background:var(--bordeaux-dark);color:#fff;
+  padding:10px 18px;border-radius:20px;font-size:13px;font-weight:600;
+  z-index:200;opacity:0;pointer-events:none;
+  transition:opacity .25s, transform .25s;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+/* calculette tab */
+.calc-hero{
+  text-align:center;
+  padding:18px 6px 4px;
+}
+.calc-hero .ic{font-size:34px;}
+.calc-hero h2{margin:8px 0 2px;font-size:19px;color:var(--bordeaux-dark);}
+.calc-hero p{margin:0;font-size:12.5px;color:var(--taupe-clair);}
+
+.newcatrow{display:flex;gap:8px;}
+.newcatrow input{flex:1;}
+.newcatrow button{
+  flex:0 0 auto;background:var(--bordeaux);color:#fff;border:none;
+  border-radius:var(--radius-sm);padding:0 14px;font-weight:700;cursor:pointer;
+}
+.hint{font-size:11px;color:var(--taupe-clair);margin-top:6px;line-height:1.4;}
+
+.installbanner{
+  background:#fff;
+  border:1px solid var(--ligne);
+  border-left:4px solid var(--or);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  margin:12px 0 4px;
+  font-size:12.5px;
+  line-height:1.5;
+  position:relative;
+}
+.installbanner b{color:var(--bordeaux-dark);}
+.installbanner .close{
+  position:absolute;top:8px;right:8px;
+  background:none;border:none;font-size:15px;color:var(--taupe-clair);
+  cursor:pointer;padding:4px;
+}
+</style>
+</head>
+<body>
+<div id="lockScreen" style="position:fixed;inset:0;z-index:500;background:var(--bordeaux);display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="max-width:340px;width:100%;text-align:center;">
+    <div style="font-size:44px;margin-bottom:6px;">🔧</div>
+    <h1 style="font-family:'Fraunces',serif;color:#fff;font-size:22px;margin:0 0 4px;">Outil</h1>
+    <div style="color:#E9D3C9;font-size:12.5px;margin-bottom:22px;">Les Essences Parfumées d'Aphrodite</div>
+    <input id="lockPwd" type="password" placeholder="Mot de passe" autocomplete="current-password"
+      style="width:100%;padding:12px 14px;border-radius:24px;border:none;background:rgba(255,255,255,.16);color:#fff;font-size:15px;outline:none;text-align:center;margin-bottom:12px;"
+      onkeydown="if(event.key==='Enter')tryUnlock()"/>
+    <button onclick="tryUnlock()" style="width:100%;padding:12px;border-radius:24px;border:none;background:var(--or);color:var(--bordeaux-dark);font-weight:700;font-size:14px;cursor:pointer;">Accéder</button>
+    <div id="lockError" style="color:#F3B9B9;font-size:12px;margin-top:12px;min-height:16px;"></div>
+  </div>
+</div>
+
+<div id="app">
+
+  <!-- ===================== CATALOGUE VIEW ===================== -->
+  <div id="view-catalogue">
+    <div class="topbar">
+      <h1>Outil — Créations & Tarifs</h1>
+      <div class="sub">Les Essences Parfumées d'Aphrodite</div>
+      <div class="searchwrap">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="searchInput" type="text" placeholder="Rechercher une création…" oninput="onSearch()"/>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="content">
+      <div id="installBannerWrap"></div>
+      <div class="grid" id="grid"></div>
+      <div class="emptystate" id="emptystate" style="display:none">
+        <div class="em">🔍</div>
+        Aucune création trouvée.
+      </div>
+    </div>
+    <button class="fab" onclick="openNewProduct()">+</button>
+  </div>
+
+  <!-- ===================== CALCULETTE VIEW ===================== -->
+  <div id="view-calc" style="display:none">
+    <div class="topbar">
+      <h1>Calculette Mélange</h1>
+      <div class="sub">Eau → Plâtre résine → Coût matière</div>
+    </div>
+    <div class="content" style="padding-top:14px;">
+      <div class="calc-hero">
+        <div class="ic">🧪</div>
+        <h2>Dosage rapide</h2>
+        <p>Entrez la quantité d'eau de départ, le reste se calcule tout seul.</p>
+      </div>
+      <div class="section">
+        <div class="field">
+          <label>Eau de départ (g)</label>
+          <input type="number" inputmode="decimal" id="calcEau" placeholder="Ex : 150" oninput="updateCalcTool()"/>
+        </div>
+      </div>
+      <div class="section">
+        <h3><span class="ic">⚖️</span> Dosage à préparer</h3>
+        <div class="calcline"><span class="k">Plâtre résine à peser</span><span class="v" id="calcPlatre">— g</span></div>
+        <div class="calcline"><span class="k">Eau à mélanger</span><span class="v" id="calcEauMel">— g</span></div>
+      </div>
+      <div class="section">
+        <h3><span class="ic">💶</span> Coût matière</h3>
+        <div class="calcline"><span class="k">Coût du plâtre résine</span><span class="v" id="calcCoutPlatre">— €</span></div>
+        <div class="calcline"><span class="k">Coût GD + Primer + Vernis</span><span class="v" id="calcCoutVernis">— €</span></div>
+        <div class="calcline total"><span class="k">Coût matière total</span><span class="v" id="calcCoutTotal">— €</span></div>
+      </div>
+      <p class="hint">Ratios fixes : 1 g d'eau de départ ≈ 1,542 g de plâtre résine + 0,516 g d'eau à mélanger · plâtre résine ≈ 0,478 centime/g · vernis fixe 0,35 €/pièce.</p>
+    </div>
+  </div>
+
+  <div class="bottomnav">
+    <button class="navbtn active" id="navCatalogue" onclick="switchTab('catalogue')">
+      <span class="ic">🗂️</span>Catalogue
+    </button>
+    <button class="navbtn" id="navCalc" onclick="switchTab('calc')">
+      <span class="ic">🧪</span>Calculette
+    </button>
+  </div>
+
+  <!-- ===================== FICHE OVERLAY ===================== -->
+  <div class="backdrop" id="backdrop" onclick="closeFiche()"></div>
+  <div class="overlay" id="ficheOverlay">
+    <div class="fiche-head">
+      <button class="iconbtn" onclick="closeFiche()">←</button>
+      <div class="titlewrap">
+        <div class="cat" id="ficheCatLabel">Catégorie</div>
+        <input class="nomInput" id="ficheNom" placeholder="Nom de la création" oninput="onFieldChange()"/>
+      </div>
+      <button class="iconbtn" onclick="confirmDelete()" title="Supprimer">🗑</button>
+    </div>
+    <div class="fiche-body" id="ficheBody">
+      <!-- filled by JS -->
+    </div>
+    <div class="totalbar">
+      <div>
+        <div class="lbl">Prix à annoncer</div>
+        <div class="amt" id="totalAnnonce">0,00 €</div>
+      </div>
+      <button class="reset" onclick="resetDevis()">↺ Réinitialiser</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script id="app-data" type="application/json">{"products": [{"cat": "Décorations", "nom": "Aromathérapie ou déco cœur rose", "taille": "≃ 6,8 cm × 7,3 cm", "poids": 0.06, "eau": 31.0, "brut": 7.0, "id": "p1"}, {"cat": "Décorations", "nom": "Aromathérapie ou déco Trio cœurs tissé", "taille": "Petit : ≃ 4,4 cm × ≃ 4,9 cm  Moyen : ≃ 6,7 cm × ≃ 7,5 cm Grand : ≃ 8,9 cm × ≃ 9,9 cm", "poids": 0.54, "eau": 291.0, "brut": 19.0, "id": "p2"}, {"cat": "Décorations", "nom": "Aromathérapie ou déco Trio cœurs fleuris", "taille": "Petit ≃ 5,8 cm × ≃ 6,3 cm Moyen : ≃ 7 cm × ≃ 7,5 cm Grand : ≃ 7,8 cm × ≃ 8,2 cm", "poids": 0.635, "eau": 341.0, "brut": 21.0, "id": "p3"}, {"cat": "Décorations", "nom": "Aromathérapie ou déco fleur de lotus", "taille": "≃ 4,3 cm × 8,8 cm", "poids": 0.2, "eau": 107.0, "brut": 11.0, "id": "p4"}, {"cat": "Décorations", "nom": "Aromathérapie ou déco ourson cœur", "taille": "≃ 6 cm × 5 cm", "poids": 0.095, "eau": 51.0, "brut": 8.0, "id": "p5"}, {"cat": "Décorations", "nom": "Aromathérapie ou déco ourson nœud ruban", "taille": "≃ 6,2 cm × 4,9 cm", "poids": 0.125, "eau": 66.0, "brut": 9.0, "id": "p6"}, {"cat": "Décorations", "nom": "Aromathérapie ou déco ourson roses", "taille": "≃ 6 cm × 5 cm", "poids": 0.13, "eau": 69.0, "brut": 9.0, "id": "p7"}, {"cat": "Boîtes & Rangements décoratifs", "nom": "Boîte Bouddha", "taille": "≃ 14,3 cm × 8,8 cm", "poids": 0.48, "eau": 257.0, "brut": 17.0, "id": "p8"}, {"cat": "Boîtes & Rangements décoratifs", "nom": "Boîte cœur", "taille": "≃ 7,5 cm × 7 cm Epaisseur 2,4", "poids": 0.145, "eau": 76.0, "brut": 9.0, "id": "p9"}, {"cat": "Boîtes & Rangements décoratifs", "nom": "Boîte Sillon", "taille": "≃ 14,3 cm × 8,8 cm", "poids": 0.275, "eau": 148.0, "brut": 13.0, "id": "p10"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Bougeoir nœud ruban", "taille": "≃ 4,9 cm × 11,6 cm × 5,3 cm", "poids": 0.13, "eau": 69.0, "brut": 9.0, "id": "p11"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Trio Sillon", "taille": "Petit : ≃ 4,2 cm × ≃ 7,9 cm Moyen : ≃ 5,3 cm × ≃ 7,3 cm Grand : ≃ 5,3 cm × ≃ 8 cm", "poids": 0.625, "eau": 336.0, "brut": 21.0, "id": "p12"}, {"cat": "Art de la table", "nom": "4 Coupelle Epuré", "taille": "≃ 7,3 cm × ≃ 8,1 cm", "poids": 0.26, "eau": 140.0, "brut": 12.0, "id": "p13"}, {"cat": "Art de la table", "nom": "4 Coupelle cœur", "taille": "≃ 7,3 cm × ≃ 8,1 cm", "poids": 0.26, "eau": 140.0, "brut": 12.0, "id": "p14"}, {"cat": "Art de la table", "nom": "Cuillère", "taille": "≃11,4 cm × ≃ 23,37 cm", "poids": 0.28, "eau": 150.0, "brut": 13.0, "id": "p15"}, {"cat": "Décorations", "nom": "Déco couple 3D enlacé", "taille": "≃ 11,5 cm × ≃ 5,5 cm", "poids": 0.25, "eau": 134.0, "brut": 12.0, "id": "p16"}, {"cat": "Décorations", "nom": "Déco cœur promesse", "taille": "≃ 6,8 cm × ≃ 7,3 cm × ≃ 2,1 cm", "poids": 0.07, "eau": 37.0, "brut": 8.0, "id": "p17"}, {"cat": "Décorations", "nom": "Déco Cœur union", "taille": "≃ 6,8 cm × ≃ 7,3 cm × ≃ 2,1 cm", "poids": 0.07, "eau": 37.0, "brut": 8.0, "id": "p18"}, {"cat": "Décorations", "nom": "Déco Family", "taille": "≃ 7 cm × ≃ 25,8 cm × ≃ 1,1 cm", "poids": 0.19, "eau": 101.0, "brut": 11.0, "id": "p19"}, {"cat": "Décorations", "nom": "Déco home", "taille": "≃ 7 cm × ≃ 21,9 cm × ≃ 1,1 cm", "poids": 0.19, "eau": 100.0, "brut": 11.0, "id": "p20"}, {"cat": "Décorations", "nom": "Déco infini Double Cœurs", "taille": "≃ 8 cm × ≃ 15,1 cm × ≃ 1,8 cm", "poids": 0.18, "eau": 97.0, "brut": 10.0, "id": "p21"}, {"cat": "Décorations", "nom": "Déco love", "taille": "≃ 8,6 cm × ≃ 21,4 cm × ≃ 1,1 cm", "poids": 0.21, "eau": 112.0, "brut": 11.0, "id": "p22"}, {"cat": "Décorations", "nom": "Déco love cœurs", "taille": "≃ 10 cm × ≃ 18,2 cm × ≃ 1,1 cm", "poids": 0.295, "eau": 157.0, "brut": 13.0, "id": "p23"}, {"cat": "Décorations", "nom": "Déco main", "taille": "≃ 14,6 cm × ≃ 15,6 cm × ≃ 6,6 cm", "poids": 1.115, "eau": 600.0, "brut": 33.0, "id": "p24"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Déco Socle Porte bougie cœur enlacé avec L'infini", "taille": "H 12,9 l 9,1 E 1", "poids": 0.095, "eau": 49.0, "brut": 8.0, "id": "p25"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Déco Socle Porte bougie cœur entrelacé", "taille": "≃ 16 cm × ≃ 11 cm Epaisseur : 1 cm", "poids": 0.1, "eau": 53.0, "brut": 8.0, "id": "p26"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Déco Socle Porte bougie fleur de lotus", "taille": "≃ 10,6 cm × ≃ 10,3 cm Epaisseur : 1 cm", "poids": 0.055, "eau": 28.0, "brut": 7.0, "id": "p27"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Déco Socle Porte-bougie arbre de vie", "taille": "≃ 12,9 cm × ≃ 9,1 cm Epaisseur : 1 cm", "poids": 0.13, "eau": 70.0, "brut": 9.0, "id": "p28"}, {"cat": "Créations Signature", "nom": "Ensemble Sillon", "taille": "Plateau rectangle ovale : ≃ 17,8 cm × 9,3 cm Boîte Sillon : ≃ 4,3 cm × 8,8 cm Vase Sillon : ≃ 9,8 cm × 8,1 cm", "poids": 1.05, "eau": 567.0, "brut": 31.0, "id": "p29"}, {"cat": "Boîtes & Rangements décoratifs", "nom": "Écrin nœud papillon", "taille": "≃ 11,2 cm × ≃ 13,8 cm", "poids": 0.56, "eau": 301.0, "brut": 19.0, "id": "p30"}, {"cat": "Organisateurs & Pots", "nom": "Garçon reveur", "taille": "(H × L) : ≃ 9,7 cm × 7,1 cm", "poids": 0.225, "eau": 119.0, "brut": 11.0, "id": "p31"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Epuré", "taille": "≃ 6,1 cm × 5,5 cm × 5,5 cm", "poids": 0.14, "eau": 75.0, "brut": 9.0, "id": "p32"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Essence relief capsule", "taille": "≃ 6,1 cm × 5,5 cm × 5,5 cm", "poids": 0.2, "eau": 108.0, "brut": 11.0, "id": "p33"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur fille méditation", "taille": "≃ 9,8 cm × 7,1 cm", "poids": 0.455, "eau": 244.0, "brut": 17.0, "id": "p34"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur fille penseuse", "taille": "≃ 9,7 cm × 7,1 cm", "poids": 0.215, "eau": 116.0, "brut": 11.0, "id": "p35"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur fille Rose", "taille": "≃ 8,3 cm × 6,5 cm", "poids": 0.295, "eau": 158.0, "brut": 13.0, "id": "p36"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur fille silencieuse", "taille": "≃ 9,1 cm × 5,7 cm", "poids": 0.3, "eau": 160.0, "brut": 13.0, "id": "p37"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Double jeu", "taille": "≃ 5,9 cm × 8,9 cm", "poids": 0.335, "eau": 180.0, "brut": 14.0, "id": "p38"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Visage naturel", "taille": "≃ 9,1 cm × 8,4 cm", "poids": 0.39, "eau": 209.0, "brut": 15.0, "id": "p39"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Nœud Ruban", "taille": "≃ 7,8 cm × 10,8 cm", "poids": 0.31, "eau": 166.0, "brut": 13.0, "id": "p40"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Facette", "taille": "≃ 7 cm × 6,8 cm", "poids": 0.11, "eau": 59.0, "brut": 9.0, "id": "p41"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Douceur", "taille": "≃ 3,3 cm × 11.3 cm", "poids": 0.14, "eau": 73.0, "brut": 9.0, "id": "p42"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Harmonie", "taille": "≃ 6,9 cm × 18,9 cm × 8,8 cm", "poids": 0.705, "eau": 380.0, "brut": 23.0, "id": "p43"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Evasion", "taille": "≃ 6,5 cm × 23 cm × 4,5 cm", "poids": 0.78, "eau": 420.0, "brut": 25.0, "id": "p44"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Essence", "taille": "≃ 6,1 cm × 5,5 cm × 5,5 cm", "poids": 0.105, "eau": 56.0, "brut": 9.0, "id": "p45"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Essence Relief ondulé", "taille": "≃ 6,5 cm 7,5 cm × 7,5 cm", "poids": 0.19, "eau": 100.0, "brut": 11.0, "id": "p46"}, {"cat": "Organisateurs & Pots", "nom": "Organisteur sérénité", "taille": "≃ 8 cm × 9,2 cm", "poids": 0.315, "eau": 168.0, "brut": 14.0, "id": "p47"}, {"cat": "Organisateurs & Pots", "nom": "Organisateur Vague Ondulé", "taille": "≃ 10 cm × 11,5 cm × 13 cm", "poids": 0.545, "eau": 293.0, "brut": 19.0, "id": "p48"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Photophore Lunes et étoiles", "taille": "≃ 6,8 cm × 7,4 cm", "poids": 0.365, "eau": 196.0, "brut": 15.0, "id": "p49"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Epuré", "taille": "≃ 10,3 cm × 10,3 cm", "poids": 0.165, "eau": 89.0, "brut": 10.0, "id": "p50"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau cœur", "taille": "≃ 10,4 cm × 11,5 cm × 1.4 cm", "poids": 0.15, "eau": 79.0, "brut": 10.0, "id": "p51"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau cœur élancé", "taille": "≃ 10,9 cm × 9,8 cm", "poids": 0.1, "eau": 52.0, "brut": 8.0, "id": "p52"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau coquillage", "taille": "≃ 15,2 cm × 10,3 cm", "poids": 0.135, "eau": 71.0, "brut": 9.0, "id": "p53"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau feuille de Ginkgo", "taille": "≃ 18,3 cm × 14,5 cm × 2 cm", "poids": 0.24, "eau": 129.0, "brut": 12.0, "id": "p54"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau feuille de marronnier", "taille": "≃ 13,3 cm × 15 cm × 2,7 cm", "poids": 0.165, "eau": 89.0, "brut": 10.0, "id": "p55"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau feuille de sauge", "taille": "≃ 16 cm × 13,3 cm × 1,3 cm", "poids": 0.21, "eau": 112.0, "brut": 11.0, "id": "p56"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau fleur", "taille": "≃ 10,8 cm × 10,8 cm", "poids": 0.155, "eau": 83.0, "brut": 10.0, "id": "p57"}, {"cat": "Plateaux & Vide-poches", "nom": "Pétale de fleur", "taille": "≃ 12 cm × 11 cm", "poids": 0.115, "eau": 60.0, "brut": 9.0, "id": "p58"}, {"cat": "Art de la table", "nom": "Plateau Boisson", "taille": "≃ 24,5 cm × 24,5 cm Encoches verres : ≃ 5,8 cm Encoche bouteille (centrale) : ≃ 7,3 cm", "poids": 1.475, "eau": 795.0, "brut": 41.0, "id": "p59"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Facette", "taille": "≃ 10,3 cm × 10,3 cm", "poids": 0.13, "eau": 69.0, "brut": 9.0, "id": "p60"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau plume", "taille": "≃ 23,8 cm × 8,6 cm", "poids": 0.185, "eau": 99.0, "brut": 10.0, "id": "p61"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Elancé", "taille": "≃ 17,8 cm × 9,3 cm", "poids": 0.315, "eau": 169.0, "brut": 14.0, "id": "p62"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Elancé Essence", "taille": "≃ 9,9 cm × 18,4 cm", "poids": 0.2, "eau": 106.0, "brut": 11.0, "id": "p63"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Essence camélia", "taille": "≃ 10,3 cm × 10,3 cm", "poids": 0.11, "eau": 59.0, "brut": 9.0, "id": "p64"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Essence Mandala", "taille": "≃ 10,2 cm × 10,2 cm", "poids": 0.11, "eau": 59.0, "brut": 9.0, "id": "p65"}, {"cat": "Art de la table", "nom": "Plateau Service Essence Rélief ondulé", "taille": "≃ 30 cm × 302 cm", "poids": 0.93, "eau": 500.0, "brut": 28.0, "id": "p66"}, {"cat": "Art de la table", "nom": "Planche Service Sillage", "taille": "≃ 34,2cm × 21 cm", "poids": 1.305, "eau": 703.0, "brut": 37.0, "id": "p67"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Essence", "taille": "≃ 8,3 cm × 8,3 cm Epaiseur : ≃ 1 cm", "poids": 0.08, "eau": 42.0, "brut": 8.0, "id": "p68"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Vague Grand", "taille": "≃ 25,6 cm × 13,7 cm × 1 cm", "poids": 0.365, "eau": 195.0, "brut": 15.0, "id": "p69"}, {"cat": "Plateaux & Vide-poches", "nom": "Plateau Vague Petit", "taille": "≃ 13,6 cm × 13,3 cm × 1 cm", "poids": 0.22, "eau": 118.0, "brut": 11.0, "id": "p70"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Porte bougie cœur", "taille": "≃ 10,6 cm × ≃ 12,6 cm Épaisseur : ≃ 4,5 cm", "poids": 0.495, "eau": 266.0, "brut": 18.0, "id": "p71"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Porte bougie cœur fleur", "taille": "≃ 3,5 cm × ≃ 10,7 cm Épaisseur : ≃ 3,5 cm", "poids": 0.165, "eau": 88.0, "brut": 10.0, "id": "p72"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Evolution Duo", "taille": "≃ 12 cm × ≃ 6 cm × ≃ 2,5 cm", "poids": 0.195, "eau": 103.0, "brut": 11.0, "id": "p73"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Porte bougie étoile filante", "taille": "≃ 29,4 cm × ≃ 15,9 cm Épaisseur : ≃ 1,5 cm", "poids": 0.49, "eau": 264.0, "brut": 18.0, "id": "p74"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Porte bougie fleur", "taille": "≃ 10,6 cm × ≃ 12,6 cm Épaisseur : ≃ 4,5 cm", "poids": 0.775, "eau": 416.0, "brut": 24.0, "id": "p75"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Evolution Solo", "taille": "≃ 6 cm × ≃ 6 cm × ≃ 2,5 cm", "poids": 0.125, "eau": 65.0, "brut": 9.0, "id": "p76"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Evolution Trio", "taille": "≃ 18 cm × ≃ 6 cm × ≃ 2,5 cm", "poids": 0.315, "eau": 168.0, "brut": 14.0, "id": "p77"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Ensemble Evolution", "taille": "Solo ≃ 6 cm × ≃ 6 cm × ≃ 2,5 cm Duo ≃ 12 cm × ≃ 6 cm × ≃ 2,5 cm Trio ≃ 18 cm × ≃ 6 cm × ≃ 2,5 cm", "poids": 0.625, "eau": 336.0, "brut": 21.0, "id": "p78"}, {"cat": "Plateaux & Vide-poches", "nom": "Porte savon", "taille": "≃ 13,1 cm x ≃ 9,7 cm Epaisseur : ≃ 1,8 cm", "poids": 0.18, "eau": 97.0, "brut": 10.0, "id": "p79"}, {"cat": "Accessoires", "nom": "Porte-bijoux main", "taille": "≃ 37,8 cm Main : ≃ 16,1 cm (largeur) Support : ≃ 18,8 cm (L) × ≃ 9,6 cm (l)", "poids": 1.025, "eau": 551.0, "brut": 30.0, "id": "p80"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Socle Epuré", "taille": "≃ 9 cm × ≃ 9 cm", "poids": 0.265, "eau": 143.0, "brut": 12.0, "id": "p81"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Socle Duo Sillage", "taille": "≃ 16 cm × ≃ 9 cm × ≃ 2 cm", "poids": 0.525, "eau": 282.0, "brut": 19.0, "id": "p82"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Socle Trio Sillage", "taille": "≃ 16 cm × ≃ 7,5 cm × ≃ 2 cm", "poids": 0.455, "eau": 245.0, "brut": 17.0, "id": "p83"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Socle Sillage Chandelle", "taille": "≃ 14 cm × ≃ 4 cm × ≃ 2 cm", "poids": 0.2, "eau": 107.0, "brut": 11.0, "id": "p84"}, {"cat": "Bougeoirs & Porte-bougies", "nom": "Socle Essence", "taille": "≃ 9,5 cm × ≃ 9,5 cm", "poids": 0.315, "eau": 168.0, "brut": 14.0, "id": "p85"}, {"cat": "Art de la table", "nom": "4 Sous verre Epuré avec support", "taille": "Sous-verre ≃ 3,6 cm × 3,6 cm – Épaisseur ≃ 0,7 cm Support ≃ 11,8 cm × 6,9 cm Haut ≃ 3,9 cm", "poids": 0.525, "eau": 281.0, "brut": 19.0, "id": "p86"}, {"cat": "Art de la table", "nom": "4 Sous verre Facette avec support", "taille": "Sous-verre : ≃ 3,6 cm × 3,6 cm – Épaisseur ≃ 0,7 cm Support ≃ 9,8 cm × 9,8 cm Haut ≃ 3,7 cm", "poids": 0.49, "eau": 263.0, "brut": 18.0, "id": "p87"}, {"cat": "Art de la table", "nom": "4 Sous verre Essence avec support", "taille": "Sous-verre : ≃ 9,7 cm × 9,7 cm – Épaisseur ≃ 0,7 cm Support : ≃ 11,4 cm × 6,9 cm Haut ≃ 3,8 cm", "poids": 0.48, "eau": 258.0, "brut": 18.0, "id": "p88"}, {"cat": "Art de la table", "nom": "Tai Chi plateau", "taille": "≃ 20,8 cm x 20,8", "poids": 0.5, "eau": 268.0, "brut": 18.0, "id": "p89"}, {"cat": "Vases", "nom": "Vase cannelés", "taille": "≃ 9,8 cm × 5,8 cm", "poids": 0.23, "eau": 124.0, "brut": 12.0, "id": "p90"}, {"cat": "Vases", "nom": "Vase éclipse", "taille": "≃ 13,6 cm × 13,5 cm", "poids": 0.425, "eau": 229.0, "brut": 16.0, "id": "p91"}, {"cat": "Vases", "nom": "Vase hybride", "taille": "≃ 9,8 cm × 6,1 cm", "poids": 0.35, "eau": 188.0, "brut": 14.0, "id": "p92"}, {"cat": "Vases", "nom": "Vase nid d'abeille", "taille": "≃ 9,9 cm × 9 cm", "poids": 0.55, "eau": 295.0, "brut": 19.0, "id": "p93"}, {"cat": "Vases", "nom": "Vase pureté", "taille": "≃ 9,8 cm × 4,8 cm", "poids": 0.27, "eau": 144.0, "brut": 12.0, "id": "p94"}, {"cat": "Vases", "nom": "Vase Sillon", "taille": "≃ 9,8 cm × 8,1 cm", "poids": 0.445, "eau": 240.0, "brut": 17.0, "id": "p95"}, {"cat": "Vases", "nom": "Vase tornade", "taille": "≃ 14,8 cm × 7,1 cm", "poids": 0.73, "eau": 393.0, "brut": 23.0, "id": "p96"}], "cats": ["Accessoires", "Art de la table", "Bougeoirs & Porte-bougies", "Boîtes & Rangements décoratifs", "Créations Signature", "Décorations", "Organisateurs & Pots", "Plateaux & Vide-poches", "Vases"], "catIcons": {"Accessoires": "💍", "Art de la table": "🍽️", "Bougeoirs & Porte-bougies": "🕯️", "Boîtes & Rangements décoratifs": "🎁", "Créations Signature": "✨", "Décorations": "🌸", "Organisateurs & Pots": "🪴", "Plateaux & Vide-poches": "🪞", "Vases": "🏺"}, "finishes": [{"nom": "Brut", "sup": 0}, {"nom": "Uni", "sup": 1}, {"nom": "Bicolore", "sup": 3}, {"nom": "Marbré", "sup": 4}, {"nom": "Terrazzo", "sup": 5}, {"nom": "Moitié Marbré / Moitié Couleur", "sup": 6}, {"nom": "Moitié Terrazzo / Moitié Couleur", "sup": 7}, {"nom": "Moitié Marbré / Moitié Terrazzo", "sup": 7}], "extras": [{"nom": "Petite lettre", "prix": 0.2, "unite": "lettre"}, {"nom": "Grosse lettre", "prix": 0.3, "unite": "lettre"}, {"nom": "Feuille d'or / Métallique S", "prix": 0.5, "unite": "unité"}, {"nom": "Feuille d'or / Métallique M", "prix": 1.0, "unite": "unité"}, {"nom": "Feuille d'or / Métallique L", "prix": 2.0, "unite": "unité"}, {"nom": "Feutre métallique", "prix": 1.0, "unite": "unité"}, {"nom": "Paillette", "prix": 1.0, "unite": "unité"}, {"nom": "Ficelle en jute", "prix": 1.0, "unite": "unité"}, {"nom": "Ficelle coton tressé", "prix": 1.5, "unite": "unité"}, {"nom": "Ficelle dorée", "prix": 2.0, "unite": "unité"}], "consts": {"kPlatre": 1.5416216216216214, "kEauMelange": 0.5159459459459459, "coutParGPlatre": 0.00478, "coutVernis": 0.35}}</script>
+<script>// ===================== DATA & STATE =====================
+const DATA = JSON.parse(document.getElementById('app-data').textContent);
+const K_PLATRE = DATA.consts.kPlatre;
+const K_EAU = DATA.consts.kEauMelange;
+const COUT_G_PLATRE = DATA.consts.coutParGPlatre;
+const COUT_VERNIS = DATA.consts.coutVernis;
+const FINISHES = DATA.finishes;
+const EXTRAS = DATA.extras;
+const CAT_ICONS = DATA.catIcons;
+
+let products = [];
+let activeCat = 'Toutes';
+let searchTerm = '';
+let currentFicheId = null;   // id being edited, or '__new__'
+let devis = { finishIdx: 0, extraQty: {} }; // transient quote state per open fiche
+let saveTimer = null;
+
+function fmt(n){
+  return (Math.round(n*100)/100).toFixed(2).replace('.', ',');
+}
+function uid(){
+  return 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+}
+
+// ===================== STORAGE (IndexedDB — works fully offline, no Claude dependency) =====================
+// Metadata (names, sizes, prices…) lives in one small record.
+// Each photo lives in its own record so nothing gets bloated.
+
+const DB_NAME = 'atelierResineDB';
+const DB_VERSION = 1;
+let _dbPromise = null;
+
+function openDB(){
+  if(_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject)=>{
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = function(e){
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains('meta')) db.createObjectStore('meta');
+      if(!db.objectStoreNames.contains('photos')) db.createObjectStore('photos');
+    };
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
+  });
+  return _dbPromise;
+}
+
+function idbGet(store, key){
+  return openDB().then(db=>new Promise((resolve, reject)=>{
+    const tx = db.transaction(store, 'readonly');
+    const rq = tx.objectStore(store).get(key);
+    rq.onsuccess = ()=>resolve(rq.result === undefined ? null : rq.result);
+    rq.onerror = ()=>reject(rq.error);
+  }));
+}
+
+function idbSet(store, key, value){
+  return openDB().then(db=>new Promise((resolve, reject)=>{
+    const tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).put(value, key);
+    tx.oncomplete = ()=>resolve(true);
+    tx.onerror = ()=>reject(tx.error);
+  }));
+}
+
+function idbDelete(store, key){
+  return openDB().then(db=>new Promise((resolve, reject)=>{
+    const tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).delete(key);
+    tx.oncomplete = ()=>resolve(true);
+    tx.onerror = ()=>reject(tx.error);
+  }));
+}
+
+function idbGetAll(store){
+  return openDB().then(db=>new Promise((resolve, reject)=>{
+    const tx = db.transaction(store, 'readonly');
+    const os = tx.objectStore(store);
+    const keysReq = os.getAllKeys();
+    const valsReq = os.getAll();
+    let keys, vals;
+    keysReq.onsuccess = ()=>{ keys = keysReq.result; done(); };
+    valsReq.onsuccess = ()=>{ vals = valsReq.result; done(); };
+    tx.onerror = ()=>reject(tx.error);
+    function done(){
+      if(keys !== undefined && vals !== undefined){
+        const map = {};
+        keys.forEach((k,i)=>{ map[k] = vals[i]; });
+        resolve(map);
+      }
+    }
+  }));
+}
+
+async function loadProducts(){
+  try{
+    const saved = await idbGet('meta', 'catalogue');
+    if(saved){
+      products = JSON.parse(saved);
+    } else {
+      products = DATA.products.slice();
+      await persist();
+    }
+  }catch(e){
+    console.error('IndexedDB unavailable, using in-memory only', e);
+    products = DATA.products.slice();
+  }
+  await loadPhotos();
+}
+
+async function loadPhotos(){
+  try{
+    const map = await idbGetAll('photos');
+    Object.keys(map).forEach(id=>{
+      const p = products.find(x=>x.id===id);
+      if(p) p.img = map[id];
+    });
+  }catch(e){
+    console.error('Photo load error', e);
+  }
+}
+
+async function persist(){
+  const meta = products.map(p=>{
+    const copy = Object.assign({}, p);
+    delete copy.img;
+    return copy;
+  });
+  try{
+    await idbSet('meta', 'catalogue', JSON.stringify(meta));
+  }catch(e){
+    console.error('Storage error', e);
+    showToast("Erreur d'enregistrement");
+  }
+}
+
+async function savePhoto(id, dataUrl){
+  try{
+    await idbSet('photos', id, dataUrl);
+  }catch(e){
+    console.error('Photo save error', e);
+    showToast("Erreur photo (trop lourde ?)");
+  }
+}
+
+function deletePhotoKey(id){
+  idbDelete('photos', id).catch(()=>{});
+}
+
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{ persist(); }, 400);
+}
+
+// ===================== TOAST =====================
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1600);
+}
+
+// ===================== TABS =====================
+function switchTab(tab){
+  document.getElementById('view-catalogue').style.display = tab==='catalogue' ? '' : 'none';
+  document.getElementById('view-calc').style.display = tab==='calc' ? '' : 'none';
+  document.getElementById('navCatalogue').classList.toggle('active', tab==='catalogue');
+  document.getElementById('navCalc').classList.toggle('active', tab==='calc');
+}
+
+function updateCalcTool(){
+  const eau = parseFloat(document.getElementById('calcEau').value);
+  const has = !isNaN(eau) && eau > 0;
+  const platre = has ? eau * K_PLATRE : null;
+  const eauMel = has ? eau * K_EAU : null;
+  const coutPlatre = has ? platre * COUT_G_PLATRE : null;
+  document.getElementById('calcPlatre').textContent = has ? Math.round(platre*100)/100 + ' g' : '— g';
+  document.getElementById('calcEauMel').textContent = has ? Math.round(eauMel*100)/100 + ' g' : '— g';
+  document.getElementById('calcCoutPlatre').textContent = has ? fmt(coutPlatre) + ' €' : '— €';
+  document.getElementById('calcCoutVernis').textContent = has ? fmt(COUT_VERNIS) + ' €' : '— €';
+  document.getElementById('calcCoutTotal').textContent = has ? fmt(coutPlatre + COUT_VERNIS) + ' €' : '— €';
+}
+
+// ===================== CATALOGUE RENDER =====================
+function allCats(){
+  const set = new Set(DATA.cats);
+  products.forEach(p=>set.add(p.cat));
+  return Array.from(set);
+}
+
+function renderChips(){
+  const wrap = document.getElementById('chips');
+  const cats = allCats();
+  const counts = {};
+  products.forEach(p=>{ counts[p.cat] = (counts[p.cat]||0)+1; });
+  let html = `<div class="chip ${activeCat==='Toutes'?'active':''}" onclick="setCat('Toutes')">Toutes <span class="n">${products.length}</span></div>`;
+  cats.forEach(c=>{
+    html += `<div class="chip ${activeCat===c?'active':''}" onclick="setCat('${escAttr(c)}')">${esc(c)} <span class="n">${counts[c]||0}</span></div>`;
+  });
+  wrap.innerHTML = html;
+}
+
+function setCat(c){
+  activeCat = c;
+  renderChips();
+  renderGrid();
+}
+
+function onSearch(){
+  searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+  renderGrid();
+}
+
+function renderGrid(){
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('emptystate');
+  let list = products.slice();
+  if(activeCat !== 'Toutes') list = list.filter(p=>p.cat===activeCat);
+  if(searchTerm) list = list.filter(p=>p.nom.toLowerCase().includes(searchTerm));
+  list.sort((a,b)=>a.nom.localeCompare(b.nom, 'fr'));
+
+  if(list.length===0){
+    grid.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = list.map(p=>{
+    const icon = CAT_ICONS[p.cat] || '🎨';
+    const thumb = p.img
+      ? `<img src="${escAttr(p.img)}" alt="">`
+      : icon;
+    const brut = (typeof p.brut === 'number' && p.brut>0) ? fmt(p.brut) + ' €' : '—';
+    return `<div class="card" onclick="openFiche('${p.id}')">
+      <div class="thumb">${thumb}</div>
+      <div class="body">
+        <div class="cat">${esc(p.cat)}</div>
+        <div class="nom">${esc(p.nom || 'Sans nom')}</div>
+        <div class="prix">${brut}<span class="lbl">brut</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function escAttr(s){ return esc(s).replace(/'/g,'&#39;'); }
+
+// ===================== FICHE (detail/edit) =====================
+function showFicheOverlay(){
+  document.getElementById('ficheOverlay').classList.add('open');
+  document.getElementById('backdrop').classList.add('show');
+}
+function hideFicheOverlay(){
+  document.getElementById('ficheOverlay').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('show');
+}
+
+function getProduct(id){
+  return products.find(p=>p.id===id);
+}
+
+function openNewProduct(){
+  const np = {
+    id: uid(),
+    cat: activeCat!=='Toutes' ? activeCat : DATA.cats[0],
+    nom: '',
+    taille: '',
+    poids: 0,
+    eau: 0,
+    brut: 0,
+    img: ''
+  };
+  products.unshift(np);
+  currentFicheId = np.id;
+  devis = { finishIdx: 0, extraQty: {} };
+  renderFiche(np, true);
+  showFicheOverlay();
+  setTimeout(()=>document.getElementById('ficheNom').focus(), 200);
+}
+
+function openFiche(id){
+  const p = getProduct(id);
+  if(!p) return;
+  currentFicheId = id;
+  devis = { finishIdx: 0, extraQty: {} };
+  renderFiche(p, false);
+  showFicheOverlay();
+}
+
+function closeFiche(){
+  // drop untouched empty new products
+  const p = getProduct(currentFicheId);
+  if(p && !p.nom && !p.taille && !p.eau && !p.brut){
+    products = products.filter(x=>x.id!==currentFicheId);
+    persist();
+  }
+  hideFicheOverlay();
+  currentFicheId = null;
+  renderChips();
+  renderGrid();
+}
+
+function catOptions(selected){
+  const cats = allCats();
+  return cats.map(c=>`<option value="${escAttr(c)}" ${c===selected?'selected':''}>${esc(c)}</option>`).join('')
+    + `<option value="__new__">+ Nouvelle catégorie…</option>`;
+}
+
+function renderFiche(p, isNew){
+  document.getElementById('ficheCatLabel').textContent = p.cat;
+  document.getElementById('ficheNom').value = p.nom || '';
+
+  const icon = CAT_ICONS[p.cat] || '🎨';
+  const thumbInner = p.img ? `<img src="${escAttr(p.img)}" alt="">` : icon;
+
+  const finishPills = FINISHES.map((f,i)=>{
+    return `<div class="pill ${devis.finishIdx===i?'sel':''}" onclick="selectFinish(${i})">${esc(f.nom)} <span class="sup">${f.sup>0?'+'+f.sup+'€':''}</span></div>`;
+  }).join('');
+
+  const extraRows = EXTRAS.map((e,i)=>{
+    const qty = devis.extraQty[i] || 0;
+    return `<div class="extra-row">
+      <div class="info">
+        <div class="n">${esc(e.nom)}</div>
+        <div class="p">${fmt(e.prix)} € / ${esc(e.unite)}</div>
+      </div>
+      <div class="stepper">
+        <button onclick="stepExtra(${i},-1)">−</button>
+        <div class="qty">${qty}</div>
+        <button onclick="stepExtra(${i},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('ficheBody').innerHTML = `
+    <div class="thumb-lg" id="thumbLg">${thumbInner}</div>
+
+    <div class="section">
+      <h3><span class="ic">🏷️</span> Informations</h3>
+      <div class="field">
+        <label>Catégorie</label>
+        <select id="f_cat" onchange="onCatChange()">${catOptions(p.cat)}</select>
+      </div>
+      <div class="field">
+        <label>Taille (L × l × E)</label>
+        <input type="text" id="f_taille" value="${escAttr(p.taille||'')}" placeholder="Ex : ≃ 10 cm × 10 cm" oninput="onFieldChange()"/>
+      </div>
+      <div class="field">
+        <label>Poids (kg)</label>
+        <input type="number" step="0.001" inputmode="decimal" id="f_poids" value="${p.poids||''}" placeholder="0.00" oninput="onFieldChange()"/>
+      </div>
+      <div class="field">
+        <label>Photo vedette</label>
+        <input type="file" accept="image/*" id="f_photofile" style="display:none" onchange="onPhotoPicked(event)"/>
+        <div class="actionsrow" style="margin-top:0">
+          <button type="button" class="btn ghost" onclick="document.getElementById('f_photofile').click()">📷 ${p.img ? 'Changer la photo' : 'Ajouter une photo'}</button>
+          ${p.img ? `<button type="button" class="btn danger" onclick="removePhoto()">Retirer</button>` : ''}
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="ic">🧪</span> Recette / dosage</h3>
+      <div class="field">
+        <label>Eau de départ (g)</label>
+        <input type="number" inputmode="decimal" id="f_eau" value="${p.eau||''}" placeholder="Ex : 150" oninput="onFieldChange()"/>
+      </div>
+      <div class="calcline"><span class="k">Plâtre résine à peser</span><span class="v" id="rc_platre">—</span></div>
+      <div class="calcline"><span class="k">Eau à mélanger</span><span class="v" id="rc_eaumel">—</span></div>
+      <div class="calcline"><span class="k">Coût plâtre résine</span><span class="v" id="rc_coutplatre">—</span></div>
+      <div class="calcline"><span class="k">Coût GD + Primer + Vernis</span><span class="v" id="rc_vernis">${fmt(COUT_VERNIS)} €</span></div>
+      <div class="calcline total"><span class="k">Prix de revient (matière)</span><span class="v" id="rc_revient">—</span></div>
+    </div>
+
+    <div class="section">
+      <h3><span class="ic">💶</span> Prix de vente Brut</h3>
+      <div class="field">
+        <label>Prix de vente — finition Brut (€)</label>
+        <input type="number" step="0.5" inputmode="decimal" id="f_brut" value="${p.brut||''}" placeholder="Ex : 9.00" oninput="onFieldChange()"/>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="ic">🎨</span> Finition choisie</h3>
+      <div class="pillgrid">${finishPills}</div>
+      <div class="calcline total" style="margin-top:10px"><span class="k">Prix avec finition</span><span class="v" id="dv_finition">—</span></div>
+    </div>
+
+    <div class="section">
+      <h3><span class="ic">✨</span> Personnalisations</h3>
+      ${extraRows}
+      <div class="calcline total" style="margin-top:6px"><span class="k">Total personnalisations</span><span class="v" id="dv_extras">0,00 €</span></div>
+    </div>
+
+    <div class="actionsrow">
+      <button class="btn ghost" onclick="closeFiche()">Fermer</button>
+      <button class="btn primary" onclick="saveNow()">Enregistrer</button>
+    </div>
+  `;
+
+  computeRecipe(p);
+  computeDevis(p);
+}
+
+function onPhotoPicked(evt){
+  const file = evt.target.files && evt.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      // downscale so stored size stays small
+      const MAX = 900;
+      let w = img.width, h = img.height;
+      if(w > MAX || h > MAX){
+        if(w > h){ h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+      const p = getProduct(currentFicheId);
+      p.img = dataUrl;
+      savePhoto(p.id, dataUrl);
+      renderFiche(p, false);
+      showToast('Photo ajoutée ✓');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto(){
+  const p = getProduct(currentFicheId);
+  p.img = '';
+  deletePhotoKey(p.id);
+  renderFiche(p, false);
+}
+
+function onCatChange(){
+  const sel = document.getElementById('f_cat');
+  if(sel.value === '__new__'){
+    const name = prompt('Nom de la nouvelle catégorie :');
+    if(name && name.trim()){
+      const p = getProduct(currentFicheId);
+      p.cat = name.trim();
+      document.getElementById('ficheCatLabel').textContent = p.cat;
+      sel.innerHTML = catOptions(p.cat);
+      scheduleSave();
+    } else {
+      sel.value = getProduct(currentFicheId).cat;
+    }
+    return;
+  }
+  const p = getProduct(currentFicheId);
+  p.cat = sel.value;
+  document.getElementById('ficheCatLabel').textContent = p.cat;
+  scheduleSave();
+}
+
+function onFieldChange(){
+  const p = getProduct(currentFicheId);
+  if(!p) return;
+  p.nom = document.getElementById('ficheNom').value;
+  p.taille = document.getElementById('f_taille').value;
+  p.poids = parseFloat(document.getElementById('f_poids').value) || 0;
+  p.eau = parseFloat(document.getElementById('f_eau').value) || 0;
+  p.brut = parseFloat(document.getElementById('f_brut').value) || 0;
+
+  const icon = CAT_ICONS[p.cat] || '🎨';
+  document.getElementById('thumbLg').innerHTML = p.img ? `<img src="${escAttr(p.img)}" alt="">` : icon;
+
+  computeRecipe(p);
+  computeDevis(p);
+  scheduleSave();
+}
+
+function computeRecipe(p){
+  const eau = p.eau || 0;
+  const has = eau > 0;
+  const platre = eau * K_PLATRE;
+  const eauMel = eau * K_EAU;
+  const coutPlatre = platre * COUT_G_PLATRE;
+  const revient = coutPlatre + COUT_VERNIS;
+  document.getElementById('rc_platre').textContent = has ? (Math.round(platre*100)/100) + ' g' : '—';
+  document.getElementById('rc_eaumel').textContent = has ? (Math.round(eauMel*100)/100) + ' g' : '—';
+  document.getElementById('rc_coutplatre').textContent = has ? fmt(coutPlatre) + ' €' : '—';
+  document.getElementById('rc_revient').textContent = fmt(revient) + ' €';
+}
+
+function selectFinish(i){
+  devis.finishIdx = i;
+  const p = getProduct(currentFicheId);
+  renderFiche(p, false);
+}
+
+function stepExtra(i, delta){
+  const cur = devis.extraQty[i] || 0;
+  const next = Math.max(0, cur + delta);
+  devis.extraQty[i] = next;
+  const p = getProduct(currentFicheId);
+  computeDevis(p);
+  // update just this stepper display without full re-render (keeps scroll position)
+  const rows = document.querySelectorAll('.extra-row .qty');
+  if(rows[i]) rows[i].textContent = next;
+}
+
+function computeDevis(p){
+  const brut = p.brut || 0;
+  const finish = FINISHES[devis.finishIdx];
+  const prixFinition = brut + finish.sup;
+  let totalExtras = 0;
+  EXTRAS.forEach((e,i)=>{
+    const q = devis.extraQty[i] || 0;
+    totalExtras += q * e.prix;
+  });
+  const total = prixFinition + totalExtras;
+
+  const dvFin = document.getElementById('dv_finition');
+  const dvExt = document.getElementById('dv_extras');
+  if(dvFin) dvFin.textContent = fmt(prixFinition) + ' €';
+  if(dvExt) dvExt.textContent = fmt(totalExtras) + ' €';
+  document.getElementById('totalAnnonce').textContent = fmt(total) + ' €';
+}
+
+function resetDevis(){
+  devis = { finishIdx: 0, extraQty: {} };
+  const p = getProduct(currentFicheId);
+  renderFiche(p, false);
+}
+
+function saveNow(){
+  persist();
+  showToast('Fiche enregistrée ✓');
+}
+
+function confirmDelete(){
+  const p = getProduct(currentFicheId);
+  if(!p) return;
+  if(confirm(`Supprimer « ${p.nom || 'cette création'} » ?`)){
+    products = products.filter(x=>x.id!==currentFicheId);
+    deletePhotoKey(currentFicheId);
+    persist();
+    hideFicheOverlay();
+    currentFicheId = null;
+    renderChips();
+    renderGrid();
+    showToast('Création supprimée');
+  }
+}
+
+// ===================== LOCK SCREEN =====================
+const OUTIL_MDP = 'aphrodite2026';
+function tryUnlock(){
+  const val = document.getElementById('lockPwd').value;
+  if(val === OUTIL_MDP){
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('app').classList.add('unlocked');
+    init();
+  } else {
+    document.getElementById('lockError').textContent = 'Mot de passe incorrect.';
+    document.getElementById('lockPwd').value = '';
+    document.getElementById('lockPwd').focus();
+  }
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  const pwd = document.getElementById('lockPwd');
+  if(pwd) pwd.focus();
+});
+
+// ===================== INSTALL BANNER =====================
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+function isIOS(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+let hideInstallBanner = false;
+async function renderInstallBanner(){
+  const wrap = document.getElementById('installBannerWrap');
+  if(!wrap) return;
+  if(isStandalone() || hideInstallBanner){
+    wrap.innerHTML = '';
+    return;
+  }
+  const steps = isIOS()
+    ? `Appuyez sur <b>Partager</b> (le carré avec la flèche) en bas de Safari, puis <b>« Sur l'écran d'accueil »</b>.`
+    : `Ouvrez le menu ⋮ de votre navigateur, puis <b>« Ajouter à l'écran d'accueil »</b>.`;
+  wrap.innerHTML = `<div class="installbanner">
+    <button class="close" onclick="dismissInstallBanner()">✕</button>
+    📲 <b>Installez cette page comme une appli :</b> ${steps} Elle s'ouvrira ensuite directement depuis votre écran d'accueil, sans repasser par Claude — même hors connexion.
+  </div>`;
+}
+async function dismissInstallBanner(){
+  hideInstallBanner = true;
+  try{ localStorage.setItem('hideInstallBanner', '1'); }catch(e){}
+  document.getElementById('installBannerWrap').innerHTML = '';
+}
+
+// ===================== INIT =====================
+async function init(){
+  try{
+    if(localStorage.getItem('hideInstallBanner') === '1') hideInstallBanner = true;
+  }catch(e){ /* not set yet */ }
+  await loadProducts();
+  renderChips();
+  renderGrid();
+  renderInstallBanner();
+}
+
+</script>
+</body>
+</html>
