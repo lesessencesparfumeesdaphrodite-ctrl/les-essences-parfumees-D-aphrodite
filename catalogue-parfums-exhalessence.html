@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue Parfums Exhalessence</title>
+<style>
+  :root{
+    --gold:#c9a15a;
+    --gold-light:#e8d5a8;
+    --dark:#1a1410;
+    --dark2:#241b14;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    height:100%;
+    background:radial-gradient(ellipse at center, #2b2118 0%, #14100c 100%);
+    font-family:'Georgia', 'Times New Roman', serif;
+    overflow:hidden;
+  }
+  .catalogue-wrap{
+    height:100%;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .book-stage{
+    position:relative;
+    width:100%;
+    max-width:1100px;
+    aspect-ratio:1492/1054;
+    perspective:2800px;
+  }
+  .page{
+    position:absolute;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+    border-radius:6px;
+    box-shadow:0 15px 50px rgba(0,0,0,0.6);
+    transform-origin:left center;
+    transform-style:preserve-3d;
+    transition:transform 0.9s cubic-bezier(.645,.045,.355,1);
+    backface-visibility:hidden;
+  }
+  .page-back{
+    position:absolute;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#2a2118,#171310);
+    border-radius:6px;
+    backface-visibility:hidden;
+    transform:rotateY(180deg);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .page-back::after{
+    content:"";
+    width:60%;height:60%;
+    border:1px solid var(--gold);
+    opacity:0.25;
+  }
+  .page.flipped{ transform: rotateY(-180deg); }
+  .page.stacked{ z-index:1; }
+  .page:not(.stacked){ z-index:5; }
+
+  .book-shadow{
+    position:absolute;
+    bottom:-18px;left:5%;right:5%;
+    height:30px;
+    background:radial-gradient(ellipse, rgba(0,0,0,0.55) 0%, transparent 75%);
+    filter:blur(4px);
+  }
+
+  .controls{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    margin-top:26px;
+  }
+  .nav-btn{
+    background:transparent;
+    border:1px solid var(--gold);
+    color:var(--gold-light);
+    width:46px;height:46px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+    display:flex;align-items:center;justify-content:center;
+    transition:all 0.25s ease;
+    user-select:none;
+  }
+  .nav-btn:hover{ background:var(--gold); color:var(--dark); }
+  .nav-btn:disabled{ opacity:0.25; cursor:default; }
+  .nav-btn:disabled:hover{ background:transparent; color:var(--gold-light); }
+
+  .page-indicator{
+    color:var(--gold-light);
+    letter-spacing:2px;
+    font-size:13px;
+    text-transform:uppercase;
+    min-width:120px;
+    text-align:center;
+  }
+
+  .hint{
+    color:#8a7c68;
+    font-size:12px;
+    letter-spacing:1px;
+    margin-top:14px;
+    text-align:center;
+  }
+
+  .edge-click{
+    position:absolute;
+    top:0;
+    width:15%;
+    height:100%;
+    z-index:10;
+    cursor:pointer;
+  }
+  .edge-left{ left:0; }
+  .edge-right{ right:0; }
+
+  @media (max-width:640px){
+    .book-stage{ max-width:94vw; }
+    .controls{ gap:18px; }
+    .nav-btn{ width:40px;height:40px;font-size:15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="catalogue-wrap">
+  <div class="book-stage" id="bookStage">
+    <div class="edge-click edge-left" id="edgeLeft"></div>
+    <div class="edge-click edge-right" id="edgeRight"></div>
+    <!-- pages injected by JS -->
+  </div>
+  <div class="book-shadow"></div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prevBtn" aria-label="Page précédente">&#10094;</button>
+    <div class="page-indicator" id="pageIndicator">1 / 4</div>
+    <button class="nav-btn" id="nextBtn" aria-label="Page suivante">&#10095;</button>
+  </div>
+  <div class="hint">Cliquez sur les bords de la page, ou utilisez les flèches, pour tourner les pages</div>
+</div>
+
+<script>
+(function(){
+  var pages = [
+    "page1-couverture.jpg",
+    "page2-femme.jpg",
+    "page3-homme.jpg",
+    "page4-mixte.jpg"
+  ];
+  var stage = document.getElementById('bookStage');
+  var current = 0;
+
+  // Build page elements (each has a front face image + a back "reverse" face)
+  var pageEls = pages.map(function(src, i){
+    var el = document.createElement('div');
+    el.className = 'page';
+    el.style.backgroundImage = "url('" + src + "')";
+    el.style.zIndex = pages.length - i;
+    var back = document.createElement('div');
+    back.className = 'page-back';
+    el.appendChild(back);
+    stage.appendChild(el);
+    return el;
+  });
+
+  function render(){
+    pageEls.forEach(function(el, i){
+      if(i < current){
+        el.classList.add('flipped');
+        el.style.zIndex = i + 1;
+      } else {
+        el.classList.remove('flipped');
+        el.style.zIndex = pages.length - i;
+      }
+    });
+    document.getElementById('pageIndicator').textContent = (current+1) + ' / ' + pages.length;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === pages.length - 1;
+  }
+
+  function next(){
+    if(current < pages.length - 1){ current++; render(); }
+  }
+  function prev(){
+    if(current > 0){ current--; render(); }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+  document.getElementById('edgeRight').addEventListener('click', next);
+  document.getElementById('edgeLeft').addEventListener('click', prev);
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight') next();
+    if(e.key === 'ArrowLeft') prev();
+  });
+
+  // basic touch swipe
+  var touchStartX = null;
+  stage.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; });
+  stage.addEventListener('touchend', function(e){
+    if(touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if(dx < -40) next();
+    if(dx > 40) prev();
+    touchStartX = null;
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
