@@ -16,10 +16,10 @@
     height:100%;
     background:radial-gradient(ellipse at center, #2b2118 0%, #14100c 100%);
     font-family:'Georgia', 'Times New Roman', serif;
-    overflow:hidden;
+    overflow:auto;
   }
   .catalogue-wrap{
-    height:100%;
+    min-height:100%;
     width:100%;
     display:flex;
     flex-direction:column;
@@ -29,10 +29,8 @@
   }
   .book-stage{
     position:relative;
-    width:100%;
-    max-width:1100px;
-    aspect-ratio:1492/1054;
     perspective:2800px;
+    margin:0 auto;
   }
   .page{
     position:absolute;
@@ -70,9 +68,10 @@
   .page:not(.stacked){ z-index:5; }
 
   .book-shadow{
-    position:absolute;
-    bottom:-18px;left:5%;right:5%;
+    width:100%;
+    max-width:1100px;
     height:30px;
+    margin-top:-10px;
     background:radial-gradient(ellipse, rgba(0,0,0,0.55) 0%, transparent 75%);
     filter:blur(4px);
   }
@@ -81,7 +80,7 @@
     display:flex;
     align-items:center;
     gap:28px;
-    margin-top:26px;
+    margin-top:22px;
   }
   .nav-btn{
     background:transparent;
@@ -116,21 +115,33 @@
     text-align:center;
   }
 
-  .edge-click{
+  .edge-arrow{
     position:absolute;
-    top:0;
-    width:15%;
-    height:100%;
-    z-index:10;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:20;
+    width:44px;height:44px;
+    border-radius:50%;
+    background:rgba(20,16,12,0.55);
+    border:1px solid var(--gold);
+    color:var(--gold-light);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
     cursor:pointer;
+    transition:all 0.2s ease;
+    user-select:none;
   }
-  .edge-left{ left:0; }
-  .edge-right{ right:0; }
+  .edge-arrow:hover{ background:var(--gold); color:var(--dark); }
+  .edge-arrow.hidden{ display:none; }
+  .edge-arrow-left{ left:-22px; }
+  .edge-arrow-right{ right:-22px; }
 
   @media (max-width:640px){
-    .book-stage{ max-width:94vw; }
     .controls{ gap:18px; }
     .nav-btn{ width:40px;height:40px;font-size:15px; }
+    .edge-arrow{ width:36px;height:36px;font-size:15px; }
+    .edge-arrow-left{ left:-8px; }
+    .edge-arrow-right{ right:-8px; }
   }
 </style>
 </head>
@@ -138,8 +149,8 @@
 
 <div class="catalogue-wrap">
   <div class="book-stage" id="bookStage">
-    <div class="edge-click edge-left" id="edgeLeft"></div>
-    <div class="edge-click edge-right" id="edgeRight"></div>
+    <div class="edge-arrow edge-arrow-left" id="edgeLeft">&#10094;</div>
+    <div class="edge-arrow edge-arrow-right" id="edgeRight">&#10095;</div>
     <!-- pages injected by JS -->
   </div>
   <div class="book-shadow"></div>
@@ -149,7 +160,7 @@
     <div class="page-indicator" id="pageIndicator">1 / 4</div>
     <button class="nav-btn" id="nextBtn" aria-label="Page suivante">&#10095;</button>
   </div>
-  <div class="hint">Cliquez sur les bords de la page, ou utilisez les flèches, pour tourner les pages</div>
+  <div class="hint">Cliquez sur les flèches, ou utilisez les touches du clavier, pour tourner les pages</div>
 </div>
 
 <script>
@@ -160,10 +171,10 @@
     "page3-homme.jpg",
     "page4-mixte.jpg"
   ];
+  var RATIO = 1492/1054;
   var stage = document.getElementById('bookStage');
   var current = 0;
 
-  // Build page elements (each has a front face image + a back "reverse" face)
   var pageEls = pages.map(function(src, i){
     var el = document.createElement('div');
     el.className = 'page';
@@ -175,6 +186,19 @@
     stage.appendChild(el);
     return el;
   });
+
+  function sizeStage(){
+    var wrapPadding = 40;
+    var controlsH = 46 + 22 + 14 + 20;
+    var shadowH = 30;
+    var availH = window.innerHeight - controlsH - shadowH - wrapPadding;
+    var availW = window.innerWidth - wrapPadding - 60;
+    var maxW = Math.min(1100, availW, availH * RATIO);
+    var w = Math.max(260, maxW);
+    var h = w / RATIO;
+    stage.style.width = w + 'px';
+    stage.style.height = h + 'px';
+  }
 
   function render(){
     pageEls.forEach(function(el, i){
@@ -189,6 +213,11 @@
     document.getElementById('pageIndicator').textContent = (current+1) + ' / ' + pages.length;
     document.getElementById('prevBtn').disabled = current === 0;
     document.getElementById('nextBtn').disabled = current === pages.length - 1;
+
+    var edgeLeft = document.getElementById('edgeLeft');
+    var edgeRight = document.getElementById('edgeRight');
+    edgeLeft.classList.toggle('hidden', current === 0);
+    edgeRight.classList.toggle('hidden', current === pages.length - 1);
   }
 
   function next(){
@@ -208,7 +237,6 @@
     if(e.key === 'ArrowLeft') prev();
   });
 
-  // basic touch swipe
   var touchStartX = null;
   stage.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; });
   stage.addEventListener('touchend', function(e){
@@ -219,6 +247,8 @@
     touchStartX = null;
   });
 
+  window.addEventListener('resize', sizeStage);
+  sizeStage();
   render();
 })();
 </script>

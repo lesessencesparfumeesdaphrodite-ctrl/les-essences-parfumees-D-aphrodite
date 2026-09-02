@@ -991,26 +991,29 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   <div style="position:sticky;top:70px;z-index:400;background:rgba(253,250,247,.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,169,110,.25);overflow-x:auto;white-space:nowrap;padding:10px 16px;box-shadow:0 2px 10px rgba(44,24,16,.05)">
     <a href="#exh-bienvenue" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Bienvenue</a>
     <a href="#exh-qui" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Qui je suis</a>
+    <a href="#exh-offre" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Offre du mois</a>
     <a href="#exh-commander" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Comment commander</a>
     <a href="#exh-reserver" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Réserver</a>
     <a href="#exh-marque" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">EXHALESSENCE</a>
     <a href="#exh-distributeur" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Devenir distributeur(trice)</a>
     <a href="#exh-avantages" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Avantages</a>
     <a href="#exh-rejoindre" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nous rejoindre</a>
-    <a href="#" onclick="showContact();return false" style="display:inline-block;font-size:12px;font-weight:700;color:var(--terra);text-decoration:none">✉ Nous contacter</a>
+    <a href="#" onclick="showContact();return false" style="display:inline-block;margin-right:14px;font-size:12px;font-weight:700;color:var(--terra);text-decoration:none">✉ Nous contacter</a>
+    <a href="tel:+33622418463" style="display:inline-block;font-size:12px;font-weight:700;color:var(--terra);text-decoration:none">📞 06 22 41 84 63</a>
   </div>
 
   <!-- BIENVENUE -->
   <section id="exh-bienvenue" style="background:var(--beige);padding:56px 20px">
-    <div style="max-width:1080px;margin:0 auto;display:flex;gap:40px;align-items:center;flex-wrap:wrap-reverse;justify-content:center">
-      <div style="flex:1;min-width:280px;max-width:480px">
-        <div class="hero-badge" style="margin-bottom:14px">✦ Parfums, Beauté & Bien-être</div>
-        <h1 class="hero-t">Bienvenue chez <em>EXHALESSENCE</em></h1>
-        <p class="hero-sub">Conseillère indépendante — parfums de Grasse & gamme beauté</p>
-        <p class="hero-desc">Parfums, soins visage et corps, cheveux, barbe, et parfums d'intérieur — découvrez ma sélection de produits EXHALESSENCE, conçus en France. Vous trouverez ici l'essentiel pour commander, réserver votre moment beauté ou découvrir l'opportunité de rejoindre l'aventure.</p>
-      </div>
+    <div style="max-width:1080px;margin:0 auto;display:flex;gap:40px;align-items:center;flex-wrap:wrap;justify-content:center">
       <div style="flex:0 0 380px;max-width:380px;border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(44,24,16,.18)">
         <img src="exh-categorie.jpg" alt="Gamme de parfums et soins EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
+      </div>
+      <div style="flex:1;min-width:280px;max-width:480px">
+        <div class="hero-badge" style="margin-bottom:14px;background:rgba(201,169,110,.28);border:1px solid var(--dore);color:var(--brun)">✦ Parfums, Beauté & Bien-être</div>
+        <h1 class="hero-t">Zulay Marques <em>EXHALESSENCE</em></h1>
+        <p class="hero-sub">Conseillère indépendante<br>Parfums de Grasse & Beauté</p>
+        <p class="hero-desc">Soins du visage et du corps, capillaires, barbe, parfums d'intérieur et d'ambiance, compléments alimentaires pour hommes et femmes — découvrez tous les produits EXHALESSENCE, conçus en France, 100% français, non testés sur les animaux, à la naturalité élevée.</p>
+        <p class="hero-desc" style="margin-top:-14px">Vous trouverez ici l'essentiel pour découvrir comment commander, réserver votre moment beauté ou découvrir l'opportunité de rejoindre l'aventure.</p>
       </div>
     </div>
   </section>
@@ -1023,14 +1026,46 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <h2 class="st">Qui je suis ?</h2>
       </div>
       <div style="display:flex;gap:36px;align-items:center;flex-wrap:wrap;justify-content:center">
-        <div style="flex:0 0 260px;max-width:260px;border-radius:16px;overflow:hidden;box-shadow:0 8px 26px rgba(44,24,16,.15)">
-          <img src="exh-qui-je-suis.jpg" alt="Zulay Marques, conseillère EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
-        </div>
-        <div style="flex:1;min-width:260px;max-width:520px">
+        <div style="flex:1;min-width:260px;max-width:520px;order:1">
           <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:16px">Conseillère EXHALESSENCE depuis 5 ans</div>
           <p style="color:var(--gris);line-height:1.9;font-size:15px">Séduite par la qualité des produits EXHALESSENCE, j'ai rejoint l'aventure en octobre 2020. D'abord en parallèle de mon emploi, j'y ai découvert une véritable passion. Depuis, cette activité a transformé ma vie personnelle et professionnelle.</p>
           <p style="color:var(--gris);line-height:1.9;font-size:15px;margin-top:14px">En 2023, j'ai choisi de m'y consacrer à temps plein, avec un épanouissement total. Aujourd'hui, je vis une liberté professionnelle précieuse, en harmonie avec ma vie de famille. Rejoindre EXHALESSENCE a été l'une des meilleures décisions de ma vie.</p>
         </div>
+        <div style="flex:0 0 260px;max-width:260px;border-radius:16px;overflow:hidden;box-shadow:0 8px 26px rgba(44,24,16,.15);order:2">
+          <img src="exh-qui-je-suis.jpg" alt="Zulay Marques, conseillère EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFRE DU MOIS -->
+  <section id="exh-offre" style="background:white;padding:50px 20px">
+    <div class="si" style="max-width:920px">
+      <div class="sh">
+        <div class="ey">✦ En ce moment</div>
+        <h2 class="st">Offre du mois</h2>
+        <p class="sdesc">Deux offres valables du 1<sup>er</sup> au 30 septembre 2026.</p>
+      </div>
+      <div style="display:flex;gap:22px;justify-content:center;flex-wrap:wrap;max-width:840px;margin:0 auto">
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:320px;text-align:center">
+          <img src="exh-offre-parfum-septembre.jpg" alt="Parfum du mois Cœur de Miel" style="width:100%;display:block" onerror="this.style.display='none'"/>
+          <div style="padding:18px">
+            <div class="vt" style="margin-bottom:6px">Parfum du mois — Cœur de Miel</div>
+            <p style="color:var(--gris);font-size:13px;line-height:1.7;margin-bottom:10px">Réf. 172 — Famille Chyprée Florale. Une gourmandise florale entre miel, gardénia et fleur d'oranger, sur un fond de caramel et de patchouli.</p>
+            <p style="color:var(--brun);font-size:13px;font-weight:700">Parfum 75ml : 25€ <span style="color:var(--gris);font-weight:400;text-decoration:line-through">32€</span><br>Recharge 125ml : 25€ <span style="color:var(--gris);font-weight:400;text-decoration:line-through">30€</span></p>
+          </div>
+        </div>
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:320px;text-align:center">
+          <img src="exh-offre-nutri-septembre.jpg" alt="Pack Nutri+ Détox Minceur Probiotique" style="width:100%;display:block" onerror="this.style.display='none'"/>
+          <div style="padding:18px">
+            <div class="vt" style="margin-bottom:6px">Pack Nutri+ — Détox, Minceur & Probiotique</div>
+            <p style="color:var(--gris);font-size:13px;line-height:1.7;margin-bottom:10px">Une cure de 55 jours : 1 flacon Détox, 3 flacons Draineurs, 3 flacons Brûleurs de graisse et 1 flacon Probiotique.</p>
+            <p style="color:var(--brun);font-size:13px;font-weight:700">199€ <span style="color:var(--gris);font-weight:400;text-decoration:line-through">279€</span> — soit 80€ de réduction</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -1054,7 +1089,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <div style="border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(44,24,16,.14);margin-bottom:10px">
               <img src="exh-liste-parfums-couverture.jpg" alt="Liste des parfums Exhalessence" style="width:100%;display:block" onerror="this.style.display='none'"/>
             </div>
-            <a href="catalogue-parfums-exhalessence.html" target="_blank" rel="noopener" class="btn-s" style="text-decoration:none;font-size:11px;padding:9px 14px;width:100%;justify-content:center">🌸 Liste des parfums</a>
+            <a href="catalogue-parfums-exhalessence.html" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none;font-size:11px;padding:9px 14px;width:100%;justify-content:center">🌸 Liste des parfums</a>
           </div>
         </div>
         <div style="flex:1;min-width:260px;max-width:420px">
@@ -1124,8 +1159,10 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <button onclick="toggleExhForm()" class="btn-p" style="font-size:15px;padding:14px 34px">Réserver</button>
       </div>
 
-      <!-- FORMULAIRE DE RÉSERVATION (masqué par défaut) -->
-      <div id="exh-form-wrap" style="display:none;max-width:560px;margin:30px auto 0;background:white;border-radius:var(--r);padding:30px 26px;box-shadow:var(--sh-lg)">
+      <!-- FORMULAIRE DE RÉSERVATION (fenêtre modale) -->
+      <div id="exh-form-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhForm()">
+      <div id="exh-form-wrap" style="max-width:560px;width:100%;max-height:88vh;overflow-y:auto;background:white;border-radius:var(--r);padding:30px 26px;box-shadow:var(--sh-lg);position:relative">
+        <button onclick="toggleExhForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
         <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Réserver votre moment</h3>
         <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:20px">La date choisie est indicative — je vous recontacte pour la confirmer.</p>
 
@@ -1153,6 +1190,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <p id="exh-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
@@ -1164,8 +1202,11 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <h2 class="st">EXHALESSENCE</h2>
       </div>
       <div style="display:flex;gap:36px;align-items:center;flex-wrap:wrap;justify-content:center">
-        <div style="flex:0 0 300px;max-width:300px;border-radius:16px;overflow:hidden;box-shadow:0 8px 26px rgba(44,24,16,.15)">
-          <img src="exh-siege.jpg" alt="Siège de la société EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
+        <div style="flex:0 0 400px;max-width:400px">
+          <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 26px rgba(44,24,16,.15)">
+            <img src="exh-siege.jpg" alt="Siège de la société EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
+          </div>
+          <p style="text-align:center;margin-top:10px;color:var(--brun-m);font-size:13px;font-weight:700">Siège EXHALESSENCE<br><span style="font-weight:400;color:var(--gris)">Meung-sur-Loire (45)</span></p>
         </div>
         <div style="flex:1;min-width:260px;max-width:480px;color:var(--gris);line-height:1.9;font-size:14px">
           <p style="margin-bottom:12px">Joël SAUVAGEOT, Président entouré de ses collaborateurs, a créé la société EXHALESSENCE en juin 2016. Exhalessence, une société Française, située à Meung-sur-Loire (45).</p>
@@ -1187,7 +1228,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div class="sh">
         <div class="ey">✦ L'opportunité</div>
         <h2 class="st">Devenir distributeur(trice)</h2>
-        <p class="sdesc">Vous aimez les produits EXHALESSENCE et vous souhaitez, vous aussi, vivre cette belle aventure et développer votre propre activité à votre rythme ? Découvrez tout ce qu'il faut savoir en vidéo.</p>
+        <p class="sdesc">Vous aimez les produits EXHALESSENCE et souhaitez découvrir aussi cette belle aventure et développer votre propre activité à votre rythme ?<br>Découvrez tout ce qu'il faut savoir en vidéo.</p>
       </div>
       <div style="position:relative;width:100%;padding-top:56.25%;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-lg);background:#000">
         <iframe
@@ -7385,11 +7426,11 @@ async function inscrireNewsletter(){
 }
 
 function toggleExhForm(){
-  const el = document.getElementById('exh-form-wrap');
-  if(!el) return;
-  const show = el.style.display === 'none' || !el.style.display;
-  el.style.display = show ? 'block' : 'none';
-  if(show) el.scrollIntoView({behavior:'smooth', block:'start'});
+  const overlay = document.getElementById('exh-form-overlay');
+  if(!overlay) return;
+  const show = overlay.style.display === 'none' || !overlay.style.display;
+  overlay.style.display = show ? 'flex' : 'none';
+  document.body.style.overflow = show ? 'hidden' : '';
 }
 
 async function reserverExhalessence(){
