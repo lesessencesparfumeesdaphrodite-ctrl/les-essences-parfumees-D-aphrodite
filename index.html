@@ -959,6 +959,17 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <li>Les bons sont valables uniquement sur les créations artisanales (hors frais de port).</li>
     </ul>
 
+    <h2>🎂 Carte cadeau anniversaire</h2>
+    <p>Le jour de votre anniversaire, vous recevez automatiquement par email un <strong>bon cadeau de 5€ pour 25€ d'achat minimum</strong>, valable <strong>1 mois</strong> (renseignez votre date de naissance dans votre espace "Mon Compte" pour en bénéficier).</p>
+    <p>Cette carte cadeau est valable aussi bien sur nos <strong>créations artisanales en plâtre résine</strong> que sur nos <strong>parfums et produits de beauté Exhalessence</strong> :</p>
+    <ul>
+      <li><strong>Créations en plâtre résine</strong> → saisissez directement votre code dans le champ "Bon de réduction" de votre panier, sur ce site.</li>
+      <li><strong>Parfums & produits de beauté Exhalessence</strong> (non vendus sur ce site) → contactez-nous directement en message privé avec votre code pour en bénéficier.</li>
+    </ul>
+    <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:14px;font-size:13px;color:var(--brun-m);margin-top:10px">
+      ⚠️ La carte cadeau anniversaire n'est <strong>pas cumulable avec d'autres promotions ou offres en cours</strong>.
+    </p>
+
     <h2>Conservation de vos points</h2>
     <p>Vos points de fidélité sont enregistrés sur <strong>cet appareil et ce navigateur</strong>. Pour ne pas les perdre en cas de changement d'appareil ou de navigateur, pensez à utiliser la fonction <strong>"Exporter mes points"</strong> disponible dans votre espace "Mon Compte". Un code de sauvegarde vous sera fourni, que vous pourrez réimporter à tout moment.</p>
     <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:14px;font-size:13px;color:var(--brun-m);margin-top:10px">
@@ -1148,11 +1159,11 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     </div>
   </div>
   <div class="fb">
-    <div>© 2026 Les Essences Parfumées d'Aphrodite — SIRET 890 868 656 00012</div>
+    <div>© 2026 Les Essences Parfumées d'Aphrodite — SIRET <span style="white-space:nowrap">890 868 656 00012</span></div>
     <div style="text-align:center;padding:10px 0;font-family:'Dancing Script',cursive;font-size:20px;color:#C8A951">
       "Chaque pièce est unique, comme vous."
     </div>
-    <div><a href="#" onclick="showPage('mentions');return false">Mentions légales</a> · <a href="#" onclick="showPage('cgv');return false">CGV</a> · <a href="#" onclick="showPage('confidentialite');return false">Confidentialité</a></div>
+    <div><a href="#" onclick="showPage('mentions');return false">Mentions légales</a> · <a href="#" onclick="showPage('cgv');return false">CGV</a> · <a href="#" onclick="showPage('confidentialite');return false">Confidentialité</a> · <a href="#" onclick="showPage('fidelite');return false">Programme de fidélité</a></div>
   </div>
   <div style="margin-top:16px;border-top:1px solid rgba(201,169,110,.15);padding-top:12px;font-size:10px;color:rgba(201,169,110,.4);text-align:center">
     <a href="#" onclick="showPage('admin');return false" style="color:rgba(201,169,110,.3);text-decoration:none;font-size:9px">⚙ Admin</a> · <a href="outil.html" target="_blank" rel="noopener" style="color:rgba(201,169,110,.3);text-decoration:none;font-size:9px">🧮 Outil</a>
@@ -2038,7 +2049,7 @@ async function emailAnniversaire(clientEmail, clientPrenom, code, expiration){
   await ejsEnvoiEmail(EMAILJS_TPL_COMMANDE, clientEmail, {
     to_name: clientPrenom,
     sujet: '🎂 Joyeux anniversaire '+clientPrenom+' ! Un cadeau vous attend 🎁',
-    produits: 'Bon anniversaire ! Voici votre cadeau : '+code,
+    produits: 'Bon anniversaire ! Voici votre cadeau : '+code+' — valable sur nos créations en plâtre résine (code à saisir sur le site) ou sur nos parfums & produits de beauté Exhalessence (contactez-nous en MP). Non cumulable avec d\'autres promotions.',
     total: '5€ offerts (pour 25€ d\'achat minimum)',
     sous_total: 'Valable jusqu\'au '+expiration,
     livraison: '',
