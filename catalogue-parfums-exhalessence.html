@@ -115,33 +115,9 @@
     text-align:center;
   }
 
-  .edge-arrow{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:20;
-    width:44px;height:44px;
-    border-radius:50%;
-    background:rgba(20,16,12,0.55);
-    border:1px solid var(--gold);
-    color:var(--gold-light);
-    display:flex;align-items:center;justify-content:center;
-    font-size:18px;
-    cursor:pointer;
-    transition:all 0.2s ease;
-    user-select:none;
-  }
-  .edge-arrow:hover{ background:var(--gold); color:var(--dark); }
-  .edge-arrow.hidden{ display:none; }
-  .edge-arrow-left{ left:-22px; }
-  .edge-arrow-right{ right:-22px; }
-
   @media (max-width:640px){
     .controls{ gap:18px; }
     .nav-btn{ width:40px;height:40px;font-size:15px; }
-    .edge-arrow{ width:36px;height:36px;font-size:15px; }
-    .edge-arrow-left{ left:-8px; }
-    .edge-arrow-right{ right:-8px; }
   }
 </style>
 </head>
@@ -149,8 +125,6 @@
 
 <div class="catalogue-wrap">
   <div class="book-stage" id="bookStage">
-    <div class="edge-arrow edge-arrow-left" id="edgeLeft">&#10094;</div>
-    <div class="edge-arrow edge-arrow-right" id="edgeRight">&#10095;</div>
     <!-- pages injected by JS -->
   </div>
   <div class="book-shadow"></div>
@@ -213,11 +187,6 @@
     document.getElementById('pageIndicator').textContent = (current+1) + ' / ' + pages.length;
     document.getElementById('prevBtn').disabled = current === 0;
     document.getElementById('nextBtn').disabled = current === pages.length - 1;
-
-    var edgeLeft = document.getElementById('edgeLeft');
-    var edgeRight = document.getElementById('edgeRight');
-    edgeLeft.classList.toggle('hidden', current === 0);
-    edgeRight.classList.toggle('hidden', current === pages.length - 1);
   }
 
   function next(){
@@ -229,8 +198,6 @@
 
   document.getElementById('nextBtn').addEventListener('click', next);
   document.getElementById('prevBtn').addEventListener('click', prev);
-  document.getElementById('edgeRight').addEventListener('click', next);
-  document.getElementById('edgeLeft').addEventListener('click', prev);
 
   document.addEventListener('keydown', function(e){
     if(e.key === 'ArrowRight') next();

@@ -633,7 +633,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <a href="#" onclick="showPage('boutique','Plateaux & Vide-poches');return false" data-cat="Plateaux & Vide-poches">Plateaux & Vide-poches</a>
           <a href="#" onclick="showPage('boutique','Vases');return false" data-cat="Vases">Vases</a>
           <a href="#" onclick="showPage('boutique','Créations Signature');return false" data-cat="Créations Signature">Créations Signature</a>
-          <a href="#" onclick="showPage('exhalessence');return false" style="border-top:1px solid rgba(201,169,110,.25);margin-top:4px;padding-top:12px">EXHALESSENCE</a>
+          <a href="#" onclick="showPage('exhalessence');return false" id="nav-exh-link" style="border-top:1px solid rgba(201,169,110,.25);margin-top:4px;padding-top:12px">EXHALESSENCE</a>
         </div>
       </li>
       <li><a href="#" onclick="showContact();return false">Contact</a></li>
@@ -671,9 +671,9 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <p class="hero-desc">Bienvenue chez <strong>Les Essences Parfumées d'Aphrodite</strong>. Chaque création est fabriquée à la main avec passion, personnalisée selon vos envies et traitée pour durer.</p>
         <div class="hero-ctas hero-ctas-desktop">
           <button class="btn-p" onclick="showPage('boutique')">✦ Découvrir la boutique</button>
-          <button class="btn-s" onclick="showContact()">Nous contacter</button>
+          <button class="btn-p" onclick="showContact()">Nous contacter</button>
           <a href="https://www.calameo.com/read/00825440008b281627392" target="_blank" rel="noopener"
-             class="btn-s" style="text-decoration:none">📖 Feuilleter notre catalogue</a>
+             class="btn-p" style="text-decoration:none">📖 Feuilleter notre catalogue</a>
         </div>
       </div>
       <div class="hero-right">
@@ -689,9 +689,9 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       </div>
       <div class="hero-ctas hero-ctas-mobile">
         <button class="btn-p" onclick="showPage('boutique')">✦ Boutique</button>
-        <button class="btn-s" onclick="showContact()">Contact</button>
+        <button class="btn-p" onclick="showContact()">Contact</button>
         <a href="https://www.calameo.com/read/00825440008b281627392" target="_blank" rel="noopener"
-           class="btn-s" style="text-decoration:none">📖 Catalogue</a>
+           class="btn-p" style="text-decoration:none">📖 Catalogue</a>
       </div>
     </div>
     <div class="hero-bottom-pad"></div>
@@ -989,8 +989,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 
   <!-- SOUS-MENU COLLANT -->
   <div style="position:sticky;top:70px;z-index:400;background:rgba(253,250,247,.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,169,110,.25);overflow-x:auto;white-space:nowrap;padding:10px 16px;box-shadow:0 2px 10px rgba(44,24,16,.05)">
-    <a href="#exh-bienvenue" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Bienvenue</a>
-    <a href="#exh-qui" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Qui je suis</a>
+    <a href="#exh-bienvenue" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Accueil</a>
+    <a href="#exh-qui" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">À propos</a>
     <a href="#exh-offre" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Offre du mois</a>
     <a href="#exh-commander" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Comment commander</a>
     <a href="#exh-reserver" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Réserver</a>
@@ -1011,8 +1011,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div style="flex:1;min-width:280px;max-width:480px">
         <div class="hero-badge" style="margin-bottom:14px;background:rgba(201,169,110,.28);border:1px solid var(--dore);color:var(--brun)">✦ Parfums, Beauté & Bien-être</div>
         <h1 class="hero-t">Zulay Marques <em>EXHALESSENCE</em></h1>
-        <p class="hero-sub">Conseillère indépendante<br>Parfums de Grasse & Beauté</p>
-        <p class="hero-desc">Soins du visage et du corps, capillaires, barbe, parfums d'intérieur et d'ambiance, compléments alimentaires pour hommes et femmes — découvrez tous les produits EXHALESSENCE, conçus en France, 100% français, non testés sur les animaux, à la naturalité élevée.</p>
+        <p class="hero-sub">Conseillère à domicile indépendante<br>Parfums de Grasse & Beauté</p>
+        <p class="hero-desc">Soins du visage et du corps, capillaires, barbe, parfums d'ambiance, compléments alimentaires pour hommes et femmes. Découvrez tous les produits EXHALESSENCE, 100% français, non testés sur les animaux, à la naturalité élevée.</p>
         <p class="hero-desc" style="margin-top:-14px">Vous trouverez ici l'essentiel pour découvrir comment commander, réserver votre moment beauté ou découvrir l'opportunité de rejoindre l'aventure.</p>
       </div>
     </div>
@@ -1044,25 +1044,40 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div class="sh">
         <div class="ey">✦ En ce moment</div>
         <h2 class="st">Offre du mois</h2>
-        <p class="sdesc">Deux offres valables du 1<sup>er</sup> au 30 septembre 2026.</p>
+        <p class="sdesc">Les offres du mois de septembre sont arrivées ! Après cet été, septembre marque le retour aux habitudes, aux petits plaisirs et à l'envie de prendre soin de soi. Pour cette rentrée, EXHALESSENCE vous propose deux belles offres à découvrir.</p>
       </div>
-      <div style="display:flex;gap:22px;justify-content:center;flex-wrap:wrap;max-width:840px;margin:0 auto">
+      <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;max-width:760px;margin:0 auto">
 
-        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:320px;text-align:center">
-          <img src="exh-offre-parfum-septembre.jpg" alt="Parfum du mois Cœur de Miel" style="width:100%;display:block" onerror="this.style.display='none'"/>
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center">
+          <div style="padding:16px 18px 0">
+            <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700">✦ Parfum du mois</div>
+          </div>
+          <img src="exh-offre-parfum-septembre.jpg" alt="Parfum du mois Cœur de Miel" style="width:100%;display:block;margin-top:14px" onerror="this.style.display='none'"/>
           <div style="padding:18px">
-            <div class="vt" style="margin-bottom:6px">Parfum du mois — Cœur de Miel</div>
-            <p style="color:var(--gris);font-size:13px;line-height:1.7;margin-bottom:10px">Réf. 172 — Famille Chyprée Florale. Une gourmandise florale entre miel, gardénia et fleur d'oranger, sur un fond de caramel et de patchouli.</p>
-            <p style="color:var(--brun);font-size:13px;font-weight:700">Parfum 75ml : 25€ <span style="color:var(--gris);font-weight:400;text-decoration:line-through">32€</span><br>Recharge 125ml : 25€ <span style="color:var(--gris);font-weight:400;text-decoration:line-through">30€</span></p>
+            <div class="vt" style="margin-bottom:8px">Cœur de Miel — Réf. 172</div>
+            <p style="color:var(--gris);font-size:13px;line-height:1.75;text-align:left;margin-bottom:12px">Pour cette rentrée, laissez-vous séduire par un parfum audacieux, gourmand et enivrant, où la douceur du miel et du caramel rencontre un cœur floral délicat et sensuel. Son ouverture fruitée apporte une première impression éclatante avant de laisser place au gardénia, à la fleur d'oranger et au jasmin. En fond, la cire d'abeille, le caramel, le patchouli et la réglisse dévoilent une fragrance suave, généreuse et résolument féminine.</p>
+            <p style="color:var(--brun-m);font-size:12px;line-height:1.9;text-align:left;margin-bottom:14px">
+              <strong style="color:var(--brun)">Famille olfactive :</strong> Chyprée Florale<br>
+              <strong style="color:var(--brun)">Tête :</strong> Orange sanguine, Mandarine<br>
+              <strong style="color:var(--brun)">Cœur :</strong> Miel, Gardénia, Fleur d'oranger, Jasmin, Pêche<br>
+              <strong style="color:var(--brun)">Fond :</strong> Cire d'abeille, Caramel, Patchouli, Réglisse
+            </p>
+            <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;line-height:1.7">Parfum 75ml : 25€ au lieu de 32€<br>Recharge 125ml : 25€ au lieu de 30€</div>
           </div>
         </div>
 
-        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:320px;text-align:center">
-          <img src="exh-offre-nutri-septembre.jpg" alt="Pack Nutri+ Détox Minceur Probiotique" style="width:100%;display:block" onerror="this.style.display='none'"/>
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center">
+          <div style="padding:16px 18px 0">
+            <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700">✦ Beauté du mois</div>
+          </div>
+          <img src="exh-offre-nutri-septembre.jpg" alt="Pack Nutri+ Détox Minceur Probiotique" style="width:100%;display:block;margin-top:14px" onerror="this.style.display='none'"/>
           <div style="padding:18px">
-            <div class="vt" style="margin-bottom:6px">Pack Nutri+ — Détox, Minceur & Probiotique</div>
-            <p style="color:var(--gris);font-size:13px;line-height:1.7;margin-bottom:10px">Une cure de 55 jours : 1 flacon Détox, 3 flacons Draineurs, 3 flacons Brûleurs de graisse et 1 flacon Probiotique.</p>
-            <p style="color:var(--brun);font-size:13px;font-weight:700">199€ <span style="color:var(--gris);font-weight:400;text-decoration:line-through">279€</span> — soit 80€ de réduction</p>
+            <div class="vt" style="margin-bottom:8px">Pack Nutri+ — Détox, Minceur & Probiotique</div>
+            <p style="color:var(--gris);font-size:13px;line-height:1.75;text-align:left;margin-bottom:12px">Après avoir bien profité de l'été et de ses petits plaisirs, la rentrée est aussi l'occasion de reprendre progressivement ses bonnes habitudes. Pour vous accompagner, découvrez notre Pack Nutri+ Détox, Minceur & Probiotique.</p>
+            <p style="color:var(--brun-m);font-size:12px;line-height:1.9;text-align:left;margin-bottom:14px">
+              <strong style="color:var(--brun)">Il comprend :</strong><br>1 flacon Détox<br>3 flacons Draineurs<br>3 flacons Brûleurs de graisse<br>1 flacon Probiotique
+            </p>
+            <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;line-height:1.7">199€ au lieu de 279€<br>Soit 80€ de réduction</div>
           </div>
         </div>
 
@@ -1096,6 +1111,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Vous pouvez commander par <strong style="color:var(--brun)">téléphone</strong>, <strong style="color:var(--brun)">SMS</strong>, ou par messagerie instantanée (<strong style="color:var(--brun)">WhatsApp, Messenger, Telegram</strong>) — liens disponibles en bas de page.</p>
           <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Le règlement s'effectue <strong style="color:var(--brun)">à la commande</strong>, par carte bancaire, PayPal, Wero ou virement.</p>
           <p style="color:var(--gris);line-height:1.9;font-size:14.5px">Pour connaître le détail des produits et leurs tarifs, consultez le catalogue et la liste des parfums ci-contre.</p>
+          <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-top:14px">Vous pouvez aussi créer votre compte pour suivre vos commandes et votre programme de fidélité.</p>
+          <a href="#" onclick="showPage('compte');return false" class="btn-p" style="text-decoration:none;font-size:12px;padding:9px 18px;margin-top:6px;display:inline-flex">👤 Créer mon compte</a>
         </div>
       </div>
     </div>
@@ -1107,7 +1124,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div class="sh">
         <div class="ey">✦ Prestations</div>
         <h2 class="st">Réservez votre moment avec <em>EXHALESSENCE</em></h2>
-        <p class="sdesc">Choisissez la formule qui vous convient : rendez-vous individuel, atelier entre proches, présentation en entreprise, ou test à domicile avec la Mallette parfum et la Box beauté Découverte.</p>
+        <p class="sdesc">Choisissez la formule qui vous convient :<br>Rendez-vous individuel, Atelier découverte à domicile, Présentation en entreprise, ou découverte à domicile avec la Mallette découverte parfum ou la Box découverte beauté.</p>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;max-width:1100px;margin:0 auto 34px">
@@ -1137,17 +1154,17 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-mallette-parfum.jpg" alt="Mallette parfum Découverte" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-mallette-parfum.jpg" alt="Mallette découverte parfum" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
-            <div class="vt" style="margin-bottom:8px">Mallette parfum Découverte</div>
+            <div class="vt" style="margin-bottom:8px">Mallette découverte parfum</div>
             <div class="vd">Envie de trouver votre signature olfactive ? Testez notre gamme de parfums pendant 48h, tranquillement chez vous, gratuitement. Chèque de caution demandé, restitué au retour.</div>
           </div>
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-box-decouverte.png" alt="Box beauté Découverte" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-box-decouverte.png" alt="Box découverte beauté" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
-            <div class="vt" style="margin-bottom:8px">Box beauté Découverte</div>
+            <div class="vt" style="margin-bottom:8px">Box découverte beauté</div>
             <div class="vd">Découvrez notre gamme beauté pendant 48h, gratuitement, tranquillement chez vous. Chèque de caution demandé, restitué au retour.</div>
           </div>
         </div>
@@ -1178,14 +1195,14 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <option value="RDV individuel">RDV individuel</option>
             <option value="Atelier découverte à domicile">Atelier découverte à domicile</option>
             <option value="Présentation en entreprise">Présentation en entreprise</option>
-            <option value="Mallette parfum Découverte">Mallette parfum Découverte</option>
-            <option value="Box beauté Découverte">Box beauté Découverte</option>
+            <option value="Mallette découverte parfum">Mallette découverte parfum</option>
+            <option value="Box découverte beauté">Box découverte beauté</option>
           </select>
           <div>
             <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:5px;padding-left:6px">Date souhaitée (indicative)</label>
             <input id="exh-date" type="date" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;box-sizing:border-box"/>
           </div>
-          <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:10px 12px;font-size:11px;color:var(--brun-m)">⚠️ Un chèque de caution est demandé pour la Mallette parfum et la Box beauté Découverte, restitué à leur retour.</p>
+          <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:10px 12px;font-size:11px;color:var(--brun-m)">⚠️ Un chèque de caution est demandé pour la Mallette découverte parfum et la Box découverte beauté, restitué à leur retour.</p>
           <button onclick="reserverExhalessence()" class="btn-p" style="width:100%;justify-content:center;border:none">Confirmer ma demande</button>
           <p id="exh-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
         </div>
@@ -2605,6 +2622,12 @@ function exhEstNouveau(){
   const diffJours = (Date.now() - EXH_LANCEMENT.getTime()) / 86400000;
   return diffJours >= 0 && diffJours <= 30;
 }
+document.addEventListener('DOMContentLoaded', function(){
+  const lien = document.getElementById('nav-exh-link');
+  if(lien && exhEstNouveau() && !lien.querySelector('.exh-new-badge')){
+    lien.insertAdjacentHTML('beforeend', ' <span class="exh-new-badge" style="display:inline-block;background:#B4544A;color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px;padding:1px 6px;border-radius:8px;vertical-align:middle;">NEW</span>');
+  }
+});
 
 const CAT_DESC = {
   "Accessoires":"De petits objets utiles et délicats, pensés pour accompagner votre quotidien avec élégance.",
