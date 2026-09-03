@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carnet de Fidélité — Les Essences Parfumées d'Aphrodite</title>
+<style>
+  :root{
+    --brun:#3D2B2E; --brun-m:#6B4E42; --dore:#C9A96E; --terra:#C4856A;
+    --beige:#F5EDE3; --blanc:#FDFAF7; --gris:#8A7C74;
+    --r:16px; --r-sm:10px;
+    --sh:0 4px 16px rgba(44,24,16,.08); --sh-lg:0 10px 34px rgba(44,24,16,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Lato',Arial,sans-serif;
+    background:var(--beige);
+    color:var(--brun);
+    min-height:100vh;
+    padding:20px;
+  }
+  h1{font-family:Georgia,serif;font-size:22px;color:var(--brun);margin-bottom:4px}
+  .sub{color:var(--gris);font-size:13px;margin-bottom:24px}
+
+  /* ÉCRAN CONNEXION */
+  #ecranLogin{max-width:360px;margin:80px auto;background:white;border-radius:var(--r);padding:34px 28px;box-shadow:var(--sh-lg);text-align:center}
+  #ecranLogin input{width:100%;border:2px solid rgba(201,169,110,.35);border-radius:30px;padding:11px 18px;font-size:14px;margin:16px 0;outline:none;text-align:center}
+  #ecranLogin button{background:var(--brun);color:white;border:none;border-radius:30px;padding:11px 26px;font-size:13px;font-weight:700;cursor:pointer;width:100%}
+  #erreurLogin{color:#B4544A;font-size:12px;margin-top:8px;display:none}
+
+  /* APP */
+  #app{display:none;max-width:820px;margin:0 auto}
+  .barre-haut{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+  .btn{background:var(--brun);color:white;border:none;border-radius:30px;padding:9px 18px;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .btn-sec{background:white;color:var(--brun);border:2px solid rgba(201,169,110,.4)}
+  .btn-danger{background:#B4544A}
+  .btn-sm{padding:6px 12px;font-size:11.5px}
+
+  .carte{background:white;border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:18px}
+
+  #formAjout{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+  #formAjout input{flex:1;min-width:150px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 16px;font-size:13px;outline:none}
+
+  #recherche{width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 18px;font-size:13px;outline:none;margin-bottom:18px}
+
+  .client{border:1px solid rgba(201,169,110,.25);border-radius:var(--r-sm);padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:.2s}
+  .client:hover{box-shadow:var(--sh)}
+  .client-ligne{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .client-nom{font-weight:700;font-size:14.5px}
+  .client-contact{color:var(--gris);font-size:12px;margin-top:2px}
+  .client-pts{background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:5px 14px;border-radius:20px;font-size:12.5px;font-weight:700;white-space:nowrap}
+
+  .detail{display:none;margin-top:16px;padding-top:16px;border-top:1px dashed rgba(201,169,110,.35)}
+  .detail.ouvert{display:block}
+
+  .histo{max-height:180px;overflow-y:auto;margin:12px 0;font-size:12px;color:var(--brun-m)}
+  .histo-ligne{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(201,169,110,.15)}
+
+  .form-pts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  .form-pts input[type=number]{width:90px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:8px 14px;font-size:13px;outline:none}
+  .form-pts input[type=text]{flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:8px 14px;font-size:13px;outline:none}
+
+  .vide{text-align:center;color:var(--gris);font-size:13px;padding:30px 10px}
+  #fileImport{display:none}
+
+  @media(max-width:600px){
+    .client-ligne{flex-direction:column;align-items:flex-start}
+    .barre-haut{flex-direction:column;align-items:stretch}
+  }
+</style>
+</head>
+<body>
+
+<!-- ÉCRAN CONNEXION -->
+<div id="ecranLogin">
+  <h1>🔒 Carnet de Fidélité</h1>
+  <p class="sub">Espace privé — Les Essences Parfumées d'Aphrodite</p>
+  <input type="password" id="mdpInput" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')connexion()">
+  <button onclick="connexion()">Accéder</button>
+  <p id="erreurLogin">Mot de passe incorrect.</p>
+</div>
+
+<!-- APPLICATION -->
+<div id="app">
+  <div class="barre-haut">
+    <div>
+      <h1>Carnet de Fidélité</h1>
+      <p class="sub">Registre manuel des points clients (parfums, beauté, créations)</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sec btn-sm" onclick="exporterJSON()">⬇ Exporter</button>
+      <button class="btn btn-sec btn-sm" onclick="document.getElementById('fileImport').click()">⬆ Importer</button>
+      <input type="file" id="fileImport" accept=".json" onchange="importerJSON(event)">
+      <button class="btn btn-danger btn-sm" onclick="deconnexion()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="carte">
+    <div id="formAjout">
+      <input type="text" id="nouveauNom" placeholder="Nom de la cliente *">
+      <input type="text" id="nouveauContact" placeholder="Téléphone ou email (optionnel)">
+      <button class="btn" onclick="ajouterClient()">+ Ajouter</button>
+    </div>
+  </div>
+
+  <input type="text" id="recherche" placeholder="🔍 Rechercher une cliente..." oninput="afficherListe()">
+
+  <div id="listeClients"></div>
+</div>
+
+<script>
+const MDP = 'aphrodite2026';
+const CLE_STOCKAGE = 'carnet_fidelite_zulay';
+
+function connexion(){
+  const val = document.getElementById('mdpInput').value;
+  if(val === MDP){
+    document.getElementById('ecranLogin').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    afficherListe();
+  } else {
+    document.getElementById('erreurLogin').style.display = 'block';
+  }
+}
+function deconnexion(){
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('ecranLogin').style.display = 'block';
+  document.getElementById('mdpInput').value = '';
+}
+
+function getClients(){
+  try{ return JSON.parse(localStorage.getItem(CLE_STOCKAGE) || '[]'); }
+  catch(e){ return []; }
+}
+function saveClients(liste){
+  localStorage.setItem(CLE_STOCKAGE, JSON.stringify(liste));
+}
+
+function ajouterClient(){
+  const nom = document.getElementById('nouveauNom').value.trim();
+  const contact = document.getElementById('nouveauContact').value.trim();
+  if(!nom){ alert('Merci de renseigner le nom de la cliente.'); return; }
+  const liste = getClients();
+  liste.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
+    nom: nom,
+    contact: contact,
+    points: 0,
+    historique: []
+  });
+  saveClients(liste);
+  document.getElementById('nouveauNom').value = '';
+  document.getElementById('nouveauContact').value = '';
+  afficherListe();
+}
+
+function supprimerClient(id){
+  if(!confirm('Supprimer définitivement cette cliente et son historique de points ?')) return;
+  let liste = getClients();
+  liste = liste.filter(c => c.id !== id);
+  saveClients(liste);
+  afficherListe();
+}
+
+function ajouterPoints(id){
+  const montantEl = document.getElementById('montant_'+id);
+  const noteEl = document.getElementById('note_'+id);
+  const montant = parseInt(montantEl.value, 10);
+  if(!montant || isNaN(montant)){ alert('Merci de saisir un nombre de points (positif pour ajouter, négatif pour retirer).'); return; }
+  const note = noteEl.value.trim() || (montant > 0 ? 'Points ajoutés' : 'Points retirés');
+  const liste = getClients();
+  const client = liste.find(c => c.id === id);
+  if(!client) return;
+  client.points += montant;
+  client.historique.unshift({
+    date: new Date().toLocaleDateString('fr-FR'),
+    montant: montant,
+    note: note
+  });
+  saveClients(liste);
+  montantEl.value = '';
+  noteEl.value = '';
+  afficherListe(id);
+}
+
+function toggleDetail(id){
+  const el = document.getElementById('detail_'+id);
+  if(el) el.classList.toggle('ouvert');
+}
+
+function afficherListe(idOuvert){
+  const recherche = (document.getElementById('recherche').value || '').toLowerCase();
+  const liste = getClients().sort((a,b) => a.nom.localeCompare(b.nom, 'fr'));
+  const filtree = liste.filter(c =>
+    c.nom.toLowerCase().includes(recherche) ||
+    (c.contact || '').toLowerCase().includes(recherche)
+  );
+  const conteneur = document.getElementById('listeClients');
+
+  if(filtree.length === 0){
+    conteneur.innerHTML = '<div class="carte"><p class="vide">Aucune cliente enregistrée' + (recherche ? ' pour cette recherche' : '. Ajoutez la première ci-dessus !') + '</p></div>';
+    return;
+  }
+
+  conteneur.innerHTML = filtree.map(c => `
+    <div class="carte client">
+      <div class="client-ligne" onclick="toggleDetail('${c.id}')">
+        <div>
+          <div class="client-nom">${escapeHtml(c.nom)}</div>
+          ${c.contact ? `<div class="client-contact">${escapeHtml(c.contact)}</div>` : ''}
+        </div>
+        <div class="client-pts">${c.points} point${c.points !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="detail" id="detail_${c.id}">
+        <div class="histo">
+          ${c.historique.length === 0
+            ? '<p style="color:var(--gris);font-size:12px">Aucun mouvement pour le moment.</p>'
+            : c.historique.map(h => `
+              <div class="histo-ligne">
+                <span>${h.date} — ${escapeHtml(h.note)}</span>
+                <strong style="color:${h.montant >= 0 ? '#5B9E96' : '#B4544A'}">${h.montant >= 0 ? '+' : ''}${h.montant}</strong>
+              </div>`).join('')}
+        </div>
+        <div class="form-pts">
+          <input type="number" id="montant_${c.id}" placeholder="± points">
+          <input type="text" id="note_${c.id}" placeholder="Note (ex : vente marché 15/09)">
+          <button class="btn btn-sm" onclick="event.stopPropagation();ajouterPoints('${c.id}')">Valider</button>
+          <button class="btn btn-sec btn-sm btn-danger" style="margin-left:auto" onclick="event.stopPropagation();supprimerClient('${c.id}')">🗑 Supprimer la cliente</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  if(idOuvert){
+    const d = document.getElementById('detail_'+idOuvert);
+    if(d) d.classList.add('ouvert');
+  }
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function exporterJSON(){
+  const data = JSON.stringify(getClients(), null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = 'carnet-fidelite-' + dateStr + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importerJSON(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!Array.isArray(data)) throw new Error('Format invalide');
+      if(getClients().length > 0){
+        if(!confirm('Importer va remplacer la liste actuelle. Continuer ?')) return;
+      }
+      saveClients(data);
+      afficherListe();
+      alert('Import réussi.');
+    }catch(err){
+      alert('Le fichier sélectionné n\'est pas un export valide de ce carnet.');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+</script>
+
+</body>
+</html>
