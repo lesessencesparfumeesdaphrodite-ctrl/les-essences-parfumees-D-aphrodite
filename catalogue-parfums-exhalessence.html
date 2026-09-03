@@ -24,7 +24,7 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
     padding:20px;
   }
   .book-stage{
@@ -162,6 +162,16 @@
   });
 
   function sizeStage(){
+    var isMobile = window.innerWidth <= 700;
+    if(isMobile){
+      // Sur mobile : on privilégie la largeur, quitte à ce que la page
+      // dépasse la hauteur de l'écran (on peut alors défiler / zoomer).
+      var w = Math.min(window.innerWidth - 24, 900);
+      var h = w / RATIO;
+      stage.style.width = w + 'px';
+      stage.style.height = h + 'px';
+      return;
+    }
     var wrapPadding = 40;
     var controlsH = 46 + 22 + 14 + 20;
     var shadowH = 30;
@@ -215,6 +225,7 @@
   });
 
   window.addEventListener('resize', sizeStage);
+  window.addEventListener('orientationchange', function(){ setTimeout(sizeStage, 200); });
   sizeStage();
   render();
 })();
