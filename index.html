@@ -1147,16 +1147,29 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
         <div style="border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:14px">
           <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:8px">Votre commande *</label>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <select id="exhc-type-produit" style="flex:0 0 130px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:8px 12px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white">
-              <option value="Parfum">Parfum</option>
-              <option value="Recharge">Recharge</option>
-              <option value="Beauté">Produit beauté</option>
-            </select>
-            <input id="exhc-ref-produit" type="text" placeholder="Référence ou nom" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:8px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none"/>
-            <button type="button" onclick="ajouterLigneCommande()" class="btn-s" style="border:none;padding:8px 16px;font-size:12px">+ Ajouter</button>
-          </div>
-          <div id="exhc-liste-produits" style="margin-top:10px;display:flex;flex-direction:column;gap:6px"></div>
+
+          <select id="exhc-sel-famille" onchange="exhcMajCascade()" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box">
+            <option value="">Choisir une catégorie...</option>
+            <option value="parfum">🌸 Parfum</option>
+            <option value="beaute">💆 Beauté</option>
+          </select>
+
+          <select id="exhc-sel-sousfamille" onchange="exhcSousFamilleChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
+
+          <select id="exhc-sel-produit" onchange="exhcProduitChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
+
+          <select id="exhc-sel-genre" onchange="exhcGenreChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box">
+            <option value="">Femme ou Homme ?</option>
+            <option value="femme">Femme</option>
+            <option value="homme">Homme</option>
+          </select>
+
+          <select id="exhc-sel-reference" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
+
+          <button type="button" onclick="ajouterLigneCommande()" class="btn-s" style="border:none;padding:9px 16px;font-size:12px;width:100%;justify-content:center">+ Ajouter à ma commande</button>
+
+          <div id="exhc-liste-produits" style="margin-top:12px;display:flex;flex-direction:column;gap:6px"></div>
+          <div id="exhc-total" style="display:none;margin-top:10px;text-align:right;font-size:13px;font-weight:700;color:var(--brun)"></div>
           <textarea id="exhc-commande-notes" placeholder="Précisions supplémentaires (facultatif)" rows="2" style="width:100%;margin-top:10px;border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;resize:vertical;box-sizing:border-box"></textarea>
         </div>
         <div>
@@ -7535,16 +7548,255 @@ function toggleExhCommandeForm(){
   document.body.style.overflow = show ? 'hidden' : '';
 }
 
+
+// ===== Catalogue produits EXHALESSENCE (pour le formulaire de commande) =====
+const REF_FEMME_EDP = ["100 - Douceur Précieuse", "101 - Secret d'Orient", "102 - Évasion Gourmande", "103 - Rêve d'Été", "104 - Lumière Sucrée", "105 - Café Velours", "106 - Velours Moderne", "107 - Nuit de Vanille", "108 - Voile Poudré", "109 - Jasmin Boisé", "110 - Jura Fruité", "111 - Voile Floral", "112 - Délice de Vanille", "113 - Coeur Fruité", "114 - Douceur Cacao", "115 - Ambre Intemporel", "116 - Iris Cuiré", "117 - Santal Vanillé", "118 - Coeur Brûlant", "119 - Rose Velours", "120 - Chypré d'Été", "121 - Mimosa Soyeux", "122 - Magnolia Cristal", "123 - Pomme Caramélisée", "124 - Violette Précieuse", "125 - Ambre Épicé", "126 - Rose Sublime", "127 - Vanille d'Orient", "128 - Orchidée Safranée", "129 - Épices Sensuelles", "130 - Bohème Chic", "131 - Fleur Défendue", "132 - Jasmin de Nuit", "133 - Sillage Divin", "134 - Lumière Botanique", "135 - Jasmin Envoûtant", "136 - Framboise Ambrée", "137 - Fleur de Soir", "138 - Fleur d'Ambre", "139 - Muse Florale", "140 - Éclat Sacré", "141 - Douce Essence", "142 - Iris de Soie", "143 - Nectar Doré", "144 - Magnolia Vanillé", "145 - Encens de Peau", "146A - Jasmin Doré", "147 - Éclat d'Ambre", "148 - Thé Boisé", "149 - Éclat Pur", "149A - Sillage Sublime", "150 - Lumière Fraiche", "151 - Ombre Intense", "152 - Éclat Vert", "152A - Velours Fruité", "153 - Lait d'Or", "154 - Fleur Blanche", "154A - Nuit Addictive", "155 - Vanille Satinée", "156 - Grenade Sucrée", "157 - Caramel Sensuel", "158 - Aurore Marine", "159A - Blanc Absolu", "160A - Velours Rosé", "162A - Litchi Étoilé", "163A - Poire Divine", "164 - Jasmin de Minuit", "165 - Brume Minérale", "166 - Vanille Rebelle", "167 - Passion Tendre", "168 - Pink Pivoine", "169 - Iris Envoûtant", "170 - Féminin Absolu", "171 - Éveil Sensuel", "172 - Coeur de Miel", "173 - Libre Addiction", "174 - Fleur d'Éclat", "175 - Nuit Précieuse", "176 - Lumière Orientale", "177 - Essence Fatale", "178 - Popcorn Sensuel", "179 - Fleur Féroce"];
+const REF_HOMME_EDP = ["200 - Sillage Précieux", "201 - Force Marine", "202 - Ligne Sensuelle", "203 - Fraîcheur Vétiver", "204 - Sillage Obscur", "205 - Praliné Noir", "206 - Fraîcheur d'Horizon", "207 - Vibration Pure", "208 - Bois d'Azur", "209 - Lumière Rebelle", "210 - Esprit Boisé", "211 - Éclat Minéral", "212 - Éclat Viril", "213 - Énergie Noble", "214 - Accord Majeur", "215 - Éclat Pur", "216 - Bois Céleste", "218 - Force Sucrée", "219 - Pure Vibration", "221 - Éclat Secret", "222 - Ambre Délicat", "224 - Feu Secret", "225 - Force Libre", "226 - Mystère Ambré", "226A - Rupture Virile", "227 - Vanille d'Orient", "228 - Bois Vibrant", "229 - Sillage Marin", "230 - Bois d'Air", "231A - Ambre Moderne", "232 - Accord Suave", "233A - Éclat Urbain", "234 - Force Antique", "235A - Éclat Tropical", "236 - Instinct Tonique", "237A - Caractère Absolu", "238 - Vert Absolu", "239 - Liqueur Noire"];
+const REF_PARFUM_CONCENTRE = ["145P - Ambre Élégant", "160P - Vanille Impériale", "161P - Satin de Nuit", "170P - Élixir Sucré", "220P - Addiction Fraîche", "222P - Zeste Royal", "232P - Bois Électrique", "148P - Or Blanc", "217P - Éclat Brûlant", "223P - Mystère Sacré", "228P - Caramel Impérial"];
+const REF_GD200_FEMME = ["102 - Évasion Gourmande", "103 - Rêve d'Été", "106 - Velours Moderne", "107 - Nuit de Vanille", "108 - Voile Poudré", "109 - Jasmin Boisé", "110 - Aura Fruité", "111 - Voile Floral", "112 - Délice de Vanille", "113 - Coeur Fruité", "114 - Douceur Cacao", "117 - Santal Vanillé", "119 - Rose Velours", "120 - Chypré d'Été", "122 - Magnolia Cristal", "123 - Pomme Caramélisée", "140 - Éclat Sacré", "156A - Grenade Sucrée", "157 - Caramel Sensuel", "159A - Blanc Absolu", "160A - Velours Rosé", "163A - Poire Divine", "172 - Coeur de Miel", "175 - Nuit Précieuse", "177 - Essence Fatale"];
+const REF_GD200_HOMME = ["200 - Sillage Précieux", "201 - Force Marine", "202 - Ligne Sensuelle", "205 - Praliné Noir", "206 - Fraîcheur d'Horizon", "207 - Vibration Pure", "208 - Bois d'Azur", "209 - Lumière Rebelle", "210 - Esprit Boisé", "211 - Éclat Minéral", "212 - Éclat Viril", "216 - Bois Céleste", "230 - Bois d'Air", "231A - Ambre Moderne", "235A - Éclat Tropical", "236 - Instinct Tonique"];
+const REF_GD185_FEMME = ["100 - Douceur Précieuse", "101 - Secret d'Orient", "104 - Lumière Sucrée", "105 - Café Velours", "179 - Fleur Féroce"];
+const REF_GD185_HOMME = ["203 - Fraîcheur Vétiver", "204 - Sillage Obscur", "225 - Force Libre"];
+const REF_CAPILLA = ["Aura Mystique", "Bulles de Joie", "Calme Étoilé", "Douce Tentation", "Élixir Envoûtant", "Évasion Zen", "L'Orée des Sens", "Oasis Intense", "Sérénité Active", "Voyage Gourmand"];
+const REF_LAIT_CORPS = ["Lait Corps 102 - Évasion Gourmande"];
+const REF_BRUME_OREILLER = ["Calme Étoilé", "Évasion Zen"];
+const REF_SAVON_MAINS = ["Aura Mystique", "Élixir Envoûtant", "Voyage Gourmand"];
+const REF_COFFRET_HOME = ["Aura Mystique", "Élixir Envoûtant", "L'Orée des Sens", "Oasis Intense", "Voyage Gourmand"];
+const REF_SHAMPOOING_185 = ["Shampooing naturel", "Shampooing protect'color", "Shampooing Gris/Blanc", "Shampooing Marula", "Shampooing ultra nourrissant", "Shampooing brillance"];
+
+// type: 'genre' (Homme/Femme puis liste), 'liste' (liste directe), 'unique' (aucune sous-liste)
+const CATALOGUE_PARFUM = [
+  { nom:"Eau de Parfum Rechargeable (75ml) — 32€", prix:32, type:'genre', femme:REF_FEMME_EDP, homme:REF_HOMME_EDP },
+  { nom:"Parfum Rechargeable (75ml) — 42€", prix:42, type:'liste', liste:REF_PARFUM_CONCENTRE },
+  { nom:"Recharge Eau de Parfum (125ml) — 30€", prix:30, type:'genre', femme:REF_FEMME_EDP, homme:REF_HOMME_EDP },
+  { nom:"Recharge Parfum (125ml) — 39€", prix:39, type:'liste', liste:REF_PARFUM_CONCENTRE },
+  { nom:"Gel Douche (200ml) — 15€", prix:15, type:'genre', femme:REF_GD200_FEMME, homme:REF_GD200_HOMME },
+  { nom:"Gel Douche (185ml) — 14€", prix:14, type:'genre', femme:REF_GD185_FEMME, homme:REF_GD185_HOMME },
+  { nom:"Lait Corps parfumant (200ml) — 19€", prix:19, type:'liste', liste:REF_LAIT_CORPS }
+];
+
+const CATALOGUE_HOME = [
+  { nom:"Diffuseur Capilla (500ml) — 50€", prix:50, type:'liste', liste:REF_CAPILLA },
+  { nom:"Diffuseur Capilla (2500ml) — 215€", prix:215, type:'liste', liste:REF_CAPILLA },
+  { nom:"Recharge Diffuseur Capilla (500ml) — 39€", prix:39, type:'liste', liste:REF_CAPILLA },
+  { nom:"Recharge Diffuseur Capilla (1000ml) — 72€", prix:72, type:'liste', liste:REF_CAPILLA },
+  { nom:"Parfum d'intérieur (500ml) — 20€", prix:20, type:'unique' },
+  { nom:"Brume d'Oreiller (150ml) — 15€", prix:15, type:'liste', liste:REF_BRUME_OREILLER },
+  { nom:"Savon Mains Exfoliant (300ml) — 17,50€", prix:17.5, type:'liste', liste:REF_SAVON_MAINS },
+  { nom:"Bâtonnets Sticks 40cm (x5) — 5€", prix:5, type:'unique' },
+  { nom:"Bâtonnets Sticks 60cm (x6) — 10€", prix:10, type:'unique' },
+  { nom:"Coffret Home miniature — 39€", prix:39, type:'liste', liste:REF_COFFRET_HOME }
+];
+
+const CATALOGUE_BEAUTE = {
+  "Gamme Cosmétique": [
+    {nom:"Lotion Pré-Soin Tonifiante 200ml", prix:20},
+    {nom:"Huile Démaquillante 200ml", prix:29},
+    {nom:"Lotion Nettoyante Démaquillante 200ml", prix:20},
+    {nom:"Mousse Nettoyante Visage 150ml", prix:19},
+    {nom:"Crème de Jour 50ml", prix:32},
+    {nom:"Crème de Nuit 50ml", prix:36},
+    {nom:"Crème Anti-Âge 50ml", prix:39},
+    {nom:"Sérum Tenseur 30ml", prix:31},
+    {nom:"Sérum Contour des Yeux 14ml", prix:29},
+    {nom:"Gel Exfoliant Hydratant 100ml", prix:18},
+    {nom:"Masque À L'Argile Détoxifiant 100ml", prix:21},
+    {nom:"Crème Mains 100ml", prix:16},
+    {nom:"Crème Exfoliante Corps 200ml", prix:17},
+    {nom:"Beurre Corps 200ml", prix:19},
+    {nom:"Huile Pailletée 50ml", prix:19}
+  ],
+  "Gamme Cheveux": [
+    {nom:"Shampooing 200ml", prix:17},
+    {nom:"Shampooing 185ml", prix:16, type:'liste', liste:REF_SHAMPOOING_185},
+    {nom:"Masque 200ml", prix:20},
+    {nom:"Masque 185ml", prix:19},
+    {nom:"Crème soin tout en 1 - 185ml", prix:19},
+    {nom:"Sérum Argan 25ml", prix:19},
+    {nom:"Soin Démêlant Express 250ml", prix:19},
+    {nom:"Soin Démêlant Neutralisant 250ml", prix:21},
+    {nom:"Sublimateur de Boucles 200ml", prix:20},
+    {nom:"Soin Disciplinant 200ml", prix:18},
+    {nom:"Crème Lissante 200ml", prix:22},
+    {nom:"Gel Coiffant Ultimate 200ml", prix:17},
+    {nom:"Crème Fixante Ultimate 100ml", prix:22}
+  ],
+  "Gamme Barbe": [
+    {nom:"Crème de Rasage 150ml", prix:13},
+    {nom:"Gel Traceur Barbe 150ml", prix:13},
+    {nom:"Baume Après-Rasage 125ml", prix:18},
+    {nom:"Shampooing Barbe 150ml", prix:13},
+    {nom:"Huile de Soin Barbe 25ml", prix:16},
+    {nom:"Cire Barbe & Moustache 50ml", prix:19}
+  ],
+  "Compléments Alimentaires": [
+    {nom:"Nutri+ Détox Purifiant 200ml", prix:25},
+    {nom:"Nutri+ Draineur Minceur 500ml", prix:35},
+    {nom:"Nutri+ Brûleur de Graisses 60 gélules", prix:35},
+    {nom:"Nutri+ Sommeil 60 gélules", prix:32},
+    {nom:"Nutri+ Anti-âge 60 gélules", prix:35},
+    {nom:"Nutri+ Cheveux & Ongles 60 gélules", prix:33},
+    {nom:"Nutri+ Ménopause 60 gélules", prix:35},
+    {nom:"Nutri+ Probiotiques 60 gélules", prix:39}
+  ]
+};
+
 let exhcLignesCommande = [];
 
+function exhcOptions(liste, placeholder){
+  return '<option value="">'+placeholder+'</option>' + liste.map(x => `<option value="${x.replace(/"/g,'&quot;')}">${x}</option>`).join('');
+}
+
+function exhcMajCascade(){
+  const famille = document.getElementById('exhc-sel-famille').value;
+  const selSous = document.getElementById('exhc-sel-sousfamille');
+  const selProduit = document.getElementById('exhc-sel-produit');
+  const selGenre = document.getElementById('exhc-sel-genre');
+  const selRef = document.getElementById('exhc-sel-reference');
+
+  // Réinitialise tout ce qui suit la famille
+  selSous.style.display = 'none'; selSous.innerHTML = '';
+  selProduit.style.display = 'none'; selProduit.innerHTML = '';
+  selGenre.style.display = 'none'; selGenre.value = '';
+  selRef.style.display = 'none'; selRef.innerHTML = '';
+
+  if(famille === 'parfum'){
+    selSous.innerHTML = '<option value="">Parfum ou Home ?</option><option value="parfum">Parfum</option><option value="home">Home</option>';
+    selSous.style.display = 'block';
+  } else if(famille === 'beaute'){
+    selSous.innerHTML = '<option value="">Choisir une gamme...</option>' + Object.keys(CATALOGUE_BEAUTE).map(g=>`<option value="${g}">${g}</option>`).join('');
+    selSous.style.display = 'block';
+  }
+}
+
+function exhcSousFamilleChange(){
+  const famille = document.getElementById('exhc-sel-famille').value;
+  const sousFamille = document.getElementById('exhc-sel-sousfamille').value;
+  const selProduit = document.getElementById('exhc-sel-produit');
+  const selGenre = document.getElementById('exhc-sel-genre');
+  const selRef = document.getElementById('exhc-sel-reference');
+
+  selProduit.style.display = 'none'; selProduit.innerHTML = '';
+  selGenre.style.display = 'none'; selGenre.value = '';
+  selRef.style.display = 'none'; selRef.innerHTML = '';
+
+  if(!sousFamille) return;
+
+  if(famille === 'parfum'){
+    const liste = sousFamille === 'parfum' ? CATALOGUE_PARFUM : CATALOGUE_HOME;
+    selProduit.innerHTML = '<option value="">Choisir un produit...</option>' + liste.map((p,i)=>`<option value="${i}">${p.nom}</option>`).join('');
+    selProduit.style.display = 'block';
+  } else if(famille === 'beaute'){
+    const liste = CATALOGUE_BEAUTE[sousFamille] || [];
+    selProduit.innerHTML = '<option value="">Choisir un produit...</option>' + liste.map((p,i)=>`<option value="${i}">${p.nom} — ${fmtPrix(p.prix)}</option>`).join('');
+    selProduit.style.display = 'block';
+  }
+}
+
+function fmtPrix(n){
+  return (Math.round(n*100)/100).toString().replace('.', ',') + '€';
+}
+
+function exhcProduitChange(){
+  const famille = document.getElementById('exhc-sel-famille').value;
+  const sousFamille = document.getElementById('exhc-sel-sousfamille').value;
+  const idx = document.getElementById('exhc-sel-produit').value;
+  const selGenre = document.getElementById('exhc-sel-genre');
+  const selRef = document.getElementById('exhc-sel-reference');
+
+  selGenre.style.display = 'none'; selGenre.value = '';
+  selRef.style.display = 'none'; selRef.innerHTML = '';
+
+  if(idx === '') return;
+
+  let produit;
+  if(famille === 'parfum'){
+    const liste = sousFamille === 'parfum' ? CATALOGUE_PARFUM : CATALOGUE_HOME;
+    produit = liste[idx];
+  } else {
+    produit = CATALOGUE_BEAUTE[sousFamille][idx];
+  }
+  if(!produit) return;
+
+  if(produit.type === 'genre'){
+    selGenre.style.display = 'block';
+  } else if(produit.type === 'liste'){
+    selRef.innerHTML = exhcOptions(produit.liste, 'Choisir une référence...');
+    selRef.style.display = 'block';
+  }
+  // type 'unique' ou pas de type -> rien de plus à afficher
+}
+
+function exhcGenreChange(){
+  const famille = document.getElementById('exhc-sel-famille').value;
+  const sousFamille = document.getElementById('exhc-sel-sousfamille').value;
+  const idx = document.getElementById('exhc-sel-produit').value;
+  const genre = document.getElementById('exhc-sel-genre').value;
+  const selRef = document.getElementById('exhc-sel-reference');
+
+  selRef.style.display = 'none'; selRef.innerHTML = '';
+  if(!genre || idx === '') return;
+
+  const liste = sousFamille === 'parfum' ? CATALOGUE_PARFUM : CATALOGUE_HOME;
+  const produit = liste[idx];
+  const refs = genre === 'femme' ? produit.femme : produit.homme;
+  selRef.innerHTML = exhcOptions(refs, 'Choisir une référence...');
+  selRef.style.display = 'block';
+}
+
+// Rattache les bons écouteurs (les selects intermédiaires ont des comportements différents)
+
 function ajouterLigneCommande(){
-  const type = document.getElementById('exhc-type-produit')?.value;
-  const refInput = document.getElementById('exhc-ref-produit');
-  const ref = refInput?.value?.trim();
-  if(!ref){ refInput?.focus(); return; }
-  exhcLignesCommande.push({type, ref});
-  refInput.value = '';
-  refInput.focus();
+  const famille = document.getElementById('exhc-sel-famille').value;
+  const sousFamille = document.getElementById('exhc-sel-sousfamille').value;
+  const idx = document.getElementById('exhc-sel-produit').value;
+  const genre = document.getElementById('exhc-sel-genre').value;
+  const selRef = document.getElementById('exhc-sel-reference');
+  const reference = selRef.style.display !== 'none' ? selRef.value : '';
+
+  if(!famille || !sousFamille || idx === ''){
+    alert('Merci de sélectionner un produit complet avant d\'ajouter.');
+    return;
+  }
+
+  let produit, categorieLabel;
+  if(famille === 'parfum'){
+    const liste = sousFamille === 'parfum' ? CATALOGUE_PARFUM : CATALOGUE_HOME;
+    produit = liste[idx];
+    categorieLabel = sousFamille === 'parfum' ? 'Parfum' : 'Home';
+    if(produit.type === 'genre' && !genre){
+      alert('Merci de préciser Femme ou Homme.');
+      return;
+    }
+    if(produit.type === 'liste' && !reference){
+      alert('Merci de choisir une référence.');
+      return;
+    }
+  } else {
+    produit = CATALOGUE_BEAUTE[sousFamille][idx];
+    categorieLabel = sousFamille;
+    if(produit.type === 'liste' && !reference){
+      alert('Merci de choisir une référence.');
+      return;
+    }
+  }
+
+  const detailGenre = genre ? (genre === 'femme' ? ' (Femme)' : ' (Homme)') : '';
+  const detailRef = reference ? ' — ' + reference : '';
+
+  exhcLignesCommande.push({
+    categorie: categorieLabel,
+    nom: produit.nom + detailGenre + detailRef,
+    prix: produit.prix
+  });
+
+  // Réinitialise les sélecteurs pour permettre un nouvel ajout
+  document.getElementById('exhc-sel-sousfamille').style.display = 'none';
+  document.getElementById('exhc-sel-produit').style.display = 'none';
+  document.getElementById('exhc-sel-genre').style.display = 'none';
+  document.getElementById('exhc-sel-reference').style.display = 'none';
+  document.getElementById('exhc-sel-famille').value = '';
+
   rafraichirListeCommande();
 }
 
@@ -7555,13 +7807,21 @@ function retirerLigneCommande(i){
 
 function rafraichirListeCommande(){
   const conteneur = document.getElementById('exhc-liste-produits');
+  const totalDiv = document.getElementById('exhc-total');
   if(!conteneur) return;
   conteneur.innerHTML = exhcLignesCommande.map((l, i) => `
     <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(201,169,110,.1);border-radius:12px;padding:6px 12px;font-size:12.5px;color:var(--brun)">
-      <span><strong>${l.type}</strong> — ${l.ref.replace(/</g,'&lt;')}</span>
+      <span><strong>${l.categorie}</strong> — ${l.nom.replace(/</g,'&lt;')} <em style="color:var(--brun-m)">(${fmtPrix(l.prix)})</em></span>
       <button type="button" onclick="retirerLigneCommande(${i})" style="border:none;background:none;color:#B4544A;cursor:pointer;font-size:14px">✕</button>
     </div>
   `).join('');
+  if(exhcLignesCommande.length > 0){
+    const total = exhcLignesCommande.reduce((s,l)=>s+l.prix, 0);
+    totalDiv.style.display = 'block';
+    totalDiv.textContent = 'Total estimé : ' + fmtPrix(total);
+  } else {
+    totalDiv.style.display = 'none';
+  }
 }
 
 async function envoyerExhCommande(){
@@ -7585,7 +7845,8 @@ async function envoyerExhCommande(){
   if(exhcLignesCommande.length === 0){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Merci d\'ajouter au moins un produit à votre commande.'; return; }
   if(!paiement){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Merci de choisir un mode de paiement.'; return; }
 
-  const detailProduits = exhcLignesCommande.map(l => '   • '+l.type+' — '+l.ref).join('\n');
+  const detailProduits = exhcLignesCommande.map(l => '   • '+l.categorie+' — '+l.nom+' ('+fmtPrix(l.prix)+')').join('\n');
+  const totalCommande = exhcLignesCommande.reduce((s,l)=>s+l.prix, 0);
   const recapAdresse = adresse+', '+cp+' '+ville;
 
   // Email à Zulay
@@ -7595,7 +7856,7 @@ async function envoyerExhCommande(){
     from_name: prenom+' '+nom,
     client_email: email,
     produits: '➜ Produits commandés :\n'+detailProduits+(notes ? '\n➜ Précisions : '+notes : '')+'\n➜ Nom : '+nom+'\n➜ Prénom : '+prenom+'\n➜ Adresse : '+recapAdresse+'\n➜ Email : '+email+'\n➜ Téléphone : '+tel+(naissance ? '\n➜ Date de naissance : '+naissance : '')+'\n➜ Paiement souhaité : '+paiement,
-    total: '', sous_total: '', livraison: 'Commande EXHALESSENCE', transaction_id: email
+    total: fmtPrix(totalCommande), sous_total: '', livraison: 'Commande EXHALESSENCE', transaction_id: email
   });
 
   // Email de confirmation à la cliente
@@ -7605,7 +7866,7 @@ async function envoyerExhCommande(){
     from_name: "Les Essences Parfumées d'Aphrodite",
     client_email: email,
     produits: 'Merci pour votre commande ! Voici le détail :\n'+detailProduits+(notes ? '\n\nPrécisions : '+notes : '')+'\n\nZulay Marques va vous contacter prochainement pour finaliser votre commande et le règlement par '+paiement+'.',
-    total: '', sous_total: 'Livraison à : '+recapAdresse, livraison: '', transaction_id: ''
+    total: fmtPrix(totalCommande), sous_total: 'Livraison à : '+recapAdresse, livraison: '', transaction_id: ''
   });
 
   msg.style.display='block'; msg.style.color='#C8A951';
@@ -7613,7 +7874,7 @@ async function envoyerExhCommande(){
   exhcLignesCommande = [];
   rafraichirListeCommande();
   document.querySelectorAll('input[name="exhc-paiement"]').forEach(r => r.checked = false);
-  ['exhc-prenom','exhc-nom','exhc-adresse','exhc-cp','exhc-ville','exhc-email','exhc-tel','exhc-naissance','exhc-commande-notes','exhc-ref-produit'].forEach(id=>{
+  ['exhc-prenom','exhc-nom','exhc-adresse','exhc-cp','exhc-ville','exhc-email','exhc-tel','exhc-naissance','exhc-commande-notes'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.value='';
   });
 }
