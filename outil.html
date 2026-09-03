@@ -965,6 +965,7 @@ function renderFiche(p, isNew){
       <div class="calcline"><span class="k">Coût plâtre résine</span><span class="v" id="rc_coutplatre">—</span></div>
       <div class="calcline"><span class="k">Coût GD + Primer + Vernis</span><span class="v" id="rc_vernis">${fmt(COUT_VERNIS)} €</span></div>
       <div class="calcline total"><span class="k">Prix de revient (matière)</span><span class="v" id="rc_revient">—</span></div>
+      <div class="calcline total" style="color:var(--brun-m)"><span class="k">Prix de vente suggéré (×6)</span><span class="v" id="rc_suggere">—</span></div>
     </div>
 
     <div class="section">
@@ -972,6 +973,9 @@ function renderFiche(p, isNew){
       <div class="field">
         <label>Prix de vente — finition Brut (€)</label>
         <input type="number" step="0.5" inputmode="decimal" id="f_brut" value="${p.brut||''}" placeholder="Ex : 9.00" oninput="onFieldChange()"/>
+      </div>
+      <div class="actionsrow" style="margin-top:0">
+        <button type="button" class="btn ghost" onclick="appliquerPrixSuggere()">🔄 Utiliser le prix suggéré (×6)</button>
       </div>
     </div>
 
@@ -1062,14 +1066,37 @@ function onFieldChange(){
   p.taille = document.getElementById('f_taille').value;
   p.poids = parseFloat(document.getElementById('f_poids').value) || 0;
   p.eau = parseFloat(document.getElementById('f_eau').value) || 0;
-  p.brut = parseFloat(document.getElementById('f_brut').value) || 0;
+
+  const prixSuggere = computeRecipe(p);
+
+  // Si c'est le champ "Eau de départ" qui vient d'être modifié, on met à jour
+  // automatiquement le prix de vente Brut suggéré (formule ×6).
+  const champActif = document.activeElement ? document.activeElement.id : '';
+  if(champActif === 'f_eau' && p.eau > 0){
+    p.brut = prixSuggere;
+    const fBrut = document.getElementById('f_brut');
+    if(fBrut) fBrut.value = prixSuggere;
+  } else {
+    p.brut = parseFloat(document.getElementById('f_brut').value) || 0;
+  }
 
   const icon = CAT_ICONS[p.cat] || '🎨';
   document.getElementById('thumbLg').innerHTML = p.img ? `<img src="${escAttr(p.img)}" alt="">` : icon;
 
-  computeRecipe(p);
   computeDevis(p);
   scheduleSave();
+}
+
+function appliquerPrixSuggere(){
+  const p = getProduct(currentFicheId);
+  if(!p) return;
+  const prixSuggere = computeRecipe(p);
+  p.brut = prixSuggere;
+  const fBrut = document.getElementById('f_brut');
+  if(fBrut) fBrut.value = prixSuggere;
+  computeDevis(p);
+  scheduleSave();
+  showToast('Prix suggéré appliqué ✓');
 }
 
 function computeRecipe(p){
@@ -1079,10 +1106,14 @@ function computeRecipe(p){
   const eauMel = eau * K_EAU;
   const coutPlatre = platre * COUT_G_PLATRE;
   const revient = coutPlatre + COUT_VERNIS;
+  const prixSuggere = Math.round(revient * 6);
   document.getElementById('rc_platre').textContent = has ? (Math.round(platre*100)/100) + ' g' : '—';
   document.getElementById('rc_eaumel').textContent = has ? (Math.round(eauMel*100)/100) + ' g' : '—';
   document.getElementById('rc_coutplatre').textContent = has ? fmt(coutPlatre) + ' €' : '—';
   document.getElementById('rc_revient').textContent = fmt(revient) + ' €';
+  const rcSuggere = document.getElementById('rc_suggere');
+  if(rcSuggere) rcSuggere.textContent = has ? fmt(prixSuggere) + ' €' : '—';
+  return prixSuggere;
 }
 
 function selectFinish(i){
