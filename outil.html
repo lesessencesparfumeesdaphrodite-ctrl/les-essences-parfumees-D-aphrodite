@@ -1660,7 +1660,7 @@ input,select,textarea{font-family:inherit;}
     "coutParGPlatre": 0.00478,
     "coutVernis": 0.35
   },
-  "dataVersion": "v8-coeur-elance-ascii-2026-08-31-prix-corriges-2026-09-03"
+  "dataVersion": "v8-coeur-elance-ascii-2026-08-31-prix-corriges-2026-09-03-photos-restaurees"
 }</script>
 <script>// ===================== DATA & STATE =====================
 const DATA = JSON.parse(document.getElementById('app-data').textContent);
@@ -1791,7 +1791,10 @@ async function loadPhotos(){
 async function persist(){
   const meta = products.map(p=>{
     const copy = Object.assign({}, p);
-    delete copy.img;
+    // On ne retire que les photos personnalisées volumineuses (uploadées via l'outil,
+    // stockées à part dans le store "photos") — jamais les simples liens du catalogue
+    // par défaut, sinon ils disparaissent à la prochaine ouverture.
+    if(copy.img && copy.img.startsWith('data:')) delete copy.img;
     return copy;
   });
   try{
