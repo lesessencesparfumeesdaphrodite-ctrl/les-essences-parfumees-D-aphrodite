@@ -1044,7 +1044,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- OFFRE DU MOIS -->
-  <section id="exh-offre" style="scroll-margin-top:140px;background:white;padding:50px 20px">
+  <section id="exh-offre" style="scroll-margin-top:140px;background:var(--beige);padding:50px 20px">
     <div class="si" style="max-width:920px">
       <div class="sh">
         <div class="ey">✦ En ce moment</div>
@@ -1053,7 +1053,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       </div>
       <div id="exh-offres-actives" style="display:flex;gap:24px;justify-content:center;align-items:stretch;flex-wrap:wrap;max-width:760px;margin:0 auto">
 
-        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
+        <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
           <div style="padding:16px 18px 0">
             <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700">✦ Parfum du mois</div>
           </div>
@@ -1071,7 +1071,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           </div>
         </div>
 
-        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
+        <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
           <div style="padding:16px 18px 0">
             <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700">✦ Beauté du mois</div>
           </div>
@@ -1091,7 +1091,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- COMMENT COMMANDER -->
-  <section id="exh-commander" style="scroll-margin-top:140px;background:#FDF6F0;padding:56px 20px">
+  <section id="exh-commander" style="scroll-margin-top:140px;background:white;padding:56px 20px">
     <div class="si" style="max-width:920px">
       <div class="sh">
         <div class="ey">✦ Pratique</div>
@@ -1125,8 +1125,9 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 
     <!-- FORMULAIRE DE COMMANDE (fenêtre modale) -->
     <div id="exh-commande-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhCommandeForm()">
-    <button onclick="toggleExhCommandeForm()" aria-label="Fermer" style="position:fixed;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:white;color:var(--brun);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-lg);z-index:5001">✕</button>
-    <div style="max-width:520px;width:100%;max-height:88vh;overflow-y:auto;background:white;border-radius:var(--r);padding:30px 26px;box-shadow:var(--sh-lg);position:relative">
+    <div style="max-width:520px;width:100%;max-height:88vh;background:white;border-radius:var(--r);box-shadow:var(--sh-lg);position:relative;display:flex;flex-direction:column;overflow:hidden">
+      <button onclick="toggleExhCommandeForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10">✕</button>
+      <div style="overflow-y:auto;padding:30px 26px">
       <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Passer commande</h3>
       <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:8px">Je vous recontacte rapidement pour confirmer et organiser le règlement.</p>
       <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:10px 14px;font-size:11.5px;color:var(--brun-m);text-align:center;margin-bottom:20px">💡 Envie de suivre vos commandes et cumuler des points fidélité ? <a href="#" onclick="toggleExhCommandeForm();showPage('compte');return false" style="color:var(--terra);font-weight:700">Créez votre compte</a> — sinon, continuez ci-dessous pour commander directement.</p>
@@ -1190,6 +1191,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
         <button onclick="envoyerExhCommande()" class="btn-p" style="width:100%;justify-content:center;border:none">Envoyer ma commande</button>
         <p id="exhc-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
+      </div>
       </div>
     </div>
     </div>
@@ -1255,8 +1257,9 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 
       <!-- FORMULAIRE DE RÉSERVATION (fenêtre modale) -->
       <div id="exh-form-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhForm()">
-      <button onclick="toggleExhForm()" aria-label="Fermer" style="position:fixed;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:white;color:var(--brun);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-lg);z-index:5001">✕</button>
-      <div id="exh-form-wrap" style="max-width:560px;width:100%;max-height:88vh;overflow-y:auto;background:white;border-radius:var(--r);padding:30px 26px;box-shadow:var(--sh-lg);position:relative">
+      <div id="exh-form-wrap" style="max-width:560px;width:100%;max-height:88vh;background:white;border-radius:var(--r);box-shadow:var(--sh-lg);position:relative;display:flex;flex-direction:column;overflow:hidden">
+        <button onclick="toggleExhForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10">✕</button>
+        <div style="overflow-y:auto;padding:30px 26px">
         <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Réserver votre moment</h3>
         <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:20px">La date choisie est indicative — je vous recontacte pour la confirmer.</p>
 
@@ -1282,6 +1285,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:10px 12px;font-size:11px;color:var(--brun-m)">⚠️ Un chèque de caution est demandé pour la Mallette découverte parfum et la Box découverte beauté, restitué à leur retour.</p>
           <button onclick="reserverExhalessence()" class="btn-p" style="width:100%;justify-content:center;border:none">Confirmer ma demande</button>
           <p id="exh-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
+        </div>
         </div>
       </div>
       </div>
@@ -1350,7 +1354,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <img src="avt-1-demarrage-gratuit.png" alt="Démarrage 100% gratuit" style="width:100%;height:100%;object-fit:cover"/>
           </div>
           <div class="vt">Démarrage 100% gratuit</div>
-          <div class="vd">Aucun frais de licence ni de kit de démarrage imposé pour se lancer.</div>
+          <div class="vd">Aucun frais de licence ni de kit de démarrage imposé pour vous lancer.</div>
         </div>
 
         <div class="vc">
@@ -1358,7 +1362,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <img src="avt-2-conditions.png" alt="Conditions" style="width:100%;height:100%;object-fit:cover"/>
           </div>
           <div class="vt">Conditions</div>
-          <div class="vd">Ouvert à toute personne majeure, résidant en France, en Europe ou dans les DOM-TOM.</div>
+          <div class="vd">Ouverte à toute personne majeure, résidant en France, en Europe ou en DOM-TOM.</div>
         </div>
 
         <div class="vc">
@@ -1366,7 +1370,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <img src="avt-3-remuneration.png" alt="Rémunération attractive" style="width:100%;height:100%;object-fit:cover"/>
           </div>
           <div class="vt">Rémunération attractive</div>
-          <div class="vd">50% de marge directe sur vos ventes, complétée par des commissions d'équipe.</div>
+          <div class="vd">50% de marge directe sur vos ventes, plus des commissions sur les ventes d'équipe.</div>
         </div>
 
         <div class="vc">
@@ -1374,7 +1378,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <img src="avt-4-stock.png" alt="Aucun stock nécessaire" style="width:100%;height:100%;object-fit:cover"/>
           </div>
           <div class="vt">Aucun stock nécessaire</div>
-          <div class="vd">Pas de stock à gérer ni à financer pour démarrer et faire vivre votre activité.</div>
+          <div class="vd">Aucun stock à gérer ni à financer pour démarrer votre activité.</div>
         </div>
 
         <div class="vc">
@@ -1382,7 +1386,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <img src="avt-5-minimum-achat.png" alt="Pas de minimum d'achat" style="width:100%;height:100%;object-fit:cover"/>
           </div>
           <div class="vt">Pas de minimum d'achat</div>
-          <div class="vd">Aucun montant minimum à atteindre chaque mois pour toucher votre marge ou rester actif(ve).</div>
+          <div class="vd">Aucun montant minimum à atteindre chaque mois pour rester active.</div>
         </div>
 
         <div class="vc">
@@ -1390,7 +1394,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <img src="avt-6-horaires.png" alt="Choisissez vos horaires" style="width:100%;height:100%;object-fit:cover"/>
           </div>
           <div class="vt">Choisissez vos horaires</div>
-          <div class="vd">Organisez votre planning et vos ateliers en toute liberté, selon votre rythme de vie.</div>
+          <div class="vd">Organisez vos ateliers et votre planning en toute liberté, à votre rythme.</div>
         </div>
 
         <div class="vc">
@@ -1398,7 +1402,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             <img src="avt-7-accompagnement.png" alt="Accompagnement / suivi" style="width:100%;height:100%;object-fit:cover"/>
           </div>
           <div class="vt">Accompagnement / suivi</div>
-          <div class="vd">Un parrain ou une marraine et une équipe présents pour vous former et vous accompagner.</div>
+          <div class="vd">Un parrain, une marraine et une équipe présents pour vous accompagner.</div>
         </div>
 
       </div>
