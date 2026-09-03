@@ -8284,8 +8284,25 @@ document.addEventListener('DOMContentLoaded', () => {
   chargerNouveauxProduits();
   chargerIndisponibles();
 
-  // Initialiser l'état historique au chargement (pour que Précédent fonctionne depuis l'accueil)
-  history.replaceState({page:'accueil', cat:null}, '', window.location.pathname);
+  // ── Chargement direct via l'URL (ex: #exhalessence, #cat-Vases, #boutique) ──
+  const hashInitial = window.location.hash;
+  if(hashInitial && hashInitial.length > 1){
+    const brut = decodeURIComponent(hashInitial.slice(1));
+    let idInitial = brut, catInitial = null;
+    if(brut.startsWith('cat-')){
+      idInitial = 'boutique';
+      catInitial = brut.slice(4);
+    }
+    if(document.getElementById('page-'+idInitial)){
+      history.replaceState({page:idInitial, cat:catInitial}, '', window.location.pathname + hashInitial);
+      _afficherPage(idInitial, catInitial);
+    } else {
+      history.replaceState({page:'accueil', cat:null}, '', window.location.pathname);
+    }
+  } else {
+    // Initialiser l'état historique au chargement (pour que Précédent fonctionne depuis l'accueil)
+    history.replaceState({page:'accueil', cat:null}, '', window.location.pathname);
+  }
 
   const w = document.querySelector('.carr-wrap');
   if (w) {
