@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carnet de Fidélité — Les Essences Parfumées d'Aphrodite</title>
+<title>Programme de Fidélité — Les Essences Parfumées d'Aphrodite</title>
 <style>
   :root{
     --brun:#3D2B2E; --brun-m:#6B4E42; --dore:#C9A96E; --terra:#C4856A;
@@ -80,7 +80,7 @@
 <body>
 
 <div id="ecranLogin">
-  <h1>🔒 Carnet de Fidélité</h1>
+  <h1>🔒 Programme de Fidélité</h1>
   <p class="sub">Espace privé — Les Essences Parfumées d'Aphrodite</p>
   <input type="password" id="mdpInput" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')connexion()">
   <button onclick="connexion()">Accéder</button>
@@ -90,7 +90,7 @@
 <div id="app">
   <div class="barre-haut">
     <div>
-      <h1>Carnet de Fidélité</h1>
+      <h1>Programme de Fidélité</h1>
       <p class="sub">Registre manuel des points clients (parfums, beauté, créations)</p>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -108,6 +108,7 @@
       <input type="text" id="nouveauNom" placeholder="Nom *">
       <input type="email" id="nouveauEmail" placeholder="Adresse email">
       <input type="tel" id="nouveauTel" placeholder="Numéro de téléphone">
+      <input type="date" id="nouveauNaissance" placeholder="Date de naissance" style="grid-column:1/-1">
     </div>
     <button class="btn" onclick="ajouterClient()">+ Ajouter la cliente</button>
 
@@ -169,11 +170,12 @@ function ajouterClient(){
   const nom = document.getElementById('nouveauNom').value.trim();
   const email = document.getElementById('nouveauEmail').value.trim();
   const tel = document.getElementById('nouveauTel').value.trim();
+  const naissance = document.getElementById('nouveauNaissance').value;
   if(!nom){ alert('Merci de renseigner au moins le nom de la cliente.'); return; }
   const liste = getClients();
   liste.push({
     id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
-    prenom: prenom, nom: nom, email: email, telephone: tel,
+    prenom: prenom, nom: nom, email: email, telephone: tel, naissance: naissance,
     points: 0,
     historique: []
   });
@@ -182,6 +184,7 @@ function ajouterClient(){
   document.getElementById('nouveauNom').value = '';
   document.getElementById('nouveauEmail').value = '';
   document.getElementById('nouveauTel').value = '';
+  document.getElementById('nouveauNaissance').value = '';
   afficherListe();
 }
 
@@ -255,7 +258,7 @@ function afficherListe(idOuvert){
 
   conteneur.innerHTML = filtree.map(c => {
     const palier = palierActuel(c.points);
-    const contactBits = [c.email, c.telephone].filter(Boolean).join(' · ');
+    const contactBits = [c.email, c.telephone, c.naissance ? ('né(e) le '+formatDateFR(c.naissance)) : ''].filter(Boolean).join(' · ');
     const optionsBons = PALIERS.slice().reverse().map(p =>
       `<option value="${p.pts}|${p.bon}">${p.bon} (${p.pts} pts)</option>`
     ).join('');
@@ -317,6 +320,13 @@ function escapeHtml(str){
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+function formatDateFR(dateISO){
+  if(!dateISO) return '';
+  const parts = dateISO.split('-');
+  if(parts.length !== 3) return dateISO;
+  return parts[2] + '/' + parts[1] + '/' + parts[0];
 }
 
 function exporterJSON(){
@@ -381,6 +391,7 @@ function importerCSV(event){
       const idxNom = entetes.findIndex(h => h === 'nom' || (h.includes('nom') && !h.includes('prénom') && !h.includes('prenom')));
       const idxEmail = entetes.findIndex(h => h.includes('email') || h.includes('mail'));
       const idxTel = entetes.findIndex(h => h.includes('tel') || h.includes('tél') || h.includes('phone'));
+      const idxNaissance = entetes.findIndex(h => h.includes('naissance') || h.includes('anniversaire') || h.includes('birth'));
 
       if(idxNom === -1){
         alert('Aucune colonne "Nom" trouvée dans le fichier. Vérifiez la première ligne d\'en-têtes.');
@@ -396,9 +407,10 @@ function importerCSV(event){
         const prenom = idxPrenom !== -1 && cols[idxPrenom] ? cols[idxPrenom].trim() : '';
         const email = idxEmail !== -1 && cols[idxEmail] ? cols[idxEmail].trim() : '';
         const tel = idxTel !== -1 && cols[idxTel] ? cols[idxTel].trim() : '';
+        const naissance = idxNaissance !== -1 && cols[idxNaissance] ? cols[idxNaissance].trim() : '';
         liste.push({
           id: Date.now().toString(36) + Math.random().toString(36).slice(2,7) + i,
-          prenom: prenom, nom: nom, email: email, telephone: tel,
+          prenom: prenom, nom: nom, email: email, telephone: tel, naissance: naissance,
           points: 0,
           historique: []
         });
