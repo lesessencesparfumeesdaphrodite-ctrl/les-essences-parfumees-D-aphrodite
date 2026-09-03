@@ -557,6 +557,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .hero-ctas-desktop{display:flex;gap:12px;flex-wrap:wrap}
 .footer-siret-br{display:none}
 @media(max-width:768px){.footer-siret-br{display:inline}}
+@media(max-width:600px){.exh-prest-img{height:220px !important}}
 @media(max-width:768px){.nav-links{display:none}.hbg{display:flex}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(253,250,247,.98);padding:14px 22px;border-bottom:1px solid rgba(201,169,110,.2);box-shadow:var(--sh)}.hero-c{grid-template-columns:1fr;display:flex;flex-direction:column}.hero-left{order:1}.hero-right{order:2}.hero-ctas-mobile{order:3;display:flex;flex-direction:row;gap:8px;padding:12px 0 0;width:100%}.hero-ctas-mobile .btn-p,.hero-ctas-mobile .btn-s{flex:1;font-size:12px;padding:10px 6px;text-align:center;justify-content:center;letter-spacing:0}.hero-ctas-desktop{display:none}.hero-img-wrap{justify-content:center}.hero-stats{grid-template-columns:repeat(3,1fr)!important}.hero-img-wrap img{max-width:100%;border-radius:var(--r)}}
 @media(max-width:480px){.vg{grid-template-columns:repeat(2,1fr)}.cg-grid{grid-template-columns:repeat(2,1fr)}.fi{grid-template-columns:1fr}.hero-stats{grid-template-columns:repeat(3,1fr)!important}.stat{padding:10px 4px}.stat-n{font-size:17px}.stat-l{font-size:8px}}
 
@@ -1111,13 +1112,71 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           </div>
         </div>
         <div style="flex:1;min-width:260px;max-width:420px">
-          <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Vous pouvez commander par <strong style="color:var(--brun)">téléphone</strong>, <strong style="color:var(--brun)">SMS</strong>, ou par messagerie instantanée (<strong style="color:var(--brun)">WhatsApp, Messenger, Telegram</strong>) — liens disponibles en bas de page.</p>
-          <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Le règlement s'effectue <strong style="color:var(--brun)">à la commande</strong>, par carte bancaire, PayPal, Wero ou virement.</p>
+          <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Vous pouvez commander par <strong style="color:var(--brun)">téléphone</strong>, <strong style="color:var(--brun)">SMS</strong> ou via notre <strong style="color:var(--brun)">formulaire de commande</strong>.</p>
+          <button onclick="toggleExhCommandeForm()" class="btn-p" style="border:none;margin-bottom:14px">📝 Commander</button>
+          <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Le règlement s'effectue <strong style="color:var(--brun)">à la commande</strong>, par PayPal, Wero ou virement.</p>
           <p style="color:var(--gris);line-height:1.9;font-size:14.5px">Pour connaître le détail des produits et leurs tarifs, consultez le catalogue et la liste des parfums ci-contre.</p>
           <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-top:14px">Vous pouvez aussi créer votre compte pour suivre vos commandes et votre programme de fidélité.</p>
           <a href="#" onclick="showPage('compte');return false" class="btn-p" style="text-decoration:none;font-size:12px;padding:9px 18px;margin-top:6px;display:inline-flex">👤 Créer mon compte</a>
         </div>
       </div>
+    </div>
+
+    <!-- FORMULAIRE DE COMMANDE (fenêtre modale) -->
+    <div id="exh-commande-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhCommandeForm()">
+    <div style="max-width:520px;width:100%;max-height:88vh;overflow-y:auto;background:white;border-radius:var(--r);padding:30px 26px;box-shadow:var(--sh-lg);position:relative">
+      <button onclick="toggleExhCommandeForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Passer commande</h3>
+      <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:20px">Je vous recontacte rapidement pour confirmer et organiser le règlement.</p>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="exhc-prenom" type="text" placeholder="Prénom *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+          <input id="exhc-nom" type="text" placeholder="Nom *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        </div>
+        <input id="exhc-adresse" type="text" placeholder="Adresse *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="exhc-cp" type="text" placeholder="Code postal *" style="flex:0 0 130px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+          <input id="exhc-ville" type="text" placeholder="Ville *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        </div>
+        <input id="exhc-email" type="email" placeholder="Email *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        <input id="exhc-tel" type="tel" placeholder="Téléphone *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        <div>
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:5px;padding-left:6px">Date de naissance (facultatif)</label>
+          <input id="exhc-naissance" type="date" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;box-sizing:border-box"/>
+        </div>
+        <div style="border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:14px">
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:8px">Votre commande *</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <select id="exhc-type-produit" style="flex:0 0 130px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:8px 12px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white">
+              <option value="Parfum">Parfum</option>
+              <option value="Recharge">Recharge</option>
+              <option value="Beauté">Produit beauté</option>
+            </select>
+            <input id="exhc-ref-produit" type="text" placeholder="Référence ou nom" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:8px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none"/>
+            <button type="button" onclick="ajouterLigneCommande()" class="btn-s" style="border:none;padding:8px 16px;font-size:12px">+ Ajouter</button>
+          </div>
+          <div id="exhc-liste-produits" style="margin-top:10px;display:flex;flex-direction:column;gap:6px"></div>
+          <textarea id="exhc-commande-notes" placeholder="Précisions supplémentaires (facultatif)" rows="2" style="width:100%;margin-top:10px;border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;resize:vertical;box-sizing:border-box"></textarea>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:6px">Mode de paiement souhaité *</label>
+          <div id="exhc-paiement-choix" style="display:flex;gap:8px;flex-wrap:wrap">
+            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-paiement" value="PayPal" style="accent-color:var(--dore)"> PayPal
+            </label>
+            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-paiement" value="Wero" style="accent-color:var(--dore)"> Wero
+            </label>
+            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-paiement" value="Virement" style="accent-color:var(--dore)"> Virement
+            </label>
+          </div>
+        </div>
+        <button onclick="envoyerExhCommande()" class="btn-p" style="width:100%;justify-content:center;border:none">Envoyer ma commande</button>
+        <p id="exhc-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
+      </div>
+    </div>
     </div>
   </section>
 
@@ -1133,7 +1192,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;max-width:1100px;margin:0 auto 34px">
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-rdv-individuel.jpg" alt="RDV individuel" style="width:100%;height:140px;object-fit:cover;object-position:center 15%" onerror="this.style.display='none'"/>
+          <img src="exh-rdv-individuel.jpg" alt="RDV individuel" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover;object-position:center 15%" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">RDV individuel</div>
             <div class="vd">Un moment privilégié, en tête-à-tête, pour échanger sur vos besoins et découvrir les produits qui vous correspondent.</div>
@@ -1141,7 +1200,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-atelier-domicile.jpg" alt="Atelier découverte à domicile" style="width:100%;height:140px;object-fit:cover;object-position:center 10%" onerror="this.style.display='none'"/>
+          <img src="exh-atelier-domicile.jpg" alt="Atelier découverte à domicile" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover;object-position:center 38%" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Atelier découverte à domicile</div>
             <div class="vd">Invitez vos proches (6 à 7 personnes, hôtesse comprise) pour un moment de convivialité autour du parfum et du bien-être, chez vous. Gratuit, entre 2h et 2h30 — l'hôtesse reçoit un cadeau de remerciement.</div>
@@ -1149,7 +1208,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-presentation-entreprise.jpg" alt="Présentation en entreprise" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-presentation-entreprise.jpg" alt="Présentation en entreprise" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Présentation en entreprise</div>
             <div class="vd">Une pause bien-être pour vos collaborateurs ou clients, sur votre lieu de travail (CSE, entreprise, association), sans obligation d'achat.</div>
@@ -1157,7 +1216,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-mallette-parfum.jpg" alt="Mallette découverte parfum" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-mallette-parfum.jpg" alt="Mallette découverte parfum" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Mallette découverte parfum</div>
             <div class="vd">Envie de trouver votre signature olfactive ? Testez notre gamme de parfums pendant 48h, tranquillement chez vous, gratuitement. Chèque de caution demandé.</div>
@@ -1165,7 +1224,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-box-decouverte.png" alt="Box découverte beauté" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-box-decouverte.png" alt="Box découverte beauté" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Box découverte beauté</div>
             <div class="vd">Découvrez notre gamme beauté pendant 48h, gratuitement, tranquillement chez vous. Chèque de caution demandé.</div>
@@ -7466,6 +7525,97 @@ async function inscrireNewsletter(){
   msg.textContent='✅ Merci '+prenom+' ! Vous serez informée en avant-première.';
   document.getElementById('newsletter-prenom').value='';
   document.getElementById('newsletter-email').value='';
+}
+
+function toggleExhCommandeForm(){
+  const overlay = document.getElementById('exh-commande-overlay');
+  if(!overlay) return;
+  const show = overlay.style.display === 'none' || !overlay.style.display;
+  overlay.style.display = show ? 'flex' : 'none';
+  document.body.style.overflow = show ? 'hidden' : '';
+}
+
+let exhcLignesCommande = [];
+
+function ajouterLigneCommande(){
+  const type = document.getElementById('exhc-type-produit')?.value;
+  const refInput = document.getElementById('exhc-ref-produit');
+  const ref = refInput?.value?.trim();
+  if(!ref){ refInput?.focus(); return; }
+  exhcLignesCommande.push({type, ref});
+  refInput.value = '';
+  refInput.focus();
+  rafraichirListeCommande();
+}
+
+function retirerLigneCommande(i){
+  exhcLignesCommande.splice(i, 1);
+  rafraichirListeCommande();
+}
+
+function rafraichirListeCommande(){
+  const conteneur = document.getElementById('exhc-liste-produits');
+  if(!conteneur) return;
+  conteneur.innerHTML = exhcLignesCommande.map((l, i) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(201,169,110,.1);border-radius:12px;padding:6px 12px;font-size:12.5px;color:var(--brun)">
+      <span><strong>${l.type}</strong> — ${l.ref.replace(/</g,'&lt;')}</span>
+      <button type="button" onclick="retirerLigneCommande(${i})" style="border:none;background:none;color:#B4544A;cursor:pointer;font-size:14px">✕</button>
+    </div>
+  `).join('');
+}
+
+async function envoyerExhCommande(){
+  const prenom = document.getElementById('exhc-prenom')?.value?.trim();
+  const nom = document.getElementById('exhc-nom')?.value?.trim();
+  const adresse = document.getElementById('exhc-adresse')?.value?.trim();
+  const cp = document.getElementById('exhc-cp')?.value?.trim();
+  const ville = document.getElementById('exhc-ville')?.value?.trim();
+  const email = document.getElementById('exhc-email')?.value?.trim();
+  const tel = document.getElementById('exhc-tel')?.value?.trim();
+  const naissance = document.getElementById('exhc-naissance')?.value;
+  const notes = document.getElementById('exhc-commande-notes')?.value?.trim();
+  const paiementEl = document.querySelector('input[name="exhc-paiement"]:checked');
+  const paiement = paiementEl ? paiementEl.value : '';
+  const msg = document.getElementById('exhc-form-msg');
+  if(!msg) return;
+  if(!prenom || !nom){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Veuillez indiquer votre nom et prénom.'; return; }
+  if(!adresse || !cp || !ville){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Veuillez compléter votre adresse.'; return; }
+  if(!email || !email.includes('@')){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Veuillez entrer un email valide.'; return; }
+  if(!tel){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Veuillez indiquer votre numéro de téléphone.'; return; }
+  if(exhcLignesCommande.length === 0){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Merci d\'ajouter au moins un produit à votre commande.'; return; }
+  if(!paiement){ msg.style.display='block'; msg.style.color='#ff6b6b'; msg.textContent='Merci de choisir un mode de paiement.'; return; }
+
+  const detailProduits = exhcLignesCommande.map(l => '   • '+l.type+' — '+l.ref).join('\n');
+  const recapAdresse = adresse+', '+cp+' '+ville;
+
+  // Email à Zulay
+  await ejsEnvoiEmail(EMAILJS_TPL_COMMANDE, 'les.essences.parfumees.d.aphrodite@gmail.com', {
+    sujet: '🛍️ Nouvelle commande EXHALESSENCE — '+prenom+' '+nom,
+    to_name: 'Zulay',
+    from_name: prenom+' '+nom,
+    client_email: email,
+    produits: '➜ Produits commandés :\n'+detailProduits+(notes ? '\n➜ Précisions : '+notes : '')+'\n➜ Nom : '+nom+'\n➜ Prénom : '+prenom+'\n➜ Adresse : '+recapAdresse+'\n➜ Email : '+email+'\n➜ Téléphone : '+tel+(naissance ? '\n➜ Date de naissance : '+naissance : '')+'\n➜ Paiement souhaité : '+paiement,
+    total: '', sous_total: '', livraison: 'Commande EXHALESSENCE', transaction_id: email
+  });
+
+  // Email de confirmation à la cliente
+  await ejsEnvoiEmail(EMAILJS_TPL_COMMANDE, email, {
+    sujet: '✅ Votre commande EXHALESSENCE a bien été reçue !',
+    to_name: prenom,
+    from_name: "Les Essences Parfumées d'Aphrodite",
+    client_email: email,
+    produits: 'Merci pour votre commande ! Voici le détail :\n'+detailProduits+(notes ? '\n\nPrécisions : '+notes : '')+'\n\nZulay Marques va vous contacter prochainement pour finaliser votre commande et le règlement par '+paiement+'.',
+    total: '', sous_total: 'Livraison à : '+recapAdresse, livraison: '', transaction_id: ''
+  });
+
+  msg.style.display='block'; msg.style.color='#C8A951';
+  msg.textContent='✅ Merci ! Votre commande a bien été envoyée, vous allez recevoir un email de confirmation.';
+  exhcLignesCommande = [];
+  rafraichirListeCommande();
+  document.querySelectorAll('input[name="exhc-paiement"]').forEach(r => r.checked = false);
+  ['exhc-prenom','exhc-nom','exhc-adresse','exhc-cp','exhc-ville','exhc-email','exhc-tel','exhc-naissance','exhc-commande-notes','exhc-ref-produit'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
 }
 
 function toggleExhForm(){
