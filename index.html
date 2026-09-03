@@ -557,7 +557,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .hero-ctas-desktop{display:flex;gap:12px;flex-wrap:wrap}
 .footer-siret-br{display:none}
 @media(max-width:768px){.footer-siret-br{display:inline}}
-@media(max-width:600px){.exh-prest-img{height:220px !important}}
+@media(max-width:600px){.exh-prest-img{height:220px !important}.exh-avantages-grid{grid-template-columns:repeat(2,1fr) !important}}
+@media(max-width:400px){.exh-avantages-grid{grid-template-columns:1fr !important}}
 @media(max-width:768px){.nav-links{display:none}.hbg{display:flex}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(253,250,247,.98);padding:14px 22px;border-bottom:1px solid rgba(201,169,110,.2);box-shadow:var(--sh)}.hero-c{grid-template-columns:1fr;display:flex;flex-direction:column}.hero-left{order:1}.hero-right{order:2}.hero-ctas-mobile{order:3;display:flex;flex-direction:row;gap:8px;padding:12px 0 0;width:100%}.hero-ctas-mobile .btn-p,.hero-ctas-mobile .btn-s{flex:1;font-size:12px;padding:10px 6px;text-align:center;justify-content:center;letter-spacing:0}.hero-ctas-desktop{display:none}.hero-img-wrap{justify-content:center}.hero-stats{grid-template-columns:repeat(3,1fr)!important}.hero-img-wrap img{max-width:100%;border-radius:var(--r)}}
 @media(max-width:480px){.vg{grid-template-columns:repeat(2,1fr)}.cg-grid{grid-template-columns:repeat(2,1fr)}.fi{grid-template-columns:1fr}.hero-stats{grid-template-columns:repeat(3,1fr)!important}.stat{padding:10px 4px}.stat-n{font-size:17px}.stat-l{font-size:8px}}
 
@@ -1124,10 +1125,11 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 
     <!-- FORMULAIRE DE COMMANDE (fenêtre modale) -->
     <div id="exh-commande-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhCommandeForm()">
+    <button onclick="toggleExhCommandeForm()" aria-label="Fermer" style="position:fixed;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:white;color:var(--brun);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-lg);z-index:5001">✕</button>
     <div style="max-width:520px;width:100%;max-height:88vh;overflow-y:auto;background:white;border-radius:var(--r);padding:30px 26px;box-shadow:var(--sh-lg);position:relative">
-      <button onclick="toggleExhCommandeForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
       <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Passer commande</h3>
-      <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:20px">Je vous recontacte rapidement pour confirmer et organiser le règlement.</p>
+      <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:8px">Je vous recontacte rapidement pour confirmer et organiser le règlement.</p>
+      <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:10px 14px;font-size:11.5px;color:var(--brun-m);text-align:center;margin-bottom:20px">💡 Envie de suivre vos commandes et cumuler des points fidélité ? <a href="#" onclick="toggleExhCommandeForm();showPage('compte');return false" style="color:var(--terra);font-weight:700">Créez votre compte</a> — sinon, continuez ci-dessous pour commander directement.</p>
 
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -1142,7 +1144,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <input id="exhc-email" type="email" placeholder="Email *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
         <input id="exhc-tel" type="tel" placeholder="Téléphone *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
         <div>
-          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:5px;padding-left:6px">Date de naissance (facultatif)</label>
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:5px;padding-left:6px">Date de naissance<br><span style="font-style:italic">(Pour recevoir votre carte cadeau à l'occasion de votre anniversaire)</span></label>
           <input id="exhc-naissance" type="date" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;box-sizing:border-box"/>
         </div>
         <div style="border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:14px">
@@ -1253,8 +1255,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 
       <!-- FORMULAIRE DE RÉSERVATION (fenêtre modale) -->
       <div id="exh-form-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhForm()">
+      <button onclick="toggleExhForm()" aria-label="Fermer" style="position:fixed;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:white;color:var(--brun);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-lg);z-index:5001">✕</button>
       <div id="exh-form-wrap" style="max-width:560px;width:100%;max-height:88vh;overflow-y:auto;background:white;border-radius:var(--r);padding:30px 26px;box-shadow:var(--sh-lg);position:relative">
-        <button onclick="toggleExhForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
         <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Réserver votre moment</h3>
         <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:20px">La date choisie est indicative — je vous recontacte pour la confirmer.</p>
 
@@ -1341,7 +1343,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <div class="ey">✦ Pourquoi nous rejoindre</div>
         <h2 class="st">Les avantages</h2>
       </div>
-      <div class="vg" style="grid-template-columns:repeat(4,1fr)">
+      <div class="vg exh-avantages-grid" style="grid-template-columns:repeat(4,1fr)">
 
         <div class="vc">
           <div class="vi" style="width:64px;height:64px;border-radius:50%;overflow:hidden">
@@ -7781,12 +7783,33 @@ function ajouterLigneCommande(){
     }
   }
 
-  const detailGenre = genre ? (genre === 'femme' ? ' (Femme)' : ' (Homme)') : '';
-  const detailRef = reference ? ' — ' + reference : '';
+  let ligneAffichage, categorieAffichage;
+
+  if(famille === 'parfum'){
+    // Format épuré pour Parfum / Home : type — format — genre — Réf. X – Nom — prix (une seule fois)
+    const typeLabel = produit.nom.replace(/\s*—\s*[\d,]+€$/, '');
+    const detailGenre = genre ? (genre === 'femme' ? 'Femme' : 'Homme') : '';
+    let detailRef = '';
+    if(reference){
+      if(reference.includes(' - ')){
+        const [num, nomParfum] = reference.split(' - ');
+        detailRef = 'Réf. ' + num + ' – ' + nomParfum;
+      } else {
+        detailRef = reference;
+      }
+    }
+    const morceaux = [typeLabel, detailGenre, detailRef].filter(Boolean);
+    ligneAffichage = morceaux.join(' – ');
+    categorieAffichage = categorieLabel;
+  } else {
+    const detailRef = reference ? ' — ' + reference : '';
+    ligneAffichage = produit.nom + detailRef;
+    categorieAffichage = categorieLabel;
+  }
 
   exhcLignesCommande.push({
-    categorie: categorieLabel,
-    nom: produit.nom + detailGenre + detailRef,
+    categorie: categorieAffichage,
+    nom: ligneAffichage,
     prix: produit.prix
   });
 
@@ -7870,7 +7893,7 @@ async function envoyerExhCommande(){
   });
 
   msg.style.display='block'; msg.style.color='#C8A951';
-  msg.textContent='✅ Merci ! Votre commande a bien été envoyée, vous allez recevoir un email de confirmation.';
+  msg.innerHTML='✅ <strong>Merci pour votre commande !</strong><br>Votre demande a bien été prise en compte. Un récapitulatif de votre commande vous sera envoyé par mail.<br>Zulay, votre conseillère Exhalessence, vous contactera prochainement pour confirmer votre commande.';
   exhcLignesCommande = [];
   rafraichirListeCommande();
   document.querySelectorAll('input[name="exhc-paiement"]').forEach(r => r.checked = false);
