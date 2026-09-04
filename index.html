@@ -1061,7 +1061,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">RDV individuel</div>
             <div class="vd">Un moment privilégié, en tête-à-tête, pour échanger sur vos besoins et découvrir les produits qui vous correspondent.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('rdv')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('rdv');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1070,7 +1070,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Atelier découverte à domicile</div>
             <div class="vd">Invitez vos proches (6 à 7 personnes, hôtesse comprise) pour un moment de convivialité autour du parfum et du bien-être, chez vous. Gratuit, entre 2h et 2h30 — l'hôtesse reçoit un cadeau de remerciement.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('atelier')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('atelier');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1079,7 +1079,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Présentation en entreprise</div>
             <div class="vd">Une pause bien-être pour vos collaborateurs ou clients, sur votre lieu de travail (CSE, entreprise, association), sans obligation d'achat.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('entreprise')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('entreprise');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1088,7 +1088,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Mallette découverte parfum</div>
             <div class="vd">Envie de trouver votre signature olfactive ? Testez notre gamme de parfums pendant 48h, tranquillement chez vous, gratuitement. Chèque de caution demandé.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('mallette')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('mallette');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1097,7 +1097,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Box découverte beauté</div>
             <div class="vd">Découvrez notre gamme beauté pendant 48h, gratuitement, tranquillement chez vous. Chèque de caution demandé.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('box')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('box');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1108,7 +1108,9 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <div style="max-width:520px;width:100%;max-height:88vh;background:white;border-radius:var(--r);box-shadow:var(--sh-lg);position:relative;display:flex;flex-direction:column;overflow:hidden">
           <button onclick="fermerDetailPrestation()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10">✕</button>
           <div style="overflow-y:auto">
-            <img id="exh-detail-img" src="" alt="" style="width:100%;height:180px;object-fit:cover;display:block"/>
+            <div style="width:100%;background:#FDF6F0;display:flex;align-items:center;justify-content:center">
+              <img id="exh-detail-img" src="" alt="" style="width:100%;max-height:280px;object-fit:contain;display:block"/>
+            </div>
             <div style="padding:24px 26px">
               <h3 id="exh-detail-titre" style="font-family:'Playfair Display',serif;font-size:20px;color:var(--brun);margin-bottom:16px"></h3>
               <div id="exh-detail-corps" style="color:var(--gris);font-size:13.5px;line-height:1.8"></div>
@@ -1179,8 +1181,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           </div>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Gamme Parfum</div>
-            <div class="vd">Plus de 130 parfums de Grasse pour hommes et femmes, en Eau de Parfum ou Parfum concentré, dans des flacons en verre rechargeables.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('gamme-parfum')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <div class="vd">120 références de parfums de Grasse pour hommes et femmes, en Eau de Parfum ou Parfum, dans des flacons en verre rechargeables.</div>
+            <a href="#" onclick="ouvrirDetailPrestation('gamme-parfum');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1190,8 +1192,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           </div>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Gamme Cosmétique</div>
-            <div class="vd">Nettoyants, démaquillants, soins hydratants et anti-âge pour le visage et le corps — une routine complète, pour elle et pour lui.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('gamme-cosmetique')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <div class="vd">Nettoyant et démaquillant, crème hydratante et crème anti-âge, soin du visage et du corps — une routine complète, pour elle et pour lui.</div>
+            <a href="#" onclick="ouvrirDetailPrestation('gamme-cosmetique');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1202,7 +1204,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Gamme Capillaire</div>
             <div class="vd">Shampoings, masques, sérums et coiffants adaptés à tous les types de cheveux, pour toute la famille.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('gamme-capillaire')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('gamme-capillaire');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1213,7 +1215,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Gamme Barbe</div>
             <div class="vd">Une gamme complète pour les barbus comme pour les non-barbus — rasage, après-rasage et soins de barbe.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('gamme-barbe')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('gamme-barbe');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1224,7 +1226,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Gamme Nutri+</div>
             <div class="vd">Des compléments alimentaires 100% végane et fabriqués en France, pour prendre soin de vous de l'intérieur.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('gamme-nutri')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('gamme-nutri');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -1235,7 +1237,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Gamme Home</div>
             <div class="vd">Diffuseurs, parfums d'intérieur, brume d'oreiller et savon exfoliant — transformez votre intérieur en cocon de bien-être.</div>
-            <button type="button" onclick="ouvrirDetailPrestation('gamme-home')" class="btn-p" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+            <a href="#" onclick="ouvrirDetailPrestation('gamme-home');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
@@ -8032,9 +8034,9 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Une expérience sensorielle", d:"Plongez dans un moment où le bien-être intérieur et extérieur se rencontrent, à travers une symphonie de parfums enivrants et de produits de beauté apaisants." },
       { t:"Le principe", d:"Un moment convivial chez vous, entre 1h30 et 2h30 selon le thème défini ensemble à l'avance, pour explorer et tester les produits dans une ambiance détendue, entourée de vos proches (6 à 7 personnes, vous comprise)." },
       { t:"Qui peut recevoir ?", d:"Tout le monde ! Il suffit d'avoir envie d'inviter ses proches à partager un moment chaleureux autour du bien-être et du parfum." },
-      { t:"Vos cadeaux en tant qu'hôtesse", d:"Une surprise en remerciement de votre accueil, des bons de réduction utilisables le jour même selon les ventes réalisées, et des bonus supplémentaires selon les paliers atteints." },
-      { t:"Ce que vos invités y gagnent", d:"La découverte d'une variété de produits, des conseils personnalisés, et parfois des offres spéciales réservées à l'occasion." },
-      { t:"Comment l'organiser ?", d:"Contactez-moi pour fixer une date qui vous convient. Ensemble, nous préparerons un événement sur-mesure où chaque instant sera une invitation à la découverte et au plaisir." }
+      { t:"Vos cadeaux en tant qu'hôtesse", d:"Un cadeau au choix d'une valeur de 20€, en remerciement de votre accueil, ainsi que des bons de réduction utilisables le jour même selon les ventes réalisées." },
+      { t:"Ce que vos invités y gagnent", d:"Selon l'atelier choisi (souvent un atelier soin du visage), vous et vos convives réalisez ensemble une routine adaptée à votre type de peau. Vous recevez des conseils personnalisés, et parfois des offres spéciales réservées à l'occasion — le tout gratuitement." },
+      { t:"Comment l'organiser ?", d:"Contactez-moi pour fixer une date qui vous convient, ou cliquez sur « Réserver ce moment » ci-dessous — c'est entièrement gratuit. Ensemble, nous préparons un événement sur-mesure où chaque instant sera une invitation à la découverte et au plaisir." }
     ]
   },
   entreprise: {
@@ -8043,6 +8045,7 @@ const EXH_DETAILS_PRESTATIONS = {
     sections: [
       { t:"Le principe", d:"Offrez à vos employés ou à vos clients un moment de détente et de découverte au sein même de votre structure (entreprise, association, CSE). Je viens présenter mes produits lors d'un créneau horaire convenu ensemble." },
       { t:"Les modalités", d:"En général, je suis disponible sur la pause déjeuner, pour une durée d'exposition de 2 heures — mais je peux m'adapter à d'autres horaires selon vos disponibilités." },
+      { t:"Vous êtes salarié(e) ?", d:"Si votre entreprise dispose d'un CSE, ou si vous pensez qu'une présentation pourrait intéresser votre entreprise ou association, n'hésitez pas à leur communiquer mes coordonnées ou à leur en parler directement." },
       { t:"Les avantages", d:"Vos collaborateurs ou clients découvrent et testent les produits sur place, sans aucune obligation d'achat. Aucune participation financière ne vous est demandée : mon objectif est simplement de faire connaître mes produits et de vous satisfaire." },
       { t:"En résumé", d:"Une occasion idéale pour promouvoir un moment de bien-être et de partage au sein de votre entreprise. Contactez-moi dès maintenant pour réserver un créneau et offrir à votre équipe une expérience mémorable." }
     ]
@@ -8053,7 +8056,7 @@ const EXH_DETAILS_PRESTATIONS = {
     sections: [
       { t:"Une offre spéciale", d:"Vous souhaitez tester toute notre gamme de parfums avant de faire votre choix ? C'est possible avec notre Mallette Découverte." },
       { t:"Le principe", d:"Une mallette réunissant 120 fragrances pour hommes et pour femmes, à tester chez vous, tranquillement, pendant 48h." },
-      { t:"Comment l'obtenir ?", d:"Il vous suffit de me contacter pour convenir d'une remise en main propre. La mallette vous est prêtée gratuitement pendant 48h, contre un chèque de caution restitué à son retour." },
+      { t:"Comment l'obtenir ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour convenir d'une remise en main propre. La mallette vous est prêtée gratuitement pendant 48h, contre un chèque de caution restitué à son retour." },
       { t:"Les avantages", d:"Prendre le temps de trouver votre signature olfactive parmi 120 références, dans le confort de votre foyer, sans aucun risque financier — l'occasion idéale de découvrir de nouveaux parfums et de trouver celui qui vous correspond parfaitement." }
     ],
     pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ma mallette découverte</button>`
@@ -8063,8 +8066,8 @@ const EXH_DETAILS_PRESTATIONS = {
     img: "exh-box-decouverte.png",
     sections: [
       { t:"Une offre spéciale", d:"Vous souhaitez tester tous nos produits de la gamme beauté (cosmétique, capillaire, barbe, Nutri+) ? C'est possible avec notre Box Découverte." },
-      { t:"Le principe", d:"Une box réunissant plusieurs produits de la gamme beauté EXHALESSENCE, à tester chez vous pendant 48h, gratuitement et sans engagement." },
-      { t:"Comment l'obtenir ?", d:"Contactez-moi pour convenir d'une remise en main propre. La box vous est prêtée pendant 48h, contre un chèque de caution restitué à son retour." },
+      { t:"Le principe", d:"Une box réunissant les produits des gammes Cosmétique, Capillaire et Barbe, à tester tranquillement chez vous pendant 48h, gratuitement et sans engagement." },
+      { t:"Comment l'obtenir ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour convenir d'une remise en main propre. La box vous est prêtée pendant 48h, contre un chèque de caution restitué à son retour." },
       { t:"Les avantages", d:"Découvrir la qualité et l'efficacité des produits avant de faire un choix définitif, et trouver ceux qui conviennent le mieux à votre peau, à vos cheveux et à vos habitudes — sans aucun risque financier." }
     ],
     pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ma box découverte</button>`
@@ -8074,9 +8077,9 @@ const EXH_DETAILS_PRESTATIONS = {
     img: "Gamme Parfum.png",
     sections: [
       { t:"Des créations d'exception", d:"Nos parfums sont des créations dont toutes les fragrances sont composées dans les hauteurs de Grasse, à Saint-Vallier-de-Thiey, puis mises en flacon au siège EXHALESSENCE, à Meung-sur-Loire. Depuis 2025, nos flacons sont en verre rechargeable, alliant élégance et responsabilité environnementale." },
-      { t:"Notre collection", d:"79 Eaux de Parfum femme et 39 Eaux de Parfum homme, pour toutes les envies et toutes les personnalités." },
-      { t:"La collection Prestige", d:"5 créations femme, 3 créations homme, et 3 créations mixtes que l'on retrouve dans les deux gammes. Des créations haut de gamme, plus intenses, plus complexes, avec un sillage exceptionnel — un niveau au-dessus pour celles et ceux qui veulent quelque chose de vraiment unique." },
-      { t:"Concentration", d:"Nos parfums classiques sont concentrés à 14% d'extrait de parfum, nos parfums Prestige à 20% d'essence de parfum." },
+      { t:"Eau de Parfum (Classique)", d:"Une eau de parfum accessible et raffinée, pensée pour accompagner votre quotidien. 79 Eaux de Parfum femme et 39 Eaux de Parfum homme, pour toutes les envies et toutes les personnalités." },
+      { t:"Parfum (Prestige)", d:"Des créations haut de gamme, plus intenses, plus complexes, avec un sillage exceptionnel — un niveau au-dessus pour celles et ceux qui veulent quelque chose de vraiment unique. 5 parfums femme, 3 parfums homme, 3 parfums mixtes." },
+      { t:"Concentration", d:"Nos Eaux de Parfum (Classiques) sont concentrées à 14% d'extrait de parfum. Nos Parfums (Prestige) sont concentrés à 20% d'essence de parfum." },
       { t:"Charte PURESAFE", d:"Nos formules s'engagent pour des parfums plus sains : sans phtalates, sans filtres UV, sans colorants, sans BHT." },
       { t:"Pour prolonger le sillage", d:"Retrouvez aussi nos gels douche parfumés et notre lait corps parfumant. Toute la gamme Parfum est pensée pour les hommes et pour les femmes." }
     ],
@@ -8087,7 +8090,7 @@ const EXH_DETAILS_PRESTATIONS = {
     titre: "Gamme Cosmétique",
     img: "Gamme Cosmétique.png",
     sections: [
-      { t:"Une routine complète", d:"Notre gamme Cosmétique est pensée pour sublimer votre peau au quotidien, aussi bien pour les femmes que pour les hommes. Elle est composée d'une gamme nettoyante et démaquillante, d'une gamme hydratante, d'une gamme anti-âge, d'une gamme soin du visage et d'une gamme soin du corps." },
+      { t:"Une routine complète", d:"Notre gamme Cosmétique est pensée pour sublimer votre peau au quotidien, aussi bien pour les femmes que pour les hommes. Elle est composée d'une gamme nettoyante et démaquillante, d'une gamme hydratante (crème de jour, crème de nuit), d'une gamme anti-âge (crème anti-âge, sérum tenseur, sérum contour des yeux), et d'une gamme soin du visage et du corps." },
       { t:"Des ingrédients de qualité", d:"Chaque produit est conçu avec des ingrédients naturels de haute qualité, alliant hydratation, exfoliation et éclat — du beurre corps nourrissant à l'huile pailletée, en passant par la crème exfoliante." },
       { t:"Une qualité garantie", d:"Développés sous contrôle pharmaceutique, nos soins vous garantissent une qualité exceptionnelle pour un rituel beauté en toute confiance." }
     ],
@@ -8109,6 +8112,7 @@ const EXH_DETAILS_PRESTATIONS = {
     titre: "Gamme Barbe",
     img: "Gamme Barbe.png",
     sections: [
+      { t:"Une gamme pour tous", d:"Que vous ayez une barbe ou préfériez le rasage, notre gamme Barbe vous accompagne au quotidien avec des produits pensés pour votre confort et votre peau." },
       { t:"Pour les barbus", d:"Shampoing barbe pour nettoyer en douceur, gel traceur pour un contour net et précis, huile de soin pour nourrir et adoucir, et cire barbe & moustache pour structurer votre style." },
       { t:"Pour les non-barbus", d:"Crème de rasage pour un confort optimal, et baume après-rasage pour apaiser et hydrater la peau." },
       { t:"Et pour elles aussi !", d:"La gamme Barbe n'est pas réservée aux hommes : la crème de rasage et le baume après-rasage conviennent parfaitement pour les aisselles et les jambes." },
@@ -8141,7 +8145,7 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Diffuseur Capilla", d:"Un diffuseur à bâtonnets, disponible en 500ml et 2500ml, pour parfumer subtilement et durablement votre intérieur ou votre espace de travail." },
       { t:"Parfum d'intérieur", d:"En spray, à utiliser sur vos rideaux, votre linge ou dans l'air ambiant pour parfumer instantanément une pièce." },
       { t:"Brume d'oreiller", d:"À vaporiser sur l'oreiller ou dans l'air de la chambre avant de vous coucher, pour un moment de détente absolue." },
-      { t:"Savon exfoliant mains", d:"Nettoie et adoucit la peau grâce à sa texture enrichie en pierre ponce — utilisable aussi pour les pieds." },
+      { t:"Savon exfoliant mains", d:"Un gommage qui nettoie, exfolie et adoucit la peau grâce à sa texture enrichie en pierre ponce — utilisable aussi pour les pieds." },
       { t:"Coffrets exclusifs", d:"Associez parfums d'intérieur, diffuseurs et recharges pour une expérience complète." }
     ],
     pied: `<p style="color:var(--gris);font-size:12.5px;text-align:center;margin-top:20px">Envie d'en savoir plus sur un produit en particulier ? <a href="https://www.calameo.com/read/0062051642ad9482b4732" target="_blank" rel="noopener" style="color:var(--terra);font-weight:700">Consultez notre catalogue</a>.</p>`
