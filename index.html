@@ -996,6 +996,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     <a href="#exh-bienvenue" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Accueil</a>
     <a href="#exh-qui" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">À propos</a>
     <a href="#exh-reserver" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Réserver</a>
+    <a href="#exh-produits" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nos produits</a>
     <a href="#exh-commander" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Comment commander</a>
     <a href="#exh-offre" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Offre du mois</a>
     <a href="#exh-marque" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">EXHALESSENCE</a>
@@ -1159,7 +1160,79 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- COMMENT COMMANDER -->
-  <section id="exh-commander" style="scroll-margin-top:140px;background:white;padding:56px 20px">
+
+  <!-- NOS PRODUITS -->
+  <section id="exh-produits" style="scroll-margin-top:140px;background:white;padding:60px 20px">
+    <div class="si">
+      <div class="sh">
+        <div class="ey">✦ L'univers EXHALESSENCE</div>
+        <h2 class="st">Nos produits</h2>
+        <p class="sdesc">Découvrez chez EXHALESSENCE une gamme étendue de parfums et de produits de beauté conçus pour vous séduire. Fabrication française, composition contrôlée selon les normes pharmaceutiques, et des prix pensés pour rendre le plaisir de prendre soin de soi accessible à tous.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;max-width:1100px;margin:0 auto">
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
+          <img src="Gamme Parfum.png" alt="Gamme Parfum" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <div style="padding:16px 14px">
+            <div class="vt" style="margin-bottom:8px">Parfum</div>
+            <div class="vd">Plus de 130 parfums de Grasse pour hommes et femmes, en Eau de Parfum ou Parfum concentré, dans des flacons en verre rechargeables.</div>
+            <button type="button" onclick="ouvrirDetailPrestation('gamme-parfum')" class="btn-s" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+          </div>
+        </div>
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
+          <img src="Gamme Cosmétique.png" alt="Gamme Cosmétique" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <div style="padding:16px 14px">
+            <div class="vt" style="margin-bottom:8px">Cosmétique</div>
+            <div class="vd">Nettoyants, démaquillants, soins hydratants et anti-âge pour le visage et le corps — une routine complète, pour elle et pour lui.</div>
+            <button type="button" onclick="ouvrirDetailPrestation('gamme-cosmetique')" class="btn-s" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+          </div>
+        </div>
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
+          <img src="Gamme Capilaire.png" alt="Gamme Capillaire" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <div style="padding:16px 14px">
+            <div class="vt" style="margin-bottom:8px">Capillaire</div>
+            <div class="vd">Shampoings, masques, sérums et coiffants adaptés à tous les types de cheveux, pour toute la famille.</div>
+            <button type="button" onclick="ouvrirDetailPrestation('gamme-capillaire')" class="btn-s" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+          </div>
+        </div>
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
+          <img src="Gamme Barbe.png" alt="Gamme Barbe" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <div style="padding:16px 14px">
+            <div class="vt" style="margin-bottom:8px">Barbe</div>
+            <div class="vd">Une gamme complète pour les barbus comme pour les non-barbus — rasage, après-rasage et soins de barbe.</div>
+            <button type="button" onclick="ouvrirDetailPrestation('gamme-barbe')" class="btn-s" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+          </div>
+        </div>
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
+          <img src="Gamme Nutri +.png" alt="Gamme Nutri+" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <div style="padding:16px 14px">
+            <div class="vt" style="margin-bottom:8px">Nutri+</div>
+            <div class="vd">Des compléments alimentaires 100% végane et fabriqués en France, pour prendre soin de vous de l'intérieur.</div>
+            <button type="button" onclick="ouvrirDetailPrestation('gamme-nutri')" class="btn-s" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+          </div>
+        </div>
+
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
+          <img src="Gamme Home.png" alt="Gamme Home" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <div style="padding:16px 14px">
+            <div class="vt" style="margin-bottom:8px">Home</div>
+            <div class="vd">Diffuseurs, parfums d'intérieur, brume d'oreiller et savon exfoliant — transformez votre intérieur en cocon de bien-être.</div>
+            <button type="button" onclick="ouvrirDetailPrestation('gamme-home')" class="btn-s" style="border:none;font-size:11px;padding:7px 16px;margin-top:10px">En savoir plus</button>
+          </div>
+        </div>
+
+      </div>
+
+      <p style="text-align:center;color:var(--gris);font-size:12.5px;margin-top:24px">Envie d'en savoir plus sur un produit en particulier ? <a href="https://www.calameo.com/read/0062051642ad9482b4732" target="_blank" rel="noopener" style="color:var(--terra);font-weight:700">Consultez notre catalogue</a> ou la <a href="catalogue-parfums-exhalessence.html" target="_blank" rel="noopener" style="color:var(--terra);font-weight:700">liste des parfums</a>.</p>
+    </div>
+  </section>
+
+  <section id="exh-commander" style="scroll-margin-top:140px;background:var(--beige);padding:56px 20px">
     <div class="si" style="max-width:920px">
       <div class="sh">
         <div class="ey">✦ Pratique</div>
@@ -1266,7 +1339,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- OFFRE DU MOIS -->
-  <section id="exh-offre" style="scroll-margin-top:140px;background:var(--beige);padding:50px 20px">
+  <section id="exh-offre" style="scroll-margin-top:140px;background:white;padding:50px 20px">
     <div class="si" style="max-width:920px">
       <div class="sh">
         <div class="ey">✦ En ce moment</div>
@@ -1275,7 +1348,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       </div>
       <div id="exh-offres-actives" style="display:flex;gap:24px;justify-content:center;align-items:stretch;flex-wrap:wrap;max-width:760px;margin:0 auto">
 
-        <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
           <div style="padding:16px 18px 0">
             <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700">✦ Parfum du mois</div>
           </div>
@@ -1293,7 +1366,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           </div>
         </div>
 
-        <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
+        <div style="background:#FDF6F0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);max-width:340px;text-align:center;display:flex;flex-direction:column">
           <div style="padding:16px 18px 0">
             <div style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700">✦ Beauté du mois</div>
           </div>
@@ -1313,7 +1386,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- BLOC MARQUE EXHALESSENCE -->
-  <section id="exh-marque" style="scroll-margin-top:140px;background:white;padding:60px 20px">
+  <section id="exh-marque" style="scroll-margin-top:140px;background:var(--beige);padding:60px 20px">
     <div style="max-width:960px;margin:0 auto">
       <div class="sh" style="margin-bottom:30px">
         <div class="ey">✦ La marque</div>
@@ -1341,7 +1414,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- DEVENIR DISTRIBUTEUR(TRICE) -->
-  <section id="exh-distributeur" style="scroll-margin-top:140px;background:#FDF6F0;padding:60px 20px">
+  <section id="exh-distributeur" style="scroll-margin-top:140px;background:white;padding:60px 20px">
     <div class="si" style="max-width:780px">
       <div class="sh">
         <div class="ey">✦ L'opportunité</div>
@@ -7971,6 +8044,66 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Le principe", d:"Une box réunissant plusieurs produits de la gamme beauté, à tester chez vous pendant 48h, gratuitement et sans engagement." },
       { t:"Comment l'obtenir ?", d:"Contactez-moi pour convenir d'une remise en main propre. La box vous est prêtée pendant 48h, contre un chèque de caution restitué à son retour." },
       { t:"Les avantages", d:"Découvrir la qualité et l'efficacité des produits avant de faire un choix définitif, et trouver ceux qui conviennent le mieux à votre peau et à vos habitudes." }
+    ]
+  },
+  'gamme-parfum': {
+    titre: "Parfum",
+    img: "Gamme Parfum.png",
+    sections: [
+      { t:"Notre collection", d:"79 parfums classiques femme + 5 créations Prestige femme, 39 parfums classiques homme + 3 Prestige homme, et 3 créations Prestige mixtes que l'on retrouve dans les deux gammes." },
+      { t:"Les Prestige", d:"Des créations haut de gamme, plus intenses, plus complexes, avec un sillage exceptionnel — un niveau au-dessus pour celles et ceux qui veulent quelque chose de vraiment unique." },
+      { t:"Concentration", d:"Nos Eaux de Parfum sont concentrées à 14%, nos Parfums à 20%." },
+      { t:"Une fabrication d'exception", d:"Toutes nos fragrances sont composées dans les hauteurs de Grasse, à Saint-Vallier-de-Thiey, puis mises en flacon au siège EXHALESSENCE, à Meung-sur-Loire. Depuis 2025, nos flacons sont en verre rechargeable, alliant élégance et responsabilité environnementale." },
+      { t:"Charte PURESAFE", d:"Nos formules s'engagent pour des parfums plus sains : sans phtalates, sans filtres UV, sans colorants, sans BHT." },
+      { t:"Pour prolonger le sillage", d:"Retrouvez aussi nos gels douche parfumés et notre lait corps parfumant." }
+    ]
+  },
+  'gamme-cosmetique': {
+    titre: "Cosmétique",
+    img: "Gamme Cosmétique.png",
+    sections: [
+      { t:"Une routine complète", d:"Notre gamme Cosmétique est pensée pour sublimer votre peau au quotidien, aussi bien pour les femmes que pour les hommes : nettoyants, démaquillants, hydratants, anti-âge, et bien plus encore." },
+      { t:"Des ingrédients de qualité", d:"Chaque produit est conçu avec des ingrédients naturels de haute qualité, alliant hydratation, exfoliation et éclat — du beurre corps nourrissant à l'huile pailletée, en passant par la crème exfoliante." },
+      { t:"Une qualité garantie", d:"Développés sous contrôle pharmaceutique, nos soins vous garantissent une qualité exceptionnelle pour un rituel beauté en toute confiance." }
+    ]
+  },
+  'gamme-capillaire': {
+    titre: "Capillaire",
+    img: "Gamme Capilaire.png",
+    sections: [
+      { t:"Une gamme pour tous", d:"Notre gamme Cheveux propose une variété de soins adaptés à tous les types de cheveux : shampoings spécifiques, masques profonds pour nourrir et réparer, sérums pour restaurer la brillance, et produits coiffants pour sublimer votre style." },
+      { t:"Des soins unisexes", d:"Conçus avec des ingrédients naturels de haute qualité, ces soins conviennent à toute la famille, pour des cheveux en pleine santé quel que soit votre style ou vos besoins." }
+    ]
+  },
+  'gamme-barbe': {
+    titre: "Barbe",
+    img: "Gamme Barbe.png",
+    sections: [
+      { t:"Pour les barbus", d:"Shampoing barbe pour nettoyer en douceur, gel traceur pour un contour net et précis, huile de soin pour nourrir et adoucir, et cire barbe & moustache pour structurer votre style." },
+      { t:"Pour les non-barbus", d:"Crème de rasage pour un confort optimal, et baume après-rasage pour apaiser et hydrater la peau." },
+      { t:"Une routine complète", d:"Chaque produit est conçu avec des ingrédients naturels de haute qualité, pour une routine alliant douceur et soin au quotidien, que vous ayez une barbe ou non." }
+    ]
+  },
+  'gamme-nutri': {
+    titre: "Nutri+",
+    img: "Gamme Nutri +.png",
+    sections: [
+      { t:"L'esprit de la gamme", d:"Des compléments alimentaires hautement concentrés, 100% à base de plantes, 100% végane et fabriqués en France, pour vous accompagner vers une vie plus saine et équilibrée." },
+      { t:"Détox & Draineur", d:"Le Détox favorise la digestion, le Draineur facilite l'élimination urinaire et la perte de poids en complément d'une alimentation équilibrée." },
+      { t:"Brûleur & Sommeil", d:"Le Brûleur favorise la combustion et l'oxydation des graisses. Le Sommeil améliore l'endormissement et la qualité des nuits." },
+      { t:"Anti-âge & Cheveux/Ongles", d:"L'Anti-âge stimule la production de collagène pour une peau éclatante. Cheveux & Ongles améliore l'état de la peau, des cheveux et des ongles." },
+      { t:"Ménopause & Probiotiques", d:"Ménopause diminue les inconforts (bouffées de chaleur), favorise la relaxation et régule l'activité hormonale. Probiotiques apporte 10 milliards d'UFC pour l'équilibre de la flore intestinale et le confort digestif." }
+    ]
+  },
+  'gamme-home': {
+    titre: "Home",
+    img: "Gamme Home.png",
+    sections: [
+      { t:"Le principe", d:"Transformez votre maison ou votre bureau en un cocon de bien-être, avec une gamme disponible en 5 senteurs raffinées (10 pour la ligne Capilla)." },
+      { t:"Diffuseur Capilla", d:"Disponible en 500ml et 2500ml, pour parfumer subtilement et durablement votre intérieur ou votre espace de travail." },
+      { t:"Parfum d'intérieur & Brume d'oreiller", d:"Le spray parfum d'intérieur s'utilise sur vos rideaux, votre linge ou dans l'air ambiant. La brume d'oreiller se vaporise sur l'oreiller, les draps ou dans l'air de la chambre avant de vous coucher, pour un moment de détente absolue." },
+      { t:"Savon exfoliant mains", d:"Nettoie et adoucit la peau grâce à sa texture enrichie en pierre ponce — utilisable aussi pour les pieds." },
+      { t:"Coffrets exclusifs", d:"Associez parfums d'intérieur, diffuseurs et recharges pour une expérience complète." }
     ]
   }
 };
