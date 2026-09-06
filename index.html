@@ -638,9 +638,9 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <a href="#" onclick="showPage('boutique','Plateaux & Vide-poches');return false" data-cat="Plateaux & Vide-poches">Plateaux & Vide-poches</a>
           <a href="#" onclick="showPage('boutique','Vases');return false" data-cat="Vases">Vases</a>
           <a href="#" onclick="showPage('boutique','Créations Signature');return false" data-cat="Créations Signature">Créations Signature</a>
-          <a href="#" onclick="showPage('exhalessence');return false" id="nav-exh-link" style="border-top:1px solid rgba(201,169,110,.25);margin-top:4px;padding-top:12px">EXHALESSENCE</a>
         </div>
       </li>
+      <li><a href="#" onclick="showPage('exhalessence');return false" id="nav-exh-link">EXHALESSENCE</a></li>
       <li><a href="#" onclick="showContact();return false">Contact</a></li>
       <li><a href="#" onclick="showPage('compte');return false" id="nav-compte">👤 Mon compte</a></li>
     </ul>
@@ -994,7 +994,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 
   <!-- SOUS-MENU COLLANT -->
   <div id="exh-submenu-fixe" style="position:fixed;top:70px;left:0;right:0;z-index:400;width:100%;background:#FDFAF7;border-bottom:1px solid rgba(201,169,110,.25);overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px 16px;box-shadow:0 2px 10px rgba(44,24,16,.05);box-sizing:border-box;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x">
-    <button class="btn-ret" onclick="showPage('boutique')" style="margin-right:16px;padding:6px 14px;font-size:11.5px;vertical-align:middle">← Retour</button>
+    <button class="btn-ret" onclick="showPage('accueil')" style="margin-right:16px;padding:6px 14px;font-size:11.5px;vertical-align:middle">← Retour</button>
     <a href="#exh-bienvenue" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Accueil</a>
     <a href="#exh-qui" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">À propos</a>
     <a href="#exh-reserver" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Réserver</a>
@@ -1058,46 +1058,46 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;max-width:1100px;margin:0 auto 34px">
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-rdv-individuel.jpg" alt="RDV individuel" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover;object-position:center 15%" onerror="this.style.display='none'"/>
+          <img src="exh-rdv-individuel.jpg" alt="RDV individuel" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover;object-position:center 15%" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">RDV individuel</div>
-            <div class="vd">Un moment privilégié, en tête-à-tête, pour échanger sur vos besoins et découvrir les produits qui vous correspondent.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Un moment rien que pour vous ✨</div><div class="vd">Un moment privilégié, en tête-à-tête, pour échanger sur vos besoins et découvrir les produits qui vous correspondent.</div>
             <a href="#" onclick="ouvrirDetailPrestation('rdv');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-atelier-domicile.jpg" alt="Atelier découverte à domicile" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover;object-position:center 38%" onerror="this.style.display='none'"/>
+          <img src="exh-atelier-domicile.jpg" alt="Atelier découverte à domicile" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover;object-position:center 38%" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Atelier découverte à domicile</div>
-            <div class="vd">Invitez vos proches (6 à 7 personnes, hôtesse comprise) pour un moment de convivialité autour du parfum et du bien-être, chez vous. Gratuit, entre 2h et 2h30 — l'hôtesse reçoit un cadeau de remerciement.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Réunissez vos proches pour un moment de partage ✨</div><div class="vd">Invitez vos proches (6 à 7 personnes, hôtesse comprise) pour un moment de convivialité autour du parfum et du bien-être, chez vous. Gratuit, entre 2h et 2h30 — l'hôtesse reçoit un cadeau de remerciement.</div>
             <a href="#" onclick="ouvrirDetailPrestation('atelier');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-presentation-entreprise.jpg" alt="Présentation en entreprise" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-presentation-entreprise.jpg" alt="Présentation en entreprise" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Présentation en entreprise</div>
-            <div class="vd">Une pause bien-être pour vos collaborateurs ou clients, sur votre lieu de travail (CSE, entreprise, association), sans obligation d'achat.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Une pause bien-être pour toute votre équipe ✨</div><div class="vd">Une pause bien-être pour vos collaborateurs ou clients, sur votre lieu de travail (CSE, entreprise, association), sans obligation d'achat.</div>
             <a href="#" onclick="ouvrirDetailPrestation('entreprise');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-mallette-parfum.jpg" alt="Mallette découverte parfum" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-mallette-parfum.jpg" alt="Mallette découverte parfum" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Mallette découverte parfum</div>
-            <div class="vd">Envie de trouver votre signature olfactive ? Testez notre gamme de parfums pendant 48h, tranquillement chez vous, gratuitement. Chèque de caution demandé.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">120 fragrances, pour trouver LA vôtre ✨</div><div class="vd">Envie de trouver votre signature olfactive ? Testez notre gamme de parfums pendant 48h, tranquillement chez vous, gratuitement. Chèque de caution demandé.</div>
             <a href="#" onclick="ouvrirDetailPrestation('mallette');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-box-decouverte.png" alt="Box découverte beauté" class="exh-prest-img" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-box-decouverte.png" alt="Box découverte beauté" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Box découverte beauté</div>
-            <div class="vd">Découvrez notre gamme beauté pendant 48h, gratuitement, tranquillement chez vous. Chèque de caution demandé.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Toute la gamme beauté à tester chez vous ✨</div><div class="vd">Découvrez notre gamme beauté pendant 48h, gratuitement, tranquillement chez vous. Chèque de caution demandé.</div>
             <a href="#" onclick="ouvrirDetailPrestation('box');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
@@ -1684,7 +1684,6 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <li><a href="#" onclick="showPage('boutique','Plateaux & Vide-poches');return false" data-cat="Plateaux & Vide-poches">Plateaux & Vide-poches</a></li>
         <li><a href="#" onclick="showPage('boutique','Vases');return false" data-cat="Vases">Vases</a></li>
         <li><a href="#" onclick="showPage('boutique','Créations Signature');return false" data-cat="Créations Signature">Créations Signature</a></li>
-        <li><a href="#" onclick="showPage('exhalessence');return false" data-cat="EXHALESSENCE" id="footer-exh-link">EXHALESSENCE</a></li>
       </ul>
     </div>
     <div class="fc2">
@@ -1692,6 +1691,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <ul>
         <li><a href="#" onclick="showPage('accueil');return false">Accueil</a></li>
         <li><a href="#" onclick="showPage('boutique');return false">Boutique</a></li>
+        <li><a href="#" onclick="showPage('exhalessence');return false" id="footer-exh-link">EXHALESSENCE</a></li>
         <li><a href="#" onclick="showPage('panier');return false">Panier</a></li>
         <li><a href="#" onclick="showContact();return false">Contact</a></li>
       <li><a href="#" onclick="showPage('compte');return false" id="nav-compte">👤 Mon compte</a></li>
@@ -2801,8 +2801,7 @@ const CAT_IMGS = {
   "Plateaux & Vide-poches":"cat_plateaux.jpg",
   "Vases":"cat_vases.jpg",
   "Nouveautés":"cat_nouveautes.jpg",
-  "Créations Signature":"cat_signature.jpg",
-  "EXHALESSENCE":"exh-categorie.jpg"
+  "Créations Signature":"cat_signature.jpg"
 };
 
 // Lancement de la tuile EXHALESSENCE : badge NEW affiché pendant 30 jours
@@ -2846,8 +2845,7 @@ const CAT_DESC = {
   "Plateaux & Vide-poches":"Des indispensables du quotidien, façonnés à la main pour poser vos objets avec style.",
   "Vases":"Des vases délicats pour mettre en valeur vos fleurs séchées, pampas et compositions naturelles au fil des saisons.",
   "Nouveautés":"Chut… une nouvelle création se prépare. Revenez très vite pour la découvrir en avant-première !",
-  "Créations Signature":"Des pièces façonnées au gré de mon inspiration et de mes envies du moment — chacune unique, chacune singulière, comme une signature.",
-  "EXHALESSENCE":"Parfums, soins beauté et bien-être — découvrez ma gamme de parfums, produits de soin, cheveux, barbe et parfums d'intérieur."
+  "Créations Signature":"Des pièces façonnées au gré de mon inspiration et de mes envies du moment — chacune unique, chacune singulière, comme une signature."
 };
 
 
@@ -8024,7 +8022,9 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Qu'est-ce qu'un rendez-vous individuel ?", d:"C'est un moment privilégié entre vous et moi, où nous prenons le temps d'échanger, d'explorer vos besoins et de découvrir ensemble les solutions qui vous correspondent." },
       { t:"Pourquoi le privilégier ?", d:"Un rendez-vous individuel vous permet de bénéficier d'une attention entièrement personnalisée, sans la contrainte de partager vos besoins devant d'autres personnes. C'est un moment dédié à votre confort et à votre bien-être." },
       { t:"Les avantages", d:"L'avantage principal réside dans la personnalisation de mes conseils : les produits que je vous présenterai seront spécifiquement adaptés à vos besoins et à vos préférences du moment." },
-      { t:"En résumé", d:"Ensemble, nous créons un espace où votre bien-être est au centre de toutes les attentions. Réservez dès maintenant votre rendez-vous pour une expérience unique et sur-mesure." }
+      { t:"En résumé", d:"Ensemble, nous créons un espace où votre bien-être est au centre de toutes les attentions. Réservez dès maintenant votre rendez-vous pour une expérience unique et sur-mesure." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Des conseils personnalisés sur les parfums ou les soins qui vous correspondent</li><li>Une pause bien-être rien que pour vous</li><li>Découvrir l'univers EXHALESSENCE en toute tranquillité</li><li>Un moment de douceur à s'offrir, seule ou entre amies</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : un moment pour vous, une attention qui vous ressemble.</em>" }
     ]
   },
   atelier: {
@@ -8036,7 +8036,9 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Qui peut recevoir ?", d:"Tout le monde ! Il suffit d'avoir envie d'inviter ses proches à partager un moment chaleureux autour du bien-être et du parfum." },
       { t:"Vos cadeaux en tant qu'hôtesse", d:"Un cadeau au choix d'une valeur de 20€, en remerciement de votre accueil, ainsi que des bons de réduction utilisables le jour même selon les ventes réalisées." },
       { t:"Ce que vos invités y gagnent", d:"Selon l'atelier choisi (souvent un atelier soin du visage), vous et vos convives réalisez ensemble une routine adaptée à votre type de peau. Vous recevez des conseils personnalisés, et parfois des offres spéciales réservées à l'occasion — le tout gratuitement." },
-      { t:"Comment l'organiser ?", d:"Contactez-moi pour fixer une date qui vous convient, ou cliquez sur « Réserver ce moment » ci-dessous — c'est entièrement gratuit. Ensemble, nous préparons un événement sur-mesure où chaque instant sera une invitation à la découverte et au plaisir." }
+      { t:"Comment l'organiser ?", d:"Contactez-moi pour fixer une date qui vous convient, ou cliquez sur « Réserver ce moment » ci-dessous — c'est entièrement gratuit. Ensemble, nous préparons un événement sur-mesure où chaque instant sera une invitation à la découverte et au plaisir." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Réunir vos amies autour d'un moment convivial</li><li>Un anniversaire, une soirée entre filles, ou simplement l'envie de se faire plaisir ensemble</li><li>Découvrir les produits en s'amusant, sans se déplacer</li><li>Repartir avec des conseils personnalisés et de jolies surprises</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : sublimer vos sens, entourée de celles qui comptent.</em>" }
     ]
   },
   entreprise: {
@@ -8047,7 +8049,9 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Les modalités", d:"En général, je suis disponible sur la pause déjeuner, pour une durée d'exposition de 2 heures — mais je peux m'adapter à d'autres horaires selon vos disponibilités." },
       { t:"Vous êtes salarié(e) ?", d:"Si votre entreprise dispose d'un CSE, ou si vous pensez qu'une présentation pourrait intéresser votre entreprise ou association, n'hésitez pas à leur communiquer mes coordonnées ou à leur en parler directement." },
       { t:"Les avantages", d:"Vos collaborateurs ou clients découvrent et testent les produits sur place, sans aucune obligation d'achat. Aucune participation financière ne vous est demandée : mon objectif est simplement de faire connaître mes produits et de vous satisfaire." },
-      { t:"En résumé", d:"Une occasion idéale pour promouvoir un moment de bien-être et de partage au sein de votre entreprise. Contactez-moi dès maintenant pour réserver un créneau et offrir à votre équipe une expérience mémorable." }
+      { t:"En résumé", d:"Une occasion idéale pour promouvoir un moment de bien-être et de partage au sein de votre entreprise. Contactez-moi dès maintenant pour réserver un créneau et offrir à votre équipe une expérience mémorable." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Un moment de détente pour vos collaborateurs</li><li>Faire découvrir nos produits à vos clients ou partenaires</li><li>Un événement d'entreprise ou un moment convivial</li><li>Un CSE, une association ou tout événement professionnel</li><li>Toutes les occasions où vous souhaitez offrir un moment de bien-être</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : offrez à votre entreprise une pause bien-être, sans obligation d'achat.</em>" }
     ]
   },
   mallette: {
@@ -8057,7 +8061,9 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Une offre spéciale", d:"Vous souhaitez tester toute notre gamme de parfums avant de faire votre choix ? C'est possible avec notre Mallette Découverte." },
       { t:"Le principe", d:"Une mallette réunissant 120 fragrances pour hommes et pour femmes, à tester chez vous, tranquillement, pendant 48h." },
       { t:"Comment l'obtenir ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour convenir d'une remise en main propre. La mallette vous est prêtée gratuitement pendant 48h, contre un chèque de caution restitué à son retour." },
-      { t:"Les avantages", d:"Prendre le temps de trouver votre signature olfactive parmi 120 références, dans le confort de votre foyer, sans aucun risque financier — l'occasion idéale de découvrir de nouveaux parfums et de trouver celui qui vous correspond parfaitement." }
+      { t:"Les avantages", d:"Prendre le temps de trouver votre signature olfactive parmi 120 références, dans le confort de votre foyer, sans aucun risque financier — l'occasion idéale de découvrir de nouveaux parfums et de trouver celui qui vous correspond parfaitement." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Changer de parfum sans se tromper</li><li>Trouver un cadeau parfait pour quelqu'un que vous aimez</li><li>Découvrir de nouvelles fragrances en toute tranquillité</li><li>Simplement vous faire plaisir</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : votre signature olfactive n'attend que vous.</em>" }
     ],
     pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ma mallette découverte</button>`
   },
@@ -8065,10 +8071,12 @@ const EXH_DETAILS_PRESTATIONS = {
     titre: "Box découverte beauté",
     img: "exh-box-decouverte.png",
     sections: [
-      { t:"Une offre spéciale", d:"Vous souhaitez tester tous nos produits de la gamme beauté (cosmétique, capillaire, barbe, Nutri+) ? C'est possible avec notre Box Découverte." },
+      { t:"Une offre spéciale", d:"Vous souhaitez tester nos produits des gammes Cosmétique, Capillaire et Barbe ? C'est possible avec notre Box Découverte." },
       { t:"Le principe", d:"Une box réunissant les produits des gammes Cosmétique, Capillaire et Barbe, à tester tranquillement chez vous pendant 48h, gratuitement et sans engagement." },
       { t:"Comment l'obtenir ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour convenir d'une remise en main propre. La box vous est prêtée pendant 48h, contre un chèque de caution restitué à son retour." },
-      { t:"Les avantages", d:"Découvrir la qualité et l'efficacité des produits avant de faire un choix définitif, et trouver ceux qui conviennent le mieux à votre peau, à vos cheveux et à vos habitudes — sans aucun risque financier." }
+      { t:"Les avantages", d:"Découvrir la qualité et l'efficacité des produits avant de faire un choix définitif, et trouver ceux qui conviennent le mieux à votre peau, à vos cheveux et à vos habitudes — sans aucun risque financier." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Renouveler votre routine beauté</li><li>Tester avant d'acheter, sans risque</li><li>Trouver les produits adaptés à votre peau ou vos cheveux</li><li>Vous faire plaisir ou préparer un joli cadeau</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : la beauté, testée avant d'être adoptée.</em>" }
     ],
     pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ma box découverte</button>`
   },
@@ -8159,7 +8167,8 @@ function ouvrirDetailPrestation(cle){
   document.getElementById('exh-detail-img').alt = data.titre;
   document.getElementById('exh-detail-titre').textContent = data.titre;
   document.getElementById('exh-detail-corps').innerHTML = data.sections.map(s =>
-    `<p style="margin-bottom:14px"><strong style="color:var(--brun)">${s.t}</strong><br>${s.d}</p>`
+    s.t ? `<p style="margin-bottom:14px"><strong style="color:var(--brun)">${s.t}</strong><br>${s.d}</p>`
+        : `<p style="margin-bottom:14px;text-align:center;color:var(--brun-m)">${s.d}</p>`
   ).join('');
   document.getElementById('exh-detail-pied').innerHTML = data.pied ||
     `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ce moment</button>`;
