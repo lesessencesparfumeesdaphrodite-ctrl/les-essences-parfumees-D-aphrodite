@@ -557,7 +557,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .hero-ctas-desktop{display:flex;gap:12px;flex-wrap:wrap}
 .footer-siret-br{display:none}
 @media(max-width:768px){.footer-siret-br{display:inline}}
-@media(max-width:600px){.exh-prest-img{height:220px !important}.exh-avantages-grid{grid-template-columns:repeat(2,1fr) !important}.exh-produits-grid{grid-template-columns:1fr !important}}
+@media(max-width:600px){.exh-avantages-grid{grid-template-columns:repeat(2,1fr) !important}.exh-produits-grid{grid-template-columns:1fr !important}}
 @media(min-width:601px) and (max-width:860px){.exh-produits-grid{grid-template-columns:repeat(2,1fr) !important}}
 @media(max-width:400px){.exh-avantages-grid{grid-template-columns:1fr !important}}
 @media(max-width:768px){.nav-links{display:none}.hbg{display:flex}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(253,250,247,.98);padding:14px 22px;border-bottom:1px solid rgba(201,169,110,.2);box-shadow:var(--sh)}.hero-c{grid-template-columns:1fr;display:flex;flex-direction:column}.hero-left{order:1}.hero-right{order:2}.hero-ctas-mobile{order:3;display:flex;flex-direction:row;gap:8px;padding:12px 0 0;width:100%}.hero-ctas-mobile .btn-p,.hero-ctas-mobile .btn-s{flex:1;font-size:12px;padding:10px 6px;text-align:center;justify-content:center;letter-spacing:0}.hero-ctas-desktop{display:none}.hero-img-wrap{justify-content:center}.hero-stats{grid-template-columns:repeat(3,1fr)!important}.hero-img-wrap img{max-width:100%;border-radius:var(--r)}}
@@ -1058,7 +1058,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;max-width:1100px;margin:0 auto 34px">
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-rdv-individuel.jpg" alt="RDV individuel" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover;object-position:center 15%" onerror="this.style.display='none'"/>
+          <img src="exh-rdv-individuel.jpg" alt="RDV individuel" class="exh-prest-img" style="width:100%;height:auto;max-height:260px;object-fit:contain;background:#FDF6F0" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">RDV individuel</div>
             <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Un moment rien que pour vous ✨</div><div class="vd">Un moment privilégié, en tête-à-tête, pour échanger sur vos besoins et découvrir les produits qui vous correspondent.</div>
@@ -1067,16 +1067,16 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-atelier-domicile.jpg" alt="Atelier découverte à domicile" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover;object-position:center 38%" onerror="this.style.display='none'"/>
+          <img src="exh-atelier-domicile.jpg" alt="Atelier découverte à domicile" class="exh-prest-img" style="width:100%;height:auto;max-height:260px;object-fit:contain;background:#FDF6F0" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Atelier découverte à domicile</div>
-            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Réunissez vos proches pour un moment de partage ✨</div><div class="vd">Invitez vos proches (6 à 7 personnes, hôtesse comprise) pour un moment de convivialité autour du parfum et du bien-être, chez vous. Gratuit, entre 2h et 2h30 — l'hôtesse reçoit un cadeau de remerciement.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Réunissez vos proches pour un moment de partage ✨</div><div class="vd">Invitez vos proches (6 à 7 personnes, hôtesse comprise) pour un moment de convivialité autour du parfum, des soins de beauté et du bien-être, chez vous. Gratuit, entre 2h et 2h30 — peut-être un cadeau de remerciement pour l'hôtesse.</div>
             <a href="#" onclick="ouvrirDetailPrestation('atelier');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-presentation-entreprise.jpg" alt="Présentation en entreprise" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-presentation-entreprise.jpg" alt="Présentation en entreprise" class="exh-prest-img" style="width:100%;height:auto;max-height:260px;object-fit:contain;background:#FDF6F0" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Présentation en entreprise</div>
             <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Une pause bien-être pour toute votre équipe ✨</div><div class="vd">Une pause bien-être pour vos collaborateurs ou clients, sur votre lieu de travail (CSE, entreprise, association), sans obligation d'achat.</div>
@@ -1085,19 +1085,19 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-mallette-parfum.jpg" alt="Mallette découverte parfum" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-mallette-parfum.jpg" alt="Mallette découverte parfum" class="exh-prest-img" style="width:100%;height:auto;max-height:260px;object-fit:contain;background:#FDF6F0" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Mallette découverte parfum</div>
-            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">120 fragrances, pour trouver LA vôtre ✨</div><div class="vd">Envie de trouver votre signature olfactive ? Testez notre gamme de parfums pendant 48h, tranquillement chez vous, gratuitement. Chèque de caution demandé.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Trouvez votre signature parfumée ✨</div><div class="vd">Découvrez nos 120 fragrances de parfums pendant 48h, tranquillement chez vous, gratuitement.</div>
             <a href="#" onclick="ouvrirDetailPrestation('mallette');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center">
-          <img src="exh-box-decouverte.png" alt="Box découverte beauté" class="exh-prest-img" style="width:100%;height:200px;object-fit:cover" onerror="this.style.display='none'"/>
+          <img src="exh-box-decouverte.png" alt="Box découverte beauté" class="exh-prest-img" style="width:100%;height:auto;max-height:260px;object-fit:contain;background:#FDF6F0" onerror="this.style.display='none'"/>
           <div style="padding:16px 14px">
             <div class="vt" style="margin-bottom:8px">Box découverte beauté</div>
-            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Toute la gamme beauté à tester chez vous ✨</div><div class="vd">Découvrez notre gamme beauté pendant 48h, gratuitement, tranquillement chez vous. Chèque de caution demandé.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px">Votre routine beauté sur-mesure ✨</div><div class="vd">Découvrez toute notre gamme beauté pendant 48h, tranquillement chez vous, gratuitement.</div>
             <a href="#" onclick="ouvrirDetailPrestation('box');return false" style="display:inline-block;margin-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
@@ -8023,9 +8023,10 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Pourquoi le privilégier ?", d:"Un rendez-vous individuel vous permet de bénéficier d'une attention entièrement personnalisée, sans la contrainte de partager vos besoins devant d'autres personnes. C'est un moment dédié à votre confort et à votre bien-être." },
       { t:"Les avantages", d:"L'avantage principal réside dans la personnalisation de mes conseils : les produits que je vous présenterai seront spécifiquement adaptés à vos besoins et à vos préférences du moment." },
       { t:"En résumé", d:"Ensemble, nous créons un espace où votre bien-être est au centre de toutes les attentions. Réservez dès maintenant votre rendez-vous pour une expérience unique et sur-mesure." },
-      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Des conseils personnalisés sur les parfums ou les soins qui vous correspondent</li><li>Une pause bien-être rien que pour vous</li><li>Découvrir l'univers EXHALESSENCE en toute tranquillité</li><li>Un moment de douceur à s'offrir, seule ou entre amies</li></ul>" },
-      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : un moment pour vous, une attention qui vous ressemble.</em>" }
-    ]
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Des conseils personnalisés sur les parfums ou les soins qui vous correspondent</li><li>Une pause bien-être rien que pour vous</li><li>Découvrir l'univers EXHALESSENCE en toute tranquillité</li><li>Un moment de douceur à s'offrir, seule</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite vous offrent un moment pour vous, une attention qui vous ressemble.</em>" }
+    ],
+    pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver mon rendez-vous</button>`
   },
   atelier: {
     titre: "Atelier découverte à domicile",
@@ -8036,34 +8037,36 @@ const EXH_DETAILS_PRESTATIONS = {
       { t:"Qui peut recevoir ?", d:"Tout le monde ! Il suffit d'avoir envie d'inviter ses proches à partager un moment chaleureux autour du bien-être et du parfum." },
       { t:"Vos cadeaux en tant qu'hôtesse", d:"Un cadeau au choix d'une valeur de 20€, en remerciement de votre accueil, ainsi que des bons de réduction utilisables le jour même selon les ventes réalisées." },
       { t:"Ce que vos invités y gagnent", d:"Selon l'atelier choisi (souvent un atelier soin du visage), vous et vos convives réalisez ensemble une routine adaptée à votre type de peau. Vous recevez des conseils personnalisés, et parfois des offres spéciales réservées à l'occasion — le tout gratuitement." },
-      { t:"Comment l'organiser ?", d:"Contactez-moi pour fixer une date qui vous convient, ou cliquez sur « Réserver ce moment » ci-dessous — c'est entièrement gratuit. Ensemble, nous préparons un événement sur-mesure où chaque instant sera une invitation à la découverte et au plaisir." },
-      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Réunir vos amies autour d'un moment convivial</li><li>Un anniversaire, une soirée entre filles, ou simplement l'envie de se faire plaisir ensemble</li><li>Découvrir les produits en s'amusant, sans se déplacer</li><li>Repartir avec des conseils personnalisés et de jolies surprises</li></ul>" },
-      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : sublimer vos sens, entourée de celles qui comptent.</em>" }
-    ]
+      { t:"Comment l'organiser ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour fixer une date qui vous convient — c'est entièrement gratuit. Ensemble, nous préparons un événement sur-mesure où chaque instant sera une invitation à la découverte et au plaisir." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Réunir vos amies autour d'un moment convivial</li><li>Un anniversaire, un enterrement de vie de jeune fille, un baby shower, ou simplement l'envie de se faire plaisir ensemble</li><li>Découvrir les produits en s'amusant, sans se déplacer</li><li>Repartir avec des conseils personnalisés et de jolies surprises</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite vous aident à sublimer vos sens, entourée de celles qui comptent pour vous.</em>" }
+    ],
+    pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver mon atelier découverte</button>`
   },
   entreprise: {
     titre: "Présentation en entreprise",
     img: "exh-presentation-entreprise.jpg",
     sections: [
-      { t:"Le principe", d:"Offrez à vos employés ou à vos clients un moment de détente et de découverte au sein même de votre structure (entreprise, association, CSE). Je viens présenter mes produits lors d'un créneau horaire convenu ensemble." },
-      { t:"Les modalités", d:"En général, je suis disponible sur la pause déjeuner, pour une durée d'exposition de 2 heures — mais je peux m'adapter à d'autres horaires selon vos disponibilités." },
-      { t:"Vous êtes salarié(e) ?", d:"Si votre entreprise dispose d'un CSE, ou si vous pensez qu'une présentation pourrait intéresser votre entreprise ou association, n'hésitez pas à leur communiquer mes coordonnées ou à leur en parler directement." },
-      { t:"Les avantages", d:"Vos collaborateurs ou clients découvrent et testent les produits sur place, sans aucune obligation d'achat. Aucune participation financière ne vous est demandée : mon objectif est simplement de faire connaître mes produits et de vous satisfaire." },
-      { t:"En résumé", d:"Une occasion idéale pour promouvoir un moment de bien-être et de partage au sein de votre entreprise. Contactez-moi dès maintenant pour réserver un créneau et offrir à votre équipe une expérience mémorable." },
-      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Un moment de détente pour vos collaborateurs</li><li>Faire découvrir nos produits à vos clients ou partenaires</li><li>Un événement d'entreprise ou un moment convivial</li><li>Un CSE, une association ou tout événement professionnel</li><li>Toutes les occasions où vous souhaitez offrir un moment de bien-être</li></ul>" },
-      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : offrez à votre entreprise une pause bien-être, sans obligation d'achat.</em>" }
-    ]
+      { t:"Le principe", d:"Offrez à vos employés ou à vos clients un moment de détente et de découverte au sein même de votre structure (entreprise, association, CSE). Je viens présenter mes produits, ou proposer un atelier bien-être (dans le cadre de la QVT), lors d'un créneau horaire convenu ensemble." },
+      { t:"Les modalités", d:"En général, cela se déroule sur la pause déjeuner, pour une durée d'environ 2 heures — mais je peux m'adapter à d'autres horaires selon vos disponibilités." },
+      { t:"Vous êtes salarié(e) ou membre d'un CSE ?", d:"N'hésitez pas à leur communiquer mes coordonnées ou à leur en faire part directement, pour discuter de ce qui est possible au sein de votre structure." },
+      { t:"Les avantages", d:"Vos collaborateurs ou clients découvrent et testent les produits sur place, sans aucune obligation d'achat. Aucune participation financière ne vous est demandée : mon objectif est simplement de faire connaître les produits, de me faire connaître, et de vous satisfaire." },
+      { t:"En résumé", d:"Une occasion idéale pour promouvoir un moment de bien-être et de partage au sein de votre entreprise. Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> dès maintenant pour réserver un créneau et offrir à votre équipe ou à vos clients une expérience mémorable." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Un moment de détente pour vos collaborateurs</li><li>Des cadeaux de fin d'année pour vos collaborateurs</li><li>Des cadeaux pour remercier vos clients ou partenaires</li><li>Des événements d'entreprise et moments conviviaux</li><li>Toutes les occasions où vous souhaitez offrir un moment de bien-être ou un cadeau original et parfumé</li></ul><p style=\"margin-top:10px\">Je peux également vous accompagner pour composer des cadeaux personnalisés, adaptés à votre budget et à votre événement.</p>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite offrent à votre entreprise une pause de parfum et de bien-être, sans obligation d'achat.</em>" }
+    ],
+    pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ma présentation en entreprise</button>`
   },
   mallette: {
     titre: "Mallette découverte parfum",
     img: "exh-mallette-parfum.jpg",
     sections: [
-      { t:"Une offre spéciale", d:"Vous souhaitez tester toute notre gamme de parfums avant de faire votre choix ? C'est possible avec notre Mallette Découverte." },
-      { t:"Le principe", d:"Une mallette réunissant 120 fragrances pour hommes et pour femmes, à tester chez vous, tranquillement, pendant 48h." },
+      { t:"Une offre spéciale", d:"Vous souhaitez tester nos 120 fragrances de Grasse avant de faire votre choix ? C'est possible avec notre Mallette Découverte." },
+      { t:"Le principe", d:"Une mallette réunissant 120 fragrances de Grasse pour hommes et pour femmes, à tester chez vous, tranquillement, pendant 48h." },
       { t:"Comment l'obtenir ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour convenir d'une remise en main propre. La mallette vous est prêtée gratuitement pendant 48h, contre un chèque de caution restitué à son retour." },
-      { t:"Les avantages", d:"Prendre le temps de trouver votre signature olfactive parmi 120 références, dans le confort de votre foyer, sans aucun risque financier — l'occasion idéale de découvrir de nouveaux parfums et de trouver celui qui vous correspond parfaitement." },
-      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Changer de parfum sans se tromper</li><li>Trouver un cadeau parfait pour quelqu'un que vous aimez</li><li>Découvrir de nouvelles fragrances en toute tranquillité</li><li>Simplement vous faire plaisir</li></ul>" },
-      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : votre signature olfactive n'attend que vous.</em>" }
+      { t:"Les avantages", d:"Prendre le temps de trouver votre signature parfumée parmi nos 120 fragrances de Grasse, dans le confort de votre foyer, sans aucun risque financier — l'occasion idéale de découvrir de nouveaux parfums de Grasse et de trouver celui qui vous correspond parfaitement." },
+      { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Changer de parfum sans se tromper</li><li>Trouver un cadeau parfait pour quelqu'un que vous aimez</li><li>Découvrir de nouvelles fragrances de Grasse en toute tranquillité</li><li>Simplement vous faire plaisir</li></ul>" },
+      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite vous aident à trouver votre signature parfumée, qui n'attend que vous.</em>" }
     ],
     pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ma mallette découverte</button>`
   },
@@ -8073,10 +8076,10 @@ const EXH_DETAILS_PRESTATIONS = {
     sections: [
       { t:"Une offre spéciale", d:"Vous souhaitez tester nos produits des gammes Cosmétique, Capillaire et Barbe ? C'est possible avec notre Box Découverte." },
       { t:"Le principe", d:"Une box réunissant les produits des gammes Cosmétique, Capillaire et Barbe, à tester tranquillement chez vous pendant 48h, gratuitement et sans engagement." },
-      { t:"Comment l'obtenir ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour convenir d'une remise en main propre. La box vous est prêtée pendant 48h, contre un chèque de caution restitué à son retour." },
+      { t:"Comment l'obtenir ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> pour convenir d'une remise en main propre. La box découverte beauté vous est prêtée pendant 48h, contre un chèque de caution restitué à son retour." },
       { t:"Les avantages", d:"Découvrir la qualité et l'efficacité des produits avant de faire un choix définitif, et trouver ceux qui conviennent le mieux à votre peau, à vos cheveux et à vos habitudes — sans aucun risque financier." },
       { t:"Idéal pour...", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Renouveler votre routine beauté</li><li>Tester avant d'acheter, sans risque</li><li>Trouver les produits adaptés à votre peau ou vos cheveux</li><li>Vous faire plaisir ou préparer un joli cadeau</li></ul>" },
-      { t:"", d:"<em>Les Essences Parfumées d'Aphrodite : la beauté, testée avant d'être adoptée.</em>" }
+      { t:"", d:"<em>Chez Les Essences Parfumées d'Aphrodite, l'essayer, c'est l'adopter.</em>" }
     ],
     pied: `<button onclick="fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'})" class="btn-p" style="border:none;margin-top:20px;width:100%;justify-content:center">Réserver ma box découverte</button>`
   },
