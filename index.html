@@ -995,36 +995,36 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   <!-- SOUS-MENU COLLANT -->
   <div id="exh-submenu-fixe" style="position:fixed;top:70px;left:0;right:0;z-index:400;width:100%;background:#FDFAF7;border-bottom:1px solid rgba(201,169,110,.25);overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px 16px;box-shadow:0 2px 10px rgba(44,24,16,.05);box-sizing:border-box;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x">
     <button class="btn-ret" onclick="showPage('accueil')" style="margin-right:16px;padding:6px 14px;font-size:11.5px;vertical-align:middle">← Retour</button>
-    <a href="#exh-bienvenue" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Bienvenue</a>
-    <a href="#exh-qui" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">À propos</a>
-    <a href="#exh-reserver" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Réserver</a>
-    <a href="#exh-produits" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nos produits</a>
-    <a href="#exh-commander" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Comment commander</a>
-    <a href="#exh-offre" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Offre du mois</a>
-    <a href="#exh-marque" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">EXHALESSENCE</a>
-    <a href="#exh-distributeur" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Devenir distributeur(trice)</a>
-    <a href="#exh-avantages" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Avantages</a>
-    <a href="#exh-rejoindre" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nous rejoindre</a>
+    <a href="#" onclick="allerVersAncreExh('exh-bienvenue');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Bienvenue</a>
+    <a href="#" onclick="allerVersAncreExh('exh-qui');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">À propos</a>
+    <a href="#" onclick="allerVersAncreExh('exh-reserver');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Réserver</a>
+    <a href="#" onclick="allerVersAncreExh('exh-produits');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nos produits</a>
+    <a href="#" onclick="allerVersAncreExh('exh-commander');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Comment commander</a>
+    <a href="#" onclick="allerVersAncreExh('exh-offre');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Offre du mois</a>
+    <a href="#" onclick="allerVersAncreExh('exh-marque');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">EXHALESSENCE</a>
+    <a href="#" onclick="allerVersAncreExh('exh-distributeur');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Devenir distributeur(trice)</a>
+    <a href="#" onclick="allerVersAncreExh('exh-avantages');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Avantages</a>
+    <a href="#" onclick="allerVersAncreExh('exh-rejoindre');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nous rejoindre</a>
     <a href="mailto:les.essences.parfumees.d.aphrodite@gmail.com" style="display:inline-block;margin-right:14px;font-size:12px;font-weight:700;color:var(--terra);text-decoration:none">✉ Me contacter</a>
     <a href="tel:+33622418463" style="display:inline-block;font-size:12px;font-weight:700;color:var(--terra);text-decoration:none">📞 06 22 41 84 63</a>
   </div>
 
   <!-- BIENVENUE -->
-  <section id="exh-bienvenue" style="scroll-margin-top:170px;background:var(--beige);padding:130px 20px 30px">
+  <section id="exh-bienvenue" style="scroll-margin-top:170px;background:var(--beige);padding:100px 20px 8px">
     <div style="max-width:1080px;margin:0 auto;display:flex;gap:40px;align-items:center;flex-wrap:wrap;justify-content:center">
       <div style="flex:0 0 380px;max-width:380px;border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(44,24,16,.18)">
         <img src="exh-categorie.jpg" alt="Gamme de parfums et soins EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
       </div>
       <div style="flex:1;min-width:280px;max-width:480px">
-        <div class="hero-badge" style="margin-bottom:14px;background:rgba(201,169,110,.28);border:1px solid var(--dore);color:var(--brun)">✦ Parfums, Beauté & Bien-être</div>
+        <div class="hero-badge" style="margin-bottom:10px;background:rgba(201,169,110,.28);border:1px solid var(--dore);color:var(--brun)">✦ Parfums, Beauté & Bien-être</div>
         <h1 class="hero-t">Zulay Marques <em>EXHALESSENCE</em></h1>
         <p class="hero-sub">Conseillère à domicile indépendante<br>Parfums de Grasse & Beauté</p>
         <p class="hero-desc">Bienvenue dans l'univers EXHALESSENCE. Parfums de Grasse, soins du visage et du corps, capillaires, barbe, parfums d'ambiance, compléments alimentaires pour hommes et femmes.</p>
-        <p class="hero-desc" style="margin-top:-14px">Découvrez tous les produits EXHALESSENCE, 100% français, non testés sur les animaux, pourcentage élevé en naturalité.</p>
-        <p class="hero-desc" style="margin-top:-14px">Vous trouverez ici l'essentiel pour découvrir comment commander, réserver votre moment beauté ou découvrir l'opportunité de rejoindre l'aventure.</p>
+        <p class="hero-desc" style="margin-top:-18px">Découvrez tous les produits EXHALESSENCE, 100% français, non testés sur les animaux, pourcentage élevé en naturalité.</p>
+        <p class="hero-desc" style="margin-top:-18px">Vous trouverez ici l'essentiel pour découvrir comment commander, réserver votre moment beauté ou découvrir l'opportunité de rejoindre l'aventure.</p>
       </div>
     </div>
-    <p style="text-align:center;font-family:'Dancing Script',cursive;font-size:24px;color:var(--terra);max-width:520px;margin:14px auto 0;padding:0 20px">"Sublimer vos sens est pour nous une évidence."</p>
+    <p style="text-align:center;font-family:'Dancing Script',cursive;font-size:clamp(15px,4.2vw,24px);white-space:nowrap;color:var(--terra);max-width:520px;margin:4px auto 0;padding:0 20px">"Sublimer vos sens est pour nous une évidence."</p>
   </section>
 
   <!-- QUI JE SUIS -->
@@ -1038,7 +1038,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <div style="flex:1;min-width:260px;max-width:520px;order:1">
           <div id="exh-anciennete" style="display:inline-block;background:rgba(201,169,110,.15);border:1px solid var(--dore);color:var(--brun-m);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:16px">Conseillère EXHALESSENCE depuis 5 ans</div>
           <p style="color:var(--gris);line-height:1.9;font-size:15px">J'étais cliente EXHALESSENCE avant de rejoindre l'aventure, séduite par la qualité de ses produits. J'ai rejoint l'aventure en octobre 2020, d'abord en parallèle de mon emploi. J'y ai découvert une véritable passion, et depuis, cette activité a transformé ma vie personnelle et professionnelle.</p>
-          <p style="color:var(--gris);line-height:1.9;font-size:15px;margin-top:14px">En 2023, après vingt ans en tant que secrétaire médicale, j'ai choisi de quitter mon poste pour m'y consacrer à temps plein, avec un épanouissement total. Aujourd'hui, je vis une liberté professionnelle précieuse, en harmonie avec ma vie de famille. Rejoindre EXHALESSENCE a été l'une des meilleures décisions de ma vie.</p>
+          <p style="color:var(--gris);line-height:1.9;font-size:15px;margin-top:14px">En 2023, après plus de vingt ans en tant que secrétaire médicale, j'ai choisi de quitter mon poste pour m'y consacrer à temps plein, avec un épanouissement total. Aujourd'hui, je vis une liberté personnelle et professionnelle précieuse, en harmonie avec ma vie de famille. Rejoindre EXHALESSENCE a été l'une des meilleures décisions de ma vie.</p>
         </div>
         <div style="flex:0 0 260px;max-width:260px;border-radius:16px;overflow:hidden;box-shadow:0 8px 26px rgba(44,24,16,.15);order:2">
           <img src="exh-qui-je-suis.jpg" alt="Zulay Marques, conseillère EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
@@ -1360,7 +1360,10 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
             </label>
           </div>
         </div>
-        <button onclick="envoyerExhCommande()" class="btn-p" style="width:100%;justify-content:center;border:none">Envoyer ma commande</button>
+        <button onclick="envoyerExhCommande()" class="btn-p" style="width:100%;justify-content:center;border:none">Envoyer ma demande de commande</button>
+        <div style="background:#FDECEC;border-left:3px solid #C0392B;border-radius:8px;padding:10px 14px;margin-top:10px">
+          <p style="color:#8B2D22;font-size:12.5px;line-height:1.6;margin:0;text-align:center">⚠️ Il ne s'agit que d'une demande de commande. Je vous recontacte rapidement pour la confirmer ensemble.</p>
+        </div>
         <p id="exhc-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
       </div>
       </div>
@@ -1545,7 +1548,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <a href="https://www.exhalessence.fr/?s=203591110" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none">S'inscrire</a>
       </div>
     </div>
-    <p style="text-align:center;font-family:'Dancing Script',cursive;font-size:24px;color:var(--terra);max-width:520px;margin:36px auto 0;padding:0 20px">"Sublimer vos sens est pour nous une évidence."</p>
+    <p style="text-align:center;font-family:'Dancing Script',cursive;font-size:clamp(15px,4.2vw,24px);white-space:nowrap;color:var(--terra);max-width:520px;margin:36px auto 0;padding:0 20px">"Sublimer vos sens est pour nous une évidence."</p>
   </section>
 
 </div>
@@ -2832,13 +2835,19 @@ function ajusterPositionSousMenuExh(){
   if(!nav || !sousMenu) return;
   const hauteurNav = nav.getBoundingClientRect().height;
   sousMenu.style.top = hauteurNav + 'px';
-  const hauteurTotale = hauteurNav + sousMenu.getBoundingClientRect().height;
-  ['exh-bienvenue','exh-qui','exh-reserver','exh-produits','exh-commander','exh-offre','exh-marque','exh-distributeur','exh-avantages','exh-rejoindre'].forEach(id=>{
-    const sec = document.getElementById(id);
-    if(sec) sec.style.scrollMarginTop = hauteurTotale + 'px';
-  });
 }
 window.addEventListener('resize', ajusterPositionSousMenuExh);
+
+function allerVersAncreExh(id){
+  const cible = document.getElementById(id);
+  if(!cible) return;
+  const nav = document.querySelector('nav');
+  const sousMenu = document.getElementById('exh-submenu-fixe');
+  const hauteurHeaders = (nav ? nav.getBoundingClientRect().height : 0) + (sousMenu ? sousMenu.getBoundingClientRect().height : 0);
+  const y = cible.getBoundingClientRect().top + window.pageYOffset - hauteurHeaders - 8;
+  window.scrollTo({top: Math.max(0,y), behavior:'smooth'});
+  history.replaceState(null, '', '#'+id);
+}
 
 document.addEventListener('DOMContentLoaded', function(){
   ajusterPositionSousMenuExh();
