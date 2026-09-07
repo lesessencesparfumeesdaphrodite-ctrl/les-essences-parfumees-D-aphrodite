@@ -1010,7 +1010,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </div>
 
   <!-- BIENVENUE -->
-  <section id="exh-bienvenue" style="scroll-margin-top:170px;background:var(--beige);padding:150px 20px 56px">
+  <section id="exh-bienvenue" style="scroll-margin-top:170px;background:var(--beige);padding:130px 20px 30px">
     <div style="max-width:1080px;margin:0 auto;display:flex;gap:40px;align-items:center;flex-wrap:wrap;justify-content:center">
       <div style="flex:0 0 380px;max-width:380px;border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(44,24,16,.18)">
         <img src="exh-categorie.jpg" alt="Gamme de parfums et soins EXHALESSENCE" style="width:100%;display:block" onerror="this.style.display='none'"/>
@@ -1024,7 +1024,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <p class="hero-desc" style="margin-top:-14px">Vous trouverez ici l'essentiel pour découvrir comment commander, réserver votre moment beauté ou découvrir l'opportunité de rejoindre l'aventure.</p>
       </div>
     </div>
-    <p style="text-align:center;font-family:'Dancing Script',cursive;font-size:24px;color:var(--terra);max-width:520px;margin:36px auto 0;padding:0 20px">"Sublimer vos sens est pour nous une évidence."</p>
+    <p style="text-align:center;font-family:'Dancing Script',cursive;font-size:24px;color:var(--terra);max-width:520px;margin:14px auto 0;padding:0 20px">"Sublimer vos sens est pour nous une évidence."</p>
   </section>
 
   <!-- QUI JE SUIS -->
@@ -2830,7 +2830,13 @@ function ajusterPositionSousMenuExh(){
   const nav = document.querySelector('nav');
   const sousMenu = document.getElementById('exh-submenu-fixe');
   if(!nav || !sousMenu) return;
-  sousMenu.style.top = nav.getBoundingClientRect().height + 'px';
+  const hauteurNav = nav.getBoundingClientRect().height;
+  sousMenu.style.top = hauteurNav + 'px';
+  const hauteurTotale = hauteurNav + sousMenu.getBoundingClientRect().height;
+  ['exh-bienvenue','exh-qui','exh-reserver','exh-produits','exh-commander','exh-offre','exh-marque','exh-distributeur','exh-avantages','exh-rejoindre'].forEach(id=>{
+    const sec = document.getElementById(id);
+    if(sec) sec.style.scrollMarginTop = hauteurTotale + 'px';
+  });
 }
 window.addEventListener('resize', ajusterPositionSousMenuExh);
 
