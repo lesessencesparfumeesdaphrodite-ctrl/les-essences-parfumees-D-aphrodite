@@ -8618,18 +8618,24 @@ document.addEventListener('DOMContentLoaded', () => {
   chargerNouveauxProduits();
   chargerIndisponibles();
 
-  // ── Chargement direct via l'URL (ex: #exhalessence, #cat-Vases, #boutique) ──
+  // ── Chargement direct via l'URL (ex: #exhalessence, #cat-Vases, #boutique, #exh-reserver) ──
   const hashInitial = window.location.hash;
   if(hashInitial && hashInitial.length > 1){
     const brut = decodeURIComponent(hashInitial.slice(1));
     let idInitial = brut, catInitial = null;
+    const ancresInternesExh = ['exh-bienvenue','exh-qui','exh-reserver','exh-produits','exh-commander','exh-offre','exh-marque','exh-distributeur','exh-avantages','exh-rejoindre'];
     if(brut.startsWith('cat-')){
       idInitial = 'boutique';
       catInitial = brut.slice(4);
+    } else if(ancresInternesExh.includes(brut)){
+      idInitial = 'exhalessence';
     }
     if(document.getElementById('page-'+idInitial)){
       history.replaceState({page:idInitial, cat:catInitial}, '', window.location.pathname + hashInitial);
       _afficherPage(idInitial, catInitial);
+      if(ancresInternesExh.includes(brut)){
+        setTimeout(()=>allerVersAncreExh(brut), 150);
+      }
     } else {
       history.replaceState({page:'accueil', cat:null}, '', window.location.pathname);
     }
