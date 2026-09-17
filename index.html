@@ -609,9 +609,15 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .etoile-sel{cursor:pointer;font-size:24px;transition:transform .1s}
 .etoile-sel:hover{transform:scale(1.2)}.exh-rej-texte{order:1}
 .exh-rej-photo{order:2}
+.exh-cmd-photo{width:170px}
+.exh-cmd-tarifs{font-size:14.5px}
 @media (max-width:640px){
   .exh-rej-texte{order:2}
   .exh-rej-photo{order:1}
+}
+@media (max-width:480px){
+  .exh-cmd-photo{width:130px}
+  .exh-cmd-tarifs{font-size:12.5px}
 }
 </style>
 </head>
@@ -1266,16 +1272,16 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <div style="background:#FDECEC;border-left:3px solid #C0392B;border-radius:8px;padding:12px 16px;margin-bottom:14px;text-align:left">
           <p style="color:#8B2D22;font-size:13px;line-height:1.7;margin:0"><strong>Pourquoi le paiement à la commande ?</strong><br>Dès que je passe votre commande, j'avance moi-même une partie du prix auprès de mon fournisseur EXHALESSENCE pour la commander. Ce règlement à la commande permet de réserver vos produits et me permet de ne jamais avancer de frais de ma poche. Merci de votre confiance et de votre compréhension 🌸</p>
         </div>
-        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:20px">Pour connaître le détail des produits et leurs tarifs,<br>Consultez le catalogue et la liste des parfums ci-dessous.</p>
+        <p class="exh-cmd-tarifs" style="color:var(--gris);line-height:1.9;margin-bottom:20px">Pour connaître le détail des produits et leurs tarifs,<br>Consultez le catalogue et la liste des parfums ci-dessous.</p>
 
         <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">
-          <div style="width:170px;text-align:center">
+          <div class="exh-cmd-photo" style="text-align:center">
             <div style="border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(44,24,16,.14);margin-bottom:10px">
               <img src="exh-catalogue-bandeau.jpg" alt="Catalogue Exhalessence" style="width:100%;display:block" onerror="this.style.display='none'"/>
             </div>
             <a href="https://www.calameo.com/read/0062051642ad9482b4732" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none;font-size:11px;padding:9px 14px;width:100%;justify-content:center">📖 Notre catalogue</a>
           </div>
-          <div style="width:170px;text-align:center">
+          <div class="exh-cmd-photo" style="text-align:center">
             <div style="border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(44,24,16,.14);margin-bottom:10px">
               <img src="exh-liste-parfums-couverture.jpg" alt="Liste des parfums Exhalessence" style="width:100%;display:block" onerror="this.style.display='none'"/>
             </div>
