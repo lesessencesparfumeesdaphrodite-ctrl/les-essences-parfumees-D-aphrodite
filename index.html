@@ -612,6 +612,12 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .etoile-sel{cursor:pointer;font-size:24px;transition:transform .1s}
 .etoile-sel:hover{transform:scale(1.2)}.exh-rej-texte{order:1}
 .exh-rej-photo{order:2}
+@media (max-width:820px){
+  .exh-prest-grid{grid-template-columns:repeat(2,1fr) !important}
+}
+@media (max-width:560px){
+  .exh-prest-grid{grid-template-columns:1fr !important}
+}
 .exh-cmd-photo{width:170px}
 .exh-cmd-tarifs{font-size:14.5px}
 @media (max-width:640px){
@@ -1073,7 +1079,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <p class="sdesc">Choisissez la formule qui vous convient :<br>Rendez-vous individuel, Atelier découverte à domicile, Présentation en entreprise, ou découverte à domicile avec la Mallette découverte parfum ou la Box découverte beauté.</p>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;max-width:1100px;margin:0 auto 34px">
+      <div class="exh-prest-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1100px;margin:0 auto 34px">
 
         <div style="background:white;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);text-align:center;display:flex;flex-direction:column;height:100%">
           <div class="vt" style="padding:14px 10px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Rendez-vous individuel</div>
@@ -1124,7 +1130,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
           <div class="vt" style="padding:14px 10px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Animation sur-mesure</div>
           <div style="width:100%;aspect-ratio:1280/1073;overflow:hidden"><img src="exh-animation-sur-mesure.jpg" alt="Animation sur-mesure EXHALESSENCE" class="exh-prest-img" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.parentElement.style.display='none'"/></div>
           <div style="padding:16px 14px;display:flex;flex-direction:column;flex:1">
-            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px;min-height:32px;font-weight:400">Imaginons ensemble votre animation ✨</div><div class="vd">Restaurant, salle de sport, résidence senior, salon, événement associatif... EXHALESSENCE s'invite partout où vous accueillez du public.</div>
+            <div class="vt" style="font-size:12.5px;font-style:italic;color:var(--terra);margin-bottom:4px;min-height:32px;font-weight:400">Imaginons ensemble votre animation ✨</div><div class="vd">Restaurant, salle de sport, résidence senior, événement associatif... une animation gratuite, adaptée à votre lieu. Prévoyez juste un emplacement pour m'accueillir.</div>
             <a href="#" onclick="ouvrirDetailPrestation('animation');return false" style="display:inline-block;margin-top:auto;padding-top:10px;color:var(--terra);font-weight:700;font-size:12px;text-decoration:none">En savoir plus</a>
           </div>
         </div>
@@ -8170,8 +8176,8 @@ const EXH_DETAILS_PRESTATIONS = {
     titre: "Animation sur-mesure",
     img: "exh-animation-sur-mesure.jpg",
     sections: [
-      { t:"Le principe", d:"EXHALESSENCE s'invite là où vous accueillez du public, pour une animation soins du visage, beauté ou parfum, adaptée à votre lieu et à votre événement." },
-      { t:"Quelques exemples de lieux", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Restaurant, bar, café, pub, discothèque</li><li>Salle de sport</li><li>Boutique de vêtements, bijoux, accessoires</li><li>Salon de coiffure, institut de beauté</li><li>Résidence senior, maison de retraite</li><li>Hôtel, résidence de vacances, camping</li><li>Comité des fêtes, événement de quartier</li><li>Association caritative ou solidaire</li><li>… et tout autre lieu recevant du public</li></ul>" },
+      { t:"Le principe", d:"Je me déplace là où vous accueillez du public, pour une animation soins du visage, beauté ou parfum, adaptée à votre lieu et à votre événement — entièrement gratuite, il vous suffit de prévoir un emplacement pour m'accueillir." },
+      { t:"Quelques exemples de lieux", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Restaurant, bar, café, pub, discothèque</li><li>Salle de sport</li><li>Boutique de vêtements, bijoux, accessoires</li><li>Coiffeur, institut de beauté</li><li>Résidence senior, maison de retraite</li><li>Hôtel, résidence de vacances, camping</li><li>Comité des fêtes, événement de quartier</li><li>Association caritative ou solidaire</li><li>… et tout autre lieu recevant du public</li></ul>" },
       { t:"Comment l'organiser ?", d:"Contactez-moi ou <a href=\"#\" onclick=\"fermerDetailPrestation();document.getElementById('exh-reserver').scrollIntoView({behavior:'smooth'});toggleExhForm();return false\" style=\"color:var(--terra);font-weight:700\">remplissez le formulaire</a> en précisant votre lieu et votre projet, dans le champ commentaire. Je suis ouverte à toute proposition et j'étudie chaque demande avec plaisir." },
       { t:"Un engagement solidaire", d:"Lors de certaines animations organisées pour une cause caritative précise (recherche médicale, association, projet solidaire...), 10% des ventes réalisées ce jour-là sont reversés à cette cause, sous forme de dons." },
       { t:"", d:"<em>Les Essences Parfumées d'Aphrodite s'invitent partout où vous avez envie de nous accueillir.</em>" }
@@ -8565,11 +8571,11 @@ function genererCarrDataDuMois(){
   ];
   const moisIndex = new Date().getMonth(); // 0 à 11, avance automatiquement chaque mois
   return categoriesCarrousel.map(cat => {
-    const produitsCat = P.filter(p => p.c === cat && p.img);
+    const produitsCat = P.filter(p => p.c === cat && p.img2);
     if(produitsCat.length === 0) return null;
     const i1 = moisIndex % produitsCat.length;
     const i2 = produitsCat.length > 1 ? (moisIndex + 1) % produitsCat.length : i1;
-    return { cat, img1: produitsCat[i1].img, img2: produitsCat[i2].img };
+    return { cat, img1: produitsCat[i1].img2, img2: produitsCat[i2].img2 };
   }).filter(Boolean);
 }
 const CARR_DATA = genererCarrDataDuMois();
