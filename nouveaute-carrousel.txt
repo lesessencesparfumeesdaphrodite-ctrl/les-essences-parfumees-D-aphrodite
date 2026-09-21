@@ -1,1 +1,1 @@
-LIBELLE = Nouveautés du mois d'octobre
+LIBELLE = Nouveautés du mois de septembre
