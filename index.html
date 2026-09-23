@@ -935,7 +935,6 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </div>
 </div>
 
-
 <!-- PAGE COMPTE CLIENT -->
 <div id="page-compte" class="page">
   <div class="compte-page">
@@ -959,7 +958,6 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     <div id="admin-contenu"></div>
   </div>
 </div>
-
 
 <!-- PAGE PROGRAMME DE FIDÉLITÉ -->
 <div id="page-fidelite" class="page">
@@ -1024,9 +1022,9 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     <a href="#" onclick="allerVersAncreExh('exh-qui');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">À propos</a>
     <a href="#" onclick="allerVersAncreExh('exh-reserver');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Réserver</a>
     <a href="#" onclick="allerVersAncreExh('exh-produits');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nos produits</a>
-    <a href="#" onclick="allerVersAncreExh('exh-commander');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Comment commander</a>
     <a href="#" onclick="allerVersAncreExh('exh-nouveaute');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Nouveauté</a>
     <a href="#" onclick="allerVersAncreExh('exh-offre');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Offre du mois</a>
+    <a href="#" onclick="allerVersAncreExh('exh-commander');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Comment commander</a>
     <a href="#" onclick="allerVersAncreExh('exh-marque');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">EXHALESSENCE</a>
     <a href="#" onclick="allerVersAncreExh('exh-distributeur');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Devenir distributeur(trice)</a>
     <a href="#" onclick="allerVersAncreExh('exh-avantages');return false" style="display:inline-block;margin-right:18px;font-size:12px;font-weight:700;color:var(--brun-m);text-decoration:none">Avantages</a>
@@ -1289,129 +1287,6 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     </div>
   </section>
 
-  <section id="exh-commander" style="scroll-margin-top:170px;background:var(--beige);padding:56px 20px">
-    <div class="si" style="max-width:640px">
-      <div class="sh">
-        <div class="ey">✦ Pratique</div>
-        <h2 class="st">Comment commander ?</h2>
-      </div>
-      <div style="text-align:center">
-        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Vous pouvez commander par <strong style="color:var(--brun)">téléphone</strong>, <strong style="color:var(--brun)">SMS</strong><br>ou via notre <strong style="color:var(--brun)">formulaire de commande</strong>.</p>
-        <button onclick="toggleExhCommandeForm()" class="btn-p" style="border:none;margin-bottom:14px">📝 Commander</button>
-        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Le règlement s'effectue <strong style="color:var(--brun)">à la commande</strong>,<br>par PayPal, Wero ou virement.</p>
-        <div style="background:#FDECEC;border-left:3px solid #C0392B;border-radius:8px;padding:12px 16px;margin-bottom:14px;text-align:left">
-          <p style="color:#8B2D22;font-size:13px;line-height:1.7;margin:0"><strong>Pourquoi le paiement à la commande ?</strong><br>Dès que je passe votre commande, j'avance moi-même une partie du prix auprès de mon fournisseur EXHALESSENCE pour la commander. Ce règlement à la commande permet de réserver vos produits et me permet de ne jamais avancer de frais de ma poche. Merci de votre confiance et de votre compréhension 🌸</p>
-        </div>
-        <p class="exh-cmd-tarifs" style="color:var(--gris);line-height:1.9;margin-bottom:20px">Pour connaître le détail des produits et leurs tarifs,<br>Consultez le catalogue et la liste des parfums ci-dessous.</p>
-
-        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">
-          <div class="exh-cmd-photo" style="text-align:center">
-            <div style="border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(44,24,16,.14);margin-bottom:10px">
-              <img src="exh-catalogue-bandeau.jpg" alt="Catalogue Exhalessence" style="width:100%;display:block" onerror="this.style.display='none'"/>
-            </div>
-            <a href="https://www.calameo.com/read/0062051642ad9482b4732" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none;font-size:11px;padding:9px 14px;width:100%;justify-content:center">📖 Notre catalogue</a>
-          </div>
-          <div class="exh-cmd-photo" style="text-align:center">
-            <div style="border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(44,24,16,.14);margin-bottom:10px">
-              <img src="page1-couverture.png" alt="Liste des parfums Exhalessence" style="width:100%;display:block" onerror="this.style.display='none'"/>
-            </div>
-            <a href="catalogue-parfums-exhalessence.html" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none;font-size:11px;padding:9px 14px;width:100%;justify-content:center">🌸 Liste des parfums</a>
-          </div>
-        </div>
-
-        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:6px">Vous pouvez aussi créer votre compte pour suivre vos commandes et votre programme de fidélité.</p>
-        <a href="#" onclick="showPage('compte');return false" class="btn-p" style="text-decoration:none;font-size:12px;padding:9px 18px;display:inline-flex">👤 Créer mon compte</a>
-      </div>
-    </div>
-
-    <!-- FORMULAIRE DE COMMANDE (fenêtre modale) -->
-    <div id="exh-commande-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhCommandeForm()">
-    <div style="max-width:520px;width:100%;max-height:88vh;background:white;border-radius:var(--r);box-shadow:var(--sh-lg);position:relative;display:flex;flex-direction:column;overflow:hidden">
-      <button onclick="toggleExhCommandeForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10">✕</button>
-      <div style="overflow-y:auto;padding:30px 26px">
-      <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Passer commande</h3>
-      <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:8px">Je vous recontacte rapidement pour confirmer et organiser le règlement.</p>
-      <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:10px 14px;font-size:11.5px;color:var(--brun-m);text-align:center;margin-bottom:20px">💡 Envie de suivre vos commandes et cumuler des points fidélité ? <a href="#" onclick="toggleExhCommandeForm();showPage('compte');return false" style="color:var(--terra);font-weight:700">Créez votre compte</a> — sinon, continuez ci-dessous pour commander directement.</p>
-
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <input id="exhc-prenom" type="text" placeholder="Prénom *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
-          <input id="exhc-nom" type="text" placeholder="Nom *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
-        </div>
-        <input id="exhc-adresse" type="text" placeholder="Adresse *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <input id="exhc-cp" type="text" placeholder="Code postal *" style="flex:0 0 130px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
-          <input id="exhc-ville" type="text" placeholder="Ville *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
-        </div>
-        <input id="exhc-email" type="email" placeholder="Email *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
-        <input id="exhc-tel" type="tel" placeholder="Téléphone *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
-        <div>
-          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:5px;padding-left:6px">Date de naissance<br><span style="font-style:italic">(Pour recevoir votre carte cadeau à l'occasion de votre anniversaire)</span></label>
-          <input id="exhc-naissance" type="date" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;box-sizing:border-box"/>
-        </div>
-        <div style="border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:14px">
-          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:8px">Votre commande *</label>
-
-          <select id="exhc-sel-famille" onchange="exhcMajCascade()" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box">
-            <option value="">Choisir une catégorie...</option>
-            <option value="parfum">🌸 Parfum</option>
-            <option value="beaute">💆 Beauté</option>
-          </select>
-
-          <select id="exhc-sel-sousfamille" onchange="exhcSousFamilleChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
-
-          <select id="exhc-sel-produit" onchange="exhcProduitChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
-
-          <select id="exhc-sel-genre" onchange="exhcGenreChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box">
-            <option value="">Femme ou Homme ?</option>
-            <option value="femme">Femme</option>
-            <option value="homme">Homme</option>
-          </select>
-
-          <select id="exhc-sel-reference" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
-
-          <button type="button" onclick="ajouterLigneCommande()" class="btn-s" style="border:none;padding:9px 16px;font-size:12px;width:100%;justify-content:center">+ Ajouter à ma commande</button>
-
-          <div id="exhc-liste-produits" style="margin-top:12px;display:flex;flex-direction:column;gap:6px"></div>
-          <div id="exhc-total" style="display:none;margin-top:10px;text-align:right;font-size:13px;font-weight:700;color:var(--brun)"></div>
-          <textarea id="exhc-commande-notes" placeholder="Précisions supplémentaires (facultatif)" rows="2" style="width:100%;margin-top:10px;border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;resize:vertical;box-sizing:border-box"></textarea>
-        </div>
-        <div>
-          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:6px">Livraison souhaitée *</label>
-          <div id="exhc-livraison-choix" style="display:flex;gap:8px;flex-wrap:wrap">
-            <label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
-              <input type="radio" name="exhc-livraison" value="Remise en main propre" style="accent-color:var(--dore)" onchange="rafraichirListeCommande()" checked> Remise en main propre
-            </label>
-            <label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
-              <input type="radio" name="exhc-livraison" value="Point relais" style="accent-color:var(--dore)" onchange="rafraichirListeCommande()"> Point relais (+6€)
-            </label>
-          </div>
-        </div>
-        <div>
-          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:6px">Mode de paiement souhaité *</label>
-          <div id="exhc-paiement-choix" style="display:flex;gap:8px;flex-wrap:wrap">
-            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
-              <input type="radio" name="exhc-paiement" value="PayPal" style="accent-color:var(--dore)"> PayPal
-            </label>
-            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
-              <input type="radio" name="exhc-paiement" value="Wero" style="accent-color:var(--dore)"> Wero
-            </label>
-            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
-              <input type="radio" name="exhc-paiement" value="Virement" style="accent-color:var(--dore)"> Virement
-            </label>
-          </div>
-        </div>
-        <button onclick="envoyerExhCommande()" class="btn-p" style="width:100%;justify-content:center;border:none">Envoyer ma demande de commande</button>
-        <div style="background:#FDECEC;border-left:3px solid #C0392B;border-radius:8px;padding:10px 14px;margin-top:10px">
-          <p style="color:#8B2D22;font-size:12.5px;line-height:1.6;margin:0;text-align:center">⚠️ Il ne s'agit que d'une demande de commande.<br>Je vous recontacte rapidement pour la confirmer ensemble.</p>
-        </div>
-        <p id="exhc-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
-      </div>
-      </div>
-    </div>
-    </div>
-  </section>
-
   <!-- NOUVEAUTÉ : COLLECTION ÉLITE -->
   <section id="exh-nouveaute" style="scroll-margin-top:170px;background:var(--beige);padding:56px 20px">
     <div class="si" style="max-width:920px">
@@ -1542,7 +1417,130 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- BLOC MARQUE EXHALESSENCE -->
-  <section id="exh-marque" style="scroll-margin-top:170px;background:var(--beige);padding:60px 20px">
+  <section id="exh-commander" style="scroll-margin-top:170px;background:var(--beige);padding:56px 20px">
+    <div class="si" style="max-width:640px">
+      <div class="sh">
+        <div class="ey">✦ Pratique</div>
+        <h2 class="st">Comment commander ?</h2>
+      </div>
+      <div style="text-align:center">
+        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Vous pouvez commander par <strong style="color:var(--brun)">téléphone</strong>, <strong style="color:var(--brun)">SMS</strong><br>ou via notre <strong style="color:var(--brun)">formulaire de commande</strong>.</p>
+        <button onclick="toggleExhCommandeForm()" class="btn-p" style="border:none;margin-bottom:14px">📝 Commander</button>
+        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Le règlement s'effectue <strong style="color:var(--brun)">à la commande</strong>,<br>par PayPal, Wero ou virement.</p>
+        <div style="background:#FDECEC;border-left:3px solid #C0392B;border-radius:8px;padding:12px 16px;margin-bottom:14px;text-align:left">
+          <p style="color:#8B2D22;font-size:13px;line-height:1.7;margin:0"><strong>Pourquoi le paiement à la commande ?</strong><br>Dès que je passe votre commande, j'avance moi-même une partie du prix auprès de mon fournisseur EXHALESSENCE pour la commander. Ce règlement à la commande permet de réserver vos produits et me permet de ne jamais avancer de frais de ma poche. Merci de votre confiance et de votre compréhension 🌸</p>
+        </div>
+        <p class="exh-cmd-tarifs" style="color:var(--gris);line-height:1.9;margin-bottom:20px">Pour connaître le détail des produits et leurs tarifs,<br>Consultez le catalogue et la liste des parfums ci-dessous.</p>
+
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">
+          <div class="exh-cmd-photo" style="text-align:center">
+            <div style="border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(44,24,16,.14);margin-bottom:10px">
+              <img src="exh-catalogue-bandeau.jpg" alt="Catalogue Exhalessence" style="width:100%;display:block" onerror="this.style.display='none'"/>
+            </div>
+            <a href="https://www.calameo.com/read/0062051642ad9482b4732" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none;font-size:11px;padding:9px 14px;width:100%;justify-content:center">📖 Notre catalogue</a>
+          </div>
+          <div class="exh-cmd-photo" style="text-align:center">
+            <div style="border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(44,24,16,.14);margin-bottom:10px">
+              <img src="page1-couverture.png" alt="Liste des parfums Exhalessence" style="width:100%;display:block" onerror="this.style.display='none'"/>
+            </div>
+            <a href="catalogue-parfums-exhalessence.html" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none;font-size:11px;padding:9px 14px;width:100%;justify-content:center">🌸 Liste des parfums</a>
+          </div>
+        </div>
+
+        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:6px">Vous pouvez aussi créer votre compte pour suivre vos commandes et votre programme de fidélité.</p>
+        <a href="#" onclick="showPage('compte');return false" class="btn-p" style="text-decoration:none;font-size:12px;padding:9px 18px;display:inline-flex">👤 Créer mon compte</a>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE DE COMMANDE (fenêtre modale) -->
+    <div id="exh-commande-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(4px);z-index:5000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)toggleExhCommandeForm()">
+    <div style="max-width:520px;width:100%;max-height:88vh;background:white;border-radius:var(--r);box-shadow:var(--sh-lg);position:relative;display:flex;flex-direction:column;overflow:hidden">
+      <button onclick="toggleExhCommandeForm()" aria-label="Fermer" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(201,169,110,.15);color:var(--brun);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10">✕</button>
+      <div style="overflow-y:auto;padding:30px 26px">
+      <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--brun);margin-bottom:6px;text-align:center">Passer commande</h3>
+      <p style="color:var(--gris);font-size:12px;text-align:center;margin-bottom:8px">Je vous recontacte rapidement pour confirmer et organiser le règlement.</p>
+      <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:10px 14px;font-size:11.5px;color:var(--brun-m);text-align:center;margin-bottom:20px">💡 Envie de suivre vos commandes et cumuler des points fidélité ? <a href="#" onclick="toggleExhCommandeForm();showPage('compte');return false" style="color:var(--terra);font-weight:700">Créez votre compte</a> — sinon, continuez ci-dessous pour commander directement.</p>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="exhc-prenom" type="text" placeholder="Prénom *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+          <input id="exhc-nom" type="text" placeholder="Nom *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        </div>
+        <input id="exhc-adresse" type="text" placeholder="Adresse *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="exhc-cp" type="text" placeholder="Code postal *" style="flex:0 0 130px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+          <input id="exhc-ville" type="text" placeholder="Ville *" style="flex:1;min-width:140px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        </div>
+        <input id="exhc-email" type="email" placeholder="Email *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        <input id="exhc-tel" type="tel" placeholder="Téléphone *" style="border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none"/>
+        <div>
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:5px;padding-left:6px">Date de naissance<br><span style="font-style:italic">(Pour recevoir votre carte cadeau à l'occasion de votre anniversaire)</span></label>
+          <input id="exhc-naissance" type="date" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;box-sizing:border-box"/>
+        </div>
+        <div style="border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:14px">
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:8px">Votre commande *</label>
+
+          <select id="exhc-sel-famille" onchange="exhcMajCascade()" style="width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box">
+            <option value="">Choisir une catégorie...</option>
+            <option value="parfum">🌸 Parfum</option>
+            <option value="beaute">💆 Beauté</option>
+          </select>
+
+          <select id="exhc-sel-sousfamille" onchange="exhcSousFamilleChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
+
+          <select id="exhc-sel-produit" onchange="exhcProduitChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
+
+          <select id="exhc-sel-genre" onchange="exhcGenreChange()" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box">
+            <option value="">Femme ou Homme ?</option>
+            <option value="femme">Femme</option>
+            <option value="homme">Homme</option>
+          </select>
+
+          <select id="exhc-sel-reference" style="display:none;width:100%;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 14px;font-family:'Lato',sans-serif;font-size:12.5px;color:var(--brun);outline:none;background:white;margin-bottom:8px;box-sizing:border-box"></select>
+
+          <button type="button" onclick="ajouterLigneCommande()" class="btn-s" style="border:none;padding:9px 16px;font-size:12px;width:100%;justify-content:center">+ Ajouter à ma commande</button>
+
+          <div id="exhc-liste-produits" style="margin-top:12px;display:flex;flex-direction:column;gap:6px"></div>
+          <div id="exhc-total" style="display:none;margin-top:10px;text-align:right;font-size:13px;font-weight:700;color:var(--brun)"></div>
+          <textarea id="exhc-commande-notes" placeholder="Précisions supplémentaires (facultatif)" rows="2" style="width:100%;margin-top:10px;border:2px solid rgba(201,169,110,.3);border-radius:16px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:13px;color:var(--brun);outline:none;resize:vertical;box-sizing:border-box"></textarea>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:6px">Livraison souhaitée *</label>
+          <div id="exhc-livraison-choix" style="display:flex;gap:8px;flex-wrap:wrap">
+            <label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-livraison" value="Remise en main propre" style="accent-color:var(--dore)" onchange="rafraichirListeCommande()" checked> Remise en main propre
+            </label>
+            <label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-livraison" value="Point relais" style="accent-color:var(--dore)" onchange="rafraichirListeCommande()"> Point relais (+6€)
+            </label>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--gris);display:block;margin-bottom:6px">Mode de paiement souhaité *</label>
+          <div id="exhc-paiement-choix" style="display:flex;gap:8px;flex-wrap:wrap">
+            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-paiement" value="PayPal" style="accent-color:var(--dore)"> PayPal
+            </label>
+            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-paiement" value="Wero" style="accent-color:var(--dore)"> Wero
+            </label>
+            <label style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer">
+              <input type="radio" name="exhc-paiement" value="Virement" style="accent-color:var(--dore)"> Virement
+            </label>
+          </div>
+        </div>
+        <button onclick="envoyerExhCommande()" class="btn-p" style="width:100%;justify-content:center;border:none">Envoyer ma demande de commande</button>
+        <div style="background:#FDECEC;border-left:3px solid #C0392B;border-radius:8px;padding:10px 14px;margin-top:10px">
+          <p style="color:#8B2D22;font-size:12.5px;line-height:1.6;margin:0;text-align:center">⚠️ Il ne s'agit que d'une demande de commande.<br>Je vous recontacte rapidement pour la confirmer ensemble.</p>
+        </div>
+        <p id="exhc-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
+      </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <section id="exh-marque" style="scroll-margin-top:170px;background:white;padding:60px 20px">
     <div style="max-width:960px;margin:0 auto">
       <div class="sh" style="margin-bottom:30px">
         <div class="ey">✦ La marque</div>
@@ -1570,7 +1568,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- DEVENIR DISTRIBUTEUR(TRICE) -->
-  <section id="exh-distributeur" style="scroll-margin-top:170px;background:white;padding:60px 20px">
+  <section id="exh-distributeur" style="scroll-margin-top:170px;background:var(--beige);padding:60px 20px">
     <div class="si" style="max-width:780px">
       <div class="sh">
         <div class="ey">✦ L'opportunité</div>
@@ -1590,7 +1588,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- LES AVANTAGES -->
-  <section id="exh-avantages" class="tbg" style="scroll-margin-top:170px;padding:60px 20px">
+  <section id="exh-avantages" style="scroll-margin-top:170px;background:white;padding:60px 20px">
     <div class="si">
       <div class="sh">
         <div class="ey">✦ Pourquoi nous rejoindre</div>
@@ -1659,7 +1657,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   </section>
 
   <!-- NOUS REJOINDRE -->
-  <section id="exh-rejoindre" style="scroll-margin-top:170px;background:white;padding:50px 20px">
+  <section id="exh-rejoindre" style="scroll-margin-top:170px;background:var(--beige);padding:50px 20px">
     <div style="max-width:860px;margin:0 auto;text-align:center;margin-bottom:0">
       <div class="ey" style="text-align:center">✦ Rejoignez l'aventure</div>
     </div>
@@ -2706,7 +2704,6 @@ function majStatutCmd(idx, statut){
   }
 }
 
-
 // ══════════════════════════════════════════
 // ANNIVERSAIRE — Bon cadeau automatique
 // ══════════════════════════════════════════
@@ -2842,8 +2839,6 @@ function enregistrerCommande(total, livraison){
 // ════════════════════════════════════════════════════════════
 // HOOK showPage — charger les pages dynamiques
 // ════════════════════════════════════════════════════════════
-
-
 
 // ══════════════════════════════════════════════════════
 // NUANCIER DE PIGMENTS — 24 familles × 7 références
@@ -3013,7 +3008,6 @@ const CAT_DESC = {
   "Créations Signature":"Des pièces façonnées au gré de mon inspiration et de mes envies du moment — chacune unique, chacune singulière, comme une signature."
 };
 
-
 // ══════════════════════════════════════════════════════════════
 // OPTIONS PRODUIT
 // ══════════════════════════════════════════════════════════════
@@ -3073,8 +3067,6 @@ const FEUTRES_PRIX = 1.00;
 
 // --- Pierres fluorescentes ---
 const PIERRES_PRIX = 2.50;
-
-
 
 // --- Lettres ---
 const LETTRES_TYPES = [
@@ -8080,7 +8072,6 @@ function toggleExhCommandeForm(){
   overlay.style.display = show ? 'flex' : 'none';
   document.body.style.overflow = show ? 'hidden' : '';
 }
-
 
 // ===== Catalogue produits EXHALESSENCE (pour le formulaire de commande) =====
 const REF_FEMME_EDP = ["100 - Douceur Précieuse", "101 - Secret d'Orient", "102 - Évasion Gourmande", "103 - Rêve d'Été", "104 - Lumière Sucrée", "105 - Café Velours", "106 - Velours Moderne", "107 - Nuit de Vanille", "108 - Voile Poudré", "109 - Jasmin Boisé", "110 - Jura Fruité", "111 - Voile Floral", "112 - Délice de Vanille", "113 - Coeur Fruité", "114 - Douceur Cacao", "115 - Ambre Intemporel", "116 - Iris Cuiré", "117 - Santal Vanillé", "118 - Coeur Brûlant", "119 - Rose Velours", "120 - Chypré d'Été", "121 - Mimosa Soyeux", "122 - Magnolia Cristal", "123 - Pomme Caramélisée", "124 - Violette Précieuse", "125 - Ambre Épicé", "126 - Rose Sublime", "127 - Vanille d'Orient", "128 - Orchidée Safranée", "129 - Épices Sensuelles", "130 - Bohème Chic", "131 - Fleur Défendue", "132 - Jasmin de Nuit", "133 - Sillage Divin", "134 - Lumière Botanique", "135 - Jasmin Envoûtant", "136 - Framboise Ambrée", "137 - Fleur de Soir", "138 - Fleur d'Ambre", "139 - Muse Florale", "140 - Éclat Sacré", "141 - Douce Essence", "142 - Iris de Soie", "143 - Nectar Doré", "144 - Magnolia Vanillé", "145 - Encens de Peau", "146A - Jasmin Doré", "147 - Éclat d'Ambre", "148 - Thé Boisé", "149 - Éclat Pur", "149A - Sillage Sublime", "150 - Lumière Fraiche", "151 - Ombre Intense", "152 - Éclat Vert", "152A - Velours Fruité", "153 - Lait d'Or", "154 - Fleur Blanche", "154A - Nuit Addictive", "155 - Vanille Satinée", "156 - Grenade Sucrée", "157 - Caramel Sensuel", "158 - Aurore Marine", "159A - Blanc Absolu", "160A - Velours Rosé", "162A - Litchi Étoilé", "163A - Poire Divine", "164 - Jasmin de Minuit", "165 - Brume Minérale", "166 - Vanille Rebelle", "167 - Passion Tendre", "168 - Pink Pivoine", "169 - Iris Envoûtant", "170 - Féminin Absolu", "171 - Éveil Sensuel", "172 - Coeur de Miel", "173 - Libre Addiction", "174 - Fleur d'Éclat", "175 - Nuit Précieuse", "176 - Lumière Orientale", "177 - Essence Fatale", "178 - Popcorn Sensuel", "179 - Fleur Féroce"];
