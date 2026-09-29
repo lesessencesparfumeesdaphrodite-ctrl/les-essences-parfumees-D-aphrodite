@@ -196,7 +196,8 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-mosaic-cell{position:relative;flex:1;overflow:hidden}
 .carr-mosaic-tag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(44,24,16,.55);color:#fff;font-weight:800;font-size:9px;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;padding:2px}
 .carr-mosaic-img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0}
-.carr-mosaic-row:first-child .carr-mosaic-img{object-position:top}
+.carr-mosaic-row:first-child{flex:1.25}
+.carr-mosaic-row:last-child{flex:.75}
 .carr-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(rgba(44,24,16,.45),rgba(44,24,16,.82));border-radius:0 0 var(--r-sm) var(--r-sm);text-align:center;padding:32px 16px 14px;pointer-events:none}
 .carr-label-cat{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:4px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .carr-label-cta{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white}
@@ -8197,6 +8198,7 @@ function toggleExhCommandeForm(){
 const REF_FEMME_EDP = ["100 - Douceur Précieuse", "101 - Secret d'Orient", "102 - Évasion Gourmande", "103 - Rêve d'Été", "104 - Lumière Sucrée", "105 - Café Velours", "106 - Velours Moderne", "107 - Nuit de Vanille", "108 - Voile Poudré", "109 - Jasmin Boisé", "110 - Jura Fruité", "111 - Voile Floral", "112 - Délice de Vanille", "113 - Coeur Fruité", "114 - Douceur Cacao", "115 - Ambre Intemporel", "116 - Iris Cuiré", "117 - Santal Vanillé", "118 - Coeur Brûlant", "119 - Rose Velours", "120 - Chypré d'Été", "121 - Mimosa Soyeux", "122 - Magnolia Cristal", "123 - Pomme Caramélisée", "124 - Violette Précieuse", "125 - Ambre Épicé", "126 - Rose Sublime", "127 - Vanille d'Orient", "128 - Orchidée Safranée", "129 - Épices Sensuelles", "130 - Bohème Chic", "131 - Fleur Défendue", "132 - Jasmin de Nuit", "133 - Sillage Divin", "134 - Lumière Botanique", "135 - Jasmin Envoûtant", "136 - Framboise Ambrée", "137 - Fleur de Soir", "138 - Fleur d'Ambre", "139 - Muse Florale", "140 - Éclat Sacré", "141 - Douce Essence", "142 - Iris de Soie", "143 - Nectar Doré", "144 - Magnolia Vanillé", "145 - Encens de Peau", "146A - Jasmin Doré", "147 - Éclat d'Ambre", "148 - Thé Boisé", "149 - Éclat Pur", "149A - Sillage Sublime", "150 - Lumière Fraiche", "151 - Ombre Intense", "152 - Éclat Vert", "152A - Velours Fruité", "153 - Lait d'Or", "154 - Fleur Blanche", "154A - Nuit Addictive", "155 - Vanille Satinée", "156 - Grenade Sucrée", "157 - Caramel Sensuel", "158 - Aurore Marine", "159A - Blanc Absolu", "160A - Velours Rosé", "162A - Litchi Étoilé", "163A - Poire Divine", "164 - Jasmin de Minuit", "165 - Brume Minérale", "166 - Vanille Rebelle", "167 - Passion Tendre", "168 - Pink Pivoine", "169 - Iris Envoûtant", "170 - Féminin Absolu", "171 - Éveil Sensuel", "172 - Coeur de Miel", "173 - Libre Addiction", "174 - Fleur d'Éclat", "175 - Nuit Précieuse", "176 - Lumière Orientale", "177 - Essence Fatale", "178 - Popcorn Sensuel", "179 - Fleur Féroce"];
 const REF_HOMME_EDP = ["200 - Sillage Précieux", "201 - Force Marine", "202 - Ligne Sensuelle", "203 - Fraîcheur Vétiver", "204 - Sillage Obscur", "205 - Praliné Noir", "206 - Fraîcheur d'Horizon", "207 - Vibration Pure", "208 - Bois d'Azur", "209 - Lumière Rebelle", "210 - Esprit Boisé", "211 - Éclat Minéral", "212 - Éclat Viril", "213 - Énergie Noble", "214 - Accord Majeur", "215 - Éclat Pur", "216 - Bois Céleste", "218 - Force Sucrée", "219 - Pure Vibration", "221 - Éclat Secret", "222 - Ambre Délicat", "224 - Feu Secret", "225 - Force Libre", "226 - Mystère Ambré", "226A - Rupture Virile", "227 - Vanille d'Orient", "228 - Bois Vibrant", "229 - Sillage Marin", "230 - Bois d'Air", "231A - Ambre Moderne", "232 - Accord Suave", "233A - Éclat Urbain", "234 - Force Antique", "235A - Éclat Tropical", "236 - Instinct Tonique", "237A - Caractère Absolu", "238 - Vert Absolu", "239 - Liqueur Noire"];
 const REF_PARFUM_CONCENTRE = ["145P - Ambre Élégant", "160P - Vanille Impériale", "161P - Satin de Nuit", "170P - Élixir Sucré", "220P - Addiction Fraîche", "222P - Zeste Royal", "232P - Bois Électrique", "148P - Or Blanc", "217P - Éclat Brûlant", "223P - Mystère Sacré", "228P - Caramel Impérial"];
+const REF_ELITE = ["300 - Accord Insolent", "301 - Carmina Absolu", "302 - Sillage Oriental", "303 - Murmure Vanillé", "304 - Pulsion Fraîche"];
 const REF_GD200_FEMME = ["102 - Évasion Gourmande", "103 - Rêve d'Été", "106 - Velours Moderne", "107 - Nuit de Vanille", "108 - Voile Poudré", "109 - Jasmin Boisé", "110 - Aura Fruité", "111 - Voile Floral", "112 - Délice de Vanille", "113 - Coeur Fruité", "114 - Douceur Cacao", "117 - Santal Vanillé", "119 - Rose Velours", "120 - Chypré d'Été", "122 - Magnolia Cristal", "123 - Pomme Caramélisée", "140 - Éclat Sacré", "156A - Grenade Sucrée", "157 - Caramel Sensuel", "159A - Blanc Absolu", "160A - Velours Rosé", "163A - Poire Divine", "172 - Coeur de Miel", "175 - Nuit Précieuse", "177 - Essence Fatale"];
 const REF_GD200_HOMME = ["200 - Sillage Précieux", "201 - Force Marine", "202 - Ligne Sensuelle", "205 - Praliné Noir", "206 - Fraîcheur d'Horizon", "207 - Vibration Pure", "208 - Bois d'Azur", "209 - Lumière Rebelle", "210 - Esprit Boisé", "211 - Éclat Minéral", "212 - Éclat Viril", "216 - Bois Céleste", "230 - Bois d'Air", "231A - Ambre Moderne", "235A - Éclat Tropical", "236 - Instinct Tonique"];
 const REF_GD185_FEMME = ["100 - Douceur Précieuse", "101 - Secret d'Orient", "104 - Lumière Sucrée", "105 - Café Velours", "179 - Fleur Féroce"];
@@ -8212,8 +8214,10 @@ const REF_SHAMPOOING_185 = ["Shampooing naturel", "Shampooing protect'color", "S
 const CATALOGUE_PARFUM = [
   { nom:"Eau de Parfum Rechargeable (75ml) — 32€", prix:32, type:'genre', femme:REF_FEMME_EDP, homme:REF_HOMME_EDP },
   { nom:"Parfum Rechargeable (75ml) — 42€", prix:42, type:'liste', liste:REF_PARFUM_CONCENTRE },
+  { nom:"Essence Rechargeable (75ml) — 49€", prix:49, type:'liste', liste:REF_ELITE },
   { nom:"Recharge Eau de Parfum (125ml) — 30€", prix:30, type:'genre', femme:REF_FEMME_EDP, homme:REF_HOMME_EDP },
   { nom:"Recharge Parfum (125ml) — 39€", prix:39, type:'liste', liste:REF_PARFUM_CONCENTRE },
+  { nom:"Recharge Essence Parfum (125ml) — 46€", prix:46, type:'liste', liste:REF_ELITE },
   { nom:"Gel Douche (200ml) — 15€", prix:15, type:'genre', femme:REF_GD200_FEMME, homme:REF_GD200_HOMME },
   { nom:"Gel Douche (185ml) — 14€", prix:14, type:'genre', femme:REF_GD185_FEMME, homme:REF_GD185_HOMME },
   { nom:"Lait Corps parfumant (200ml) — 19€", prix:19, type:'liste', liste:REF_LAIT_CORPS }
@@ -9126,7 +9130,7 @@ function initCarr() {
       const rangeesHTML = rangees.map(rangee => `<div class="carr-mosaic-row">${rangee.map(src=>{
         const alt = (d.miseEnAvant && gi===0) ? 'Nouveauté' : d.cat;
         gi++;
-        return `<div class="carr-mosaic-cell"><img class="carr-mosaic-img" src="${src}" alt="${alt}" onerror="this.parentElement.style.display='none'"/></div>`;
+        return `<div class="carr-mosaic-cell"><img class="carr-mosaic-img" src="${src}" alt="${alt}" onerror="this.style.display='none'"/></div>`;
       }).join('')}</div>`).join('');
       visuel = `<div class="carr-mosaic-frame"><div class="carr-mosaic">${rangeesHTML}</div></div>`;
     } else {
