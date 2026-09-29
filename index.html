@@ -191,11 +191,11 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-duo{display:flex;gap:0;width:100%;justify-content:center;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
 .carr-duo-img{width:50%;aspect-ratio:1/1;object-fit:contain;display:block;background:white}
 .carr-mosaic-frame{width:100%;position:relative;padding-top:50%;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:white}
-.carr-mosaic{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:2px;position:absolute;top:0;left:0;right:0}
-.carr-mosaic-cell{position:relative;width:100%;height:100%}
+.carr-mosaic{display:flex;flex-direction:column;gap:2px;position:absolute;top:0;left:0;right:0}
+.carr-mosaic-row{display:flex;gap:2px;flex:1}
+.carr-mosaic-cell{position:relative;flex:1;overflow:hidden}
 .carr-mosaic-tag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(44,24,16,.55);color:#fff;font-weight:800;font-size:9px;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;padding:2px}
-.carr-mosaic-img{width:100%;height:100%;object-fit:cover;display:block;background:white}
-.carr-mosaic-cell .carr-mosaic-img{position:absolute;top:0;left:0}
+.carr-mosaic-img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0}
 .carr-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(rgba(44,24,16,.45),rgba(44,24,16,.82));border-radius:0 0 var(--r-sm) var(--r-sm);text-align:center;padding:32px 16px 14px;pointer-events:none}
 .carr-label-cat{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:4px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .carr-label-cta{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white}
@@ -213,6 +213,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
   .carr-duo-img{width:calc(50% - 4px);border-radius:0}
   .carr-mosaic-frame{border-radius:var(--r-sm)}
   .carr-mosaic{gap:1px}
+  .carr-mosaic-row{gap:1px}
   .carr-label{position:static;background:transparent;padding:10px 8px 4px;pointer-events:auto}
   .carr-label-cat{color:var(--terra)}
   .carr-label-cta{color:var(--brun);font-size:14px}
@@ -6407,6 +6408,12 @@ async function chargerNouveauxProduits(){
       renderBoutique(catActive, true);
     }
     updateCategoryBadges();
+    // Recalcule la rotation des catégories en excluant les produits actuellement
+    // "nouveauté" (leurs dates ne sont connues qu'à partir d'ici).
+    const idsRecents = new Set(P.filter(x=>estRecent(x.id)).map(x=>x.id));
+    const baseSansNouveautes = genererCarrDataDuMois(idsRecents);
+    CARR_DATA.length = 0;
+    CARR_DATA.push(...baseSansNouveautes);
     await chargerLibelleNouveaute();
   }catch(e){ /* si le fichier n'existe pas encore, rien de grave, le site fonctionne normalement */ }
 }
@@ -8633,8 +8640,8 @@ const EXH_DETAILS_PRESTATIONS = {
     img: "Gamme Parfum.png",
     sections: [
       { t:"Des créations d'exception", d:"Nos parfums sont des créations dont toutes les fragrances sont composées dans les hauteurs de Grasse, à Saint-Vallier-de-Thiey, puis mises en flacon au siège EXHALESSENCE, à Meung-sur-Loire. Depuis 2025, nos flacons sont en verre rechargeable, alliant élégance et responsabilité environnementale." },
-      { t:"Collection Classique", d:"Une eau de parfum accessible et raffinée, concentrée à 14% d'extrait de parfum, pensée pour accompagner votre quotidien. 79 Eaux de Parfum femme et 39 Eaux de Parfum homme, pour toutes les envies et toutes les personnalités." },
-      { t:"Collection Prestige", d:"Des créations haut de gamme, concentrées à 20% d'essence de parfum, plus intenses, plus complexes, avec un sillage exceptionnel — un niveau au-dessus pour celles et ceux qui veulent quelque chose de vraiment unique. 5 parfums femme, 3 parfums homme, 3 parfums mixtes." },
+      { t:"Collection Classique", d:"Une eau de parfum accessible et raffinée, concentrée à 14% d'extrait de parfum, pensée pour accompagner votre quotidien. 75 Eaux de Parfum femme et 34 Eaux de Parfum homme, pour toutes les envies et toutes les personnalités." },
+      { t:"Collection Prestige", d:"Des créations haut de gamme, concentrées à 20% d'essence de parfum, plus intenses, plus complexes, avec un sillage exceptionnel — un niveau au-dessus pour celles et ceux qui veulent quelque chose de vraiment unique. 5 parfums femme, 4 parfums homme, 2 parfums mixtes." },
       { t:"Collection Élite", d:"Notre collection la plus intense : des essences de parfum atteignant 25 à 30% de concentration, dans un flacon réinterprété, plus sobre et plus luxueux. 5 nouvelles fragrances mixtes." },
       { t:"Flacon raffiné et rechargeable", d:"Présenté dans un flacon en verre élégant, conçu pour durer, chaque parfum s'inscrit dans une démarche précieuse et responsable. Son format rechargeable allie esthétisme, praticité et engagement.<br><strong style=\"color:#8B2D22\">Important :</strong> le flacon doit être rechargé uniquement avec une recharge de la même senteur — aucune réclamation ne pourra être acceptée si une autre fragrance y a été utilisée." },
       { t:"Qualité & sécurité", d:"<ul style=\"margin:0;padding-left:18px;line-height:2\"><li>Formulé et fabriqué en France, selon les normes européennes les plus strictes</li><li>0% parabènes</li><li>Testé sous contrôle dermatologique (patch test réalisé sur volontaires humains)</li><li>Déclaré sur le portail officiel européen CPNP, garantissant transparence et traçabilité</li><li>Conforme à la réglementation cosmétique européenne, avec un dossier complet de sécurité établi par un expert toxicologue</li></ul>" },
@@ -9079,15 +9086,21 @@ updCC();
 // en piochant parmi les produits réellement présents dans chaque catégorie.
 // Si une catégorie n'a qu'un seul produit, les 2 vignettes restent identiques
 // (rien à faire, c'est normal et sans conséquence).
-function genererCarrDataDuMois(){
+function genererCarrDataDuMois(excludeIds){
+  excludeIds = excludeIds || new Set();
   const categoriesCarrousel = [
     "Accessoires", "Art de la table", "Boîtes & Rangements décoratifs",
     "Bougeoirs & Porte-bougies", "Décorations", "Organisateurs & Pots",
     "Plateaux & Vide-poches", "Vases"
   ];
-  const moisIndex = new Date().getMonth(); // 0 à 11, avance automatiquement chaque mois
+  // Cycle qui bascule le 28 de chaque mois (et non le 1er) : on recule la date
+  // de 27 jours avant de lire le mois, donc à partir du 28 on tombe déjà sur
+  // le mois suivant. Inclut l'année pour progresser correctement d'une année à l'autre.
+  const dateCycle = new Date();
+  dateCycle.setDate(dateCycle.getDate() - 27);
+  const moisIndex = dateCycle.getFullYear() * 12 + dateCycle.getMonth();
   return categoriesCarrousel.map(cat => {
-    const produitsCat = P.filter(p => p.c === cat && p.img2);
+    const produitsCat = P.filter(p => p.c === cat && p.img2 && !excludeIds.has(p.id));
     if(produitsCat.length === 0) return null;
     const i1 = moisIndex % produitsCat.length;
     const i2 = produitsCat.length > 1 ? (moisIndex + 1) % produitsCat.length : i1;
@@ -9103,14 +9116,24 @@ function initCarr() {
   if (!track || !dots) return;
   track.innerHTML = CARR_DATA.map((d, i) => {
     const estMosaic = d.mosaic && d.mosaic.length;
-    const visuel = estMosaic
-      ? `<div class="carr-mosaic-frame"><div class="carr-mosaic">${d.mosaic.map((src,mi)=>
-          `<img class="carr-mosaic-img" src="${src}" alt="${(d.miseEnAvant && mi===0) ? 'Nouveauté' : d.cat}" onerror="this.style.display='none'"/>`
-        ).join('')}</div></div>`
-      : `<div class="carr-duo">
+    let visuel;
+    if(estMosaic){
+      const total = d.mosaic.length;
+      const r1n = Math.floor(total/2); // répartition équilibrée sur 2 lignes (ex: 5 → 2 puis 3)
+      const rangees = [d.mosaic.slice(0,r1n), d.mosaic.slice(r1n)];
+      let gi = 0;
+      const rangeesHTML = rangees.map(rangee => `<div class="carr-mosaic-row">${rangee.map(src=>{
+        const alt = (d.miseEnAvant && gi===0) ? 'Nouveauté' : d.cat;
+        gi++;
+        return `<div class="carr-mosaic-cell"><img class="carr-mosaic-img" src="${src}" alt="${alt}" onerror="this.parentElement.style.display='none'"/></div>`;
+      }).join('')}</div>`).join('');
+      visuel = `<div class="carr-mosaic-frame"><div class="carr-mosaic">${rangeesHTML}</div></div>`;
+    } else {
+      visuel = `<div class="carr-duo">
         <img class="carr-duo-img" src="${d.img1}" alt="${d.cat}" onerror="this.style.display='none'"/>
         <img class="carr-duo-img" src="${d.img2}" alt="${d.cat}" onerror="this.style.display='none'"/>
       </div>`;
+    }
     return `
     <div class="carr-slide" onclick="showPage('boutique','${d.cat.replace(/'/g,"\\'")}')">
       ${visuel}
