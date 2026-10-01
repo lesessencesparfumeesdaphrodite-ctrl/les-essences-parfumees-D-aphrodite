@@ -196,7 +196,6 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-mosaic-cell{position:relative;flex:1;overflow:hidden}
 .carr-mosaic-tag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(44,24,16,.55);color:#fff;font-weight:800;font-size:9px;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;padding:2px}
 .carr-mosaic-img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0}
-.carr-mosaic-row:first-child .carr-mosaic-img{object-position:top}
 .carr-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(rgba(44,24,16,.45),rgba(44,24,16,.82));border-radius:0 0 var(--r-sm) var(--r-sm);text-align:center;padding:32px 16px 14px;pointer-events:none}
 .carr-label-cat{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:4px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .carr-label-cta{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white}
@@ -6445,12 +6444,11 @@ async function chargerLibelleNouveaute(){
 
     const mosaic = recents.map(x=>x.img).filter(Boolean).slice(0,9);
     if(!mosaic.length) return;
-    // 1ère case de la mosaïque (en haut à gauche) : visuel dédié "NOUVEAUTÉ"
-    // (et non une photo produit dupliquée), pour arriver à 10 cases (5+5)
-    // au lieu de 9 (5+4) et éviter le trou dans la grille.
-    mosaic.unshift(PHOTO_NOUVEAUTE_MISE_EN_AVANT);
+    // Pas de visuel "NOUVEAUTÉ" dédié dans la grille : le libellé est déjà
+    // affiché en transparence en bas du visuel (carr-label), comme pour les
+    // autres catégories. Seules les vraies photos produits composent la mosaïque.
 
-    CARR_DATA.unshift({ cat: 'Nouveautés', label: libelle, mosaic, miseEnAvant: true });
+    CARR_DATA.unshift({ cat: 'Nouveautés', label: libelle, mosaic });
     clearCarrTimer();
     initCarr();
     goCarr(0); // resynchronise immédiatement l'affichage et le point actif sur cette nouvelle vignette
@@ -9127,7 +9125,7 @@ function initCarr() {
       const rangees = [d.mosaic.slice(0,r1n), d.mosaic.slice(r1n)];
       let gi = 0;
       const rangeesHTML = rangees.map(rangee => `<div class="carr-mosaic-row">${rangee.map(src=>{
-        const alt = (d.miseEnAvant && gi===0) ? 'Nouveauté' : d.cat;
+        const alt = d.cat;
         gi++;
         return `<div class="carr-mosaic-cell"><img class="carr-mosaic-img" src="${src}" alt="${alt}" onerror="this.style.display='none'"/></div>`;
       }).join('')}</div>`).join('');
