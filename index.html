@@ -1386,7 +1386,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       <div style="max-width:680px;margin:0 auto;text-align:center">
         <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Pour la 6<sup>e</sup> année consécutive, je souhaite continuer à me mobiliser dans la lutte contre le cancer du sein. Cette cause me tient particulièrement à cœur, car la maladie a touché des personnes qui me sont chères.</p>
         <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:14px">Comme chaque année, je me mobilise à ma manière et je fais également des dons personnels pour contribuer à cette cause. Cette année encore, j'ai souhaité que mes activités puissent elles aussi y participer.</p>
-        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:18px">À travers mes créations faites main en plâtre résine et l'univers EXHALESSENCE, <strong style="color:#C23B6B">1€ sera reversé à la Ligue contre le Cancer (association Ruban Rose) pour chaque commande passée durant le mois d'octobre</strong>, en complément de mes dons personnels.</p>
+        <p style="color:var(--gris);line-height:1.9;font-size:14.5px;margin-bottom:18px">À travers mes créations faites main en plâtre résine et l'univers EXHALESSENCE, <strong style="color:#C23B6B">1€ sera reversé à la Ligue contre le Cancer du Sein &ldquo;Association Ruban Rose&rdquo; pour chaque commande passée durant le mois d'octobre</strong>, en complément de mes dons personnels.</p>
         <p style="font-family:'Playfair Display',serif;font-style:italic;color:#C23B6B;font-size:16px;margin-bottom:18px">Ensemble, faisons la différence.</p>
         <div style="display:inline-block;background:white;border:1px solid rgba(194,59,107,.3);color:#C23B6B;padding:10px 20px;border-radius:20px;font-size:12.5px;font-weight:700;line-height:1.7">🎗️ 1 commande = 1€ reversé, du 1<sup>er</sup> au 31 octobre</div>
       </div>
@@ -6525,15 +6525,41 @@ function afficherBandeauFermeture(){
   document.body.insertBefore(bandeau, document.body.firstChild);
 }
 
-// Bandeau "Octobre Rose", visible sur tout le site, du 1er au 31 octobre inclus.
+// Fenêtre "Octobre Rose", affichée une fois à l'arrivée sur le site, du 1er au 31 octobre inclus.
 function afficherBandeauOctobreRose(){
   const aujourdhui = new Date().toISOString().slice(0,10);
   if(aujourdhui < '2026-10-01' || aujourdhui > '2026-10-31') return;
-  const bandeau = document.createElement('div');
-  bandeau.id = 'bandeau-octobre-rose';
-  bandeau.style.cssText = 'position:sticky;top:0;z-index:9998;background:linear-gradient(90deg,#F7C9DD,#EC6FA3);color:#5B1036;text-align:center;padding:10px 16px;font-family:"Lato",sans-serif;font-weight:700;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.12)';
-  bandeau.innerHTML = '🎀 Les Essences Parfumées d\'Aphrodite se mobilisent pour Octobre Rose · 1 commande = 1€ reversé à la Ligue contre le Cancer (association Ruban Rose) 🎀';
-  document.body.insertBefore(bandeau, document.body.firstChild);
+  const overlay = document.createElement('div');
+  overlay.id = 'popup-octobre-rose';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(60,20,35,.55);display:flex;align-items:center;justify-content:center;padding:20px';
+  const contenuAccueil = `
+        <img src="exh-octobre-rose-titre.jpg" alt="Octobre Rose" style="width:100%;max-width:260px;height:auto;display:block;margin:0 auto 18px" onerror="this.style.display='none'"/>
+        <p style="color:#6B3A4E;font-size:14.5px;line-height:1.6;margin-bottom:16px">Les Essences Parfumées d'Aphrodite<br>se mobilisent pour Octobre Rose.</p>
+        <div style="text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:#8A2755;font-size:13px;margin-bottom:0">1 commande</div>
+        <div style="color:#8A2755;font-size:22px;font-weight:700;line-height:1.1;margin-bottom:0">=</div>
+        <div style="font-weight:800;color:#E0518A;font-size:26px;margin-bottom:8px;line-height:1.1">1€</div>
+        <p style="color:#6B3A4E;font-size:13.5px;line-height:1.7;margin-bottom:18px">reversé à la Ligue contre le Cancer du Sein<br>\u201cAssociation Ruban Rose\u201d</p>
+        <button onclick="afficherDetailOctobreRose()" style="background:linear-gradient(90deg,#F7A8C9,#E0518A);color:white;border:none;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">En savoir plus</button>`;
+  overlay.innerHTML = `
+    <div style="background:radial-gradient(circle at center,#FDE8F0 0%,#F7A8C9 55%,#E0518A 100%);border-radius:26px;max-width:400px;width:100%;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+      <div id="popup-octobre-rose-contenu" style="position:relative;background:#FFF7FA;border-radius:18px;padding:30px 26px 26px;text-align:center;font-family:'Lato',sans-serif;max-height:85vh;overflow-y:auto">
+        <button onclick="document.getElementById('popup-octobre-rose').remove()" aria-label="Fermer" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;line-height:1;color:#8A2755;cursor:pointer;padding:4px">×</button>
+        ${contenuAccueil}
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function afficherDetailOctobreRose(){
+  const conteneur = document.getElementById('popup-octobre-rose-contenu');
+  if(!conteneur) return;
+  conteneur.innerHTML = `
+    <button onclick="document.getElementById('popup-octobre-rose').remove()" aria-label="Fermer" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;line-height:1;color:#8A2755;cursor:pointer;padding:4px">×</button>
+    <div style="font-family:'Playfair Display',serif;font-size:19px;color:#8A2755;font-weight:700;margin-bottom:14px">Octobre Rose 🎀</div>
+    <p style="color:#6B3A4E;font-size:13.5px;line-height:1.85;text-align:left;margin-bottom:12px">Octobre Rose... un mois qui me tient particulièrement à cœur. Comme chaque année, je me mobilise à ma façon, avec des dons personnels, pour soutenir cette cause qui m'est chère.</p>
+    <p style="color:#6B3A4E;font-size:13.5px;line-height:1.85;text-align:left;margin-bottom:12px">Octobre Rose nous rappelle l'importance du dépistage — mais notre santé ne se résume pas à un mois dans l'année. Prendre soin de soi, se faire dépister, en parler : c'est important toute l'année.</p>
+    <p style="color:#6B3A4E;font-size:13.5px;line-height:1.85;text-align:left;margin-bottom:16px">Alors cette année encore, à travers mes créations faites main en plâtre résine et l'univers EXHALESSENCE, <strong style="color:#C23B6B">1€ sera reversé à l'association Ruban Rose pour chaque commande passée durant le mois d'octobre</strong>, en complément de mes dons personnels. Une petite contribution à mon échelle, qui prend tout son sens lorsqu'elle permet d'agir, ensemble, pour quelque chose de plus grand.</p>
+    <p style="color:#8A2755;font-weight:700;font-size:14px;margin-bottom:0">Pour eux. Pour elles. Pour nous. ❤️</p>`;
 }
 let catActive=null, prodModal=null, finModal=null, qteModal=1, livActive='domicile', relaisChoisi='', galerieImgs=[], galerieIdx=0, triActif='pertinence';
 let coulSel = {};
