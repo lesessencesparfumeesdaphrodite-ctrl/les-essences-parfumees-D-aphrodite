@@ -1374,13 +1374,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   <!-- OCTOBRE ROSE -->
   <section id="exh-octobre-rose" style="scroll-margin-top:170px;background:linear-gradient(180deg,#FDF0F3,#FCE4EA);padding:56px 20px">
     <div class="si" style="max-width:820px">
-      <div class="sh">
-        <div class="ey" style="color:#C23B6B">🎀 Octobre Rose</div>
-        <h2 class="st">Mois de lutte contre le cancer</h2>
-      </div>
-
-      <div style="border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-lg);margin-bottom:26px;max-width:620px;margin-left:auto;margin-right:auto">
-        <img src="exh-octobre-rose.png" alt="Octobre Rose — Mois de lutte contre le cancer" style="width:100%;display:block" onerror="this.parentElement.style.display='none'"/>
+      <div style="max-width:300px;margin:0 auto 30px">
+        <img src="exh-octobre-rose-titre.png" alt="Octobre Rose" style="width:100%;display:block" onerror="this.parentElement.style.display='none'"/>
       </div>
 
       <div style="max-width:680px;margin:0 auto;text-align:center">
@@ -6533,7 +6528,7 @@ function afficherBandeauOctobreRose(){
   overlay.id = 'popup-octobre-rose';
   overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(60,20,35,.55);display:flex;align-items:center;justify-content:center;padding:20px';
   const contenuAccueil = `
-        <img src="exh-octobre-rose-titre.jpg" alt="Octobre Rose" style="width:100%;max-width:260px;height:auto;display:block;margin:0 auto 18px" onerror="this.style.display='none'"/>
+        <img src="exh-octobre-rose-titre.png" alt="Octobre Rose" style="width:100%;max-width:260px;height:auto;display:block;margin:0 auto 18px" onerror="this.style.display='none'"/>
         <p style="color:#6B3A4E;font-size:14.5px;line-height:1.6;margin-bottom:16px">Les Essences Parfumées d'Aphrodite<br>se mobilisent pour Octobre Rose.</p>
         <div style="text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:#8A2755;font-size:13px;margin-bottom:0">1 commande</div>
         <div style="color:#8A2755;font-size:22px;font-weight:700;line-height:1.1;margin-bottom:0">=</div>
@@ -6542,7 +6537,7 @@ function afficherBandeauOctobreRose(){
         <button onclick="afficherDetailOctobreRose()" style="background:linear-gradient(90deg,#F7A8C9,#E0518A);color:white;border:none;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">En savoir plus</button>`;
   overlay.innerHTML = `
     <div style="background:radial-gradient(circle at center,#FDE8F0 0%,#F7A8C9 55%,#E0518A 100%);border-radius:26px;max-width:400px;width:100%;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.3)">
-      <div id="popup-octobre-rose-contenu" style="position:relative;background:#FFF7FA;border-radius:18px;padding:30px 26px 26px;text-align:center;font-family:'Lato',sans-serif;max-height:85vh;overflow-y:auto">
+      <div id="popup-octobre-rose-contenu" style="position:relative;background:#FBD9E6;border-radius:18px;padding:30px 26px 26px;text-align:center;font-family:'Lato',sans-serif;max-height:85vh;overflow-y:auto">
         <button onclick="document.getElementById('popup-octobre-rose').remove()" aria-label="Fermer" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;line-height:1;color:#8A2755;cursor:pointer;padding:4px">×</button>
         ${contenuAccueil}
       </div>
