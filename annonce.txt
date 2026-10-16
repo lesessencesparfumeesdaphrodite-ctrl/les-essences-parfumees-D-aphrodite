@@ -1,0 +1,15 @@
+ACTIF=OUI
+DEBUT=2026-10-01
+FIN=2026-10-31
+COULEUR1=#F7A8C9
+COULEUR2=#E0518A
+FOND_CONTENU=#FBD9E6
+IMAGE=exh-octobre-rose-titre.png
+TITRE=
+TEXTE=Les Essences Parfumées d'Aphrodite\nse mobilisent pour Octobre Rose.
+BLOC_LABEL=1 commande =
+BLOC_CHIFFRE=1€
+BLOC_LEGENDE=reversé à la Ligue contre le Cancer du Sein\n“Association Ruban Rose”
+LIEN_LABEL=En savoir plus
+LIEN_PAGE=exhalessence
+LIEN_ANCRE=exh-octobre-rose
