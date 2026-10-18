@@ -2,9 +2,9 @@ ACTIF=OUI
 DEBUT=2026-10-01
 FIN=2026-10-31
 COULEUR1=#F7A8C9
-COULEUR2=#E0518A
+COULEUR2=#A82D63
 FOND_CONTENU=#FBD9E6
-IMAGE=exh-octobre-rose-titre.png
+IMAGE=exh-octobre-rose-titre.webp
 TITRE=
 TEXTE=Les Essences Parfumées d'Aphrodite\nse mobilisent pour Octobre Rose.
 BLOC_LABEL=1 commande =

@@ -170,6 +170,19 @@
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 <link rel="icon" type="image/png" href="https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/logo.png"/>
 <link rel="apple-touch-icon" href="https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/cat_organisateurs.jpg"/>
+<script>
+/* Filet de sécurité images : si un .webp est introuvable, on tente l'ancien .png puis .jpg */
+document.addEventListener('error',function(e){
+  var t=e.target; if(!t||t.tagName!=='IMG') return;
+  var n=(t.getAttribute('data-fb')||'0')|0;
+  var w=t.getAttribute('data-wsrc');
+  if(!w){ var s=t.getAttribute('src')||''; if(!/\.webp(\?|$)/.test(s)) return; w=s; t.setAttribute('data-wsrc',w); }
+  if(n>=2) return;
+  e.stopPropagation();
+  t.setAttribute('data-fb',n+1);
+  t.src=w.replace(/\.webp(\?.*)?$/, n===0?'.png$1':'.jpg$1');
+},true);
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
@@ -187,9 +200,9 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --beige:#F5EDE3;--blanc:#FDFAF7;--terra:#C4856A;--teal:#5B9E96;
-  --dore:#C9A96E;--dore-cl:#E8D5A8;--brun:#2C1810;--brun-m:#6B4226;
-  --gris:#8A7A70;--sh:0 4px 20px rgba(44,24,16,.08);--sh-lg:0 12px 40px rgba(44,24,16,.14);
+  --beige:#F5EDE3;--blanc:#FDFAF7;--terra:#9E5238;--teal:#3A766E;
+  --dore:#C9A96E;--dore-txt:#7A5C14;--dore-cl:#E8D5A8;--brun:#2C1810;--brun-m:#6B4226;
+  --gris:#6B5E55;--sh:0 4px 20px rgba(44,24,16,.08);--sh-lg:0 12px 40px rgba(44,24,16,.14);
   --r:14px;--r-sm:8px;--tr:all .3s cubic-bezier(.4,0,.2,1)
 }
 html{scroll-behavior:smooth;overflow-x:hidden;max-width:100vw}
@@ -252,7 +265,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 /* HERO */
 .hero{padding-top:70px;background:var(--beige)}
 .hero-c{max-width:1200px;margin:0 auto;padding:50px 24px 0;display:grid;grid-template-columns:1fr 1fr;align-items:flex-start;gap:40px}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.4);border-radius:30px;padding:6px 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore);margin-bottom:18px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.4);border-radius:30px;padding:6px 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-txt);margin-bottom:18px}
 .hero-t{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,50px);font-weight:700;line-height:1.15;color:var(--brun);margin-bottom:10px}
 .hero-t em{font-style:italic;color:var(--terra)}
 .hero-sub{font-family:'Dancing Script',cursive;font-size:clamp(16px,2vw,22px);color:#C8A951;margin-bottom:16px}
@@ -295,7 +308,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-arrow:hover{background:white;transform:translateY(-50%) scale(1.08)}
 .carr-arrow-l{left:4px}
 .carr-arrow-r{right:4px}
-.carr-dots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.carr-dots{display:flex;justify-content:center;gap:16px;margin-top:10px}
 .carr-dot{width:8px;height:8px;border-radius:50%;background:rgba(44,24,16,.2);border:none;cursor:pointer;transition:var(--tr);padding:0}
 .carr-dot.act{background:var(--terra);width:22px;border-radius:4px}
 @media(max-width:768px){
@@ -334,7 +347,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .btn-s:hover{background:var(--dore);color:white;transform:translateY(-2px)}
 
 /* SECTIONS */
-.ey{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dore);margin-bottom:10px;text-align:center}
+.ey{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dore-txt);margin-bottom:10px;text-align:center}
 .st{font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,34px);font-weight:700;color:var(--brun);line-height:1.25;text-align:center}
 .st em{font-style:italic;color:var(--terra)}
 .sdesc{margin-top:12px;font-size:14px;color:var(--gris);max-width:540px;margin-left:auto;margin-right:auto;line-height:1.8;text-align:center}
@@ -365,7 +378,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .cc2:hover{transform:translateY(-5px);box-shadow:var(--sh-lg)}
 .cc2-img{width:100%;height:200px;object-fit:cover;object-position:center 75%;background:var(--beige)}
 @media(max-width:768px){.cc2-img{object-fit:contain;object-position:center center}}
-.cc2-img-ph{display:flex;align-items:center;justify-content:center;font-size:42px;color:var(--dore);background:linear-gradient(135deg,var(--beige),var(--dore-cl))}
+.cc2-img-ph{display:flex;align-items:center;justify-content:center;font-size:42px;color:var(--dore-txt);background:linear-gradient(135deg,var(--beige),var(--dore-cl))}
 .cc2-b{padding:16px 12px}
 .cc2-n{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--brun);text-transform:uppercase;letter-spacing:1.5px;text-align:center;line-height:1.3}
 @media(max-width:768px){.cc2-n{font-size:13px;letter-spacing:0.8px}}
@@ -382,7 +395,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .tri-select{border:2px solid rgba(201,169,110,.4);border-radius:20px;padding:6px 14px;font-family:'Lato',sans-serif;font-size:12px;font-weight:700;color:var(--brun);background:white;outline:none;cursor:pointer;transition:var(--tr)}
 .tri-select:hover,.tri-select:focus{border-color:var(--dore)}
 .cat-empty{text-align:center;padding:60px 20px;background:var(--beige);border-radius:var(--r);max-width:680px;margin:0 auto}
-.cat-empty-icon{font-size:38px;margin-bottom:14px;color:var(--dore)}
+.cat-empty-icon{font-size:38px;margin-bottom:14px;color:var(--dore-txt)}
 .cat-empty-txt{font-size:14px;color:var(--brun-m);line-height:1.8}
 .btn-ret{background:var(--beige);border:none;border-radius:30px;padding:8px 18px;font-family:'Lato',sans-serif;font-size:12px;font-weight:700;color:var(--brun-m);cursor:pointer;transition:var(--tr)}
 .btn-ret:hover{background:var(--terra);color:white}
@@ -636,7 +649,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .f-social{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
 .sl{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:var(--tr)}
 .sl:hover{transform:translateY(-2px);opacity:.88}
-.fc2 h4{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:12px}
+.fc2 h3,.fc2 h4{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:12px}
 .fc2 ul{list-style:none}
 .fc2 ul li{margin-bottom:6px}
 .fc2 ul li a{font-size:12px;color:rgba(253,250,247,.7);text-decoration:none;transition:var(--tr)}
@@ -991,7 +1004,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <h2 class="st">8 finitions pour<br><em>une création qui vous ressemble</em></h2>
         <p class="sdesc">Choisissez parmi nos finitions exclusives. Le prix s'adapte automatiquement selon votre choix.</p>
       </div>
-      <img loading="lazy" src="photo_finitions.jpg" class="fin-photo"
+      <img loading="lazy" src="photo_finitions.webp" class="fin-photo"
            alt="Les 8 finitions : Unis, Bicolores, Terrazzo, Duo Couleur+Terrazzo, Marbré, Duo Couleur+Marbré, Mot, Prénom"
            onerror="this.style.display='none'"/>
     </div>
@@ -1467,7 +1480,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   <section id="exh-octobre-rose" style="scroll-margin-top:170px;background:linear-gradient(180deg,#FDF0F3,#FCE4EA);padding:56px 20px">
     <div class="si" style="max-width:820px">
       <div style="max-width:300px;margin:0 auto 30px">
-        <img loading="lazy" src="exh-octobre-rose-titre.png" alt="Octobre Rose" style="width:100%;display:block" onerror="this.parentElement.style.display='none'"/>
+        <img loading="lazy" src="exh-octobre-rose-titre.webp" alt="Octobre Rose" style="width:100%;display:block" onerror="this.parentElement.style.display='none'"/>
       </div>
 
       <div style="border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-lg);margin-bottom:30px;max-width:620px;margin-left:auto;margin-right:auto">
@@ -1878,7 +1891,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .faq-item{border-bottom:1px solid rgba(201,169,110,.3)}
 .faq-item summary{list-style:none;cursor:pointer;padding:14px 30px 14px 0;font-weight:700;font-size:14px;color:var(--brun);position:relative}
 .faq-item summary::-webkit-details-marker{display:none}
-.faq-item summary::after{content:"▾";position:absolute;right:6px;top:50%;transform:translateY(-50%);color:var(--dore);font-size:18px;transition:transform .2s}
+.faq-item summary::after{content:"▾";position:absolute;right:6px;top:50%;transform:translateY(-50%);color:var(--dore-txt);font-size:18px;transition:transform .2s}
 .faq-item[open] summary::after{transform:translateY(-50%) rotate(180deg)}
 .faq-item p{margin:0 0 14px;color:var(--gris);font-size:13.5px;line-height:1.8}
 </style>
@@ -1911,7 +1924,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
       <div class="f-tag">Chaque pièce est unique, comme vous.</div>
       <p>Créations en plâtre résine, faites main et personnalisées à Irigny, près de Lyon, dans le Rhône (69) — Rhône-Alpes. Imperméabilisées et vernies avec soin.</p>
       <a href="https://www.calameo.com/read/00825440008b281627392" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,169,81,0.15);border:1px solid var(--dore);color:var(--dore);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;margin:10px 0">
+         style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,169,81,0.15);border:1px solid var(--dore);color:var(--dore-txt);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;margin:10px 0">
         📖 Feuilleter notre catalogue
       </a>
       <div class="f-contact">
@@ -1971,7 +1984,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
       </div>
     </div>
     <div class="fc2">
-      <h4>Catégories</h4>
+      <h3>Catégories</h3>
       <ul>
         <li><a href="#" onclick="showPage('boutique','Nouveautés');return false" data-cat="Nouveautés">Nouveautés</a></li>
         <li><a href="#" onclick="showPage('boutique','Accessoires');return false" data-cat="Accessoires">Accessoires</a></li>
@@ -1987,7 +2000,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
       </ul>
     </div>
     <div class="fc2">
-      <h4>Navigation</h4>
+      <h3>Navigation</h3>
       <ul>
         <li><a href="#" onclick="showPage('accueil');return false">Accueil</a></li>
         <li><a href="#" onclick="showPage('boutique');return false">Boutique</a></li>
@@ -1998,7 +2011,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
       </ul>
     </div>
     <div class="fc2">
-      <h4>📧 Newsletter</h4>
+      <h3>📧 Newsletter</h3>
       <p style="font-size:12px;color:rgba(253,250,247,.7);margin-bottom:10px;line-height:1.6">Soyez la première informée des nouveautés !</p>
       <div style="display:flex;flex-direction:column;gap:8px">
         <input id="newsletter-prenom" type="text" placeholder="Votre prénom" autocomplete="off"
@@ -2054,7 +2067,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
     <div class="cf"><label>Nom & Prénom</label><input type="text" id="cNom" placeholder="Marie Dupont"/></div>
     <div class="cf"><label>Email</label><input type="email" id="cEmail" placeholder="marie@email.fr"/></div>
     <div class="cf"><label>Sujet</label>
-      <select id="cSujet"><option>Question sur une création</option><option>Commande personnalisée</option><option>Suivi de commande</option><option>Question sur EXHALESSENCE</option><option>Signaler un problème sur le site</option><option>Autre</option></select>
+      <select id="cSujet" aria-label="Sujet de votre message"><option>Question sur une création</option><option>Commande personnalisée</option><option>Suivi de commande</option><option>Question sur EXHALESSENCE</option><option>Signaler un problème sur le site</option><option>Autre</option></select>
     </div>
     <div class="cf"><label>Message</label><textarea id="cMsg" placeholder="Votre message..."></textarea></div>
     <button class="co-sub" onclick="sendContact()">Envoyer ✦</button>
@@ -2468,7 +2481,7 @@ function renderCompte(){
       let txt = `• <strong>${a.n}</strong> — ${a.fin}`;
       if(a.qte && a.qte > 1) txt += ` × ${a.qte}`;
       txt += ` — ${a.prix}€`;
-      if(a.perso) txt += `<br><span style="color:var(--dore);font-size:11px">🎨 ${a.perso}</span>`;
+      if(a.perso) txt += `<br><span style="color:var(--dore-txt);font-size:11px">🎨 ${a.perso}</span>`;
       return `<div style="margin-bottom:4px">${txt}</div>`;
     }).join('');
     return `
@@ -2669,7 +2682,7 @@ function renderAdmin(){
       </div>
       ${articlesHtml}
       ${c.livraison?`<div style="font-size:11px;color:var(--teal);margin-top:4px">🚚 ${c.livraison}</div>`:''}
-      ${c.perso?`<div style="font-size:11px;color:var(--dore);margin-top:2px">🎨 ${c.perso}</div>`:''}
+      ${c.perso?`<div style="font-size:11px;color:var(--dore-txt);margin-top:2px">🎨 ${c.perso}</div>`:''}
       <div class="cmd-statuts">${statutsBtns}</div>
     </div>`;
   }).join('');
@@ -3093,7 +3106,7 @@ const CAT_IMGS = {
   "Boîtes & Rangements décoratifs":"cat_boites.jpg",
   "Bougeoirs & Porte-bougies":"cat_bougeoirs.jpg",
   "Décorations":"cat_decorations.jpg",
-  "Occasions Spéciales":"https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Catégorie_site_internet_.png",
+  "Occasions Spéciales":"https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Catégorie_site_internet_.webp",
   "Organisateurs & Pots":"cat_organisateurs.jpg",
   "Plateaux & Vide-poches":"cat_plateaux.jpg",
   "Vases":"cat_vases.jpg",
@@ -3278,10 +3291,10 @@ const PRODUITS_FEUTRES = [
   'feuille-de-marronnier','feuille-de-sauge','plume',
   'decoration-coeur-enlace-avec-l-infini'
 ,
-  {"id": "evt-fille-silencieuse", "n": "Fille Silencieuse", "c": "Occasions Spéciales", "p": 9.0, "f": ["Brut", "Uni", "Marbré"], "finPrix": {"Brut": 9.0, "Uni": 10.0, "Marbré": 13.0}, "d": "Ce pot Fille Silencieuse est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante. ⚠️ Vendu sans dragées ni pochon organza — les photos sont présentées à titre indicatif pour vous aider à vous projeter.", "dim": "Dimensions (H × L) : ≃ 9,1 cm × 5,7 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse1.png", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse2.png", "finImgs": {"Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse__Brut.png", "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse__Uni.png", "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse_Marbré.png"}},
-  {"id": "evt-fille-penseuse", "n": "Fille Penseuse", "c": "Occasions Spéciales", "p": 7.0, "f": ["Brut", "Uni", "Marbré"], "finPrix": {"Brut": 7.0, "Uni": 8.0, "Marbré": 11.0}, "d": "Ce pot Fille Penseuse est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante. ⚠️ Vendu sans dragées ni pochon organza — les photos sont présentées à titre indicatif pour vous aider à vous projeter.", "dim": "Dimensions (H × L) : ≃ 9,7 cm × 7,1 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse1.png", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse2.png", "finImgs": {"Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Brut.png", "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Uni.png", "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Marbré.png"}},
-  {"id": "evt-fille-meditation", "n": "Fille Méditation", "c": "Occasions Spéciales", "p": 13.0, "f": ["Brut", "Uni", "Marbré"], "finPrix": {"Brut": 13.0, "Uni": 14.0, "Marbré": 17.0}, "d": "Ce pot Fille Méditation est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante. ⚠️ Vendu sans dragées ni pochon organza — les photos sont présentées à titre indicatif pour vous aider à vous projeter.", "dim": "Dimensions (H × L) : ≃ 9,8 cm × 7,1 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation1.png", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation2.png", "finImgs": {"Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Brut.png", "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Uni.png", "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Marbré.png"}},
-  {"id": "evt-elance", "n": "Élancé", "c": "Occasions Spéciales", "p": 17.0, "f": ["Maître", "Maîtresse", "Nounou", "ATSEM"], "finPrix": {"Maître": 17.0, "Maîtresse": 17.0, "Nounou": 17.0, "ATSEM": 17.0}, "d": "Ce plateau Élancé est fabriqué à la main, personnalisé et unique. Choisissez le destinataire de votre choix et personnalisez les couleurs selon vos envies. ⚠️ La couleur des lettres reste inchangée. Idéal comme cadeau de fin d'année pour remercier maîtres, maîtresses, nounous et ATSEM.", "dim": "Dimensions (L × l) : ≃ 17,8 cm × 9,3 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé1.png", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé2.png", "finImgs": {"Maître": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Maître.png", "Maîtresse": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Maîtresse.png", "Nounou": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Nounou.png", "ATSEM": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_ATSEM.png"}}
+  {"id": "evt-fille-silencieuse", "n": "Fille Silencieuse", "c": "Occasions Spéciales", "p": 9.0, "f": ["Brut", "Uni", "Marbré"], "finPrix": {"Brut": 9.0, "Uni": 10.0, "Marbré": 13.0}, "d": "Ce pot Fille Silencieuse est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante. ⚠️ Vendu sans dragées ni pochon organza — les photos sont présentées à titre indicatif pour vous aider à vous projeter.", "dim": "Dimensions (H × L) : ≃ 9,1 cm × 5,7 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse1.webp", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse2.webp", "finImgs": {"Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse__Brut.png", "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse__Uni.png", "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse_Marbré.png"}},
+  {"id": "evt-fille-penseuse", "n": "Fille Penseuse", "c": "Occasions Spéciales", "p": 7.0, "f": ["Brut", "Uni", "Marbré"], "finPrix": {"Brut": 7.0, "Uni": 8.0, "Marbré": 11.0}, "d": "Ce pot Fille Penseuse est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante. ⚠️ Vendu sans dragées ni pochon organza — les photos sont présentées à titre indicatif pour vous aider à vous projeter.", "dim": "Dimensions (H × L) : ≃ 9,7 cm × 7,1 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse1.webp", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse2.webp", "finImgs": {"Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Brut.png", "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Uni.png", "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Marbré.png"}},
+  {"id": "evt-fille-meditation", "n": "Fille Méditation", "c": "Occasions Spéciales", "p": 13.0, "f": ["Brut", "Uni", "Marbré"], "finPrix": {"Brut": 13.0, "Uni": 14.0, "Marbré": 17.0}, "d": "Ce pot Fille Méditation est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante. ⚠️ Vendu sans dragées ni pochon organza — les photos sont présentées à titre indicatif pour vous aider à vous projeter.", "dim": "Dimensions (H × L) : ≃ 9,8 cm × 7,1 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation1.webp", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation2.webp", "finImgs": {"Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Brut.png", "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Uni.png", "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Marbré.png"}},
+  {"id": "evt-elance", "n": "Élancé", "c": "Occasions Spéciales", "p": 17.0, "f": ["Maître", "Maîtresse", "Nounou", "ATSEM"], "finPrix": {"Maître": 17.0, "Maîtresse": 17.0, "Nounou": 17.0, "ATSEM": 17.0}, "d": "Ce plateau Élancé est fabriqué à la main, personnalisé et unique. Choisissez le destinataire de votre choix et personnalisez les couleurs selon vos envies. ⚠️ La couleur des lettres reste inchangée. Idéal comme cadeau de fin d'année pour remercier maîtres, maîtresses, nounous et ATSEM.", "dim": "Dimensions (L × l) : ≃ 17,8 cm × 9,3 cm", "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé1.webp", "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé2.webp", "finImgs": {"Maître": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Maître.png", "Maîtresse": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Maîtresse.png", "Nounou": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Nounou.png", "ATSEM": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_ATSEM.png"}}
 ];
 
 // Pierres fluorescentes
@@ -3395,8 +3408,8 @@ const P = [
     },
     "d": "Ces 4 coupelles cœurs sont fabriquées à la main, personnalisées et uniques. Elles peuvent être utilisées comme décoration de table, pour les apéritifs (olives, cacahuètes, bonbons), comme vide-poche pour bijoux ou comme élément décoratif.",
     "dim": "Dimensions (L × l) : ≃ 7,3 cm × ≃ 8,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelle_Coeur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelles_Coeur2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelle_Coeur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelles_Coeur2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelle_Coeur_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelles_Coeur_Uni.png",
@@ -3423,8 +3436,8 @@ const P = [
     },
     "d": "Ces 4 coupelles Carrées sont fabriquées à la main, personnalisées et uniques. Elles peuvent être utilisées comme décoration de table, pour les apéritifs (olives, cacahuètes, bonbons), comme vide-poche pour bijoux ou comme élément décoratif.",
     "dim": "Dimensions (L × l) : ≃ 7,3 cm × ≃ 8,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coupelle_Epuré1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelles_Epuré2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coupelle_Epuré1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelles_Epuré2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coupelle_Epuré_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Coupelles_Epuré_Uni.png",
@@ -3457,8 +3470,8 @@ const P = [
     },
     "d": "Ces 4 sous-verres carrés avec leur support de rangement sont fabriqués à la main, personnalisés et uniques. Ils sont idéals pour protéger vos surfaces tout en apportant une touche décorative à votre table, bureau ou espace apéritif.",
     "dim": "Dimensions (L × l × É) : Sous-verre (x4 – carré) : ≃ 3,6 cm × 3,6 cm – Épaisseur ≃ 0,7 cm | Support (L x l) : ≃ 11,8 cm × 6,9 cm Haut ≃ 3,9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous_Verres_Epuré_avec_Support1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous_Verres_Epuré_avec_Support2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous_Verres_Epuré_avec_Support1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous_Verres_Epuré_avec_Support2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous_Verres_Epuré_avec_Support_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous_Verres_Epuré_avec_Support_Uni.png",
@@ -3494,8 +3507,8 @@ const P = [
     },
     "d": "Ces 4 sous-verres Rond avec leur support de rangementsont fabriqués à la main, personnalisés et uniques. Ils sont idéals pour protéger vos surfaces tout en apportant une touche décorative à votre table, bureau ou espace apéritif.",
     "dim": "Dimensions (L × l × É) : Sous-verre (x4 – carré) : ≃ 9,7 cm × 9,7 cm – Épaisseur ≃ 0,7 cm | Support (L x l) : ≃ 11,4 cm × 6,9 cm Haut ≃ 3,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Essence_avec_support1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Essence_avec_support2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Essence_avec_support1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Essence_avec_support2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Essence_avec_support_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Essence_avec_support_Uni.png",
@@ -3531,8 +3544,8 @@ const P = [
     },
     "d": "Ces 4 sous-verres Octogonal avec leur support de rangement sont fabriqués à la main, personnalisés et uniques. Ils sont idéals pour protéger vos surfaces tout en apportant une touche décorative à votre table, bureau ou espace apéritif.",
     "dim": "Dimensions (L × l × É) : Sous-verre (x4 – carré) : ≃ 3,6 cm × 3,6 cm – Épaisseur ≃ 0,7 cm | Support (x1) : ≃ 9,8 cm × 9,8 cm Haut ≃ 3,7 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Facette_avec_support1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Facette_avec_support2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Facette_avec_support1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Facette_avec_support2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Facette_avec_support_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/4_Sous-verres_Facette_avec_support_Uni.png",
@@ -3562,8 +3575,8 @@ const P = [
     },
     "d": "Cette boîte Bouddha est fabriquée à la main, personnalisée et unique, avec des reliefs. Elle peut être utilisée pour le rangement (bijoux, petits objets, salle de bain), pour accueillir une bougie, ou comme élément décoratif.",
     "dim": "Dimensions (H × L) : ≃ 14,3 cm × 8,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Bouddha1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Bouddha2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Bouddha1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Bouddha2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Bouddha_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Bouddha_Uni.png",
@@ -3590,8 +3603,8 @@ const P = [
     },
     "d": "Cet Vase Cannelés est fabriqué à la main, personnalisé et unique, avec des reliefs. Il est idéal comme élément décoratif et convient parfaitement pour accueillir des fleurs séchées, pampas, fleurs artificielles ou compositions décoratives. ⚠️ Vase décoratif : non destiné à contenir de l’eau.",
     "dim": "Dimensions (H x l) : ≃ 9,8 cm × 5,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cannelé1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cannelé2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cannelé1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cannelé2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cannelé_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cannelé_Uni.png",
@@ -3618,8 +3631,8 @@ const P = [
     },
     "d": "Cette boîte Cœur est fabriquée à la main, personnalisée et unique, avec des reliefs. Elle peut être utilisée pour le rangement (bijoux, petits objets, salle de bain), pour accueillir une bougie, ou comme élément décoratif.",
     "dim": "Dimensions (L × l × E) : ≃ 7,5 cm × 7 cm Epaisseur 2,4",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_boite1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_boite2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_boite1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_boite2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_boite_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_boite_Uni.png",
@@ -3646,8 +3659,8 @@ const P = [
     },
     "d": "Ce Porte-Bougie Cœur est fabriqué à la main, personnalisé et unique . Son design épuré et intemporel apporte une touche douce et élégante à votre intérieur. Il peut accueillir une bougie (bougie LED ou chauffe-plat) et être utilisé comme élément décoratif sur une table, une étagère, une table de chevet ou dans une chambre pour créer une atmosphère chaleureuse et féerique.",
     "dim": "Dimensions (L × l) : ≃ 10,6 cm × ≃ 12,6 cm Épaisseur : ≃ 4,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Bougie1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Bougie2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Bougie1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Bougie2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Bougie_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Bougie_Uni.png",
@@ -3674,8 +3687,8 @@ const P = [
     },
     "d": "Ce Porte-Bougie Cœur Fleur est fabriqué à la main, personnalisé et unique . Avec sa délicate fleur en relief, il apporte une touche romantique et élégante à votre décoration. Il peut accueillir une bougie (bougie LED ou chauffe-plat) et être utilisé comme élément décoratif sur une table, une étagère, une table de chevet ou dans une chambre pour créer une atmosphère chaleureuse et féerique.",
     "dim": "Dimensions (L × l) : ≃ 3,5 cm × ≃ 10,7 cm Épaisseur : ≃ 3,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Fleur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Fleur2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Fleur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Fleur2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Fleur_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Fleur_Uni.png",
@@ -3700,10 +3713,10 @@ const P = [
     },
     "d": "Ce cœur promesse est fabriqué à la main, personnalisé et unique, avec des reliefs représentant deux mains unies, dont l’une dépose une alliance sur l’autre. Il est destiné à la décoration et à être offert, symbolisant l’engagement, l’union ou un lien fort entre deux personnes. Il apporte une touche symbolique et rayonnante à votre intérieur ou constitue un cadeau plein de sens.",
     "dim": "Dimensions (H × L × Épaisseur) : ≃ 6,8 cm × ≃ 7,3 cm × ≃ 2,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Promesse.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Promesse1.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Promesse.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Promesse1.webp",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Promesse.png",
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Promesse.webp",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__13_55_39.png",
       "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__13_55_39_-_Copie.png"
     }
@@ -3725,10 +3738,10 @@ const P = [
     },
     "d": "Cœur Union Ce cœur union est fabriqué à la main, personnalisé et unique, avec des reliefs représentant deux mains unies. Il est destiné à la décoration et à être offert, symbolisant l’union, l’amour et le lien entre deux personnes. Il est idéal comme cadeau pour un mariage, une union ou pour célébrer un moment fort de la vie. Il apporte une touche symbolique et chaleureuse à votre intérieur.",
     "dim": "Dimensions (H × L × Épaisseur) : ≃ 6,8 cm × ≃ 7,3 cm × ≃ 2,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Union.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Union1.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Union.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Union1.webp",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Union.png",
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Coeur_Union.webp",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__14_03_28_-_Copie.png",
       "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__14_03_28.png"
     }
@@ -3752,10 +3765,10 @@ const P = [
     },
     "d": "Cette déco couple 3D enlacé est fabriquée à la main, personnalisée et unique. Elle représente un couple enlacé, symbolisant l’amour, la tendresse et la connexion entre deux personnes. Cette pièce est idéale comme élément décoratif, à poser sur un meuble, une étagère ou une table, et convient parfaitement comme cadeau symbolique.",
     "dim": "Dimensions (H × L) : ≃ 11,5 cm × ≃ 5,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Couple_3D_Enlacé.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Couple_3D_Enlacé1.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Couple_3D_Enlacé.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Couple_3D_Enlacé1.webp",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Couple_3D_Enlacé.png",
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Déco_Couple_3D_Enlacé.webp",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__14_17_22.png",
       "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__14_17_22_-_Copie__2_.png",
       "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__14_17_22_-_Copie.png"
@@ -3786,8 +3799,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Cœur est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l × E) : ≃ 10,4 cm × 11,5 cm × 1.4 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeur_Uni.png",
@@ -3813,10 +3826,10 @@ const P = [
     },
     "d": "Ce cœur rose est fabriqué à la main, personnalisé et unique, avec des reliefs de roses dessinées. Il peut être utilisé comme élément décoratif ou pour l’aromathérapie.",
     "dim": "Dimensions (L × l) : ≃ 6,8 cm × 7,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cœur Roses.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cœur Roses1.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cœur Roses.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cœur Roses1.webp",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cœur Roses.png",
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cœur Roses.webp",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Cœur roses Uni.png"
     }
   },
@@ -3843,8 +3856,8 @@ const P = [
     },
     "d": "Ce Pot Double Jeu est fabriquée à la main, personnalisée et unique. Son design se distingue par un contraste de textures : une partie lisse et une partie supérieure ornée de rayures en relief, apportant un style moderne et original. Il peut être utilisé comme élément décoratif, pour accueillir une plante, une bougie, ou simplement comme objet déco sur un bureau, une coiffeuse ou une étagère.",
     "dim": "Dimensions (H × L) : ≃ 5,9 cm × 8,9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Double_Jeu1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Double_Jeu2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Double_Jeu1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Double_Jeu2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Double_Jeu_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Double_Jeu_Uni.png",
@@ -3877,8 +3890,8 @@ const P = [
     },
     "d": "Ce Pot Ovale est fabriquée à la main, personnalisée et unique. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets sur un bureau, sur une coiffeuse, dans la salle de bain, ou accueillir une bougie ou une plante.",
     "dim": "Dimensions (H × l) : ≃ 3,3 cm × 11.3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Douceur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Douceur2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Douceur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Douceur2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Douceur_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Douceur_Uni.png",
@@ -3907,8 +3920,8 @@ const P = [
     },
     "d": "Cette décoration Arbre de Vie est fabriqué à la main, personnalisé et unique . Elle apportera une touche élégante et chaleureuse à votre intérieur. Vendue sans le socle, elle est spécialement conçue pour être insérée dans un socle porte-bougie de votre choix disponible dans la boutique.",
     "dim": "Dimensions (L × l) : ≃ 12,9 cm × ≃ 9,1 cm Epaisseur : 1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Arbre_de_vie1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Arbre_de_vie2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Arbre_de_vie1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Arbre_de_vie2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Arbre_de_vie_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Arbre_de_vie_Uni.png",
@@ -3935,8 +3948,8 @@ const P = [
     },
     "d": "Cette décoration Cœur enlacé avec l'infini est fabriqué à la main, personnalisé et unique . Elle apportera une touche élégante et chaleureuse à votre intérieur. Vendue sans le socle, elle est spécialement conçue pour être insérée dans un socle porte-bougie de votre choix disponible dans la boutique.",
     "dim": "Dimensions (L × l) : ≃ 11,5 cm × ≃ 11,5 cm Epaisseur : 0,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Cœur_enlacé_avec_l_infini_1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Cœur_enlacé_avec_l_infini2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Cœur_enlacé_avec_l_infini_1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Cœur_enlacé_avec_l_infini2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Cœur_enlacé_avec_l_infini_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Cœur_enlacé_avec_l_infini_Uni.png",
@@ -3963,8 +3976,8 @@ const P = [
     },
     "d": "Cette décoration Cœurs entrelacés est fabriqué à la main, personnalisé et unique . Elle apportera une touche élégante et chaleureuse à votre intérieur. Vendue sans le socle, elle est spécialement conçue pour être insérée dans un socle porte-bougie de votre choix disponible dans la boutique.",
     "dim": "Dimensions (L × l) : ≃ 16 cm × ≃ 11 cm Epaisseur : 1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Coeurs_Entrelacés1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Coeurs_Entrelacés2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Coeurs_Entrelacés1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Coeurs_Entrelacés2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Coeurs_Entrelacés_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Décoration_Coeurs_Entrelacés_Uni.png",
@@ -3991,8 +4004,8 @@ const P = [
     },
     "d": "Cette décoration Fleur de Lotus est fabriqué à la main, personnalisé et unique . Elle apportera une touche élégante et chaleureuse à votre intérieur. Vendue sans le socle, elle est spécialement conçue pour être insérée dans un socle porte-bougie de votre choix disponible dans la boutique.",
     "dim": "Dimensions (L × l) : ≃ 10,6 cm × ≃ 10,3 cm Epaisseur : 1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_de_Lotus1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_de_Lotus2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_de_Lotus1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_de_Lotus2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_de_Lotus_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_de_Lotus_Uni.png",
@@ -4025,8 +4038,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Rectangle Ovale est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l) : ≃ 17,8 cm × 9,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Elancé1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Elancé2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Elancé1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Elancé2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Elancé_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Elancé_Uni.jpg",
@@ -4056,8 +4069,8 @@ const P = [
     },
     "d": "Cet Ensemble Evolution est fabriqué à la main, personnalisé et unique . Composé de trois porte-bougies. Utilisés séparément ou ensemble, ils créent une composition harmonieuse pouvant accueillir jusqu'à 6 bougies (bougies LED ou chauffe-plats) pour diffuser une ambiance chaleureuse dans votre intérieur.",
     "dim": "Dimensions (L × l × H) : Solo ≃ 6 cm × ≃ 6 cm × ≃ 2,5 cm Duo ≃ 12 cm × ≃ 6 cm × ≃ 2,5 cm Trio ≃ 18 cm × ≃ 6 cm × ≃ 2,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_Evolution1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_Evolution2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_Evolution1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_Evolution2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_Evolution_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_Evolution_Uni.png",
@@ -4084,8 +4097,8 @@ const P = [
     },
     "d": "Cet ensemble Sillon est fabriqué à la main, personnalisé et unique, avec des reliefs. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets dans une salle de bain, sur une coiffeuse, ou dans un salon ou une salle à manger.",
     "dim": "Dimensions (H x l) : Plateau rectangle ovale : ≃ 17,8 cm × 9,3 cm | Boîte Sillon : ≃ 4,3 cm × 8,8 cm | Vase Sillon : ≃ 9,8 cm × 8,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon_Uni.png",
@@ -4112,8 +4125,8 @@ const P = [
     },
     "d": "Cet ensemble Sillon est fabriqué à la main, personnalisé et unique, avec des reliefs. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets dans une salle de bain, sur une coiffeuse, ou dans un salon ou une salle à manger.",
     "dim": "Dimensions (H x l) : Plateau rectangle ovale : ≃ 17,8 cm × 9,3 cm | Boîte Sillon : ≃ 4,3 cm × 8,8 cm | Vase Sillon : ≃ 9,8 cm × 8,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon_Uni.png",
@@ -4140,8 +4153,8 @@ const P = [
     },
     "d": "Cet ensemble Sillon est fabriqué à la main, personnalisé et unique, avec des reliefs. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets dans une salle de bain, sur une coiffeuse, ou dans un salon ou une salle à manger.",
     "dim": "Dimensions (H x l) : Plateau rectangle ovale : ≃ 17,8 cm × 9,3 cm | Boîte Sillon : ≃ 4,3 cm × 8,8 cm | Vase Sillon : ≃ 9,8 cm × 8,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ensemble_sillon_Uni.png",
@@ -4174,8 +4187,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Carré est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l) : ≃ 10,3 cm × 10,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Uni.png",
@@ -4211,8 +4224,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Rond est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l × E) : ≃ 8,3 cm × 8,3 cm Epaiseur : ≃ 1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Uni.png",
@@ -4238,8 +4251,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Rond est fabriqué à la main, personnalisé et unique, avec de délicats reliefs floraux de Camélias. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l) : ≃ 10,3 cm × 10,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Camélia1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Camélia2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Camélia1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Camélia2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Camélia_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Camélia_Uni.png"
@@ -4260,8 +4273,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Rond est fabriqué à la main, personnalisé et unique, avec de fins reliefs mandala soigneusement travaillés. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l) : ≃ 10,2 cm × 10,2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Mandala1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Mandala2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Mandala1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Mandala2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Mandala_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Mandala_Uni.png"
@@ -4286,8 +4299,8 @@ const P = [
     },
     "d": "Ce Pot Rond en Relief ondulé est fabriquée à la main, personnalisée et unique. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets sur un bureau, sur une coiffeuse, dans la salle de bain, ou accueillir une bougie ou une plante.",
     "dim": "Dimensions (H × L × l) : ≃ 6,5 cm 7,5 cm × 7,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Relief_ondulé1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Relief_ondulé2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Relief_ondulé1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Relief_ondulé2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Relief_ondulé_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Relief_ondulé_Uni.png",
@@ -4314,8 +4327,8 @@ const P = [
     },
     "d": "Ce Porte-Bougie Etoile Filante est fabriqué à la main, personnalisé et unique . Inspiré d'une étoile traversant le ciel, il apporte une touche poétique et originale à votre décoration. Il peut accueillir jusqu'à 4 bougies (bougies LED ou chauffe-plats) pour créer une ambiance chaleureuse et lumineuse dans votre intérieur.",
     "dim": "Dimensions (L × l) : ≃ 29,4 cm × ≃ 15,9 cm Épaisseur : ≃ 1,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Etoile_Filante1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Etoile_Filante2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Etoile_Filante1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Etoile_Filante2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Etoile_Filante_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Etoile_Filante_Uni.png",
@@ -4346,8 +4359,8 @@ const P = [
     },
     "d": "Cet organisateur Triple est fabriquée à la main, personnalisée et unique. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets sur un bureau, sur une coiffeuse ou dans la salle de bain.",
     "dim": "Dimensions (H × L × l) : ≃ 6,5 cm × 23 cm × 4,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evasion1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evasion2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evasion1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evasion2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evasion_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evasion_Uni.png",
@@ -4376,8 +4389,8 @@ const P = [
     },
     "d": "Ce Porte-Bougie Duo est fabriqué à la main, personnalisé et unique . Avec ses deux emplacements, il permet de créer une décoration harmonieuse et équilibrée. Il peut accueillir deux bougies (bougies LED ou chauffe-plats) pour diffuser une ambiance douce et chaleureuse",
     "dim": "Dimensions (L × l × H) : ≃ 12 cm × ≃ 6 cm × ≃ 2,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Duo1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Duo2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Duo1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Duo2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Duo_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Duo_Uni.png",
@@ -4404,8 +4417,8 @@ const P = [
     },
     "d": "Ce Porte-Bougie Solo est fabriqué à la main, personnalisé et unique . Son design minimaliste et intemporel s'intègre facilement à tous les styles de décoration. Il peut accueillir une bougie (bougie LED ou chauffe-plat) et apporter une touche chaleureuse et élégante à votre intérieur.",
     "dim": "Dimensions (L × l × H) : ≃ 6 cm × ≃ 6 cm × ≃ 2,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Solo1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Solo2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Solo1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Solo2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Solo_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Solo_Uni.png",
@@ -4432,8 +4445,8 @@ const P = [
     },
     "d": "Ce Porte-Bougie Trio est fabriqué à la main, personnalisé et unique . Son format allongé met élégamment en valeur trois bougies (bougies LED ou chauffe-plats) pour créer un centre de table raffiné ou une décoration chaleureuse sur une console, une coiffeuse pour diffuser une ambiance douce et chaleureuse",
     "dim": "Dimensions (L × l × H) : ≃ 18 cm × ≃ 6 cm × ≃ 2,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Trio1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Trio2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Trio1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Trio2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Trio_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Evolution_Trio_Uni.png",
@@ -4464,8 +4477,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Octogonal est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × L) : ≃ 10,3 cm × 10,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Uni.png",
@@ -4499,8 +4512,8 @@ const P = [
     },
     "d": "Ce Pot Octogonal est fabriquée à la main, personnalisée et unique. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets sur un bureau, sur une coiffeuse, dans la salle de bain, ou accueillir une bougie ou une plante.",
     "dim": "Dimensions (H × l) : ≃ 7 cm × 6,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Pot1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Pot2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Pot1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Pot2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Pot_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Facette_Pot_Uni.png",
@@ -4527,8 +4540,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Feuille de Ginkgo est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l × E) : ≃ 18,3 cm × 14,5 cm × 2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Ginkgo1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Ginkgo2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Ginkgo1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Ginkgo2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Ginkgo_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Ginkgo_Uni.png",
@@ -4552,8 +4565,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Feuille de Marronnier est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l × E) : ≃ 13,3 cm × 15 cm × 2,7 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Marronnier1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Marronnier2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Marronnier1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Marronnier2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Marronnier_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Marronnier_Uni.png",
@@ -4577,8 +4590,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Feuille de Sauge est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l × E) : ≃ 16 cm × 13,3 cm × 1,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Sauge1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Sauge2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Sauge1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Sauge2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Sauge_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Feuille_de_Sauge_Uni.png",
@@ -4602,8 +4615,8 @@ const P = [
     },
     "d": "Ce pot Fille Méditation est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante.",
     "dim": "Dimensions (H × L) : ≃ 9,8 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Méditation1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Méditation_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Méditation1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Méditation_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Méditation_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Méditation_Uni.png",
@@ -4627,8 +4640,8 @@ const P = [
     },
     "d": "Ce pot Fille Penseuse est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante.",
     "dim": "Dimensions (H × L) : ≃ 9,7 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Penseuse1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Penseuse2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Penseuse1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Penseuse2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Penseuse_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Penseuse_Uni.png",
@@ -4652,8 +4665,8 @@ const P = [
     },
     "d": "Ce pot Fille Silencieuse est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante.",
     "dim": "Dimensions (H × L) : ≃ 9,1 cm × 5,7 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Silencieuse1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Silencieuse2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Silencieuse1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Silencieuse2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Silencieuse_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_Silencieuse_Uni.png",
@@ -4677,8 +4690,8 @@ const P = [
     },
     "d": "Ce pot Fille aux Roses est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif, sur une coiffeuse pour ranger pinceaux de maquillage, sur un bureau pour stylos, ou pour accueillir une plante.",
     "dim": "Dimensions (H × L) : ≃ 8,3 cm × 6,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_aux_Roses_1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_aux_Roses2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_aux_Roses_1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_aux_Roses2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_aux_Roses_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fille_aux_Roses_Uni.jpg",
@@ -4702,8 +4715,8 @@ const P = [
     },
     "d": "Ce pot Garçon Rêveur est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme élément décoratif pour accueillir une petite plante, une bougie LED, des stylos, de petits accessoires ou encore des fleurs séchées. Son design tendre et poétique apportera une touche de douceur et d'originalité à une entrée, un bureau, une étagère, une table de chevet ou toute autre pièce de votre intérieur.",
     "dim": "Dimensions (H × L) : ≃ 9,7 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon Rêveur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon Rêveur2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon Rêveur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon Rêveur2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon Rêveur Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Garçon Rêveur Uni.jpg",
@@ -4727,8 +4740,8 @@ const P = [
     },
     "d": "Ce pot Garçon Rêveur est fabriqué à la main, personnalisé et unique. Idéal en décoration de table pour vos occasions spéciales : anniversaire, mariage, baptême, communion... Offrez-le garni de dragées à vos invités, ou associez-le à quelques fleurs séchées pour une jolie touche décorative. ⚠️ Vendu sans sachet organza ni dragées — les photos sont présentées à titre indicatif pour vous aider à vous projeter.",
     "dim": "Dimensions (H × L) : ≃ 9,7 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Garçon_Rêveur Uni.png",
@@ -4760,8 +4773,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Fleur est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × L) : ≃ 10,8 cm × 10,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Uni.png",
@@ -4791,8 +4804,8 @@ const P = [
     },
     "d": "Ce Porte-Bougie Fleur est fabriqué à la main, personnalisé et unique . Avec sa forme florale élégante, il apporte douceur et raffinement à votre décoration. Il peut accueillir jusqu'à 6 bougies (bougies LED ou chauffe-plats), tandis que son centre peut recevoir une bougie plus imposante ou un petit vase décoratif pour une composition harmonieuse et personnalisée.",
     "dim": "Dimensions (L × l) : ≃ 10,6 cm × ≃ 12,6 cm Épaisseur : ≃ 4,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Bougie1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Bougie2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Bougie1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Bougie2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Bougie_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Fleur_Bougie_Uni.png",
@@ -4815,10 +4828,10 @@ const P = [
     },
     "d": "Cette Fleur de Lotus est fabriqués à la main, personnalisés et uniques. Il peut être utilisé comme élément décoratif ou pour l’aromathérapie. Vous pouvez choisir une couleur parmi les variantes disponibles et ajouter, si vous le souhaitez, une fiole de parfum d’intérieur.",
     "dim": "Dimensions (H × l) : ≃ 4,3 cm × 8,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Aromathérapie_ou_Déco_Fleur_de_Lotus.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Aromathérapie_ou_Déco_Fleur_de_Lotus1.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Aromathérapie_ou_Déco_Fleur_de_Lotus.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Aromathérapie_ou_Déco_Fleur_de_Lotus1.webp",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Aromathérapie_ou_Déco_Fleur_de_Lotus.png",
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Aromathérapie_ou_Déco_Fleur_de_Lotus.webp",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/ChatGPT_Image_16_juin_2026__14_32_13.png"
     }
   },
@@ -4845,8 +4858,8 @@ const P = [
     },
     "d": "Ce organisateur Double est fabriquée à la main, personnalisée et unique. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets sur un bureau, sur une coiffeuse ou dans la salle de bain.",
     "dim": "Dimensions (H × L × l) : ≃ 6,9 cm × 18,9 cm × 8,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Harmonie1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Harmonie2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Harmonie1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Harmonie2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Harmonie_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Harmonie__Uni.png",
@@ -4875,8 +4888,8 @@ const P = [
     },
     "d": "Ce Vase Hybride est fabriqué à la main, personnalisé et unique, Lise en haut et avec des reliefs sillon sur le bas Il est idéal comme élément décoratif et convient parfaitement pour accueillir des fleurs séchées, pampas, fleurs artificielles ou compositions décoratives. ⚠️ Vase décoratif : non destiné à contenir de l’eau.",
     "dim": "Dimensions (H x l) : ≃ 9,8 cm × 6,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Hybride1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Hybride2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Hybride1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Hybride2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Hybride_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Hybride_Uni.png",
@@ -4903,10 +4916,10 @@ const P = [
     },
     "d": "Cet élément décoratif Infini avec double cœurs est fabriqué à la main, personnalisé et unique. Il représente le signe de l’infini, accompagné de deux cœurs (un cœur plein et un cœur ajouré), symbole d’amour, de lien éternel et de connexion. Il peut être utilisé comme élément décoratif à poser sur un meuble, une étagère ou une table, apportant une touche symbolique et chaleureuse à votre intérieur.",
     "dim": "Dimensions (H × L × É) : ≃ 8 cm × ≃ 15,1 cm × ≃ 1,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Coeurs_Brut.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Cœurs2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Coeurs_Brut.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Cœurs2.webp",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Coeurs_Brut.png",
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Coeurs_Brut.webp",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Cœurs_Uni.png",
       "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Coeurs_Marbre.png",
       "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Infini_Double_Cœurs_Terrazzo.png"
@@ -4933,8 +4946,8 @@ const P = [
     },
     "d": "Ce photophore lunes &amp; étoiles est fabriqué à la main, personnalisé et unique, avec deux lunes face à face entourées de nombreuses étoiles, créant une ambiance douce, poétique et apaisante. Il peut être utilisé pour accueillir une bougie (bougie LED ou chauffe-plat), comme élément décoratif, sur une table, une étagère, une table de chevet ou dans une chambre pour une atmosphère chaleureuse et féérique.",
     "dim": "Dimensions (H × L) : ≃ 6,8 cm × 7,4 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Lune___Etoiles1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Lune___Etoiles2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Lune___Etoiles1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Lune___Etoiles2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Lune___Etoiles_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Lunes___Étoiles_Uni.png",
@@ -4962,8 +4975,8 @@ const P = [
     },
     "d": "Ces mains ouvertes sont fabriquées à la main, personnalisées et uniques. Elles sont côte à côte, tournées vers le ciel, formant un geste symbolique évoquant l’offrande, la réception, le partage ou la protection. Elles peuvent être utilisées comme élément décoratif, mais aussi comme support pour une bougie, une plante succulente, apportant une touche douce et symbolique à votre intérieur.",
     "dim": "Dimensions (L × l × É) : ≃ 14,6 cm × ≃ 15,6 cm × ≃ 6,6 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mains_ouvertes1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mains_ouvertes2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mains_ouvertes1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mains_ouvertes2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mains_ouvertes_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mains_ouvertes_Uni.png",
@@ -4990,8 +5003,8 @@ const P = [
     },
     "d": "Ce mot décoratif “Family” est fabriqué à la main, personnalisé et unique. Il s’agit d’un élément de décoration à poser, idéal pour apporter une touche chaleureuse et familiale à votre intérieur (salon, chambre, entrée ou étagère).",
     "dim": "Dimensions (H × L × É) : ≃ 7 cm × ≃ 25,8 cm × ≃ 1,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Family_1_-_Copie.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Family_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Family_1_-_Copie.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Family_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Family_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Family_Uni.png",
@@ -5018,8 +5031,8 @@ const P = [
     },
     "d": "Ce mot décoratif “Home” est fabriqué à la main, personnalisé et unique. Il s’agit d’un élément de décoration à poser, idéal pour apporter une touche chaleureuse et conviviale à votre intérieur (salon, chambre, entrée ou étagère).",
     "dim": "Dimensions (H × L × É) : ≃ 7 cm × ≃ 21,9 cm × ≃ 1,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Home_1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Home_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Home_1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Home_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Home__Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Home__Uni.png",
@@ -5046,8 +5059,8 @@ const P = [
     },
     "d": "Ce mot décoratif Love est fabriqué à la main, personnalisé et unique. Son design épuré apporte une touche douce, moderne et romantique à votre intérieur. Il peut être utilisé comme élément décoratif à poser sur un meuble, une étagère ou une table, idéal pour une décoration d’intérieur ou comme idée cadeau.",
     "dim": "Dimensions (H × L × É) : ≃ 8,6 cm × ≃ 21,4 cm × ≃ 1,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love__Uni.png",
@@ -5074,8 +5087,8 @@ const P = [
     },
     "d": "Ce mot décoratif “Love” Cœurs est fabriqué à la main, personnalisé et unique. Il représente le mot LOVE, accompagné de 4 cœurs, apportant une touche romantique, chaleureuse et symbolique à votre intérieur. Il peut être utilisé comme élément décoratif à poser sur un meuble, une étagère ou une table, idéal pour une décoration d’intérieur ou comme idée cadeau.",
     "dim": "Dimensions (H × L × É) : ≃ 10 cm × ≃ 18,2 cm × ≃ 1,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_Coeurs1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_Coeurs2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_Coeurs1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_Coeurs2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_Coeurs_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Mot_décoratif__Love_Coeurs_Uni.png",
@@ -5102,8 +5115,8 @@ const P = [
     },
     "d": "Ce Vase Nid d'Abeille est fabriqué à la main, personnalisé et unique, avec des reliefs Alvéoles Il est idéal comme élément décoratif et convient parfaitement pour accueillir des fleurs séchées, pampas, fleurs artificielles ou compositions décoratives. ⚠️ Vase décoratif : non destiné à contenir de l’eau.",
     "dim": "Dimensions (H x l) : ≃ 9,9 cm × 9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nid_d_Abeille1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nid_d_Abeille2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nid_d_Abeille1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nid_d_Abeille2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nid_d_Abeille_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nid_d_Abeille_Uni.png",
@@ -5130,8 +5143,8 @@ const P = [
     },
     "d": "Ce bougeoir nœud ruban est fabriqué à la main, personnalisé et unique, avec des reliefs. Il peut être utilisé comme élément décoratif ou pour décorer une table.",
     "dim": "Dimensions (H × L × l) : ≃ 4,9 cm × 11,6 cm × 5,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban2.jpg",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Uni.png",
@@ -5156,15 +5169,15 @@ const P = [
     },
     "d": "Pot Nœud Ruban Ce pot nœud ruban est fabriqué à la main, personnalisé et unique, avec de jolis reliefs représentant un élégant nœud ruban, apportant une touche douce et raffinée à votre décoration. Il peut être utilisé comme organisateur pour des pinceaux de maquillage ou stylos, comme pot pour plante ou une bougie, ou simplement comme élément décoratif sur un bureau, une coiffeuse ou une étagère.",
     "dim": "Dimensions (H × L) : ≃ 7,8 cm × 10,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot2.webp",
     "finImgs": {
-      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.png",
+      "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.webp",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot_Uni.png",
-      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.png",
-      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.png",
-      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.png",
-      "Duo Couleur + Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.png"
+      "Bicolore": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.webp",
+      "Marbré": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.webp",
+      "Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.webp",
+      "Duo Couleur + Terrazzo": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Nœud_Ruban_Pot1.webp"
     }
   },
   {
@@ -5186,8 +5199,8 @@ const P = [
     },
     "d": "Cet écrin nœud papillon est fabriqué à la main, personnalisé et unique, avec des reliefs soignés et un nœud. Le nœud fait partie intégrante du design et sert de système d’ouverture, apportant une touche élégante et originale. Il peut être utilisé pour le rangement de bijoux, de petits objets (salle de bain – femme), pour accueillir une bougie, ou comme élément décoratif raffiné.",
     "dim": "Dimensions (H × L) : ≃ 11,2 cm × ≃ 13,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Noeud_Papillon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Noeud_Papillon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Noeud_Papillon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Noeud_Papillon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Noeud_Papillon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Noeud_Papillon_Uni.png",
@@ -5210,8 +5223,8 @@ const P = [
     },
     "d": "Ce Ourson Cœur est fabriqués à la main, personnalisés et uniques, avec reliefs. Il peut être utilisé comme élément décoratif ou pour l’aromathérapie. Vous pouvez choisir une couleur parmi les variantes disponibles et ajouter, si vous le souhaitez, une fiole de parfum d’intérieur. 📐 N’oubliez pas de consulter les dimensions ci-dessous pour vous projeter !",
     "dim": "Dimensions (H × l) : ≃ 6 cm × 5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Coeur1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Coeur_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Coeur1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Coeur_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Coeur_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Coeur_Uni.png"
@@ -5232,8 +5245,8 @@ const P = [
     },
     "d": "Ce Ourson Nœud Ruban est fabriqués à la main, personnalisés et uniques, avec reliefs. Il peut être utilisé comme élément décoratif ou pour l’aromathérapie. Vous pouvez choisir une couleur parmi les variantes disponibles et ajouter, si vous le souhaitez, une fiole de parfum d’intérieur. 📐 N’oubliez pas de consulter les dimensions ci-dessous pour vous projeter !",
     "dim": "Dimensions (H × l) : ≃ 6,2 cm × 4,9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Noeud_Ruban1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Noeud_Ruban2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Noeud_Ruban1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Noeud_Ruban2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Noeud_Ruban_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Noeud_Ruban_Uni.png"
@@ -5254,8 +5267,8 @@ const P = [
     },
     "d": "Ce Ourson Rose est fabriqués à la main, personnalisés et uniques, avec reliefs. Il peut être utilisé comme élément décoratif ou pour l’aromathérapie. Vous pouvez choisir une couleur parmi les variantes disponibles et ajouter, si vous le souhaitez, une fiole de parfum d’intérieur. 📐 N’oubliez pas de consulter les dimensions ci-dessous pour vous projeter !",
     "dim": "Dimensions (H × l) : ≃ 6 cm × 5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Rose1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Rose_2.jpg",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Rose1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Rose_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Rose_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Ourson_Rose_Uni.png"
@@ -5286,8 +5299,8 @@ const P = [
     },
     "d": "Ce plateau rond Boisson est fabriqué à la main, personnalisé et unique. Il peut être utilisé pour l'apéritif ou pour une pause rafraîchissante 6 encoches pour accueillir des verres ou coupes, et 1 encoche centrale prévue pour une bouteille ou carafe.",
     "dim": "Dimensions (L × l) : Plateau ≃ 24,5 cm × 24,5 cm | Encoches verres : ≃ 5,8 cm | Encoche bouteille (centrale) : ≃ 7,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_boisson1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_boisson2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_boisson1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_boisson2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_boisson_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau_boisson_Uni.png",
@@ -5315,8 +5328,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Plume est fabriqué à la main, personnalisé et unique. Il peut être utilisé comme vide-poche pour les clés, bijoux, petits objets, ou comme élément décoratif sur une coiffeuse, un bureau, une console ou une table.",
     "dim": "Dimensions (L × l ) : ≃ 23,8 cm × 8,6 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plume1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plume2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plume1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plume2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plume_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plume_Uni.png",
@@ -5342,8 +5355,8 @@ const P = [
     },
     "d": "Ce porte-bijoux est fabriqué à la main, personnalisé et unique, avec une main sculptée intégrée à un plateau. Il permet de ranger vos bijoux tout en apportant une touche décorative élégante à une coiffeuse, une chambre ou une salle de bain.",
     "dim": "Dimensions (H × L × l) : Hauteur totale (main incluse) : ≃ 37,8 cm | Main : ≃ 16,1 cm (largeur) | Support : ≃ 18,8 cm (L) × ≃ 9,6 cm (l)",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Bijoux_Main1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Bijoux_Main_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Bijoux_Main1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Bijoux_Main_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Bijoux_Main_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Bijoux_Main_Uni.png",
@@ -5376,8 +5389,8 @@ const P = [
     },
     "d": "Ce porte Savon est fabriqué à la main, personnalisé et unique, avec une main sculptée intégrée à un plateau. À la fois pratique et décoratif, il favorise l'évacuation de l'eau grâce à ses ouvertures intégrées. Son design élégant s'intègre facilement dans une salle de bain, une cuisine ou un espace bien-être.",
     "dim": "Dimensions (L × l × E) : ≃ 13,1 cm x ≃ 9,7 cm Epaisseur : ≃ 1,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Savon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_savon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Savon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_savon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Savon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte_Savon_Uni.png",
@@ -5409,8 +5422,8 @@ const P = [
     },
     "d": "Ce Vase Pureté est fabriqué à la main, personnalisé et unique. Il est idéal comme élément décoratif et convient parfaitement pour accueillir des fleurs séchées, pampas, fleurs artificielles ou compositions décoratives. ⚠️ Vase décoratif : non destiné à contenir de l’eau.",
     "dim": "Dimensions (H x l) : ≃ 9,8 cm × 4,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pureté1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pureté2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pureté1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pureté2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pureté_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pureté_Uni.png",
@@ -5438,8 +5451,8 @@ const P = [
     },
     "d": "Cette boîte Bouddha est fabriquée à la main, personnalisée et unique, avec des reliefs. Elle peut être utilisée pour le rangement (bijoux, petits objets, salle de bain), pour accueillir une bougie, ou comme élément décoratif.",
     "dim": "Dimensions (H × L) : ≃ 14,3 cm × 8,8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sillon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sillon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sillon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sillon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sillon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sillon_Uni.png",
@@ -5466,8 +5479,8 @@ const P = [
     },
     "d": "Cet Vase Sillon est fabriqué à la main, personnalisé et unique, avec des reliefs. Il est idéal comme élément décoratif et convient parfaitement pour accueillir des fleurs séchées, pampas, fleurs artificielles ou compositions décoratives. ⚠️ Vase décoratif : non destiné à contenir de l’eau.",
     "dim": "Dimensions (H x l) : ≃ 9,8 cm × 8,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vase_Sillon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vase_Sillon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vase_Sillon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vase_Sillon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vase_Sillon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vase_Sillon_Uni.png",
@@ -5494,8 +5507,8 @@ const P = [
     },
     "d": "Ce Socle Rectangle 2 Portes-Bougies est fabriqué à la main, personnalisé et unique . Il peut être utilisé seul comme élément décoratif ou accompagné d’une création disponible dans la boutique. Le socle possède deux rainures pour y ajouter des lettres ou autres éléments décoratifs vendus séparément, ainsi que deux emplacements destinés à accueillir deux bougies LED ou des chauffe-plats.",
     "dim": "Dimensions (L × l × E ) : ≃ 16 cm × ≃ 9 cm × ≃ 2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Duo_Sillage1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Duo_Sillage2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Duo_Sillage1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Duo_Sillage2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Duo_Sillage_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Duo_Sillage_Uni.png",
@@ -5522,8 +5535,8 @@ const P = [
     },
     "d": "Ce socle Carré Porte-Bougie est fabriqué à la main, personnalisé et unique . Il peut être utilisé seul comme élément décoratif ou accompagné d’une création disponible dans la boutique. Le socle possède une rainure pour y ajouter des lettres ou autres éléments décoratifs vendus séparément, ainsi qu’un emplacement pour accueillir une bougie chauffe-plat.",
     "dim": "Dimensions (H × L) : ≃ 9 cm × ≃ 9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Epuré1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Epuré2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Epuré1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Epuré2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Epuré_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Epuré_Uni.png",
@@ -5550,8 +5563,8 @@ const P = [
     },
     "d": "Ce Socle Rond Porte-Bougie est fabriqué à la main, personnalisé et unique . Il peut être utilisé seul comme élément décoratif ou accompagné d’une création disponible dans la boutique. Le socle possède une rainure pour y ajouter des lettres ou autres éléments décoratifs vendus séparément, ainsi qu’un emplacement pour accueillir une bougie chauffe-plat.",
     "dim": "Dimensions (H × L) : ≃ 9,5 cm × ≃ 9,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Essence1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Essence2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Essence1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Essence2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Essence_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Essence_Uni.png",
@@ -5578,8 +5591,8 @@ const P = [
     },
     "d": "Ce Socle Rectangle Porte-Bougie Chandelle est fabriqué à la main, personnalisé et unique . Il peut être utilisé seul comme élément décoratif ou accompagné d’une création disponible dans la boutique. Le socle possède une rainure pour y ajouter des lettres ou autres éléments décoratifs vendus séparément, ainsi qu’un emplacement pour accueillir une bougie chandelle.",
     "dim": "Dimensions (L × l × E ) : ≃ 14 cm × ≃ 4 cm × ≃ 2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Sillage_Chandelle1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Sillage_Chandelle2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Sillage_Chandelle1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Sillage_Chandelle2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Sillage_Chandelle_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Sillage_Chandelle_Uni.png",
@@ -5606,8 +5619,8 @@ const P = [
     },
     "d": "Ce Socle Rectangle 3 Portes-Bougies est fabriqué à la main, personnalisé et unique . Il peut être utilisé seul comme élément décoratif ou accompagné d’une création disponible dans la boutique. Le socle possède d'une rainures pour y ajouter des lettres ou autres éléments décoratifs vendus séparément, ainsi que trois emplacements destinés à accueillir trois bougies LED ou des chauffe-plats.",
     "dim": "Dimensions (L × l × E ) : ≃ 16 cm × ≃ 7,5 cm × ≃ 2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Trio_Sillage1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Trio_Sillage2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Trio_Sillage1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Trio_Sillage2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Trio_Sillage_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Socle_Trio_Sillage_Uni.png",
@@ -5634,8 +5647,8 @@ const P = [
     },
     "d": "Ce Pot Sérénité est fabriqué à la main, personnalisé et unique, avec des reliefs soignés représentant deux mains tenant délicatement le contenant. Son design évoque une forme florale douce, apportant une sensation de calme et d’équilibre. Il peut être utilisé comme élément décoratif, organisateur ou rangement, pour accueillir une bougie, une plante (succulente) ou de petits objets du quotidien.",
     "dim": "Dimensions (H × l) : ≃ 8 cm × 9,2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sérénité1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sérénité2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sérénité1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sérénité2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sérénité_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Sérénité_Uni.png",
@@ -5662,8 +5675,8 @@ const P = [
     },
     "d": "Ce Vase Tornade est fabriqué à la main, personnalisé et unique, avec des reliefs. Il est idéal comme élément décoratif et convient parfaitement pour accueillir des fleurs séchées, pampas, fleurs artificielles ou compositions décoratives. ⚠️ Vase décoratif : non destiné à contenir de l’eau.",
     "dim": "Dimensions (H x l) : ≃ 14,8 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Tornade1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Tornade2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Tornade1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Tornade2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Tornade_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Tornade_Uni.png",
@@ -5688,8 +5701,8 @@ const P = [
     },
     "d": "Ce trio bougeoirs Sillon est fabriqué à la main, personnalisé et unique avec des reliefs. Il peut être utilisé comme élément décoratif ou pour décorer une table.",
     "dim": "Dimensions (H × L ou l, selon bougeoir) : Petit : ≃ 4,2 cm × ≃ 7,9 cm | Moyen : ≃ 5,3 cm × ≃ 7,3 cm | Grand : ≃ 5,3 cm × ≃ 8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Trio_Sillon1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Trio_Sillon2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Trio_Sillon1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Trio_Sillon2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Trio_Sillon_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Trio_Sillon_Uni.png",
@@ -5711,8 +5724,8 @@ const P = [
     },
     "d": "Trio de cœurs Fleuris (petit, moyen et grand) est fabriqués à la main, personnalisés et uniques, avec reliefs de pétales dessinés. Il peut être utilisé comme élément décoratif ou pour l’aromathérapie. Vous pouvez choisir une couleur parmi les variantes disponibles et ajouter, si vous le souhaitez, une fiole de parfum d’intérieur. 📐 N’oubliez pas de consulter les dimensions ci-dessous pour vous projeter !",
     "dim": "Dimensions (L × l) : Petit : ≃ 5,8 cm × ≃ 6,3 cm | Moyen : ≃ 7 cm × ≃ 7,5 cm | Grand : ≃ 7,8 cm × ≃ 8,2 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Fleuris_1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Fleuris2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Fleuris_1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Fleuris2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Fleuris_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Fleuris_Uni.png"
@@ -5733,8 +5746,8 @@ const P = [
     },
     "d": "Trio de cœurs Tissés (petit, moyen et grand) est fabriqués à la main, personnalisés et uniques, avec reliefs de tissage dessinés. Il peut être utilisé comme élément décoratif ou pour l’aromathérapie. Vous pouvez choisir une couleur parmi les variantes disponibles et ajouter, si vous le souhaitez, une fiole de parfum d’intérieur. 📐 N’oubliez pas de consulter les dimensions ci-dessous pour vous projeter !",
     "dim": "Dimensions (L × l) : Petit : ≃ 4,4 cm × ≃ 4,9 cm | Moyen : ≃ 6,7 cm × ≃ 7,5 cm | Grand : ≃ 8,9 cm × ≃ 9,9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Tissés1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Tissés2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Tissés1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Tissés2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Tissés_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coeurs_Tissés_Uni.png"
@@ -5761,8 +5774,8 @@ const P = [
     },
     "d": "Ce Pot Vague ondulée est fabriquée à la main, personnalisée et unique. Il peut être utilisé comme élément décoratif ou pour organiser de petits objets sur un bureau, sur une coiffeuse, dans la salle de bain, ou accueillir une bougie ou une plante.",
     "dim": "Dimensions (H × L × l) : ≃ 10 cm × 11,5 cm × 13 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague_Ondulée1_.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague_Ondulée2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague_Ondulée1_.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague_Ondulée2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague_Ondulée_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague_Ondulée_Uni.png",
@@ -5790,8 +5803,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Vagues est fabriqué à la main, personnalisé et unique. Avec ses lignes ondulées élégantes, il allie esthétique et praticité. Idéal pour mettre en valeur bougies, parfums, diffuseurs, bijoux, vases, plantes et autres objets décoratifs. Il apporte une touche moderne et élégante à votre intérieur.",
     "dim": "Dimensions (L × l × E) : ≃ 25,6 cm × 13,7 cm × 1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Grand_1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Grand_2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Grand_1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Grand_2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Grand_Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Grand_Uni.jpg",
@@ -5818,8 +5831,8 @@ const P = [
     },
     "d": "Ce plateau vide-poche Vagues est fabriqué à la main, personnalisé et unique. Avec ses lignes ondulées élégantes, il allie esthétique et praticité. Idéal pour accueillir clés, bijoux, bougies, parfums, diffuseurs et accessoires décoratifs sur une coiffeuse, un bureau, une console ou une table. Il peut également être utilisé comme sous-tasse ou sous-verre pour vos boissons tout en protégeant vos surfaces.",
     "dim": "Dimensions (L × l × E) : ≃ 13,6 cm × 13,3 cm × 1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Petit_1.jpg",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Petit_2_jpg.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Petit_1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Petit_2_jpg.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Petit__Brut.jpg",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Vague__Petit__Uni.png",
@@ -5850,8 +5863,8 @@ const P = [
     },
     "d": "Ce Pot Essence est fabriqué à la main, personnalisé et unique. Sa forme cylindrique épurée et intemporelle s'adapte à toutes les pièces de la maison.",
     "dim": "Dimensions (H × L) : ≃ 10 cm × 9 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Pot1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Pot2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Pot1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Pot2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Pot_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence_Pot_Uni.png",
@@ -5884,8 +5897,8 @@ const P = [
     },
     "d": "Ce Pot Épuré est fabriqué à la main, personnalisé et unique. Sa forme cubique minimaliste et moderne s'intègre avec élégance dans tous les espaces.",
     "dim": "Dimensions (H × L) : ≃ 8 cm × 8 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Pot1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Pot1.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Pot1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Pot1.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Pot_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Epuré_Pot_Uni.png",
@@ -5912,8 +5925,8 @@ const P = [
     },
     "d": "Ce Pot Visage Naturel est fabriquée à la main, personnalisée et unique. Il représente un visage de femme aux traits délicats, avec un jeu de reliefs végétaux : d’un côté, de grandes feuilles e, et de l’autre, des feuilles plus petites, apportant une harmonie organique et artistique. Il peut être utilisé comme élément décoratif, comme pot pour plante, une bougie, ou comme organisateur sur un bureau, coiffeuse ou étagère.",
     "dim": "Dimensions (H × L) : ≃ 9,1 cm × 8,4 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Visage_Naturel1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Visage_Naturel2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Visage_Naturel1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Visage_Naturel2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Visage_Naturel_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Visage_Naturel_Uni.png",
@@ -5941,8 +5954,8 @@ const P = [
     },
     "d": "Ce Vase Éclipse est fabriqué à la main, personnalisé et unique. Il est idéal comme élément décoratif et convient parfaitement pour accueillir des fleurs séchées, pampas, fleurs artificielles ou compositions décoratives. ⚠️ Vase décoratif : non destiné à contenir de l’eau.",
     "dim": "Dimensions (H x l) : ≃ 13,6 cm × 13,5 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Eclipse1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Eclipse2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Eclipse1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Eclipse2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Eclipse_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Eclipse_Uni.png",
@@ -5968,8 +5981,8 @@ const P = [
     },
     "d": "Ce pot Fille Silencieuse est fabriqué à la main, personnalisé et unique. Idéal en décoration de table pour vos occasions spéciales : anniversaire, mariage, baptême, communion... Offrez-le garni de dragées à vos invités, ou associez-le à quelques fleurs séchées pour une jolie touche décorative. ⚠️ Vendu sans sachet organza ni dragées — les photos sont présentées à titre indicatif pour vous aider à vous projeter.",
     "dim": "Dimensions (H × L) : ≃ 9,1 cm × 5,7 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse__Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Silencieuse__Uni.png",
@@ -5993,8 +6006,8 @@ const P = [
     },
     "d": "Ce pot Fille Penseuse est fabriqué à la main, personnalisé et unique. Idéal en décoration de table pour vos occasions spéciales : anniversaire, mariage, baptême, communion... Offrez-le garni de dragées à vos invités, ou associez-le à quelques fleurs séchées pour une jolie touche décorative. ⚠️ Vendu sans sachet organza ni dragées — les photos sont présentées à titre indicatif pour vous aider à vous projeter.",
     "dim": "Dimensions (H × L) : ≃ 9,7 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Penseuse_Uni.png",
@@ -6018,8 +6031,8 @@ const P = [
     },
     "d": "Ce pot Fille Méditation est fabriqué à la main, personnalisé et unique. Idéal en décoration de table pour vos occasions spéciales : anniversaire, mariage, baptême, communion... Offrez-le garni de dragées à vos invités, ou associez-le à quelques fleurs séchées pour une jolie touche décorative. ⚠️ Vendu sans sachet organza ni dragées — les photos sont présentées à titre indicatif pour vous aider à vous projeter.",
     "dim": "Dimensions (H × L) : ≃ 9,8 cm × 7,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation2.webp",
     "finImgs": {
       "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Brut.png",
       "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Fille_Méditation_Uni.png",
@@ -6045,8 +6058,8 @@ const P = [
     },
     "d": "Plateau Élancé personnalisé, fait à la main. Choisissez le destinataire et les couleurs. ⚠️ La couleur des lettres reste inchangée.",
     "dim": "Dimensions (L × l) : ≃ 17,8 cm × 9,3 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé1.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé1.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé2.webp",
     "finImgs": {
       "Maître": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Maître.png",
       "Maîtresse": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Occassion_Elancé_Maîtresse.png",
@@ -6064,11 +6077,11 @@ const P = [
     "finPrix": {"Pièce unique": 30.0},
     "d": "Une page blanche entre mes mains… C'est ainsi qu'est née cette création.\n\nPêche gorgée de soleil est une Création Signature imaginée en un seul exemplaire — une pièce unique qui ne sera jamais reproduite.\n\nElle est le fruit d'un subtil mélange de blanc, de pêche, de jaune, d'orange et de délicates touches rosées, inspiré des derniers rayons d'un soleil d'été.\n\nChaque nuance se dévoile avec douceur pour offrir une création chaleureuse, lumineuse et intemporelle.\n\nPlus qu'un simple objet décoratif, cette création raconte une histoire… et elle est prête à accueillir la vôtre.",
     "dim": "Ensemble complet : Plateau ≃ 17,8 cm × 9,3 cm — Boîte Sillon ≃ 4,3 cm × 8,8 cm — Vase Sillon ≃ 9,8 cm × 8,1 cm",
-    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble.png",
-    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble2.png",
+    "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble.webp",
+    "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble2.webp",
     "imgs": [
-      "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble.png",
-      "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble2.png",
+      "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble.webp",
+      "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Ensemble2.webp",
       "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Plateau.png",
       "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Vase.png",
       "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Signature_Peche_gorgee_de_soleil_Boite.png"
@@ -6093,8 +6106,8 @@ const P = [
   },
   "d": "Cette planche de présentation Sillage est fabriquée à la main, personnalisée et unique. Elle habille avec élégance vos apéritifs, plateaux de charcuterie ou de fromages. Attention : il ne s'agit pas d'une planche à découper.",
   "dim": "Dimensions (L × l) : ≃ 34,2 cm × ≃ 21 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Planche service Sillage Uni.jpg",
@@ -6121,8 +6134,8 @@ const P = [
   },
   "d": "Ce cœur Élancé est fabriqué à la main, personnalisé et unique. Il trouve sa place comme élément de décoration, vide-poche pour vos bijoux ou petit rangement du quotidien.",
   "dim": "Dimensions (L × l) : ≃ 9,8 cm × ≃ 10,9 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/CoeurElance1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/CoeurElance2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/CoeurElance1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/CoeurElance2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/CoeurElance Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/CoeurElance Uni.jpg",
@@ -6151,8 +6164,8 @@ const P = [
   },
   "d": "Ce duo de coquillages enlacés est fabriqué à la main, personnalisé et unique. Il se glisse aussi bien en décoration qu'en vide-poche pour vos bijoux ou petits objets.",
   "dim": "Dimensions (L × l) : ≃ 10,3 cm × ≃ 15,2 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Coquillage Enlacé Uni.jpg",
@@ -6178,8 +6191,8 @@ const P = [
   },
   "d": "Ce pot Essence Lunaire est fabriqué à la main, personnalisé et unique. Il accueille une plante grasse, une bougie ou se pose simplement comme objet de décoration.",
   "dim": "Dimensions (H × l × Ouverture) : ≃ 6 cm × ≃ 9 cm × ≃ 5 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Lunaire Uni.jpg",
@@ -6205,8 +6218,8 @@ const P = [
   },
   "d": "Ce plateau Essence Élancé est fabriqué à la main, personnalisé et unique. Il sert de décoration ou de vide-poche pour vos bijoux et petits objets du quotidien.",
   "dim": "Dimensions (L × l) : ≃ 18,4 cm × ≃ 9,9 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Essence Elancé Uni.jpg",
@@ -6233,8 +6246,8 @@ const P = [
   },
   "d": "Ce plateau Pétales de fleur est fabriqué à la main, personnalisé et unique. Il se prête à la décoration comme au rangement de vos bijoux en vide-poche.",
   "dim": "Dimensions (L × l) : ≃ 12 cm × ≃ 11 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur1 .png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur2 .png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur1 .webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur2 .webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Pétales de fleur Uni.jpg",
@@ -6261,8 +6274,8 @@ const P = [
   },
   "d": "Ce plateau de service Essence Relief ondulé est fabriqué à la main, personnalisé et unique. Il accompagne vos apéritifs, plateaux de charcuterie ou de fromages. Attention : il ne s'agit pas d'une surface de découpe.",
   "dim": "Dimensions (L × l) : ≃ 30 cm × ≃ 30 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé1 .png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé2 .png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé1 .webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé2 .webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau de Service Essence Relief ondulé Uni.jpg",
@@ -6291,8 +6304,8 @@ const P = [
   },
   "d": "Ce plateau de service Taï Chi, à la silhouette inspirée du symbole yin et yang, est fabriqué à la main, personnalisé et unique. Il accompagne vos apéritifs, charcuteries, fromages, bonbons ou crudités.",
   "dim": "Dimensions (L × l) : ≃ 20,8 cm × ≃ 20,8 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi1 .png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi2 .png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi1 .webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi2 .webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Plateau Taï Chi Uni.png",
@@ -6320,8 +6333,8 @@ const P = [
   },
   "d": "Ce repose-cuillère Alizé est fabriqué à la main, personnalisé et unique. Pratique en cuisine, il accueille vos ustensiles pendant la préparation de vos plats.",
   "dim": "Dimensions (L × l × É) : ≃ 23,37 cm × ≃ 11,94 cm × ≃ 4,57 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé1 .png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé2 .png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé1 .webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé2 .webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Repose-cuillère Alizé Uni.jpg",
@@ -6348,8 +6361,8 @@ const P = [
   },
   "d": "Ce porte-savon Élancé Iris est fait main, personnalisé et unique, à la silhouette ovale épurée rehaussée d'une élégante encoche en V. Ses reliefs intégrés facilitent l'évacuation de l'eau et gardent votre savon toujours au sec. Sobre et raffiné, il s'invite avec grâce dans une salle de bain, une cuisine ou un espace bien-être.",
   "dim": "Dimensions (L × l × E) : ≃ 11 cm x ≃ 7,4 cm Epaisseur : ≃ 2,2 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Elancé Iris1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Elancé Iris2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Elancé Iris1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Elancé Iris2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Elancé Iris Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Elancé Iris Uni.jpg",
@@ -6376,8 +6389,8 @@ const P = [
   },
   "d": "Ce porte-savon Essence est fait main, personnalisé et unique, associant une base ronde généreuse à un plateau amovible finement rainuré. Pratique au quotidien, il permet à l'eau de s'écouler facilement pour préserver votre savon plus longtemps. Sa forme ronde et douce apporte une touche épurée à votre salle de bain ou votre espace bien-être.",
   "dim": "Dimensions (Ø) : ≃ 11,3 cm Epaisseur : ≃ 2,5 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Essence1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Essence2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Essence1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Essence2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Essence Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Essence Uni.jpg",
@@ -6404,8 +6417,8 @@ const P = [
   },
   "d": "Ce porte-savon Sillage Capucine est fait main, personnalisé et unique, avec des cannelures profondes qui dessinent des lignes graphiques et élégantes. Ses sillons favorisent l'évacuation de l'eau pour un savon toujours prêt à l'emploi. Son design contemporain se glisse aussi bien dans une salle de bain qu'une cuisine ou un espace cocooning.",
   "dim": "Dimensions (L × l × E) : ≃ 11 cm x ≃ 7,5 cm Epaisseur : ≃ 1,6 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Capucine1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Capucine2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Capucine1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Capucine2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Capucine Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Capucine Uni.jpg",
@@ -6432,8 +6445,8 @@ const P = [
   },
   "d": "Ce porte-savon Sillage Tressé est fait main, personnalisé et unique, orné d'un motif tressé en zigzag du plus bel effet. Ses reliefs entrecroisés assurent une excellente évacuation de l'eau tout en apportant du caractère à votre salle de bain. Une pièce décorative et fonctionnelle, parfaite pour sublimer un espace bien-être ou une cuisine.",
   "dim": "Dimensions (L × l × E) : ≃ 11 cm x ≃ 7,5 cm Epaisseur : ≃ 1,6 cm",
-  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Tressé1.png",
-  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Tressé2.png",
+  "img": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Tressé1.webp",
+  "img2": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Tressé2.webp",
   "finImgs": {
     "Brut": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Tressé Brut.png",
     "Uni": "https://lesessencesparfumeesdaphrodite-ctrl.github.io/les-essences-parfumees-D-aphrodite/Porte savon Sillage Tressé Uni.jpg",
@@ -6696,7 +6709,7 @@ function afficherAnnonce(cfg){
        ${cfg['BLOC_LEGENDE'] ? `<p style="color:#6B3A4E;font-size:13.5px;line-height:1.7;margin-bottom:18px">${cfg['BLOC_LEGENDE'].replace(/\\n/g,'<br>')}</p>` : ''}`
     : '';
   const bouton = cfg['LIEN_LABEL']
-    ? `<button onclick="fermerAnnonce();${cfg['LIEN_PAGE'] ? `showPage('${cfg['LIEN_PAGE']}');` : ''}${cfg['LIEN_ANCRE'] ? `setTimeout(()=>allerVersAncreExh('${cfg['LIEN_ANCRE']}'),150);` : ''}" style="background:linear-gradient(90deg,${c1},${c2});color:white;border:none;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">${cfg['LIEN_LABEL']}</button>`
+    ? `<button onclick="fermerAnnonce();${cfg['LIEN_PAGE'] ? `showPage('${cfg['LIEN_PAGE']}');` : ''}${cfg['LIEN_ANCRE'] ? `setTimeout(()=>allerVersAncreExh('${cfg['LIEN_ANCRE']}'),150);` : ''}" style="background:${c2};color:white;border:none;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">${cfg['LIEN_LABEL']}</button>`
     : '';
 
   overlay.innerHTML = `
@@ -7063,7 +7076,7 @@ function renderBoutique(cat, _skipHistory){
         <span class="tri-label">${liste.length} création${liste.length>1?'s':''}</span>
         <div class="tri-select-wrap">
           <label for="triSelect" class="tri-by">Trier par :</label>
-          <select id="triSelect" class="tri-select" onchange="changerTri(this.value)">
+          <select id="triSelect" aria-label="Trier les produits" class="tri-select" onchange="changerTri(this.value)">
             <option value="pertinence"${triActif==='pertinence'?' selected':''}>Pertinence</option>
             <option value="nouveautes"${triActif==='nouveautes'?' selected':''}>Nouveautés</option>
             <option value="az"${triActif==='az'?' selected':''}>Nom : A à Z</option>
@@ -7322,7 +7335,7 @@ function buildMo(pr,mainImg){
     <div class="qte-box">
       <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--brun)">Quantité</span>
       ${pr.c==='Créations Signature'
-        ? `<div style="font-size:12px;color:var(--dore);font-style:italic;margin-top:4px">⚡ Pièce unique — 1 exemplaire disponible</div>`
+        ? `<div style="font-size:12px;color:var(--dore-txt);font-style:italic;margin-top:4px">⚡ Pièce unique — 1 exemplaire disponible</div>`
         : `<div class="qte-ctrl">
           <button class="qte-btn" onclick="chQte(-1)">−</button>
           <span class="qte-v" id="qteVal">1</span>
@@ -7764,7 +7777,7 @@ function buildParfumOption(){
   return `<div class="opt-block">
     <label class="opt-label">🌸 Parfum d'intérieur — flacon 8 ml (+${PARFUM_PRIX.toFixed(2)} €)</label>
     <p class="opt-sub">Choisissez la fragrance qui accompagnera votre création et apportera une signature olfactive unique à votre intérieur.</p>
-    <select class="opt-select" onchange="selParfum(this.value)">
+    <select class="opt-select" aria-label="Choisir un parfum" onchange="selParfum(this.value)">
       <option value=""${!parfumSel?' selected':''}>— Aucun parfum —</option>
       ${opts}
     </select>
@@ -9364,7 +9377,7 @@ function initCarr() {
       </div>
     </div>`;
   }).join('');
-  dots.innerHTML = CARR_DATA.map((_, i) => `<button class="carr-dot${i===0?' act':''}" onclick="goCarr(${i})"></button>`).join('');
+  dots.innerHTML = CARR_DATA.map((_, i) => `<button class="carr-dot${i===0?' act':''}" onclick="goCarr(${i})" aria-label="Voir la diapositive ${i+1} sur ${CARR_DATA.length}"${i===0?' aria-current="true"':''}></button>`).join('');
   ajusterHauteurMosaique();
   startCarrTimer();
 }
@@ -9390,7 +9403,7 @@ window.addEventListener('resize', ()=>{
 function goCarr(i) {
   carrIdx = (i + CARR_DATA.length) % CARR_DATA.length;
   document.getElementById('carrTrack').style.transform = `translateX(-${carrIdx*100}%)`;
-  document.querySelectorAll('.carr-dot').forEach((d,j) => d.classList.toggle('act', j===carrIdx));
+  document.querySelectorAll('.carr-dot').forEach((d,j) => { d.classList.toggle('act', j===carrIdx); if(j===carrIdx) d.setAttribute('aria-current','true'); else d.removeAttribute('aria-current'); });
 }
 
 function carrNav(dir) {
