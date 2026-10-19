@@ -186,8 +186,9 @@ document.addEventListener('error',function(e){
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet"/>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1MP7PNBGKB"></script>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap"/></noscript>
+<script>window.addEventListener('load',function(){setTimeout(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-1MP7PNBGKB';document.head.appendChild(s);},1500);});</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -196,7 +197,6 @@ document.addEventListener('error',function(e){
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>window.addEventListener('DOMContentLoaded',function(){ if(window.emailjs) emailjs.init('y6UuxLOIIQbhDWjeD'); });</script>
-<script src="https://www.paypal.com/sdk/js?client-id=BAAnCz81FiY7unJvAi2c11cGazltrKVBwAtbB4Hqux_IAJ0U6QhHZhPXR41P6_E5v32aADUwmGjD4miRZs&currency=EUR&locale=fr_FR&enable-funding=paylater,card" defer></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -268,7 +268,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.4);border-radius:30px;padding:6px 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-txt);margin-bottom:18px}
 .hero-t{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,50px);font-weight:700;line-height:1.15;color:var(--brun);margin-bottom:10px}
 .hero-t em{font-style:italic;color:var(--terra)}
-.hero-sub{font-family:'Dancing Script',cursive;font-size:clamp(16px,2vw,22px);color:#C8A951;margin-bottom:16px}
+.hero-sub{font-family:'Dancing Script',cursive;font-size:clamp(16px,2vw,22px);color:#7A5C14;margin-bottom:16px}
 .hero-desc{font-size:14px;color:var(--gris);line-height:1.8;margin-bottom:24px;max-width:440px}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:0}
 /* Colonne droite : image + stats empilés */
@@ -290,7 +290,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-title .ey{margin-bottom:8px}
 .carr-title h2{font-family:'Playfair Display',serif;font-size:clamp(20px,2.5vw,30px);font-weight:700;color:var(--brun);line-height:1.3}
 .carr-title h2 em{font-style:italic;color:var(--terra)}
-.carr-wrap{position:relative;overflow:hidden;border-radius:var(--r)}
+.carr-wrap{position:relative;overflow:hidden;border-radius:var(--r);aspect-ratio:2/1}
 .carr-track{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .carr-slide{min-width:100%;position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center}
 .carr-duo{display:flex;gap:0;width:100%;justify-content:center;position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
@@ -301,7 +301,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 .carr-mosaic-cell{position:relative;flex:1;overflow:hidden}
 .carr-mosaic-tag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(44,24,16,.55);color:#fff;font-weight:800;font-size:9px;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;padding:2px}
 .carr-mosaic-img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0}
-.carr-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(rgba(44,24,16,.45),rgba(44,24,16,.82));border-radius:0 0 var(--r-sm) var(--r-sm);text-align:center;padding:32px 16px 14px;pointer-events:none}
+.carr-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(rgba(44,24,16,.6),rgba(44,24,16,.92));border-radius:0 0 var(--r-sm) var(--r-sm);text-align:center;padding:32px 16px 14px;pointer-events:none}
 .carr-label-cat{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dore-cl);margin-bottom:4px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .carr-label-cta{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white}
 .carr-arrow{position:absolute;top:42%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:none;border-radius:50%;width:40px;height:40px;font-size:22px;line-height:1;cursor:pointer;color:var(--brun);box-shadow:var(--sh);display:flex;align-items:center;justify-content:center;transition:var(--tr);z-index:5}
@@ -314,15 +314,16 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 @media(max-width:768px){
   .hero-bottom-pad{padding-bottom:16px}
   .carr-section{padding:0 0 32px}
+  .carr-wrap{aspect-ratio:auto;min-height:calc(50vw + 40px)}
   .carr-duo{gap:8px;border-radius:var(--r-sm);box-shadow:var(--sh)}
   .carr-duo-img{width:calc(50% - 4px);border-radius:0}
   .carr-mosaic-frame{border-radius:var(--r-sm)}
   .carr-mosaic{gap:1px}
   .carr-mosaic-row{gap:1px}
   .carr-label{position:static;background:transparent;padding:10px 8px 4px;pointer-events:auto}
-  .carr-label-cat{color:var(--terra)}
+  .carr-label-cat{color:var(--brun)}
   .carr-label-cta{color:var(--brun);font-size:14px}
-  .carr-arrow{background:rgba(255,255,255,.25);box-shadow:none;color:white}
+  .carr-arrow{background:rgba(255,255,255,.92);box-shadow:var(--sh);color:var(--brun)}
 }
 
 /* ZOOM PHOTO MOBILE */
@@ -365,7 +366,7 @@ nav{position:fixed;top:0;left:0;right:0;width:100%;max-width:100vw;z-index:1000;
 
 /* FINITIONS */
 .sf{padding:70px 24px}
-.fin-photo{width:100%;max-width:900px;display:block;margin:30px auto 0;border-radius:var(--r);box-shadow:var(--sh-lg)}
+.fin-photo{width:100%;height:auto;max-width:900px;display:block;margin:30px auto 0;border-radius:var(--r);box-shadow:var(--sh-lg)}
 
 /* BOUTIQUE */
 .bh{padding:100px 24px 36px;text-align:center}
@@ -741,7 +742,6 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 <body>
 <!-- Lien d'évitement pour les lecteurs d'écran (malvoyants) -->
 <a href="#contenu-principal" class="skip-link" style="position:absolute;top:-40px;left:0;background:var(--terra);color:#fff;padding:8px 16px;z-index:10000;border-radius:0 0 8px 0;font-size:14px;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
-<a href="#main-content" style="position:absolute;top:-40px;left:0;background:var(--terra);color:white;padding:8px 16px;border-radius:0 0 8px 0;font-weight:700;font-size:13px;z-index:9999;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
 <!-- NAV -->
 <nav>
@@ -814,8 +814,8 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
       </div>
       <div class="hero-right">
         <div class="hero-img-wrap">
-          <img src="photo_hero.jpg" alt="Créations faites main en plâtre résine"
-               onerror="this.src='https://cdn.sumup.store/shops/39596944/settings/th1024/68950ece-2f55-4fd2-b19b-171338512bca.jpeg'"/>
+          <img src="photo_hero.webp" width="652" height="451" fetchpriority="high" decoding="async" alt="Créations faites main en plâtre résine"
+               onerror="if(!this.dataset.f){this.dataset.f=1;this.src='photo_hero.jpg'}else{this.src='https://cdn.sumup.store/shops/39596944/settings/th1024/68950ece-2f55-4fd2-b19b-171338512bca.jpeg'"/>
         </div>
         <div class="hero-stats">
           <div class="stat"><div class="stat-n">90+</div><div class="stat-l">Créations</div></div>
@@ -876,7 +876,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
   <!-- SLOGAN PLEINE LARGEUR -->
   <section style="background:#FDF6F0;padding:28px 20px 36px">
     <div style="max-width:960px;margin:0 auto;border-top:2px solid var(--dore);padding-top:24px;text-align:center">
-      <p style="font-family:'Dancing Script',cursive;font-size:24px;color:#C8A951;margin:0;letter-spacing:0.5px">
+      <p style="font-family:'Dancing Script',cursive;font-size:24px;color:#7A5C14;margin:0;letter-spacing:0.5px">
         "Chaque pièce est unique, comme vous."
       </p>
     </div>
@@ -1004,7 +1004,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <h2 class="st">8 finitions pour<br><em>une création qui vous ressemble</em></h2>
         <p class="sdesc">Choisissez parmi nos finitions exclusives. Le prix s'adapte automatiquement selon votre choix.</p>
       </div>
-      <img loading="lazy" src="photo_finitions.webp" class="fin-photo"
+      <img loading="lazy" src="photo_finitions.webp" width="1000" height="335" class="fin-photo"
            alt="Les 8 finitions : Unis, Bicolores, Terrazzo, Duo Couleur+Terrazzo, Marbré, Duo Couleur+Marbré, Mot, Prénom"
            onerror="this.style.display='none'"/>
     </div>
@@ -1025,7 +1025,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     <div class="ey">✦ Notre collection</div>
     <h1 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);color:var(--brun);margin:8px 0 10px">La Boutique</h1>
     <p style="color:var(--gris);font-size:13px;max-width:600px;margin:0 auto 14px;line-height:1.6">Découvrez toutes nos créations faites main en plâtre résine, personnalisables selon vos envies.</p>
-    <p style="font-family:'Dancing Script',cursive;font-size:24px;color:#C8A951;margin:0">"Chaque pièce est unique, comme vous."</p>
+    <p style="font-family:'Dancing Script',cursive;font-size:24px;color:#7A5C14;margin:0">"Chaque pièce est unique, comme vous."</p>
   </div>
   <div id="boutiqueContenu"></div>
 </div>
@@ -1924,7 +1924,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
       <div class="f-tag">Chaque pièce est unique, comme vous.</div>
       <p>Créations en plâtre résine, faites main et personnalisées à Irigny, près de Lyon, dans le Rhône (69) — Rhône-Alpes. Imperméabilisées et vernies avec soin.</p>
       <a href="https://www.calameo.com/read/00825440008b281627392" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,169,81,0.15);border:1px solid var(--dore);color:var(--dore-txt);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;margin:10px 0">
+         style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,169,81,0.15);border:1px solid var(--dore);color:var(--dore-cl);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;margin:10px 0">
         📖 Feuilleter notre catalogue
       </a>
       <div class="f-contact">
@@ -2021,7 +2021,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
                style="padding:8px 12px;border-radius:20px;border:1px solid rgba(200,169,81,0.4);background:rgba(255,255,255,0.1);color:white;font-size:12px;outline:none;width:100%;box-sizing:border-box"
                onfocus="this.style.borderColor='#C8A951'" onblur="this.style.borderColor='rgba(200,169,81,0.4)'"/>
         <button onclick="inscrireNewsletter()" 
-                style="background:var(--dore);color:white;border:none;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s"
+                style="background:var(--dore);color:var(--brun);border:none;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s"
                 onmouseover="this.style.background='#b8952e'" onmouseout="this.style.background='var(--dore)'">
           S'inscrire →
         </button>
@@ -2036,8 +2036,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
     </div>
     <div><a href="#" onclick="showPage('mentions');return false">Mentions légales</a> · <a href="#" onclick="showPage('cgv');return false">CGV</a> · <a href="#" onclick="showPage('confidentialite');return false">Confidentialité</a> · <a href="#" onclick="showPage('fidelite');return false">Programme de fidélité</a> · <a href="#" onclick="ouvrirFAQ();return false">FAQ</a></div>
   </div>
-  <div style="margin-top:16px;border-top:1px solid rgba(201,169,110,.15);padding-top:12px;font-size:10px;color:rgba(201,169,110,.4);text-align:center">
-    <a href="#" onclick="showPage('admin');return false" style="color:rgba(201,169,110,.3);text-decoration:none;font-size:9px">⚙ Admin</a> · <a href="outil.html" target="_blank" rel="noopener" style="color:rgba(201,169,110,.3);text-decoration:none;font-size:9px">🧮 Outil</a> · <a href="carnet-fidelite.html" target="_blank" rel="noopener" style="color:rgba(201,169,110,.3);text-decoration:none;font-size:9px">💳 Fidélité</a>
+  <div style="margin-top:16px;border-top:1px solid rgba(201,169,110,.15);padding-top:12px;font-size:10px;color:rgba(201,169,110,.9);text-align:center">
+    <a href="#" onclick="showPage('admin');return false" style="color:rgba(201,169,110,.9);text-decoration:none;font-size:9px">⚙ Admin</a> · <a href="outil.html" target="_blank" rel="noopener" style="color:rgba(201,169,110,.9);text-decoration:none;font-size:9px">🧮 Outil</a> · <a href="carnet-fidelite.html" target="_blank" rel="noopener" style="color:rgba(201,169,110,.9);text-decoration:none;font-size:9px">💳 Fidélité</a>
   </div>
 </footer>
 
@@ -2502,16 +2502,16 @@ function renderCompte(){
     <div class="compte-card">
       <div class="compte-titre">👤 Bonjour, ${client.prenom} !</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-        <div class="form-field"><label>Prénom</label><input type="text" value="${client.prenom||''}" onchange="majChampClient('prenom',this.value)"/></div>
-        <div class="form-field"><label>Nom</label><input type="text" value="${client.nom||''}" onchange="majChampClient('nom',this.value)"/></div>
+        <div class="form-field"><label>Prénom</label><input type="text" value="${client.prenom||''}" name="client-prenom" autocomplete="given-name" onchange="majChampClient('prenom',this.value)"/></div>
+        <div class="form-field"><label>Nom</label><input type="text" value="${client.nom||''}" name="client-nom" autocomplete="family-name" onchange="majChampClient('nom',this.value)"/></div>
       </div>
-      <div class="form-field"><label>Email</label><input type="email" value="${client.email||''}" onchange="majChampClient('email',this.value)"/></div>
-      <div class="form-field"><label>Téléphone</label><input type="tel" value="${client.tel||''}" onchange="majChampClient('tel',this.value)"/></div>
-      <div class="form-field"><label>Adresse</label><input type="text" value="${client.adresse||''}" onchange="majChampClient('adresse',this.value)"/></div>
-      <div class="form-field"><label>Complément d'adresse</label><input type="text" value="${client.adresse2||''}" placeholder="Appartement, bâtiment..." onchange="majChampClient('adresse2',this.value)"/></div>
+      <div class="form-field"><label>Email</label><input type="email" value="${client.email||''}" name="client-email" autocomplete="email" onchange="majChampClient('email',this.value)"/></div>
+      <div class="form-field"><label>Téléphone</label><input type="tel" value="${client.tel||''}" name="client-tel" autocomplete="tel" onchange="majChampClient('tel',this.value)"/></div>
+      <div class="form-field"><label>Adresse</label><input type="text" value="${client.adresse||''}" name="client-adresse" autocomplete="address-line1" onchange="majChampClient('adresse',this.value)"/></div>
+      <div class="form-field"><label>Complément d'adresse</label><input type="text" value="${client.adresse2||''}" name="client-adresse2" autocomplete="address-line2" placeholder="Appartement, bâtiment..." onchange="majChampClient('adresse2',this.value)"/></div>
       <div style="display:flex;gap:10px">
-        <div class="form-field" style="flex:1"><label>CP</label><input type="text" value="${client.cp||''}" onchange="majChampClient('cp',this.value)" maxlength="5"/></div>
-        <div class="form-field" style="flex:2"><label>Ville</label><input type="text" value="${client.ville||''}" onchange="majChampClient('ville',this.value)"/></div>
+        <div class="form-field" style="flex:1"><label>CP</label><input type="text" value="${client.cp||''}" name="client-cp" autocomplete="postal-code" onchange="majChampClient('cp',this.value)" maxlength="5"/></div>
+        <div class="form-field" style="flex:2"><label>Ville</label><input type="text" value="${client.ville||''}" name="client-ville" autocomplete="address-level2" onchange="majChampClient('ville',this.value)"/></div>
       </div>
       <div class="form-row" style="margin-top:10px">
         <div class="form-field"><label>🎂 Date de naissance</label><input type="date" aria-label="Date de naissance" value="${client.dateNaissance||''}" onchange="majChampClient('dateNaissance',this.value);verifierAnniversaire()"/></div>
@@ -6697,7 +6697,7 @@ function afficherAnnonce(cfg){
   overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(40,30,30,.55);display:flex;align-items:center;justify-content:center;padding:20px';
 
   const image = cfg['IMAGE']
-    ? `<img loading="lazy" src="${cfg['IMAGE']}" alt="${cfg['TITRE']||''}" style="width:100%;max-width:260px;height:auto;display:block;margin:0 auto 18px" onerror="this.style.display='none'"/>`
+    ? `<img src="${cfg['IMAGE']}" width="520" height="204" decoding="async" alt="${cfg['TITRE']||''}" style="width:100%;max-width:260px;height:auto;display:block;margin:0 auto 18px" onerror="this.style.display='none'"/>`
     : '';
   const titre = cfg['TITRE']
     ? `<div style="font-family:'Playfair Display',serif;font-size:21px;color:#5B2A3A;font-weight:700;margin-bottom:10px">${cfg['TITRE']}</div>` : '';
@@ -6962,7 +6962,7 @@ function renderBoutique(cat, _skipHistory){
           <p style="color:var(--gris);font-size:15px;line-height:1.7;max-width:400px;margin:0 auto 20px">
             Une nouvelle création se prépare.<br/>Revenez très vite pour la découvrir en avant-première !
           </p>
-          <p style="font-family:'Dancing Script',cursive;font-size:20px;color:#C8A951">"Chaque pièce est unique, comme vous."</p>
+          <p style="font-family:'Dancing Script',cursive;font-size:20px;color:#7A5C14">"Chaque pièce est unique, comme vous."</p>
         </div>
       </div>`;
       window.scrollTo(0,0);
@@ -8330,8 +8330,15 @@ function supprimerBon(){
   renderPanier();
 }
 
+function chargerPayPalSDK(){
+  if(window._ppCharge) return; window._ppCharge = true;
+  const s = document.createElement('script');
+  s.src = 'https://www.paypal.com/sdk/js?client-id=BAAnCz81FiY7unJvAi2c11cGazltrKVBwAtbB4Hqux_IAJ0U6QhHZhPXR41P6_E5v32aADUwmGjD4miRZs&currency=EUR&locale=fr_FR&enable-funding=paylater,card';
+  document.head.appendChild(s);
+}
 function initPayPal(total){
   if(typeof paypal==='undefined'){
+    chargerPayPalSDK();
     setTimeout(()=>initPayPal(total),800);return;
   }
   const wrap=document.getElementById('paypal-btn-wrap');
@@ -8365,7 +8372,7 @@ function initPayPal(total){
           <p style="color:var(--gris);font-size:15px;line-height:1.7;margin-bottom:8px">Votre paiement a bien été validé.</p>
           <p style="color:var(--gris);font-size:14px;line-height:1.7;margin-bottom:24px">Vous allez recevoir un email de confirmation à l'adresse indiquée. Votre commande vous sera envoyée dans un délai de <strong>5 à 7 jours</strong>.</p>
           <div style="background:#FDF6F0;border:1px solid var(--dore);border-radius:12px;padding:16px;margin-bottom:24px">
-            <p style="font-family:'Dancing Script',cursive;font-size:20px;color:#C8A951;margin:0">"Chaque pièce est unique, comme vous."</p>
+            <p style="font-family:'Dancing Script',cursive;font-size:20px;color:#7A5C14;margin:0">"Chaque pièce est unique, comme vous."</p>
           </div>
           <button class="btn-p" onclick="showPage('boutique')" style="margin:0 auto">Retour à la boutique</button>
         </div>`;
@@ -8409,7 +8416,7 @@ async function inscrireNewsletter(){
     produits: '➜ Prénom : '+prenom+'\n➜ Email : '+email+'\n\nCette personne souhaite être informée de vos nouveautés.',
     total: '', sous_total: '', livraison: 'Newsletter', transaction_id: email
   });
-  msg.style.display='block'; msg.style.color='#C8A951';
+  msg.style.display='block'; msg.style.color='#7A5C14';
   msg.textContent='✅ Merci '+prenom+' ! Vous serez informée en avant-première.';
   document.getElementById('newsletter-prenom').value='';
   document.getElementById('newsletter-email').value='';
@@ -8775,7 +8782,7 @@ async function envoyerExhCommande(){
     total: fmtPrix(totalCommande), sous_total: 'Livraison à : '+recapAdresse, livraison: '', transaction_id: ''
   });
 
-  msg.style.display='block'; msg.style.color='#C8A951';
+  msg.style.display='block'; msg.style.color='#7A5C14';
   msg.innerHTML='✅ <strong>Merci pour votre commande !</strong><br>Votre demande a bien été prise en compte. Un récapitulatif de votre commande vous sera envoyé par mail.<br>Zulay, votre conseillère Exhalessence, vous contactera prochainement pour confirmer votre commande.';
   exhcLignesCommande = [];
   rafraichirListeCommande();
@@ -9085,7 +9092,7 @@ async function reserverExhalessence(){
     produits: '➜ Prestation : '+prestation+'\n➜ Nom : '+nom+'\n➜ Prénom : '+prenom+'\n➜ Email : '+email+'\n➜ Téléphone : '+tel+'\n➜ Date souhaitée : '+(date||'Non précisée')+(commentaire ? '\n➜ Commentaire : '+commentaire : '')+'\n\nMerci de recontacter cette personne pour confirmer la date.',
     total: '', sous_total: '', livraison: 'Réservation EXHALESSENCE', transaction_id: email
   });
-  msg.style.display='block'; msg.style.color='#C8A951';
+  msg.style.display='block'; msg.style.color='#7A5C14';
   msg.textContent='✅ Merci ! Votre demande a bien été envoyée, je vous recontacte rapidement pour confirmer votre rendez-vous.';
   ['exh-prenom','exh-nom','exh-email','exh-tel','exh-prestation','exh-date','exh-commentaire'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.value='';
