@@ -6708,8 +6708,11 @@ function afficherAnnonce(cfg){
        <div style="font-weight:800;color:${c2};font-size:26px;margin-bottom:8px;line-height:1.2">${cfg['BLOC_CHIFFRE']}</div>
        ${cfg['BLOC_LEGENDE'] ? `<p style="color:#6B3A4E;font-size:13.5px;line-height:1.7;margin-bottom:18px">${cfg['BLOC_LEGENDE'].replace(/\\n/g,'<br>')}</p>` : ''}`
     : '';
+  window._annonceCfg = cfg;
   const bouton = cfg['LIEN_LABEL']
-    ? `<button onclick="fermerAnnonce();${cfg['LIEN_PAGE'] ? `showPage('${cfg['LIEN_PAGE']}');` : ''}${cfg['LIEN_ANCRE'] ? `setTimeout(()=>allerVersAncreExh('${cfg['LIEN_ANCRE']}'),150);` : ''}" style="background:${c2};color:white;border:none;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">${cfg['LIEN_LABEL']}</button>`
+    ? (cfg['LIEN_TEXTE']
+      ? `<button onclick="ouvrirAnnonceDetail()" style="background:${c2};color:white;border:none;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">${cfg['LIEN_LABEL']}</button>`
+      : `<button onclick="fermerAnnonce();${cfg['LIEN_PAGE'] ? `showPage('${cfg['LIEN_PAGE']}');` : ''}${cfg['LIEN_ANCRE'] ? `setTimeout(()=>allerVersAncreExh('${cfg['LIEN_ANCRE']}'),150);` : ''}" style="background:${c2};color:white;border:none;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">${cfg['LIEN_LABEL']}</button>`)
     : '';
 
   overlay.innerHTML = `
@@ -6721,6 +6724,38 @@ function afficherAnnonce(cfg){
     </div>`;
   document.body.appendChild(overlay);
 }
+
+
+// Fenêtre « En savoir plus » du pop-up : affiche le texte LIEN_TEXTE d'annonce.txt
+function ouvrirAnnonceDetail(){
+  const cfg = window._annonceCfg || {};
+  const c2 = cfg['COULEUR2'] || '#E0518A';
+  const c1 = cfg['COULEUR1'] || '#FDE8F0';
+  const fond = cfg['FOND_CONTENU'] || '#FBD9E6';
+  const esc = t => t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const paras = (cfg['LIEN_TEXTE']||'').split('\\n').map(t=>t.trim()).filter(Boolean)
+    .map(t=>`<p style="color:#6B3A4E;font-size:14px;line-height:1.8;margin-bottom:12px">${esc(t)}</p>`).join('');
+  const d = document.createElement('div');
+  d.id = 'popup-annonce-detail';
+  d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-label', cfg['LIEN_LABEL']||'Détails');
+  d.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(40,30,30,.6);display:flex;align-items:center;justify-content:center;padding:20px';
+  d.onclick = e => { if(e.target === d) fermerAnnonceDetail(); };
+  d.innerHTML = `
+    <div style="background:radial-gradient(circle at center,${c1} 0%,${c2} 100%);border-radius:26px;max-width:520px;width:100%;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+      <div style="position:relative;background:${fond};border-radius:18px;padding:34px 26px 24px;font-family:'Lato',sans-serif;max-height:80vh;overflow-y:auto">
+        <button onclick="fermerAnnonceDetail()" aria-label="Fermer" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;line-height:1;color:#5B2A3A;cursor:pointer;padding:4px">×</button>
+        ${paras}
+        <div style="text-align:center;margin-top:16px"><button onclick="fermerAnnonceDetail()" style="background:${c2};color:white;border:none;padding:10px 24px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Fermer</button></div>
+      </div>
+    </div>`;
+  document.body.appendChild(d);
+  const b = d.querySelector('button'); if(b) b.focus();
+}
+function fermerAnnonceDetail(){
+  const el = document.getElementById('popup-annonce-detail');
+  if(el) el.remove();
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') fermerAnnonceDetail(); });
 
 function fermerAnnonce(){
   const el = document.getElementById('popup-annonce');

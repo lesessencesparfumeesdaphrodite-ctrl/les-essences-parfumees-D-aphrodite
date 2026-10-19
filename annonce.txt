@@ -11,5 +11,4 @@ BLOC_LABEL=1 commande =
 BLOC_CHIFFRE=1€
 BLOC_LEGENDE=reversé à la Ligue contre le Cancer du Sein\n“Association Ruban Rose”
 LIEN_LABEL=En savoir plus
-LIEN_PAGE=exhalessence
-LIEN_ANCRE=exh-octobre-rose
+LIEN_TEXTE=Pour la 6e année consécutive, je souhaite continuer à me mobiliser dans la lutte contre le cancer du sein. Cette cause me tient particulièrement à cœur, car la maladie a touché des personnes qui me sont chères.\nComme chaque année, je me mobilise à ma manière et je fais également des dons personnels pour contribuer à cette cause. Cette année encore, j'ai souhaité que mes activités puissent elles aussi y participer.\nÀ travers mes créations faites main en plâtre résine et l'univers EXHALESSENCE, 1€ sera reversé à la Ligue contre le Cancer du Sein “Association Ruban Rose” pour chaque commande passée durant le mois d'octobre, en complément de mes dons personnels.\nEnsemble, faisons la différence.\n🎗️ 1 commande = 1€ reversé, du 1er au 31 octobre
