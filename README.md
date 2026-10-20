@@ -1,2 +1,2 @@
 # les-essences-parfumees-D-aphrodite
-Boutique Artisanale en Plâtre résine
+Boutique de créations faites main en plâtre résine
