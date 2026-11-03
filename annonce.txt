@@ -1,14 +1,22 @@
 ACTIF=OUI
-DEBUT=2026-10-01
-FIN=2026-10-31
-COULEUR1=#F7A8C9
-COULEUR2=#A82D63
-FOND_CONTENU=#FBD9E6
-IMAGE=exh-octobre-rose-titre.webp
-TITRE=
-TEXTE=Les Essences Parfumées d'Aphrodite\nse mobilisent pour Octobre Rose.
-BLOC_LABEL=1 commande =
-BLOC_CHIFFRE=1€
-BLOC_LEGENDE=reversé à la Ligue contre le Cancer du Sein\n“Association Ruban Rose”
+DEBUT=2026-11-02
+FIN=2026-12-13
+COULEUR1=#E8D5A8
+COULEUR2=#6B1F2A
+FOND_CONTENU=#FBF3E6
+TITRE=Retrouvons-nous aux marchés de Noël !
+TEXTE=Les Essences Parfumées d'Aphrodite vous donnent rendez-vous sur 3 marchés de Noël en novembre et décembre.
 LIEN_LABEL=En savoir plus
-LIEN_TEXTE=Pour la 6e année consécutive, je souhaite continuer à me mobiliser dans la lutte contre le cancer du sein. Cette cause me tient particulièrement à cœur, car la maladie a touché des personnes qui me sont chères.\nComme chaque année, je me mobilise à ma manière et je fais également des dons personnels pour contribuer à cette cause. Cette année encore, j'ai souhaité que mes activités puissent elles aussi y participer.\nÀ travers mes créations faites main en plâtre résine et l'univers EXHALESSENCE, 1€ sera reversé à la Ligue contre le Cancer du Sein “Association Ruban Rose” pour chaque commande passée durant le mois d'octobre, en complément de mes dons personnels.\nEnsemble, faisons la différence.\n🎗️ 1 commande = 1€ reversé, du 1er au 31 octobre
+LIEN_TEXTE=Les fêtes de fin d'année approchent à grands pas, et je suis heureuse de vous annoncer que Les Essences Parfumées d'Aphrodite viendront à votre rencontre sur trois marchés de Noël en novembre et décembre !\nCe sera l'occasion de vous faire découvrir mes créations faites main en plâtre résine, ainsi que l'univers EXHALESSENCE avec ses parfums et ses produits de beauté.\nDes idées cadeaux, de jolies découvertes et le plaisir d'échanger ensemble dans la magie des fêtes !
+CARTE1_IMAGE=marche-noel-chasse-sur-rhone.webp
+CARTE1_ALT=Affiche du marché de Noël de Chasse-sur-Rhône, dimanche 22 novembre, de 10h à 18h, salle Jean Marion
+CARTE1_TITRE=Dimanche 22 novembre 2026 · Chasse-sur-Rhône
+CARTE1_INFOS=De 10h00 à 18h00\nSalle Jean Marion\n95 Allée des Lauriers, 38670 Chasse-sur-Rhône
+CARTE2_IMAGE=marche-noel-corbas.webp
+CARTE2_ALT=Affiche du marché de Noël de Corbas, samedi 5 et dimanche 6 décembre, gymnase Jean Jaurès
+CARTE2_TITRE=Samedi 5 et dimanche 6 décembre 2026 · Corbas
+CARTE2_INFOS=Samedi : de 15h30 à 20h00\nDimanche : de 10h00 à 17h00\nGymnase Jean Jaurès\n41 Chemin de Grange Blanche, 69960 Corbas
+CARTE3_IMAGE=marche-noel-montagny.webp
+CARTE3_ALT=Affiche du marché de Noël de Montagny, samedi 12 et dimanche 13 décembre, place de Sourzy
+CARTE3_TITRE=Samedi 12 et dimanche 13 décembre 2026 · Montagny
+CARTE3_INFOS=Samedi : de 14h00 à 20h00\nDimanche : de 10h00 à 18h00\nPlace de Sourzy, 69700 Montagny
