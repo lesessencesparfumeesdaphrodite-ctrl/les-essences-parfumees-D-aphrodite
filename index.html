@@ -1732,13 +1732,16 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
         <div id="exhc-total" style="display:none;margin-top:6px;text-align:right;font-size:13px;font-weight:700;color:var(--brun)"></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"><div style="flex:1;min-width:140px"><label class="bc-l" for="exhc-prenom">Prénom *</label><input id="exhc-prenom" class="bc-in" type="text" autocomplete="given-name"/></div><div style="flex:1;min-width:140px"><label class="bc-l" for="exhc-nom">Nom *</label><input id="exhc-nom" class="bc-in" type="text" autocomplete="family-name"/></div></div>
         <label class="bc-l" for="exhc-adresse">Adresse *</label><input id="exhc-adresse" class="bc-in" type="text" autocomplete="street-address"/>
+        <label class="bc-l" for="exhc-complement">Complément d'adresse <span style="font-weight:400;font-style:italic;color:var(--gris)">(bâtiment, étage, digicode… facultatif)</span></label><input id="exhc-complement" class="bc-in" type="text" autocomplete="address-line2"/>
         <div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:0 0 130px"><label class="bc-l" for="exhc-cp">Code postal *</label><input id="exhc-cp" class="bc-in" type="text" autocomplete="postal-code"/></div><div style="flex:1;min-width:140px"><label class="bc-l" for="exhc-ville">Ville *</label><input id="exhc-ville" class="bc-in" type="text" autocomplete="address-level2"/></div></div>
         <label class="bc-l" for="exhc-email">E-mail *</label><input id="exhc-email" class="bc-in" type="email" autocomplete="email"/>
         <label class="bc-l" for="exhc-tel">Téléphone *</label><input id="exhc-tel" class="bc-in" type="tel" autocomplete="tel"/>
-        <label class="bc-l" for="exhc-naissance">Date de naissance <span style="font-weight:400;font-style:italic;color:var(--gris)">(pour recevoir votre carte cadeau à l'occasion de votre anniversaire)</span></label><input id="exhc-naissance" class="bc-in" type="date"/>
+        <label class="bc-l" for="exhc-naissance">Date de naissance <span style="font-weight:400;font-style:italic;color:var(--gris)">(pour recevoir votre carte cadeau à l'occasion de votre anniversaire)</span></label><input id="exhc-naissance" class="bc-in" type="text" inputmode="numeric" placeholder="JJ/MM/AAAA" maxlength="10" autocomplete="bday"/>
+        <button id="bc-compte" type="button" class="btn-s" style="border:none;margin-top:10px;width:100%;justify-content:center">👤 Se connecter / S'inscrire</button>
+        <p id="bc-compte-t" style="font-size:11.5px;font-style:italic;color:var(--gris);line-height:1.5;margin:6px 0 0;text-align:center">Pour cumuler vos points de fidélité à chaque commande.</p>
+        <label class="bc-l" for="exhc-commande-notes">Message (facultatif)</label><textarea id="exhc-commande-notes" class="bc-in" rows="3" style="resize:vertical"></textarea>
         <span class="bc-l">Livraison souhaitée *</span><div id="exhc-livraison-choix" style="display:flex;gap:8px;flex-wrap:wrap"><label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer"><input type="radio" name="exhc-livraison" value="Remise en main propre" style="accent-color:var(--dore)" onchange="rafraichirListeCommande()" checked> Remise en main propre</label><label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer"><input type="radio" name="exhc-livraison" value="Point relais" style="accent-color:var(--dore)" onchange="rafraichirListeCommande()"> Point relais (+6€)</label></div>
         <span class="bc-l">Mode de paiement souhaité *</span><div id="exhc-paiement-choix" style="display:flex;gap:8px;flex-wrap:wrap"><label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer"><input type="radio" name="exhc-paiement" value="PayPal" style="accent-color:var(--dore)" > PayPal</label><label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer"><input type="radio" name="exhc-paiement" value="Wero" style="accent-color:var(--dore)" > Wero</label><label style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:9px 10px;font-size:12.5px;color:var(--brun);cursor:pointer"><input type="radio" name="exhc-paiement" value="Virement" style="accent-color:var(--dore)" > Virement</label></div>
-        <label class="bc-l" for="exhc-commande-notes">Message (facultatif)</label><textarea id="exhc-commande-notes" class="bc-in" rows="3" style="resize:vertical"></textarea>
         <button onclick="envoyerExhCommande()" class="btn-p" style="width:100%;justify-content:center;border:none;margin-top:10px">Envoyer ma demande de commande</button>
         <div style="background:#FDECEC;border-left:3px solid #C0392B;border-radius:8px;padding:10px 14px;margin-top:6px"><p style="color:#8B2D22;font-size:12.5px;line-height:1.6;margin:0;text-align:center">⚠️ Il ne s'agit que d'une demande de commande.<br>Je vous recontacte rapidement pour la confirmer ensemble.</p></div>
         <p id="exhc-form-msg" style="font-size:12px;text-align:center;display:none;margin-top:2px"></p>
@@ -2168,7 +2171,14 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
 <style>.bc-l{display:block;font:700 13px 'Lato',sans-serif;color:var(--brun);margin:10px 0 6px}.bc-s,.bc-in{width:100%;box-sizing:border-box;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;padding:12px 14px;font:15px 'Lato',sans-serif;color:var(--brun);background:#fff}.bc-s:focus,.bc-in:focus{outline:2px solid var(--terra);outline-offset:1px}
 .bc-info{font-size:12.5px;color:var(--gris);line-height:1.65;margin:8px 0 0;padding:12px 14px;background:#fff;border-left:4px solid #C9A96E;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.06)}.bc-it{display:block;color:var(--brun);font-size:14px;margin-bottom:4px}.bc-id{display:block;margin-top:6px}.bc-id b{color:var(--brun)}
 .bc-q{display:inline-flex;align-items:center;border:2px solid rgba(201,169,110,.3);border-radius:30px;overflow:hidden}.bc-q button{border:none;background:#fff;width:30px;height:30px;font-size:16px;cursor:pointer;color:var(--brun)}.bc-q span{min-width:26px;text-align:center;font-weight:700;font-size:13px;color:var(--brun)}.bc-ln{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(201,169,110,.1);border-radius:12px;padding:6px 12px;font-size:12.5px;color:var(--brun)}
-.bc-tb{width:100%;border-collapse:collapse;font-size:13px}.bc-tb td{padding:7px 0;border-bottom:1px solid rgba(201,169,110,.25);vertical-align:top;color:var(--brun);font-weight:700}.bc-tb td.p{text-align:right;white-space:nowrap;padding-left:10px}.bc-hid{position:absolute!important;opacity:0;pointer-events:none;height:1px;width:1px;overflow:hidden}.bc-dd{position:relative}.bc-dd-b{text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}.bc-dd-b::after{content:'▾';color:var(--terra);flex:0 0 auto}.bc-dd-b[disabled]{opacity:.55;cursor:not-allowed}.bc-dd-l{margin-top:6px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;background:#fff;max-height:340px;overflow:auto}.bc-row{border-bottom:1px solid rgba(201,169,110,.25)}.bc-row:last-child{border-bottom:none}.bc-rw{display:flex;align-items:center}.bc-li{flex:1;padding:12px 14px;cursor:pointer;font-size:14px;line-height:1.4;color:var(--brun);font-weight:700}.bc-li:hover,.bc-li:focus{background:rgba(201,169,110,.16);outline:none}.bc-li[aria-selected=true]{background:rgba(201,169,110,.28)}.bc-i{border:none;background:none;cursor:pointer;font-size:20px;color:var(--terra);min-width:46px;min-height:46px;flex:0 0 auto}.bc-ds{padding:0 14px 12px;font-size:12.5px;color:var(--gris);line-height:1.65}.bc-tip{position:fixed;z-index:100001;background:#fff;border-left:4px solid #C9A96E;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.22);padding:12px 14px;font-size:12.5px;line-height:1.6;color:var(--gris);pointer-events:none}.bc-it{display:block;color:var(--brun);font-size:13.5px;margin-bottom:3px}.bc-ds b,.bc-tip b,.bc-id b,.bc-tb small b{color:var(--brun)}.bc-tb small{display:block;color:var(--gris);font-size:11.5px;line-height:1.5;font-weight:400;margin-top:2px}</style>
+.bc-tb{width:100%;border-collapse:collapse;font-size:13px}.bc-tb td{padding:7px 0;border-bottom:1px solid rgba(201,169,110,.25);vertical-align:top;color:var(--brun);font-weight:700}.bc-tb td.p{text-align:right;white-space:nowrap;padding-left:10px}.bc-hid{position:absolute!important;opacity:0;pointer-events:none;height:1px;width:1px;overflow:hidden}.bc-dd{position:relative}.bc-dd-b{text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}.bc-dd-b::after{content:'▾';color:var(--terra);flex:0 0 auto}.bc-dd-b[disabled]{opacity:.55;cursor:not-allowed}.bc-dd-l{margin-top:6px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;background:#fff;max-height:340px;overflow:auto}.bc-row{border-bottom:1px solid rgba(201,169,110,.25)}.bc-row:last-child{border-bottom:none}.bc-rw{display:flex;align-items:center}.bc-li{flex:1;padding:12px 14px;cursor:pointer;font-size:14px;line-height:1.4;color:var(--brun);font-weight:700}.bc-li:hover,.bc-li:focus{background:rgba(201,169,110,.16);outline:none}.bc-li[aria-selected=true]{background:rgba(201,169,110,.28)}.bc-i{border:none;background:none;cursor:pointer;font-size:20px;color:var(--terra);min-width:46px;min-height:46px;flex:0 0 auto}.bc-ds{padding:0 14px 12px;font-size:12.5px;color:var(--gris);line-height:1.65}.bc-tip{position:fixed;z-index:100001;background:#fff;border-left:4px solid #C9A96E;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.22);padding:12px 14px;font-size:12.5px;line-height:1.6;color:var(--gris);pointer-events:none}.bc-it{display:block;color:var(--brun);font-size:13.5px;margin-bottom:3px}.bc-ds b,.bc-tip b,.bc-id b,.bc-tb small b{color:var(--brun)}.bc-tb small{display:block;color:var(--gris);font-size:11.5px;line-height:1.5;font-weight:400;margin-top:2px}
+.bc-lb{color:var(--terra);font-weight:700}.bc-pr{display:block;padding:12px 0;border-bottom:1px solid rgba(201,169,110,.6)}.bc-pr:last-child{border-bottom:none}.bc-ph{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.bc-pn,.bc-pp{color:var(--terra);font-weight:700;font-size:14px}.bc-pp{white-space:nowrap}.bc-pt{display:block;margin-top:5px;font-size:12.5px;line-height:1.7;color:var(--gris);font-weight:400}
+.bc-aide{display:block;font-style:italic;font-size:12px;line-height:1.5;color:var(--gris);margin:2px 0 10px}.bc-gp{display:block;margin:8px 0 4px}.bc-gt{display:block;font-weight:700;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--brun);margin:8px 0 6px}
+.bc-tag{display:inline-block;margin:0 5px 7px 0;padding:5px 11px;font:12px/1.3 'Lato',sans-serif;color:var(--brun);background:#fff;border:1px solid rgba(201,169,110,.85);border-radius:16px;cursor:help;text-decoration:underline dotted;text-underline-offset:3px;text-align:left}.bc-tag:hover,.bc-tag:focus{background:rgba(201,169,110,.16);outline:none}
+.bc-b::after{content:' ⓘ';font-size:.85em;color:var(--terra);text-decoration:none;display:inline-block}.bc-lk{display:inline-block;margin:7px 0 0;font-size:12.5px;color:var(--terra);font-weight:700;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}.bc-ln .bc-b{cursor:help;text-decoration:underline dotted;text-underline-offset:3px}
+.bc-ov{position:fixed;inset:0;background:rgba(44,24,16,.5);z-index:100002;display:flex;align-items:flex-end;justify-content:center}.bc-sh{position:relative;background:#fff;width:100%;max-width:560px;max-height:78vh;overflow:auto;border-radius:18px 18px 0 0;border-top:4px solid #C9A96E;padding:20px 18px 30px;font-size:13px;line-height:1.65;color:var(--gris)}.bc-x{position:absolute;top:4px;right:6px;border:none;background:none;font-size:22px;min-width:46px;min-height:46px;cursor:pointer;color:var(--brun)}.bc-sc{padding-right:30px}
+.bc-tip .bc-pp,.bc-sc .bc-pp{color:var(--terra)}
+</style>
 <script>
 (function(){
 'use strict';
@@ -2176,41 +2186,172 @@ var D = {"PD": {"Eau de Parfum Rechargeable (75ml)": {"n": "Collection Classique
 function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 function base(n){ return n.replace(/\s*—\s*[\d,]+€$/, ''); }
 function eur(n){ var r = Math.round(n * 100) / 100; return (r % 1 ? r.toFixed(2) : String(r)).replace('.', ',') + ' €'; }
+function L(t){ return '<span class="bc-lb">' + esc(t) + '</span>'; }
 function infoOf(n){
   var x = PD[n]; if(!x) return '';
   var h = esc(x.d);
-  (x.v || []).forEach(function(v){ h += '<br>• <b>' + esc(v[0]) + '</b> : ' + esc(v[1]); });
-  if(x.u) h += '<br><b>Utilisation :</b> ' + esc(x.u);
-  if(x.w) h += '<br><b>À savoir :</b> ' + esc(x.w);
+  (x.v || []).forEach(function(v){ h += '<br>• ' + L(v[0]) + ' : ' + esc(v[1]); });
+  if(x.u) h += '<br>' + L('Utilisation :') + ' ' + esc(x.u);
+  if(x.w) h += '<br>' + L('À savoir :') + ' ' + esc(x.w);
   return h;
 }
-
 /* ===== 1. Fiches « En savoir plus » : textes et tarifs mis à jour ===== */
 var ALL = {};
 (CATALOGUE_PARFUM.concat(CATALOGUE_HOME)).forEach(function(p){ ALL[base(p.nom)] = p; });
 Object.keys(CATALOGUE_BEAUTE).forEach(function(g){ CATALOGUE_BEAUTE[g].forEach(function(p){ ALL[base(p.nom)] = p; }); });
+/* ===== Libellés ===== */
+var LABEL = {
+  'Eau de Parfum Rechargeable (75ml)':'Collection Classique · Eau de parfum rechargeable 75 ml',
+  'Parfum Prestige Rechargeable (75ml)':'Collection Prestige · Parfum rechargeable 75 ml',
+  'Parfum Élite Rechargeable (75ml)':'Collection Élite · Parfum rechargeable 75 ml',
+  'Recharge Eau de Parfum (125ml)':'Collection Classique · Recharge 125 ml',
+  'Recharge Parfum Prestige (125ml)':'Collection Prestige · Recharge 125 ml',
+  'Recharge Parfum Élite (125ml)':'Collection Élite · Recharge 125 ml',
+  'Gel Douche (200ml)':'Gel douche parfumé 200 ml',
+  'Gel Douche (185ml)':'Gel douche parfumé 185 ml',
+  'Lait Corps parfumant (200ml)':'Lait corps parfumant 200 ml'
+};
+function nomProd(k){ return (LABEL[k] || (PD[k] ? PD[k].n : k)).replace(/\((\d+)\s*(ml|cm)\)/g, '($1 $2)').replace(/(\d)(ml|cm)\b/g, '$1 $2'); }
+
+/* ===== Bulles : survol (ordinateur) / fenêtre en bas d'écran (téléphone, tablette) ===== */
+var lastPT = 'mouse';
+var tip = document.createElement('div'); tip.className = 'bc-tip'; tip.hidden = true; tip.setAttribute('role', 'tooltip'); document.body.appendChild(tip);
+function norm(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+var HOMEBY = {}; (D.HOME || []).forEach(function(s){ HOMEBY[s.k] = s; });
+function ficheRef(code){
+  var f = (typeof EXH_FICHES !== 'undefined' && EXH_FICHES[code]) || null, d = (typeof EXH_DESC !== 'undefined' && EXH_DESC[code]) || '';
+  return {f:f, d:d};
+}
+function refBulle(label){
+  var m = /^(\d+[A-Z]?)\s*-/.exec(label), r = ficheRef(m ? m[1] : ''), h = '<b class="bc-it">' + esc(label) + '</b>';
+  if(!r.f && !r.d) return h + '<span class="bc-id">Chargement des notes olfactives… Réessayez dans un instant.</span>';
+  if(r.f){
+    if(r.f.f) h += '<span class="bc-id">' + L('Famille olfactive :') + ' ' + esc(r.f.f.charAt(0) + r.f.f.slice(1).toLowerCase()) + '</span>';
+    if(r.f.t) h += '<span class="bc-id">' + L('Tête :') + ' ' + esc(r.f.t) + '</span>';
+    if(r.f.h) h += '<span class="bc-id">' + L('Cœur :') + ' ' + esc(r.f.h) + '</span>';
+    if(r.f.d) h += '<span class="bc-id">' + L('Fond :') + ' ' + esc(r.f.d) + '</span>';
+    if(r.f.n) h += '<span class="bc-id">' + L('Notes olfactives :') + ' ' + esc(r.f.n) + '</span>';
+  }
+  if(r.d) h += '<span class="bc-id"><i>' + esc(r.d) + '</i></span>';
+  return h;
+}
+function senteurBulle(s){
+  return '<b class="bc-it">' + esc(s.n) + '</b><span class="bc-id"><i>' + esc(s.a) + '</i></span>' +
+    '<span class="bc-id">' + L('Tête :') + ' ' + esc(s.t) + '</span><span class="bc-id">' + L('Cœur :') + ' ' + esc(s.h) + '</span><span class="bc-id">' + L('Fond :') + ' ' + esc(s.d) + '</span>' +
+    '<span class="bc-id">' + esc(s.x) + '</span>';
+}
+function bulHtml(el){
+  if(el._html) return el._html();
+  var k = el.getAttribute('data-b') || '';
+  if(k.indexOf('r:') === 0) return refBulle(k.slice(2));
+  if(k.indexOf('s:') === 0){ var s = HOMEBY[k.slice(2)]; return s ? senteurBulle(s) : ''; }
+  return '';
+}
+function hideTip(){ tip.hidden = true; }
+function showTip(el){
+  var html = bulHtml(el); if(!html) return;
+  tip.innerHTML = html; tip.style.visibility = 'hidden'; tip.hidden = false;
+  var r = el.getBoundingClientRect(), W = window.innerWidth, Hh = window.innerHeight, w = Math.min(340, W - 24);
+  tip.style.width = w + 'px';
+  var left = Math.max(12, Math.min(r.left, W - w - 12)), top = r.bottom + 8;
+  if(top + tip.offsetHeight > Hh - 8) top = Math.max(12, r.top - tip.offsetHeight - 8);
+  tip.style.left = left + 'px'; tip.style.top = top + 'px'; tip.style.visibility = 'visible';
+}
+var ov = null;
+function closeSheet(){ if(ov){ ov.parentNode && ov.parentNode.removeChild(ov); ov = null; } }
+function openSheet(el){
+  var html = bulHtml(el); if(!html) return; closeSheet(); hideTip();
+  ov = document.createElement('div'); ov.className = 'bc-ov';
+  var sh = document.createElement('div'); sh.className = 'bc-sh'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true');
+  var x = document.createElement('button'); x.type = 'button'; x.className = 'bc-x'; x.setAttribute('aria-label', 'Fermer'); x.textContent = '✕';
+  var c = document.createElement('div'); c.className = 'bc-sc'; c.innerHTML = html;
+  sh.appendChild(x); sh.appendChild(c); ov.appendChild(sh); document.body.appendChild(ov);
+  x.addEventListener('click', closeSheet);
+  ov.addEventListener('click', function(e){ if(e.target === ov) closeSheet(); });
+  x.focus();
+}
+document.addEventListener('pointerdown', function(e){ lastPT = e.pointerType || 'mouse'; }, true);
+document.addEventListener('pointerover', function(e){ lastPT = e.pointerType || lastPT; }, true);
+document.addEventListener('mouseover', function(e){
+  if(lastPT !== 'mouse') return; var el = e.target.closest && e.target.closest('.bc-b'); if(el) showTip(el);
+});
+document.addEventListener('mouseout', function(e){
+  var el = e.target.closest && e.target.closest('.bc-b'); if(!el) return;
+  if(e.relatedTarget && el.contains(e.relatedTarget)) return; hideTip();
+});
+document.addEventListener('click', function(e){
+  var el = e.target.closest && e.target.closest('.bc-b'); if(!el) return;
+  e.preventDefault();
+  var touch = (e.pointerType ? e.pointerType !== 'mouse' : lastPT !== 'mouse') || e.detail === 0;
+  if(touch || el.hasAttribute('data-click')) openSheet(el);
+});
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeSheet(); hideTip(); } });
+window.addEventListener('scroll', hideTip, true);
+
+/* ===== 1. Fiches « En savoir plus » ===== */
+function ligne(k, txt){
+  var p = ALL[k]; if(!p) return '';
+  return '<span class="bc-pr"><span class="bc-ph"><span class="bc-pn">' + esc(nomProd(k)) + '</span><span class="bc-pp">' + eur(p.prix) + '</span></span>' + (txt ? '<span class="bc-pt">' + txt + '</span>' : '') + '</span>';
+}
+function tag(kind, label, key){
+  return '<button type="button" class="bc-b bc-tag" data-b="' + kind + ':' + esc(key) + '">' + esc(label) + '</button>';
+}
+function refsByCode(list, codes){ return list.filter(function(r){ return codes.indexOf(r.split(' - ')[0]) > -1; }); }
+function groupe(titre, labels){
+  return '<span class="bc-gp"><span class="bc-gt">' + esc(titre) + '</span>' + labels.map(function(r){ return tag('r', r, r); }).join('') + '</span>';
+}
+var AIDE = '<span class="bc-aide">Passez la souris (ordinateur) / Touchez (téléphone) sur une référence pour découvrir sa famille olfactive, ses notes et sa description.</span>';
+var PRES_F = ['145P','148P','161P','170P','228P'], PRES_H = ['160P','220P','222P','232P'], PRES_M = ['217P','223P'];
+function tarifsParfum(){
+  var rows = D.ROWS['gamme-parfum'], out = AIDE;
+  rows.forEach(function(k){
+    var txt = '';
+    if(k === 'Eau de Parfum Rechargeable (75ml)') txt = groupe('Pour elle', REF_FEMME_EDP) + groupe('Pour lui', REF_HOMME_EDP);
+    else if(k === 'Parfum Prestige Rechargeable (75ml)') txt = groupe('Pour elle', refsByCode(REF_PARFUM_CONCENTRE, PRES_F)) + groupe('Pour lui', refsByCode(REF_PARFUM_CONCENTRE, PRES_H)) + groupe('Mixtes', refsByCode(REF_PARFUM_CONCENTRE, PRES_M));
+    else if(k === 'Parfum Élite Rechargeable (75ml)') txt = groupe('Fragrances mixtes', REF_ELITE);
+    else if(/^Recharge /.test(k)) txt = '';
+    else txt = infoOf(k);
+    out += ligne(k, txt);
+  });
+  return out;
+}
+function dispo(k){
+  var lst = [];
+  (D.HOME || []).forEach(function(s){ if(s.e.some(function(f){ return f.replace(/\s*\([\d\s,]+\s*€\)\s*$/, '') === k; })) lst.push(s.n); });
+  return lst;
+}
+function tarifsHome(){
+  var out = '';
+  D.ROWS['gamme-home'].forEach(function(k){
+    var txt = infoOf(k), sen = /^(Diffuseur|Recharge Diffuseur|Parfum d|Brume|Savon)/.test(k) ? dispo(k) : [];
+    if(sen.length) txt += (txt ? '<br>' : '') + L('Senteurs disponibles :') + ' ' + esc(sen.join(', '));
+    out += ligne(k, txt);
+  });
+  return out;
+}
 function tarifs(cle){
-  return '<table class="bc-tb">' + (D.ROWS[cle] || []).map(function(k){
-    var p = ALL[k]; if(!p) return '';
-    var inf = infoOf(k);
-    return '<tr><td>' + esc(PD[k] ? PD[k].n : k) + (inf ? '<small>' + inf + '</small>' : '') + '</td><td class="p">' + eur(p.prix) + '</td></tr>';
-  }).join('') + '</table>';
+  if(cle === 'gamme-parfum') return tarifsParfum();
+  if(cle === 'gamme-home') return tarifsHome();
+  return (D.ROWS[cle] || []).map(function(k){ return ligne(k, infoOf(k)); }).join('');
 }
 var E = EXH_DETAILS_PRESTATIONS;
 Object.keys(D.SEC).forEach(function(cle){
   if(!E[cle]) return;
   E[cle].sections = D.SEC[cle].map(function(s){ return {t:s[0], d:s[1]}; });
-  if(cle==='gamme-home' && D.HOME){
-    E[cle].sections.push({t:'Les senteurs', d:D.HOME.map(function(s){
-      return '<span style="display:block;margin:0 0 12px"><b>'+esc(s.n)+'</b> — <i>'+esc(s.a)+'</i><br>Tête : '+esc(s.t)+' · Cœur : '+esc(s.h)+' · Fond : '+esc(s.d)+'<br>'+esc(s.x)+'<br><small>Existe en : '+esc(s.e.join(' ; '))+'</small></span>';
-    }).join('')});
+  if(cle === 'gamme-home' && D.HOME){
+    E[cle].sections.push({t:'Nos senteurs et leurs notes olfactives', d: '<span class="bc-aide">Passez la souris (ordinateur) / Touchez (téléphone) sur une senteur pour découvrir son accroche, ses notes et sa description.</span><span class="bc-gp">' + D.HOME.map(function(s){ return tag('s', s.n, s.k); }).join('') + '</span>'});
   }
   E[cle].sections.push({t:'Nos produits et leurs prix', d:tarifs(cle)});
 });
+(function(){
+  var o = window.ouvrirDetailPrestation;
+  if(typeof o !== 'function') return;
+  window.ouvrirDetailPrestation = function(e){ try{ if(typeof exhLoadData === 'function') exhLoadData(); }catch(x){} return o.apply(this, arguments); };
+})();
 window.exhHomeFix = function(){
-  try{ (D.HOME||[]).forEach(function(s){
-    if(typeof EXH_DESC!=='undefined') EXH_DESC[s.k] = s.a+' '+s.x;
-    if(typeof EXH_FICHES!=='undefined'){ var f = EXH_FICHES[s.k] || {}; f.t=s.t; f.h=s.h; f.d=s.d; EXH_FICHES[s.k]=f; }
+  try{ (D.HOME || []).forEach(function(s){
+    if(typeof EXH_DESC !== 'undefined') EXH_DESC[s.k] = s.a + ' ' + s.x;
+    if(typeof EXH_FICHES !== 'undefined'){ var f = EXH_FICHES[s.k] || {}; f.t = s.t; f.h = s.h; f.d = s.d; EXH_FICHES[s.k] = f; }
   }); }catch(e){}
 };
 
@@ -2256,109 +2397,53 @@ function fillProduits(){
   syncAll();
 }
 
-/* ===== Listes avec descriptif au survol (ordinateur) et au toucher de ⓘ (mobile) ===== */
-var HOVER = !!(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches);
-var tip = mk('div', 'bc-tip'); tip.hidden = true; tip.setAttribute('role', 'tooltip'); document.body.appendChild(tip);
-function hideTip(){ tip.hidden = true; }
-function showTip(row, html){
-  if(!html) return;
-  tip.innerHTML = html; tip.style.visibility = 'hidden'; tip.hidden = false;
-  var r = row.getBoundingClientRect(), W = window.innerWidth, Hh = window.innerHeight, w = 340, left, top;
-  tip.style.width = w + 'px';
-  if(W - r.right - 12 >= w + 8){ left = r.right + 10; top = r.top; }
-  else if(r.left - 12 >= w + 8){ left = r.left - w - 10; top = r.top; }
-  else { w = Math.min(r.width, W - 24); tip.style.width = w + 'px'; left = Math.max(12, r.left); top = r.bottom + 6; if(top + tip.offsetHeight > Hh - 8) top = r.top - tip.offsetHeight - 6; }
-  top = Math.max(12, Math.min(top, Hh - tip.offsetHeight - 12));
-  tip.style.left = left + 'px'; tip.style.top = top + 'px'; tip.style.visibility = 'visible';
+
+/* ===== Descriptifs du bon de commande (via liens à bulle) ===== */
+function prodHtml(g, p){
+  if(!p) return ''; var n = base(p.nom), t = infoOf(n);
+  var h = '<b class="bc-it">' + esc(nomProd(n)) + '<span class="bc-pp" style="float:right">' + eur(p.prix) + '</span></b>';
+  return h + (t ? '<span class="bc-id">' + t + '</span>' : '<span class="bc-id">Pas de descriptif complémentaire pour ce produit.</span>');
 }
-function DD(sel, descFn){
-  var w = mk('div', 'bc-dd'), b = mk('button', 'bc-s bc-dd-b'), l = mk('div', 'bc-dd-l');
-  b.type = 'button'; l.hidden = true; b.setAttribute('aria-haspopup', 'listbox'); b.setAttribute('aria-expanded', 'false'); l.setAttribute('role', 'listbox');
-  w.appendChild(b); w.appendChild(l); sel.classList.add('bc-hid'); sel.setAttribute('tabindex', '-1'); sel.setAttribute('aria-hidden', 'true');
-  sel.parentNode.insertBefore(w, sel.nextSibling);
-  function close(){ l.hidden = true; b.setAttribute('aria-expanded', 'false'); hideTip(); }
-  function open(){ if(sel.disabled) return; l.hidden = false; b.setAttribute('aria-expanded', 'true'); var s = l.querySelector('[aria-selected=true]'); if(s) s.scrollIntoView({block:'nearest'}); }
-  function choose(v){ sel.value = v; sel.dispatchEvent(new Event('change', {bubbles:true})); close(); b.focus(); }
-  function sync(){
-    l.innerHTML = ''; hideTip(); l.hidden = true; b.setAttribute('aria-expanded', 'false');
-    var o0 = sel.options[sel.selectedIndex]; b.textContent = o0 ? o0.textContent : ''; b.disabled = sel.disabled;
-    [].slice.call(sel.options).forEach(function(o){
-      if(!o.value) return;
-      var row = mk('div', 'bc-row'), rw = mk('div', 'bc-rw'), li = mk('div', 'bc-li'), ds = mk('div', 'bc-ds');
-      li.setAttribute('role', 'option'); li.tabIndex = -1; li.textContent = o.textContent; if(o.value === sel.value) li.setAttribute('aria-selected', 'true');
-      li.addEventListener('click', function(){ choose(o.value); });
-      rw.appendChild(li);
-      var html = descFn(o);
-      if(html){
-        var ib = mk('button', 'bc-i', 'ⓘ'); ib.type = 'button'; ib.setAttribute('aria-label', 'Voir le descriptif : ' + o.textContent);
-        ds.innerHTML = html; ds.hidden = true;
-        ib.addEventListener('click', function(e){ e.stopPropagation(); ds.hidden = !ds.hidden; hideTip(); });
-        rw.appendChild(ib); row.appendChild(rw); row.appendChild(ds);
-        rw.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse') showTip(rw, html); }); rw.addEventListener('pointerleave', hideTip);
-        li.addEventListener('focus', function(){ if(!li._tap) showTip(rw, html); }); li.addEventListener('blur', hideTip);
-      } else row.appendChild(rw);
-      l.appendChild(row);
-    });
-  }
-  b.addEventListener('click', function(){ if(l.hidden) open(); else close(); });
-  w.addEventListener('keydown', function(e){
-    var lis = [].slice.call(l.querySelectorAll('.bc-li')), i = lis.indexOf(document.activeElement);
-    if(e.key === 'Escape'){ if(!l.hidden){ close(); b.focus(); e.stopPropagation(); } }
-    else if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
-      e.preventDefault(); if(l.hidden) open(); if(!lis.length) return;
-      var n = e.key === 'ArrowDown' ? Math.min(lis.length - 1, i + 1) : Math.max(0, i - 1); lis[n].focus();
-    }
-    else if((e.key === 'Enter' || e.key === ' ') && i > -1){ e.preventDefault(); lis[i].click(); }
-  });
-  document.addEventListener('click', function(e){ if(!w.contains(e.target)) close(); });
-  return {sync:sync};
-}
-function descProd(o){
-  var g = gam(); if(!g) return ''; var p = g[3]()[+o.value]; if(!p) return '';
-  var t = infoOf(base(p.nom)); if(!t) return '';
-  var lb = lab(p), m = / — ([\d,]+ €)$/.exec(lb);
-  return '<b class="bc-it">' + esc(lb.replace(/ — [\d,]+ €$/, '')) + (m ? '<span style="float:right;color:var(--terra)">' + m[1] + '</span>' : '') + '</b>' + t;
-}
-function descRef(o){
-  var p = cur(); if(!p) return ''; var ref = o.value, h = '', f = '';
+function refHtml(p, ref, genre){
+  if(!p || !ref) return ''; var f = '', h = '';
   try{ f = exhcFiche(ref, exhcCtx(p)); }catch(e){}
   if(f){
     f = f.split('\n').filter(function(x){ return x.indexOf('COMPOSITION') !== 0; }).join('\n');
-    h = '<b class="bc-it">' + esc(ref) + '</b>' + esc(f).replace(/^(FAMILLE OLFACTIVE|CONCENTRATION|CONTENANCE|NOTES OLFACTIVES|Tête|Cœur|Fond)/gm, '<b>$1</b>').replace(/\n/g, '<br>');
-    var mm = /^(\d+[A-Z]?)\s*-/.exec(ref); try{ if(mm && EXH_DESC && EXH_DESC[mm[1]]) h += '<br><i>' + esc(EXH_DESC[mm[1]]) + '</i>'; }catch(e){}
+    h = '<b class="bc-it">' + esc(ref) + '</b>' + esc(f).replace(/^(FAMILLE OLFACTIVE|CONCENTRATION|CONTENANCE|NOTES OLFACTIVES|Tête|Cœur|Fond)/gm, '<span class="bc-lb">$1</span>').replace(/\n/g, '<br>');
+    var mm = /^(\d+[A-Z]?)\s*-/.exec(ref), dd = '';
+    try{ if(mm) dd = EXH_DESC[mm[1]]; else { var s = HOMEBY['H:' + norm(ref)]; if(s) dd = s.a + ' ' + s.x; else dd = EXH_DESC['H:' + norm(ref)]; } }catch(e){}
+    if(dd) h += '<br><i>' + esc(dd) + '</i>';
     return h;
   }
   var n = base(p.nom), v = ((PD[n] && PD[n].v) || []).filter(function(v){ return v[0].toLowerCase() === ref.toLowerCase(); })[0];
-  return v ? '<b class="bc-it">' + esc(v[0]) + '</b>' + esc(v[1].charAt(0).toUpperCase() + v[1].slice(1)) : '';
+  if(v) return '<b class="bc-it">' + esc(v[0]) + '</b>' + esc(v[1].charAt(0).toUpperCase() + v[1].slice(1));
+  return '<b class="bc-it">' + esc(ref) + '</b>' + ((PD[n] && !(PD[n].v || []).length && PD[n].d) ? esc(PD[n].d) : '');
 }
-var dp, dr;
-function syncAll(){ if(dp) dp.sync(); if(dr) dr.sync(); }
-function setRefs(list, p){ sr.innerHTML = exhcOptions(list, 'Choisissez une référence', exhcCtx(p)); wr.hidden = false; syncAll(); }
-function plain(h){ var d = document.createElement('div'); d.innerHTML = h.replace(/<br>/g, '\n'); return d.textContent; }
-function showInfo(p, ref){
-  if(!p) return;
-  var n = base(p.nom), t = infoOf(n), h = '';
-  var lb = lab(p), m = / — ([\d,]+ €)$/.exec(lb), prix = m ? m[1] : '';
-  h += '<b class="bc-it">' + esc(lb.replace(/ — [\d,]+ €$/, '')) + (prix ? '<span style="float:right;color:var(--terra)">' + prix + '</span>' : '') + '</b>';
-  if(t) h += '<span class="bc-id">' + t + '</span>';
-  if(ref){
-    var f = ''; try{ f = exhcFiche(ref, exhcCtx(p)); }catch(e){}
-    h += '<span class="bc-id"><b>Votre choix : ' + esc(ref) + '</b>';
-    if(f) h += '<br>' + esc(f).replace(/\n/g, '<br>');
-    else { var vv = ((PD[n] && PD[n].v) || []).filter(function(v){ return ref.toLowerCase().indexOf(v[0].toLowerCase().replace(/^shampooing |^masque /, '')) > -1 || v[0].toLowerCase().indexOf(ref.toLowerCase()) > -1; })[0]; if(vv) h += '<br>' + esc(vv[1]); }
-    h += '</span>';
-  }
-  inf.innerHTML = h; inf.hidden = false;
+function aFiche(p, ref){ try{ return !!exhcFiche(ref, exhcCtx(p)); }catch(e){ return false; } }
+var lkp = mk('a', 'bc-b bc-lk', 'Voir le descriptif de ce produit'), lkr = mk('a', 'bc-b bc-lk', 'Voir les notes olfactives de ce choix');
+[lkp, lkr].forEach(function(a){ a.href = '#'; a.hidden = true; a.setAttribute('data-click', '1'); });
+sp.parentNode.insertBefore(lkp, sp.nextSibling); sr.parentNode.appendChild(lkr);
+lkp._html = function(){ var g = gam(); return prodHtml(g, cur()); };
+lkr._html = function(){ var p = cur(); return refHtml(p, sr.value, sge.value); };
+function syncAll(){
+  var p = cur();
+  lkp.hidden = !p;
+  var ok = p && !wr.hidden && sr.value;
+  lkr.hidden = !ok;
+  if(ok) lkr.textContent = aFiche(p, sr.value) ? 'Voir les notes olfactives de ce choix' : 'Voir le descriptif de ce choix';
+}
+function setRefs(list, p){
+  sr.innerHTML = '<option value="">Choisissez une référence</option>' + list.map(function(r){ return '<option value="' + esc(r) + '">' + esc(r) + '</option>'; }).join('');
+  wr.hidden = false; syncAll();
 }
 function onProduit(){
   resetSub(); var p = cur(); if(!p) return;
-  showInfo(p, '');
   if(p.type === 'genre') wge.hidden = false;
   else if(refsOf(p)) setRefs(p.liste, p);
+  syncAll();
 }
-sr.addEventListener('change', function(){ var p = cur(); if(p) showInfo(p, sr.value); syncAll(); });
-dp = DD(sp, descProd); dr = DD(sr, descRef); syncAll();
-sg.addEventListener('change', fillProduits); sp.addEventListener('change', function(){ onProduit(); syncAll(); });
+sr.addEventListener('change', syncAll);
+sg.addEventListener('change', fillProduits); sp.addEventListener('change', onProduit);
 sge.addEventListener('change', function(){ var p = cur(); wr.hidden = true; sr.innerHTML = ''; syncAll(); if(p && sge.value) setRefs(sge.value === 'femme' ? p.femme : p.homme, p); });
 function ajouter(){
   var g = gam(), p = cur(); if(!g || !p){ alert('Merci de choisir une gamme et un produit.'); return; }
@@ -2372,7 +2457,7 @@ function ajouter(){
     nom = [n, gl, rt].filter(Boolean).join(' – ');
   } else nom = p.nom + (ref ? ' — ' + ref : '');
   var ex = cart.filter(function(l){ return l.categorie === cat && l.nom === nom; })[0];
-  if(ex) ex.qte = Math.min(50, ex.qte + q); else cart.push({categorie:cat, nom:nom, prix:p.prix, qte:q});
+  if(ex) ex.qte = Math.min(50, ex.qte + q); else cart.push({categorie:cat, nom:nom, prix:p.prix, qte:q, gk:g[0], pi:+sp.value, ref:ref, genre:genre});
   $('bc-qte').value = '1'; sp.value = ''; resetSub(); syncAll();
   var ad = $('bc-add'); ad.textContent = '✓ Ajouté à ma commande'; setTimeout(function(){ ad.textContent = '+ Ajouter à ma commande'; }, 1400);
   window.rafraichirListeCommande();
@@ -2386,7 +2471,12 @@ window.rafraichirListeCommande = function(){
   var el = $('exhc-liste-produits'), tot = $('exhc-total'), vide = $('bc-vide'); if(!el) return;
   el.innerHTML = '';
   cart.forEach(function(l, i){
-    var r = mk('div', 'bc-ln'), t = mk('span', null, '<strong>' + esc(l.categorie) + '</strong> — ' + esc(l.nom) + ' <em style="color:var(--brun-m)">(' + eur(l.prix) + ')</em>');
+    var r = mk('div', 'bc-ln'), t = mk('span', 'bc-b', '<strong>' + esc(l.categorie) + '</strong> — ' + esc(l.nom) + ' <em style="color:var(--brun-m)">(' + eur(l.prix) + ')</em>');
+    t.setAttribute('data-click', '1'); t.tabIndex = 0; t.setAttribute('role', 'button');
+    t._html = (function(l){ return function(){
+      var gg = GAMMES.filter(function(x){ return x[0] === l.gk; })[0], pp = gg ? gg[3]()[l.pi] : null; if(!pp) return '';
+      return prodHtml(gg, pp) + (l.ref ? '<span class="bc-id">' + refHtml(pp, l.ref, l.genre) + '</span>' : '');
+    }; })(l);
     var ctl = mk('span', 'bc-q'), m = mk('button', null, '−'), s = mk('span', null, String(l.qte)), p = mk('button', null, '+'), x = mk('button', null, '✕');
     m.type = p.type = x.type = 'button'; m.setAttribute('aria-label', 'Moins'); p.setAttribute('aria-label', 'Plus'); x.setAttribute('aria-label', 'Retirer ce produit'); x.style.color = '#B4544A';
     m.addEventListener('click', function(){ qtyLigne(i, -1); }); p.addEventListener('click', function(){ qtyLigne(i, 1); }); x.addEventListener('click', function(){ window.retirerLigneCommande(i); });
@@ -2400,10 +2490,41 @@ window.rafraichirListeCommande = function(){
     tot.innerHTML = (port ? 'Sous-total produits : ' + eur(st) + '<br>Frais de port (point relais) : ' + eur(port) + '<br>' : '') + 'Total estimé : ' + eur(st + port);
   } else tot.style.display = 'none';
 };
+
+/* date de naissance : on tape les chiffres, les / se mettent tout seuls (pas de calendrier) */
+var nai = $('exhc-naissance');
+if(nai){
+  nai.addEventListener('input', function(){
+    var d = nai.value.replace(/\D/g, '').slice(0, 8), o = d.slice(0, 2);
+    if(d.length > 2) o += '/' + d.slice(2, 4);
+    if(d.length > 4) o += '/' + d.slice(4);
+    nai.value = o;
+  });
+}
+function naissanceOk(){
+  if(!nai || !nai.value.trim()) return true;
+  var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(nai.value.trim()); if(!m) return false;
+  var j = +m[1], mo = +m[2], y = +m[3], dt = new Date(y, mo - 1, j);
+  return y >= 1900 && y <= new Date().getFullYear() && dt.getFullYear() === y && dt.getMonth() === mo - 1 && dt.getDate() === j;
+}
+/* bouton Se connecter / S'inscrire : ouvre la page Mon compte (la commande en cours est gardée), caché si déjà connectée */
+var bcCompte = $('bc-compte'), bcCompteT = $('bc-compte-t');
+function majCompte(){ var c = null; try{ c = getClient(); }catch(e){} if(bcCompte) bcCompte.style.display = c ? 'none' : 'inline-flex'; if(bcCompteT) bcCompteT.style.display = c ? 'none' : 'block'; }
+if(bcCompte){
+  bcCompte.addEventListener('click', function(){ toggleExhCommandeForm(); showPage('compte'); });
+  majCompte();
+  var _tg = window.toggleExhCommandeForm;
+  window.toggleExhCommandeForm = function(){ var r = _tg.apply(this, arguments); majCompte(); return r; };
+}
 var _envoi = window.envoyerExhCommande;
 window.envoyerExhCommande = async function(){
+  if(!naissanceOk()){ var mm = $('exhc-form-msg'); if(mm){ mm.style.display = 'block'; mm.style.color = '#ff6b6b'; mm.textContent = 'Date de naissance : merci de l\'écrire sous la forme jour/mois/année, par exemple 24/10/1977.'; } return; }
   exhcLignesCommande = cart.map(function(l){ return {categorie:l.categorie, nom:l.nom + (l.qte > 1 ? ' × ' + l.qte : ''), prix:l.prix * l.qte}; });
+  var ad = $('exhc-adresse'), cp = $('exhc-complement'), av = ad ? ad.value : '', comb = null;
+  if(ad && cp && cp.value.trim() && av.trim()){ comb = av.trim() + ' (' + cp.value.trim() + ')'; ad.value = comb; }
   await _envoi();
+  if(ad && comb !== null && ad.value === comb) ad.value = av;
+  if(cp && $('exhc-prenom') && !$('exhc-prenom').value) cp.value = '';
   if(exhcLignesCommande.length === 0){ cart = []; window.rafraichirListeCommande(); }
 };
 window.rafraichirListeCommande();
