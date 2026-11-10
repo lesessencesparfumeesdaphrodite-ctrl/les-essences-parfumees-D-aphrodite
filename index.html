@@ -1262,7 +1262,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     <p><strong>Règles importantes :</strong></p>
     <ul>
       <li>Un seul bon de réduction est utilisable par commande.</li>
-      <li>Les points correspondants sont <strong>automatiquement déduits</strong> de votre solde au moment où vous générez le bon.</li>
+      <li>Les points correspondants sont <strong>déduits de votre solde au moment où vous utilisez le bon</strong> pour une commande (par exemple : avec 400 points, si vous utilisez le bon de 300 points, il vous reste 100 points).</li>
       <li>Le bon est à usage unique — il ne peut pas être réutilisé une fois la commande passée.</li>
       <li>Les bons de réduction ne sont pas cumulables entre eux.</li>
       <li>Les bons sont valables sur les créations faites main, parfums et beauté (hors frais de port).</li>
@@ -1280,10 +1280,7 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     </p>
 
     <h2>Conservation de vos points</h2>
-    <p>Vos points de fidélité sont enregistrés sur <strong>cet appareil et ce navigateur</strong>. Pour ne pas les perdre en cas de changement d'appareil ou de navigateur, pensez à utiliser la fonction <strong>"Exporter mes points"</strong> disponible dans votre espace "Mon Compte". Un code de sauvegarde vous sera fourni, que vous pourrez réimporter à tout moment.</p>
-    <p style="background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:var(--r-sm);padding:14px;font-size:13px;color:var(--brun-m);margin-top:10px">
-      ⚠️ <strong>Important :</strong> En cas de suppression du cache ou des données du navigateur, vos points peuvent être perdus. Pensez à exporter régulièrement votre solde de points.
-    </p>
+    <p>Vos points de fidélité sont enregistrés dans votre <strong>compte client</strong> : vous les retrouvez sur tous vos appareils en vous connectant, et ils sont <strong>conservés à vie</strong>.</p>
 
     <h2>Accéder à votre solde de points</h2>
     <p>Rendez-vous dans <a href="#" onclick="showPage('compte');return false" style="color:var(--terra);font-weight:700">Mon Compte → Programme de fidélité</a> pour consulter votre solde, voir votre progression vers les paliers et générer vos bons de réduction.</p>
@@ -2538,6 +2535,447 @@ window.exhcPreselect = function(e){
   syncAll();
   setTimeout(function(){ sp.scrollIntoView({block:'center'}); }, 80);
 };
+})();
+
+</script>
+<script>
+/* === Compte client, points, commandes et cartes cadeaux : liaison avec le relais (Cloudflare + Notion + Brevo) === */
+(function () {
+  "use strict";
+  var API = "https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev";
+  var SITE = "https://www.lesessencesparfumeesdaphrodite.fr";
+
+  /* ---------- petits outils ---------- */
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+  function jget(k, d) { try { var v = JSON.parse(lsGet(k)); return v == null ? d : v; } catch (e) { return d; } }
+  function H(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function eur(n) { return (Math.round(n * 100) / 100).toString().replace(".", ",") + " €"; }
+  function getTok() { return lsGet("aph_token"); }
+  function getProf() { return jget("aph_profil", null); }
+  function setProf(p) { lsSet("aph_profil", JSON.stringify(p)); }
+  function getAdr() { return jget("aph_adresse", {}); }
+  function setAdr(a) { lsSet("aph_adresse", JSON.stringify(a)); }
+  function $(id) { return document.getElementById(id); }
+  function toast(i, m) { try { showToast(i, m); } catch (e) {} }
+
+  function api(path, body, withToken) {
+    var h = { "Content-Type": "application/json" };
+    if (withToken !== false && getTok()) h.Authorization = "Bearer " + getTok();
+    return fetch(API + path, { method: "POST", headers: h, body: JSON.stringify(body || {}) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, j: j || {} }; }); })
+      .catch(function () { return { ok: false, status: 0, j: { erreur: "Connexion impossible pour le moment. Réessayez dans un instant." } }; });
+  }
+  function deconnecterLocal() { lsSet("aph_token", null); lsSet("aph_profil", null); }
+  function sessionExpiree(r) { if (r.status === 401 && getTok()) { deconnecterLocal(); return true; } return false; }
+
+  /* ---------- session : getClient et points compatibles avec le reste du site ---------- */
+  window.getClient = function () {
+    var p = getProf();
+    if (!p || !getTok()) return null;
+    var a = getAdr();
+    return { prenom: p.prenom || "", nom: p.nom || "", email: p.mail || "", tel: p.tel || "", dateNaissance: p.naissance || "",
+      adresse: a.adresse || "", adresse2: a.adresse2 || "", cp: a.cp || "", ville: a.ville || "" };
+  };
+  window.saveClient = function (c) { if (!c) return; setAdr({ adresse: c.adresse || "", adresse2: c.adresse2 || "", cp: c.cp || "", ville: c.ville || "" }); };
+  window.majChampClient = function (k, v) {
+    if (["adresse", "adresse2", "cp", "ville"].indexOf(k) < 0) return;
+    var a = getAdr(); a[k] = v; setAdr(a);
+  };
+  window.getFidelite = function () {
+    var p = getProf();
+    if (!p || !getTok()) return { pts: 0, bons: [] };
+    return { pts: p.pointsLibres || 0, bons: (p.bons || []).map(function (b) { return { code: b.code, montant: b.montant, minAchat: b.mini || 0, utilise: false, type: b.type, fin: b.fin }; }) };
+  };
+  window.saveFidelite = function () {};
+  window.ajouterPointsFidelite = function () {};
+  window.exporterPoints = function () {};
+  window.importerPoints = function () {};
+  window.verifierAnniversaire = function () {};
+
+  function rafraichirProfil(cb) {
+    if (!getTok()) { if (cb) cb(false); return; }
+    api("/moi").then(function (r) {
+      if (r.ok && r.j.profil) { setProf(r.j.profil); if (cb) cb(true); return; }
+      sessionExpiree(r); if (cb) cb(false);
+    });
+  }
+
+  /* ---------- panier enregistré dans le compte ---------- */
+  var syncT = null;
+  function compactPanier(full) {
+    return panier.slice(0, 12).map(function (i) {
+      var o = { id: i.id, pId: i.pId, n: i.n, fin: i.fin, prix: i.prix, qte: i.qte, img: i.img };
+      if (i.carte) { o.carte = true; o._cg = i._cg; }
+      if (full && i.perso) o.perso = String(i.perso).slice(0, 220);
+      return o;
+    });
+  }
+  function envoyerPanier() {
+    if (!getTok()) return;
+    var c = compactPanier(true);
+    if (JSON.stringify(c).length > 1900) c = compactPanier(false);
+    if (JSON.stringify(c).length > 1900) c = c.slice(0, 3);
+    api("/panier", { panier: c }).then(function (r) { sessionExpiree(r); });
+  }
+  var savePanOrig = window.savePan;
+  window.savePan = function () {
+    savePanOrig.apply(this, arguments);
+    if (!getTok()) return;
+    clearTimeout(syncT); syncT = setTimeout(envoyerPanier, 1500);
+  };
+  function restaurerPanier(p) {
+    if (!p || !p.panier || !p.panier.length || panier.length) return;
+    p.panier.forEach(function (i) { panier.push(i); });
+    savePanOrig(); toast("🛒", "Votre panier a été retrouvé.");
+  }
+
+  /* ---------- connexion / inscription ---------- */
+  function champMdp(id, ph) {
+    return '<div style="position:relative"><input id="' + id + '" type="password" placeholder="' + ph + '" autocomplete="' + (id === "cx-mdp" ? "current-password" : "new-password") + '" style="width:100%;padding-right:40px" onkeydown="if(event.key===\'Enter\')' + (id === "cx-mdp" ? "connecterClient()" : "creerCompte()") + '"/>' +
+      '<button type="button" aria-label="Afficher ou masquer le mot de passe" onclick="toggleMdp(\'' + id + '\',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gris);display:flex;align-items:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>';
+  }
+  function msgZone(txt, couleur) {
+    return '<p id="cpt-msg" role="alert" aria-live="polite" style="font-size:13px;margin:10px 0 0;' + (txt ? "color:" + (couleur || "var(--terra)") : "display:none") + '">' + H(txt || "") + "</p>";
+  }
+  function dire(txt, couleur) { var m = $("cpt-msg"); if (m) { m.style.display = txt ? "block" : "none"; m.style.color = couleur || "var(--terra)"; m.textContent = txt || ""; } }
+
+  window.afficherConnexion = function (info) {
+    var e = $("compte-contenu"); if (!e) return;
+    e.innerHTML = '<div class="compte-card"><div class="compte-titre">🔑 Se connecter</div>' +
+      (info ? '<p style="font-size:13px;color:var(--teal);margin-bottom:12px">' + H(info) + "</p>" : "") +
+      '<div class="form-field"><label for="cx-email">E-mail</label><input id="cx-email" type="email" autocomplete="email" placeholder="votre@email.com" onkeydown="if(event.key===\'Enter\')connecterClient()"/></div>' +
+      '<div class="form-field"><label for="cx-mdp">Mot de passe</label>' + champMdp("cx-mdp", "Votre mot de passe") + "</div>" +
+      '<button class="btn-p" id="cx-btn" onclick="connecterClient()" style="width:100%;margin-top:6px">Se connecter</button>' + msgZone("") +
+      '<p style="text-align:center;margin-top:12px;font-size:12px;color:var(--gris)">Pas encore de compte ? <a href="#" onclick="afficherInscription();return false" style="color:var(--terra)">Créer un compte</a></p>' +
+      '<p style="text-align:center;margin-top:6px;font-size:12px;color:var(--gris)">Mot de passe oublié ? <a href="#" onclick="showContact();return false" style="color:var(--terra)">Écrivez-moi</a>, je vous aide.</p></div>';
+  };
+  window.afficherInscription = function () {
+    var e = $("compte-contenu"); if (!e) return;
+    var old = jget("aph_ancien", null) || {};
+    e.innerHTML = '<div class="compte-card"><div class="compte-titre">👤 Créer mon compte</div>' +
+      '<p style="font-size:13px;color:var(--gris);margin-bottom:16px">Créez votre compte pour suivre vos commandes et cumuler des points de fidélité. Une adresse e-mail est obligatoire : je vous y envoie un lien pour confirmer votre compte.</p>' +
+      '<div class="form-field"><label for="c-prenom">Prénom *</label><input id="c-prenom" type="text" autocomplete="given-name" placeholder="Votre prénom" value="' + H(old.prenom) + '"/></div>' +
+      '<div class="form-field"><label for="c-nom">Nom *</label><input id="c-nom" type="text" autocomplete="family-name" placeholder="Votre nom" value="' + H(old.nom) + '"/></div>' +
+      '<div class="form-field"><label for="c-email">E-mail *</label><input id="c-email" type="email" autocomplete="email" placeholder="votre@email.com" value="' + H(old.email) + '"/></div>' +
+      '<div class="form-field"><label for="c-tel">Téléphone</label><input id="c-tel" type="tel" autocomplete="tel" placeholder="06 XX XX XX XX" value="' + H(old.tel) + '"/></div>' +
+      '<div class="form-field"><label for="c-adresse">Adresse</label><input id="c-adresse" type="text" autocomplete="address-line1" placeholder="Numéro et rue" value="' + H(old.adresse) + '"/></div>' +
+      '<div class="form-field"><label for="c-adresse2">Complément d\'adresse</label><input id="c-adresse2" type="text" autocomplete="address-line2" placeholder="Appartement, bâtiment, étage..." value="' + H(old.adresse2) + '"/></div>' +
+      '<div style="display:flex;gap:10px"><div class="form-field" style="flex:1"><label for="c-cp">Code postal</label><input id="c-cp" type="text" autocomplete="postal-code" placeholder="69540" maxlength="5" value="' + H(old.cp) + '"/></div>' +
+      '<div class="form-field" style="flex:2"><label for="c-ville">Ville</label><input id="c-ville" type="text" autocomplete="address-level2" placeholder="Irigny" value="' + H(old.ville) + '"/></div></div>' +
+      '<div class="form-field"><label for="c-datenaissance">🎂 Date de naissance *</label><input id="c-datenaissance" type="date" value="' + H(old.dateNaissance) + '"/></div>' +
+      '<div class="form-field"><label for="c-mdp">Mot de passe * (8 caractères minimum)</label>' + champMdp("c-mdp", "Choisissez un mot de passe") + "</div>" +
+      '<label style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--brun-m);line-height:1.5;margin:10px 0 4px"><input id="c-accepte" type="checkbox" style="margin-top:3px"/><span>J\'accepte de recevoir par e-mail mes cadeaux d\'anniversaire, mes bons fidélité et les demandes d\'avis. Je peux me désinscrire à tout moment.</span></label>' +
+      '<button class="btn-p" id="c-btn" onclick="creerCompte()" style="width:100%;margin-top:8px">Créer mon compte</button>' + msgZone("") +
+      '<p style="text-align:center;margin-top:12px;font-size:12px;color:var(--gris)">Déjà un compte ? <a href="#" onclick="afficherConnexion();return false" style="color:var(--terra)">Se connecter</a></p></div>';
+  };
+  window.creerCompte = function () {
+    var v = function (id) { var x = $(id); return x ? String(x.value || "").trim() : ""; };
+    var prenom = v("c-prenom"), nom = v("c-nom"), mail = v("c-email"), mdp = $("c-mdp") ? $("c-mdp").value : "", nais = v("c-datenaissance");
+    if (!prenom || !nom || !mail || !mdp || !nais) return dire("Merci de remplir tous les champs marqués d'une étoile (*), y compris l'e-mail et la date de naissance.");
+    if (mdp.length < 8) return dire("Le mot de passe doit contenir au moins 8 caractères.");
+    setAdr({ adresse: v("c-adresse"), adresse2: v("c-adresse2"), cp: v("c-cp"), ville: v("c-ville") });
+    var b = $("c-btn"); if (b) { b.disabled = true; b.textContent = "Création en cours…"; }
+    api("/inscription", { prenom: prenom, nom: nom, mail: mail, mdp: mdp, tel: v("c-tel"), naissance: nais, accepte: !!($("c-accepte") && $("c-accepte").checked) }, false).then(function (r) {
+      if (!r.ok) { if (b) { b.disabled = false; b.textContent = "Créer mon compte"; } return dire(r.j.erreur || "Une erreur est survenue. Réessayez."); }
+      var e = $("compte-contenu");
+      if (e) e.innerHTML = '<div class="compte-card"><div class="compte-titre">📧 Vérifiez votre boîte e-mail</div><p style="font-size:14px;color:var(--brun-m);line-height:1.7;margin-bottom:14px">' + H(r.j.message || "Un e-mail de confirmation vient de vous être envoyé.") + '</p><p style="font-size:12px;color:var(--gris);margin-bottom:14px">Vous ne le trouvez pas ? Regardez dans vos courriers indésirables (spams).</p><button class="btn-p" onclick="afficherConnexion()" style="margin:0 auto">Se connecter</button></div>';
+    });
+  };
+  window.connecterClient = function () {
+    var mail = $("cx-email") ? $("cx-email").value.trim() : "", mdp = $("cx-mdp") ? $("cx-mdp").value : "";
+    if (!mail || !mdp) return dire("Merci de remplir l'e-mail et le mot de passe.");
+    var b = $("cx-btn"); if (b) { b.disabled = true; b.textContent = "Connexion…"; }
+    api("/connexion", { mail: mail, mdp: mdp }, false).then(function (r) {
+      if (!r.ok || !r.j.token) { if (b) { b.disabled = false; b.textContent = "Se connecter"; } return dire(r.j.erreur || "Adresse ou mot de passe incorrect."); }
+      lsSet("aph_token", r.j.token); setProf(r.j.profil);
+      restaurerPanier(r.j.profil); essayerEnvoisEnAttente();
+      toast("✅", "Connexion réussie !");
+      window.renderCompte();
+    });
+  };
+  window.deconnecterClient = function () { deconnecterLocal(); toast("👋", "À bientôt !"); window.renderCompte(); };
+
+  /* ---------- page Mon compte ---------- */
+  var BADGES = { "Reçue": ["Commande reçue", "var(--dore)"], "En cours de création": ["Création en cours", "var(--terra)"], "Prête": ["Commande prête", "var(--teal)"], "Expédiée": ["Expédiée", "#5B7E5B"] };
+  function badge(s) { var b = BADGES[s] || BADGES["Reçue"]; return '<span style="background:' + b[1] + ';color:white;border-radius:30px;padding:3px 10px;font-size:10px;font-weight:700">' + b[0] + "</span>"; }
+  function fmtDate(d) { var m = String(d || "").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[3] + "/" + m[2] + "/" + m[1] : d || ""; }
+
+  function carteFidelite(p) {
+    var pts = p.points || 0, libres = p.pointsLibres == null ? pts : p.pointsLibres;
+    var rows = (p.paliers || []).map(function (s) {
+      var ok = libres >= s.points, pc = Math.min(100, Math.round(pts / s.points * 100));
+      return '<div class="fid-palier"><div style="flex:1"><div class="fid-palier-nom">' + (ok ? "✅ " : "🔒 ") + s.points + " points → Bon de " + s.montant + '€ <span class="fid-palier-pts">(achat min. ' + s.mini + '€)</span></div>' +
+        '<div class="fid-progress"><div class="fid-progress-bar" style="width:' + pc + '%"></div></div><div style="font-size:10px;color:var(--gris);margin-top:2px">' + pts + "/" + s.points + " points</div></div>" +
+        (ok ? '<button class="btn-avis" style="font-size:11px;padding:5px 12px" onclick="genererBon(' + s.montant + "," + s.mini + "," + s.points + ')">Obtenir bon ' + s.montant + "€</button>" : "") + "</div>";
+    }).join("");
+    var bons = (p.bons || []).map(function (b) {
+      return '<div style="padding:8px 0;border-bottom:1px solid rgba(201,169,110,.15);font-size:13px;color:var(--brun)"><strong style="font-family:monospace;letter-spacing:1px">' + H(b.code) + "</strong> — " + b.montant + "€ dès " + b.mini + "€ d'achat<br><span style=\"font-size:11px;color:var(--gris)\">" + H(b.type) + (b.fin ? " · valable jusqu'au " + fmtDate(b.fin) : " · valable sans limite de date") + "</span></div>";
+    }).join("");
+    return '<div class="compte-card"><div class="compte-titre">⭐ Programme de fidélité</div>' +
+      '<div class="fid-barre"><div style="font-size:12px;color:var(--gris);margin-bottom:4px">Vos points accumulés</div><div class="fid-pts">' + pts + ' pts</div>' +
+      '<div style="font-size:11px;color:var(--gris);margin-top:4px">1€ dépensé (hors port) = 1 point · vos points sont gardés à vie</div>' +
+      (libres !== pts ? '<div style="font-size:11px;color:var(--terra);margin-top:4px">Dont ' + (pts - libres) + " points déjà réservés pour un bon non utilisé.</div>" : "") + "</div>" +
+      "<div>" + rows + "</div>" +
+      (bons ? '<div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(201,169,110,.3)"><div style="font-size:12px;font-weight:700;color:var(--brun);margin-bottom:4px">🎁 Mes bons disponibles</div>' + bons + '<p style="font-size:11px;color:var(--gris);margin-top:8px">Saisissez le code dans votre panier. Un seul bon par commande.</p></div>' : "") + "</div>";
+  }
+  function carteCommandes(p) {
+    var cs = p.commandes || [];
+    var h = cs.length ? cs.slice(0, 15).map(function (o) {
+      var lignes = String(o.produits || "").split("\n").filter(Boolean).map(function (l) { return "<div>" + H(l) + "</div>"; }).join("");
+      var liv = o.mode === "Point relais" ? "Point relais" + (o.relais ? " : " + H(o.relais) : "") : o.mode === "Chronopost" ? "Livraison à domicile" : o.mode === "Main propre" ? "Remise en main propre" : "";
+      return '<div style="padding:12px 0;border-bottom:1px solid rgba(201,169,110,.1)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px"><div><span style="font-weight:700;font-size:13px;color:var(--brun)">' + H(o.numero) + " · " + fmtDate(o.date) + "</span>" + (liv ? '<div style="font-size:11px;color:var(--gris);margin-top:2px">🚚 ' + liv + "</div>" : "") + '</div><span style="font-size:13px;color:var(--terra);font-weight:700;white-space:nowrap;margin-left:8px">' + eur(o.total || 0) + '</span></div><div style="font-size:12px;color:var(--gris);margin-bottom:6px;line-height:1.6">' + lignes + "</div><div>" + badge(o.statut) + (o.points ? ' <span style="font-size:11px;color:var(--gris)">+' + o.points + " points</span>" : "") + "</div></div>";
+    }).join("") : '<p style="color:var(--gris);font-size:13px">Aucune commande pour le moment.</p>';
+    return '<div class="compte-card"><div class="compte-titre">📦 Mes commandes</div>' + h + "</div>";
+  }
+  function carteCartes() {
+    var l = jget("aph_cartes", []);
+    var liste = l.length ? l.map(function (c) {
+      return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(201,169,110,.15);font-size:13px;color:var(--brun)"><span><strong style="font-family:monospace">' + H(c.code) + "</strong> — " + c.montant + "€" + (c.pour ? " pour " + H(c.pour) : "") + '</span><button class="btn-s" style="font-size:11px;padding:5px 12px" onclick="telechargerCarte(\'' + H(c.code) + "','" + H(c.mail) + '\')">Télécharger le PDF</button></div>';
+    }).join("") : "";
+    return '<div class="compte-card"><div class="compte-titre">🎁 Mes cartes cadeaux</div>' + liste +
+      '<p style="font-size:12px;color:var(--gris);margin:10px 0 8px">Votre carte est disponible en PDF dès que votre paiement est confirmé. Retrouvez-la avec son code :</p>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap"><input id="cg-code-dl" type="text" aria-label="Code de la carte cadeau" placeholder="CADEAU-XXXXXX" autocomplete="off" style="flex:1;min-width:150px;border:2px solid rgba(201,169,110,.3);border-radius:30px;padding:8px 14px;font-size:13px;font-family:\'Lato\',sans-serif;color:var(--brun)"/>' +
+      '<button class="btn-s" style="font-size:12px;padding:6px 16px" onclick="telechargerCarte(document.getElementById(\'cg-code-dl\').value)">Télécharger</button></div><p id="cg-dl-msg" role="alert" aria-live="polite" style="font-size:12px;margin-top:8px;display:none"></p></div>';
+  }
+  function carteReglages(p) {
+    return '<div class="compte-card"><div class="compte-titre">⚙️ Mes préférences</div>' +
+      '<label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--brun-m);line-height:1.5"><input id="pref-accepte" type="checkbox" ' + (p.accepte ? "checked" : "") + ' onchange="majPrefMail(this.checked)" style="margin-top:3px"/><span>Je souhaite recevoir par e-mail mes cadeaux d\'anniversaire, mes bons fidélité et les demandes d\'avis. (Les e-mails liés à mes commandes continuent d\'arriver.)</span></label>' +
+      '<p id="pref-msg" role="status" aria-live="polite" style="font-size:12px;color:var(--teal);margin-top:6px;display:none"></p>' +
+      '<div style="margin-top:16px;padding-top:14px;border-top:1px dashed rgba(201,169,110,.3)"><button type="button" class="btn-s" style="font-size:12px;padding:6px 16px" onclick="afficherSuppression()">Supprimer mon compte</button><div id="suppr-zone"></div></div></div>';
+  }
+  window.majPrefMail = function (ok) {
+    api("/preferences", { accepte: !!ok }).then(function (r) {
+      var m = $("pref-msg"); if (!m) return;
+      m.style.display = "block"; m.style.color = r.ok ? "var(--teal)" : "var(--terra)"; m.textContent = r.ok ? "Enregistré." : (r.j.erreur || "Impossible d'enregistrer.");
+      if (r.ok) { var p = getProf(); if (p) { p.accepte = !!ok; setProf(p); } }
+    });
+  };
+  window.afficherSuppression = function () {
+    var z = $("suppr-zone"); if (!z) return;
+    z.innerHTML = '<p style="font-size:12px;color:var(--brun-m);line-height:1.6;margin:10px 0 8px">Votre compte, vos points et votre panier enregistré seront supprimés. Cette action est définitive. Saisissez votre mot de passe pour confirmer :</p>' +
+      '<div class="form-field"><label for="suppr-mdp">Mot de passe</label><input id="suppr-mdp" type="password" autocomplete="current-password"/></div>' +
+      '<button type="button" class="btn-p" style="font-size:12px;padding:8px 18px" onclick="confirmerSuppression()">Oui, supprimer définitivement mon compte</button><p id="suppr-msg" role="alert" aria-live="polite" style="font-size:12px;color:var(--terra);margin-top:6px;display:none"></p>';
+  };
+  window.confirmerSuppression = function () {
+    var m = $("suppr-mdp"), z = $("suppr-msg");
+    if (!m || !m.value) { if (z) { z.style.display = "block"; z.textContent = "Saisissez votre mot de passe."; } return; }
+    api("/supprimer-compte", { mdp: m.value }).then(function (r) {
+      if (!r.ok) { if (z) { z.style.display = "block"; z.textContent = r.j.erreur || "Impossible de supprimer le compte."; } return; }
+      deconnecterLocal(); lsSet("aph_cartes", null); lsSet("aph_adresse", null);
+      toast("✅", "Votre compte a été supprimé.");
+      window.renderCompte();
+    });
+  };
+
+  function dessinerCompte(p) {
+    var e = $("compte-contenu"); if (!e) return;
+    var a = getAdr();
+    e.innerHTML = '<div class="compte-card"><div class="compte-titre">👤 Bonjour, ' + H(p.prenom) + " !</div>" +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><div class="form-field"><label>Prénom</label><div style="padding:8px 0;font-size:14px">' + H(p.prenom) + '</div></div><div class="form-field"><label>Nom</label><div style="padding:8px 0;font-size:14px">' + H(p.nom) + "</div></div></div>" +
+      '<div class="form-field"><label>E-mail</label><div style="padding:6px 0;font-size:14px">' + H(p.mail) + "</div></div>" +
+      '<div class="form-field"><label>Téléphone</label><div style="padding:6px 0;font-size:14px">' + H(p.tel || "Non renseigné") + "</div></div>" +
+      '<div class="form-field"><label>🎂 Date de naissance</label><div style="padding:6px 0;font-size:14px">' + H(fmtDate(p.naissance) || "Non renseignée") + "</div></div>" +
+      '<p style="font-size:11px;color:var(--gris);margin-bottom:12px">Pour modifier ces informations, <a href="#" onclick="showContact();return false" style="color:var(--terra)">écrivez-moi</a>.</p>' +
+      '<div class="form-field"><label for="m-adresse">Adresse</label><input id="m-adresse" type="text" value="' + H(a.adresse) + '" autocomplete="address-line1" onchange="majChampClient(\'adresse\',this.value)"/></div>' +
+      '<div class="form-field"><label for="m-adresse2">Complément d\'adresse</label><input id="m-adresse2" type="text" value="' + H(a.adresse2) + '" autocomplete="address-line2" onchange="majChampClient(\'adresse2\',this.value)"/></div>' +
+      '<div style="display:flex;gap:10px"><div class="form-field" style="flex:1"><label for="m-cp">CP</label><input id="m-cp" type="text" value="' + H(a.cp) + '" autocomplete="postal-code" maxlength="5" onchange="majChampClient(\'cp\',this.value)"/></div><div class="form-field" style="flex:2"><label for="m-ville">Ville</label><input id="m-ville" type="text" value="' + H(a.ville) + '" autocomplete="address-level2" onchange="majChampClient(\'ville\',this.value)"/></div></div>' +
+      '<button class="btn-s" style="font-size:12px;padding:6px 16px;margin-top:8px" onclick="deconnecterClient()">Se déconnecter</button></div>' +
+      carteFidelite(p) + carteCommandes(p) + carteCartes() + carteReglages(p);
+  }
+  window.buildFideliteCard = function () { var p = getProf(); return p ? carteFidelite(p) : ""; };
+  window.renderCompte = function () {
+    var e = $("compte-contenu"); if (!e) return;
+    var p = getProf();
+    if (!getTok() || !p) { window.afficherConnexion(); return; }
+    dessinerCompte(p);
+    rafraichirProfil(function (ok) { var q = getProf(); if (ok && q && $("compte-contenu") && $("page-compte") && $("page-compte").classList.contains("active")) dessinerCompte(q); else if (!ok && !getTok()) window.afficherConnexion("Votre session a expiré, merci de vous reconnecter."); });
+  };
+  window.genererBon = function (montant, mini, pts) {
+    api("/points/echanger", { palier: pts }).then(function (r) {
+      if (!r.ok) { toast("⚠️", r.j.erreur || "Impossible de créer le bon."); sessionExpiree(r); return; }
+      toast("🎁", "Votre bon de " + montant + "€ est prêt : " + r.j.code);
+      rafraichirProfil(function () { window.renderCompte(); });
+    });
+  };
+
+  /* ---------- bons et cartes cadeaux dans le panier ---------- */
+  var appliquerBonOrig = window.appliquerBon;
+  window.appliquerBon = function () {
+    var el = $("bon-reduc-input"), code = el ? el.value.trim().toUpperCase() : "";
+    var local = (getFidelite().bons || []).some(function (b) { return b.code === code && !b.utilise; });
+    if (!code || local || !/^CADEAU-/.test(code)) return appliquerBonOrig.apply(this, arguments);
+    bonSaisie = el.value.trim();
+    var sous = panier.reduce(function (s, i) { return s + i.prix * i.qte; }, 0);
+    var z = $("bon-msg"); if (z) { z.style.display = "block"; z.style.color = "var(--gris)"; z.textContent = "Vérification en cours…"; }
+    return api("/bon/verifier", { code: code, sousTotal: sous }).then(function (r) {
+      if (r.ok && r.j.type === "Carte cadeau") {
+        if (!panier.some(function (i) { return !i.carte; })) { bonActif = null; bonMsg = { c: "var(--terra)", t: "Une carte cadeau ne peut pas servir à acheter une autre carte cadeau." }; }
+        else { bonActif = { code: code, montant: r.j.montant, minAchat: 0, carte: true, server: true, h: "srv-" + code, avant: r.j.montant }; bonMsg = { c: "var(--teal)", t: "✅ Carte cadeau appliquée (" + eur(r.j.montant) + ")." }; }
+        return renderPanier();
+      }
+      if (r.status === 400 && r.j.erreur === "Code inconnu.") return appliquerBonOrig();
+      bonActif = null; bonMsg = { c: "var(--terra)", t: r.j.erreur || "Code non valable." }; renderPanier();
+    });
+  };
+
+  /* ---------- enregistrement de la commande ---------- */
+  function modeServeur() { return livActive === "relais" ? "Point relais" : livActive === "domicile" ? "Chronopost" : "Main propre"; }
+  function construireCommande() {
+    var c = getClient() || {};
+    var sous = panier.reduce(function (s, i) { return s + i.prix * i.qte; }, 0);
+    var adr = [c.adresse, c.adresse2, [c.cp, c.ville].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+    return {
+      mail: c.email, nom: ((c.prenom || "") + " " + String(c.nom || "").toUpperCase()).trim(), mode: modeServeur(),
+      relais: livActive === "relais" ? String(relaisChoisi || "") : "", adresse: livActive === "domicile" ? adr : "",
+      port: soloCartes() ? 0 : calcLiv(livActive, sous),
+      bon: bonActif && (!bonActif.carte || bonActif.server) ? bonActif.code : "",
+      lignes: panier.filter(function (i) { return !i.carte; }).map(function (i) { return { nom: i.n, finition: i.fin, qte: i.qte, prix: i.prix }; })
+    };
+  }
+  function cartesAcheteesDe(snap) {
+    var out = [], c = getClient() || {};
+    snap.forEach(function (i) { if (!i.carte) return; for (var k = 0; k < (i.qte || 1); k++) out.push({ montant: (i._cg && i._cg.m) || i.prix, pour: i._cg && i._cg.pour || "", de: i._cg && i._cg.de || "", message: i._cg && i._cg.msg || "", mail: (i._cg && i._cg.mail) || c.email || "" }); });
+    return out;
+  }
+  function envoyerCommande(cmd, cartes) {
+    var fait = { points: 0, total: null, cartes: [] };
+    var p1 = cmd.lignes.length ? api("/commande", cmd).then(function (r) {
+      if (r.ok) { fait.points = r.j.points || 0; fait.total = r.j.total; return true; }
+      if (r.status === 0 || r.status >= 500) return false; /* à réessayer plus tard */
+      return true; /* refusée : inutile de réessayer */
+    }) : Promise.resolve(true);
+    var p2 = cartes.reduce(function (chaine, k) {
+      return chaine.then(function () {
+        return api("/carte-cadeau/creer", { montant: k.montant, pour: k.pour, de: k.de, message: k.message, mail: k.mail }, false).then(function (r) {
+          if (r.ok && r.j.code) { fait.cartes.push({ code: r.j.code, mail: k.mail, montant: k.montant, pour: k.pour }); }
+          else if (r.status === 0 || r.status >= 500) { k._retry = true; }
+        });
+      });
+    }, Promise.resolve());
+    return Promise.all([p1, p2]).then(function (res) {
+      var anciennes = jget("aph_cartes", []);
+      lsSet("aph_cartes", JSON.stringify(fait.cartes.concat(anciennes).slice(0, 50)));
+      fait.ok = res[0]; fait.reste = cartes.filter(function (k) { return k._retry; });
+      return fait;
+    });
+  }
+  function essayerEnvoisEnAttente() {
+    var q = jget("aph_attente", []);
+    if (!q.length || !getTok()) return;
+    lsSet("aph_attente", JSON.stringify([]));
+    q.forEach(function (x) {
+      envoyerCommande(x.cmd, x.cartes || []).then(function (f) {
+        if (!f.ok || f.reste.length) { var n = jget("aph_attente", []); n.push({ cmd: f.ok ? { lignes: [] } : x.cmd, cartes: f.reste }); lsSet("aph_attente", JSON.stringify(n)); }
+        rafraichirProfil();
+      });
+    });
+  }
+  var finaliserOrig = window.finaliserCommande;
+  window.finaliserCommande = function (details, total) {
+    var cmd = null, cartes = [];
+    try { cmd = construireCommande(); cartes = cartesAcheteesDe(panier); } catch (e) { cmd = null; }
+    finaliserOrig.apply(this, arguments);
+    if (!cmd || !cmd.mail) return;
+    envoyerCommande(cmd, cartes).then(function (f) {
+      if (!f.ok || f.reste.length) { var q = jget("aph_attente", []); q.push({ cmd: f.ok ? { lignes: [] } : cmd, cartes: f.reste }); lsSet("aph_attente", JSON.stringify(q)); }
+      var z = document.querySelector("#page-panier .pan-page > div");
+      if (z && (f.points || f.cartes.length)) {
+        var t = "";
+        if (f.points) t += "<p style=\"color:var(--teal);font-weight:700;margin-bottom:8px\">⭐ Vous gagnez " + f.points + " point" + (f.points > 1 ? "s" : "") + " de fidélité" + (f.total != null ? " (total : " + f.total + ")" : "") + ".</p>";
+        if (f.cartes.length) t += "<p style=\"font-size:14px;color:var(--gris);line-height:1.6;margin-bottom:12px\">🎁 Votre carte cadeau sera téléchargeable en PDF dans <strong>Mon compte → Mes cartes cadeaux</strong> dès que votre paiement sera confirmé.</p>";
+        var d = document.createElement("div"); d.innerHTML = t; var btn = z.querySelector("button"); z.insertBefore(d, btn);
+      }
+      rafraichirProfil();
+    });
+  };
+
+  /* ---------- carte cadeau en PDF ---------- */
+  function charger(src) { return new Promise(function (ok, ko) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = ko; i.src = src; }); }
+  function lignesTexte(ctx, txt, max) {
+    var mots = String(txt).split(/\s+/), l = [], cur = "";
+    mots.forEach(function (m) { var t = cur ? cur + " " + m : m; if (ctx.measureText(t).width > max && cur) { l.push(cur); cur = m; } else cur = t; });
+    if (cur) l.push(cur); return l.slice(0, 3);
+  }
+  function jpegVersPdf(jpegBytes, w, h) {
+    var enc = new TextEncoder(), parts = [], off = [], len = 0;
+    function add(x) { var b = typeof x === "string" ? enc.encode(x) : x; parts.push(b); len += b.length; }
+    function obj(n, body) { off[n] = len; add(n + " 0 obj\n"); add(body); add("\nendobj\n"); }
+    add("%PDF-1.4\n");
+    obj(1, "<< /Type /Catalog /Pages 2 0 R >>");
+    obj(2, "<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
+    obj(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + w + " " + h + "] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>");
+    off[4] = len; add("4 0 obj\n<< /Type /XObject /Subtype /Image /Width " + jpegBytes.w + " /Height " + jpegBytes.h + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + jpegBytes.d.length + " >>\nstream\n"); add(jpegBytes.d); add("\nendstream\nendobj\n");
+    var c = "q " + w + " 0 0 " + h + " 0 0 cm /Im0 Do Q";
+    obj(5, "<< /Length " + c.length + " >>\nstream\n" + c + "\nendstream");
+    var x = len; add("xref\n0 6\n0000000000 65535 f \n");
+    for (var n = 1; n <= 5; n++) add(("0000000000" + off[n]).slice(-10) + " 00000 n \n");
+    add("trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n" + x + "\n%%EOF");
+    var out = new Uint8Array(len), p = 0; parts.forEach(function (b) { out.set(b, p); p += b.length; });
+    return out;
+  }
+  function dessinerCarte(c) {
+    var S = 2, W = 851, Hh = 315;
+    return Promise.all([charger("carte-cadeau-gauche.png"), charger("carte-cadeau-droite.png"), charger("logo.png"),
+      (document.fonts && document.fonts.load ? Promise.all([document.fonts.load('600 27px "Dancing Script"'), document.fonts.load('600 34px "Playfair Display"'), document.fonts.load('400 13px Lato'), document.fonts.load('700 13px Lato')]).catch(function () {}) : Promise.resolve())])
+      .then(function (r) {
+        var cv = document.createElement("canvas"); cv.width = W * S; cv.height = Hh * S;
+        var x = cv.getContext("2d"); x.scale(S, S);
+        x.fillStyle = "#FDFAF7"; x.fillRect(0, 0, W, Hh);
+        x.drawImage(r[0], 0, 0, 268, 229); x.drawImage(r[1], 586, 0, 265, 229);
+        x.fillStyle = "#E8D5A8"; x.fillRect(268, 0, 1, 229); x.fillRect(585, 0, 1, 229);
+        x.drawImage(r[2], 427 - 31, 5, 62, 62);
+        x.textAlign = "center"; x.textBaseline = "middle";
+        x.fillStyle = "#9E5238"; x.font = '600 27px "Dancing Script", cursive'; x.fillText("Bon cadeau", 427, 82);
+        x.fillStyle = "#7A5C14"; x.font = '600 34px "Playfair Display", serif'; x.fillText(c.montant + " €", 427, 112);
+        function ligneMixte(label, nom, y) {
+          x.font = '400 13.5px Lato, sans-serif'; var w1 = x.measureText(label).width;
+          x.font = '600 15px "Playfair Display", serif'; var w2 = x.measureText(nom).width;
+          var d = 427 - (w1 + w2) / 2; x.textAlign = "left";
+          x.fillStyle = "#2C1810"; x.font = '400 13.5px Lato, sans-serif'; x.fillText(label, d, y);
+          x.fillStyle = "#6B4226"; x.font = '600 15px "Playfair Display", serif'; x.fillText(nom, d + w1, y); x.textAlign = "center";
+        }
+        var y = 140;
+        if (c.pour) { ligneMixte("Pour : ", c.pour, y); y += 20; }
+        if (c.message) {
+          x.fillStyle = "#6B5E55"; x.font = 'italic 400 12px Lato, sans-serif';
+          lignesTexte(x, "« " + c.message + " »", 290).forEach(function (l) { x.fillText(l, 427, y); y += 14; });
+          y += 6;
+        }
+        if (c.de) ligneMixte("De la part de : ", c.de, Math.min(y, 208));
+        x.fillStyle = "#9E5238"; x.fillRect(0, 229, W, 86);
+        x.fillStyle = "#FDFAF7"; x.font = '600 19px "Playfair Display", serif'; x.fillText("Code : " + c.code + "  ·  Valable 1 an", 425.5, 262);
+        x.fillStyle = "#E8D5A8"; x.font = '400 13px Lato, sans-serif'; x.fillText("www.lesessencesparfumeesdaphrodite.fr  ·  06 22 41 84 63  ·  69540 Irigny", 425.5, 292);
+        return cv;
+      });
+  }
+  function dlMsg(t, bon) { var m = $("cg-dl-msg"); if (m) { m.style.display = t ? "block" : "none"; m.style.color = bon ? "var(--teal)" : "var(--terra)"; m.textContent = t || ""; } else if (t) toast("🎁", t); }
+  window.telechargerCarte = function (code, mail) {
+    code = String(code || "").trim().toUpperCase();
+    mail = mail || (getClient() || {}).email || "";
+    if (!code) return dlMsg("Saisissez le code de votre carte cadeau.");
+    dlMsg("Préparation de votre carte…", true);
+    api("/carte-cadeau/lire", { code: code, mail: mail }, false).then(function (r) {
+      if (r.ok && r.j.attente) return dlMsg(r.j.message || "Votre carte sera disponible dès réception du paiement.", true);
+      if (!r.ok || !r.j.carte) return dlMsg(r.j.erreur || "Carte introuvable.");
+      return dessinerCarte(r.j.carte).then(function (cv) {
+        var durl = cv.toDataURL("image/jpeg", 0.92), b = atob(durl.split(",")[1]), u = new Uint8Array(b.length);
+        for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+        var pdf = jpegVersPdf({ d: u, w: cv.width, h: cv.height }, 851, 315);
+        var url = URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
+        var a = document.createElement("a"); a.href = url; a.download = "carte-cadeau-" + code + ".pdf"; document.body.appendChild(a); a.click();
+        setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 4000);
+        dlMsg("Votre carte cadeau est téléchargée. Vous pouvez l'imprimer ou l'envoyer.", true);
+      }).catch(function () { dlMsg("Impossible de préparer le PDF pour le moment. Réessayez."); });
+    });
+  };
+
+  /* ---------- au chargement de la page ---------- */
+  window.addEventListener("DOMContentLoaded", function () {
+    /* anciens comptes enregistrés seulement sur l'appareil : on les déconnecte (ils ont été remplacés par les comptes en ligne) */
+    if (!getTok()) { var anc = jget("client_session", null); if (anc) { lsSet("aph_ancien", JSON.stringify({ prenom: anc.prenom, nom: anc.nom, email: anc.email, tel: anc.tel, adresse: anc.adresse, adresse2: anc.adresse2, cp: anc.cp, ville: anc.ville, dateNaissance: anc.dateNaissance })); lsSet("client_session", null); } }
+    if (getTok()) rafraichirProfil(function (ok) { if (ok) { restaurerPanier(getProf()); essayerEnvoisEnAttente(); } });
+  });
 })();
 
 </script>
