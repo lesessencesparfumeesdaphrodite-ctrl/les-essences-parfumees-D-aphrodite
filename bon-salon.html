@@ -470,7 +470,11 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   .line-row{display:grid;grid-template-columns:1.3fr .6fr .4fr .5fr .8fr 26px;gap:6px;align-items:center;margin-bottom:7px;}
   .line-row input[type=text], .line-row input[type=number]{padding:9px 10px;font-size:13.5px}
   .line-promo{display:flex;align-items:center;justify-content:center}
-  .line-promo input{width:17px;height:17px;accent-color:var(--gold);cursor:pointer}
+  .line-promo input{width:22px;height:22px;accent-color:var(--gold);cursor:pointer}
+  .line-promo{gap:6px;cursor:pointer}
+  .promo-txt{display:none;font-size:13px;font-weight:600;color:var(--dark)}
+  .promo-hint{display:none;margin:6px 0 10px;padding:9px 11px;border-radius:10px;background:#fff6dc;border:1px solid var(--gold);font-size:13px;color:var(--dark)}
+  @media(max-width:420px){.promo-txt{display:inline}}
   .line-total{font-size:13.5px;font-weight:600;color:var(--dark);text-align:right;padding-right:4px}
   .line-del{background:none;border:none;color:var(--err);font-size:16px;cursor:pointer;opacity:.6;padding:0}
   .add-line{
@@ -626,6 +630,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 
       <div class="totals-box">
         <div class="trow"><span>Total de la commande</span><b id="totCommande">0,00 €</b></div>
+        <div class="promo-hint" id="promoHint"></div>
         <div class="trow" id="promoRow" style="display:none"><span>🎁 Remise promotion (3/6)</span><b id="totPromo" style="color:var(--gold)">0,00 €</b></div>
         <div class="trow"><span>Remise / bon fidélité</span><input type="number" id="f-remise" value="0" step="0.5" oninput="calcTotals(true)"> €</div>
         <div class="trow"><span>Frais de port</span><input type="number" id="f-port" value="0" step="0.5" oninput="calcTotals(true)"> €</div>
@@ -767,7 +772,7 @@ function addLine(prod='', pu='', qte=1, promo=false){
     <input type="text" placeholder="Nom du produit" value="${prod}" oninput="calcTotals()">
     <input type="number" placeholder="0" step="0.5" value="${pu}" oninput="calcTotals()">
     <input type="number" placeholder="1" step="1" value="${qte}" oninput="calcTotals()">
-    <div class="line-promo"><input type="checkbox" ${promo ? 'checked' : ''} onchange="calcTotals()" title="Éligible promo parfum/cosmétique"></div>
+    <label class="line-promo"><input type="checkbox" ${promo ? 'checked' : ''} onchange="calcTotals()" title="Éligible promo parfum/cosmétique"><span class="promo-txt">Promo</span></label>
     <div class="line-total">0,00 €</div>
     <button class="line-del" onclick="removeLine('${id}')">✕</button>
   `;
@@ -832,6 +837,12 @@ function calcTotals(manualRemise){
   document.getElementById('totCommande').textContent = eur(total);
 
   const promoDiscount = computePromoDiscount(promoUnits);
+  let nbArt = 0; rows.forEach(r=>{ const i=r.querySelectorAll('input'); if((parseFloat(i[1].value)||0)>0) nbArt += Math.max(0, Math.floor(parseFloat(i[2].value)||0)); });
+  const ph = document.getElementById('promoHint');
+  if(ph){
+    if(nbArt >= 3 && promoUnits.length < 3){ ph.style.display='block'; ph.textContent = '💡 Vous avez ' + nbArt + ' articles. Pour la promotion (3e à -50 %), cochez « Promo » devant les parfums et cosmétiques (3 cochés minimum).'; }
+    else ph.style.display='none';
+  }
   const promoRow = document.getElementById('promoRow');
   if(promoDiscount > 0){
     promoRow.style.display = 'flex';
@@ -1330,6 +1341,7 @@ function showConfirmation(entry){
   else { syncLine.textContent = '⏳ Pas encore envoyé dans Notion (réseau). Dès que le réseau revient, les points et le lien « Créer mon compte » s\'ajoutent : revenez ici et appuyez sur « Ouvrir SMS ».'; syncLine.style.color = 'var(--text-soft)'; }
   smsBtn.href = entry.tel ? `sms:${entry.tel.replace(/\s/g,'')}?body=${encodeURIComponent(recap)}` : '#';
   smsBtn.style.opacity = entry.tel ? '1' : '.4';
+  smsBtn.onclick = entry.tel ? null : (e)=>{e.preventDefault(); showToast('Pas de numéro de téléphone : utilisez « Copier le message » ou Mail');};
   smsBtn.classList.toggle('preferred', entry.envoiPref === 'SMS' || entry.envoiPref === 'Les deux');
   const mailBtn = document.getElementById('mailBtn');
   mailBtn.classList.toggle('preferred', entry.envoiPref === 'Mail' || entry.envoiPref === 'Les deux');
