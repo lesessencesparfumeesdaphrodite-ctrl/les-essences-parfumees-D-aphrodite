@@ -879,6 +879,15 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .fav-btn{position:absolute;bottom:9px;left:9px;z-index:3;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:var(--terra);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18);padding:0}
 .fav-btn.on{background:var(--terra);color:#fff}
+.fav-liste{margin:10px 0 4px;padding:10px 12px;border:1px dashed rgba(201,169,110,.5);border-radius:10px;background:rgba(255,255,255,.55);text-align:left}
+.fav-liste .fav-tit{margin:0 0 6px;font-size:12.5px;font-weight:700;color:var(--brun)}
+#fav-bc-liste .fav-liste,#fav-bc-liste>div{max-height:210px;overflow-y:auto}
+.fav-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(201,169,110,.15);font-size:13px;color:var(--brun);text-align:left}
+.fav-btn.fav-inline{position:static;flex:none;width:32px;height:32px;font-size:18px;background:transparent;border:1px solid rgba(201,169,110,.6);box-shadow:none}
+.fav-btn.fav-inline.on{background:var(--terra);color:#fff}
+.bc-ph .fav-btn.fav-inline{align-self:center;margin-right:2px}.bc-ph .bc-pn{flex:1;margin-right:auto}
+.fav-sel{background:none;border:none;padding:4px 0;font:inherit;color:var(--brun);cursor:pointer;text-align:left;flex:1}
+.fav-sel:hover{text-decoration:underline}
 .fav-btn:focus-visible{outline:3px solid var(--brun);outline-offset:2px}
 .fav-btn.fav-modal{position:static;display:inline-flex;margin-left:8px;vertical-align:middle}
 </style>
@@ -2883,7 +2892,7 @@ window.exhcPreselect = function(e){
       champ("m-relais", "📦 Mon point relais préféré", p.relais || "", "off") +
       '<p style="font-size:11px;color:var(--gris);line-height:1.5;margin:-4px 0 10px">Indiquez le nom et l\'adresse du point relais : il sera proposé automatiquement à votre prochaine commande.</p>' +
       '<button class="btn-p" id="co-btn" onclick="enregistrerCoordonnees()" style="width:100%">Enregistrer mes coordonnées</button><p id="co-msg" role="status" aria-live="polite" style="font-size:13px;margin:8px 0 0;display:none"></p>' +
-      '<p style="font-size:11px;color:var(--gris);line-height:1.6;margin-top:14px;padding-top:12px;border-top:1px dashed rgba(201,169,110,.3)">💳 <strong>Carte bancaire et PayPal :</strong> pour votre sécurité, ils ne sont jamais enregistrés sur ce site. Vous les saisissez à chaque paiement, directement chez PayPal (site sécurisé).</p></div>' +
+      '<p style="font-size:11px;color:var(--gris);line-height:1.6;margin-top:14px;padding-top:12px;border-top:1px dashed rgba(201,169,110,.3)">💳 <strong>Carte bancaire et PayPal :</strong> pour votre sécurité, ils ne sont jamais enregistrés sur ce site.</p></div>' +
       '<div class="compte-card"><div class="compte-titre">📧 Changer mon adresse e-mail</div>' +
       champ("em-nouveau", "Nouvelle adresse e-mail", "", "email", "email") +
       '<div class="form-field"><label for="em-mdp">Mot de passe actuel</label>' + champMdp2("em-mdp", "Votre mot de passe", "current-password", "changerMail()") + "</div>" +
@@ -3220,6 +3229,38 @@ window.exhcPreselect = function(e){
       add.parentNode.insertBefore(bx, add); majBoutonExh();
     }
   }
+  var MODAL_G = { "gamme-parfum": 1, "gamme-home": 1, "gamme-cosmetique": 1, "gamme-capillaire": 1, "gamme-barbe": 1, "gamme-nutri": 1 };
+  function nomNet(n) { return String(n).replace(/\s+—\s+\d[\d,.]*\s*€.*$/, "").replace(/\s+/g, " ").trim(); }
+  function ajouterListeBc() {
+    var g = $("bc-gamme"), sp = $("bc-produit"); if (!g || !sp) return;
+    var box = $("fav-bc-liste");
+    if (!box) { box = document.createElement("div"); box.id = "fav-bc-liste"; sp.parentNode.insertBefore(box, sp.nextSibling); }
+    var sig = g.value + "|" + sp.options.length;
+    if (box.getAttribute("data-g") === sig) return;
+    box.setAttribute("data-g", sig); box.innerHTML = "";
+    if (!g.value || sp.options.length < 2) return;
+    var l = document.createElement("div"); l.className = "fav-liste"; l.setAttribute("role", "group"); l.setAttribute("aria-label", "Produits de la gamme : cœur pour les favoris");
+    var t = document.createElement("p"); t.className = "fav-tit"; t.textContent = "♡ Appuyez sur le cœur pour garder un produit en favori :"; l.appendChild(t);
+    for (var i = 1; i < sp.options.length; i++) {
+      (function (o) {
+        var nom = nomNet(o.text), d = document.createElement("div"); d.className = "fav-row";
+        var c = coeur("e:" + nom); c.classList.add("fav-inline"); c.setAttribute("data-nom", " : " + nom); d.appendChild(c);
+        var lb = document.createElement("button"); lb.type = "button"; lb.className = "fav-sel"; lb.textContent = nom; lb.setAttribute("aria-label", "Choisir ce produit : " + nom);
+        lb.addEventListener("click", function () { sp.value = o.value; sp.dispatchEvent(new Event("change", { bubbles: true })); });
+        d.appendChild(lb); l.appendChild(d);
+      })(sp.options[i]);
+    }
+    box.appendChild(l); majCoeurs();
+  }
+  function ajouterListeModal(id) {
+    if (!MODAL_G[id]) return;
+    document.querySelectorAll("#exh-detail-corps .bc-pr").forEach(function (r) {
+      var h = r.querySelector(".bc-ph"), n = r.querySelector(".bc-pn"); if (!h || !n || h.querySelector(".fav-btn")) return;
+      var nom = nomNet(n.textContent), c = coeur("e:" + nom); c.classList.add("fav-inline"); c.setAttribute("data-nom", " : " + nom);
+      h.insertBefore(c, h.firstChild);
+    });
+    majCoeurs();
+  }
   function libelleExh() {
     var t = [];
     ["bc-produit", "bc-genre", "bc-ref"].forEach(function (id) {
@@ -3233,7 +3274,7 @@ window.exhcPreselect = function(e){
     var lab = libelleExh(), on = !!lab && estFav("e:" + lab);
     var tx = on ? "♥ Dans mes favoris (retirer)" : "♡ Ajouter ce produit à mes favoris"; if (b.textContent !== tx) b.textContent = tx;
     b.setAttribute("aria-pressed", on ? "true" : "false");
-    var dp = lab ? "" : "none"; if (b.style.display !== dp) b.style.display = dp;
+    if (b.style.display !== "") b.style.display = "";
   }
   function favListe() {
     var l = favGet();
@@ -3328,7 +3369,7 @@ window.exhcPreselect = function(e){
   var obsT = null;
   function observer() {
     clearTimeout(obsT);
-    obsT = setTimeout(function () { try { ajouterCoeurs(); majCoeurs(); ajouterBoutonQuestionnaire(); majBoutonExh(); } catch (e) {} }, 60);
+    obsT = setTimeout(function () { try { ajouterCoeurs(); ajouterListeBc(); majCoeurs(); ajouterBoutonQuestionnaire(); majBoutonExh(); } catch (e) {} }, 60);
   }
   function boutonsAvis() {
     var t = $("avis-track"); if (!t) return;
@@ -3346,8 +3387,9 @@ window.exhcPreselect = function(e){
   window.addEventListener("resize", boutonsAvis);
   window.addEventListener("DOMContentLoaded", function () {
     boutonsAvis();
+    try { var oDP = window.ouvrirDetailPrestation; if (typeof oDP === "function") window.ouvrirDetailPrestation = function (e) { oDP.apply(this, arguments); try { ajouterListeModal(e); } catch (x) {} }; } catch (x) {}
     new MutationObserver(observer).observe(document.body, { childList: true, subtree: true });
-    document.addEventListener("change", function (ev) { if (ev.target && /^bc-/.test(ev.target.id || "")) majBoutonExh(); });
+    document.addEventListener("change", function (ev) { if (ev.target && /^bc-/.test(ev.target.id || "")) { majBoutonExh(); ajouterListeBc(); } });
     observer();
   });
 
