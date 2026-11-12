@@ -2746,10 +2746,13 @@ window.exhcPreselect = function(e){
       '<p style="text-align:center;margin-top:12px;font-size:12px;color:var(--gris)">Pas encore de compte ? <a href="#" onclick="afficherInscription();return false" style="color:var(--terra)">Créer un compte</a></p>' +
       '<p style="text-align:center;margin-top:6px;font-size:12px"><a href="#" onclick="afficherOubli();return false" style="color:var(--terra)">Mot de passe oublié ?</a></p></div>';
   };
+  var JETON = "", PRE = null;
   window.afficherInscription = function () {
     var e = $("compte-contenu"); if (!e) return;
     var old = jget("aph_ancien", null) || {};
+    if (JETON && PRE) old = PRE;
     e.innerHTML = '<div class="compte-card"><div class="compte-titre">👤 Créer mon compte</div>' +
+      (JETON && PRE ? '<p style="font-size:13px;color:var(--teal);margin-bottom:12px"><strong>Bonjour ' + H(PRE.prenom) + ' !</strong> Votre fiche est déjà remplie avec les informations données lors de votre commande. Il ne vous reste qu\'à vérifier, choisir un mot de passe et vos préférences d\'e-mails.</p>' : "") +
       '<p style="font-size:13px;color:var(--gris);margin-bottom:16px">Créez votre compte pour suivre vos commandes et cumuler des points de fidélité. Tous les champs marqués d\'une étoile (*) sont obligatoires : je vous envoie par e-mail un lien pour confirmer votre compte.</p>' +
       '<div class="form-field"><label for="c-prenom">Prénom *</label><input id="c-prenom" type="text" autocomplete="given-name" placeholder="Votre prénom" value="' + H(old.prenom) + '"/></div>' +
       '<div class="form-field"><label for="c-nom">Nom *</label><input id="c-nom" type="text" autocomplete="family-name" placeholder="Votre nom" value="' + H(old.nom) + '"/></div>' +
@@ -2773,7 +2776,7 @@ window.exhcPreselect = function(e){
     if (!mdpFort(mdp)) return dire(MSG_MDP);
     setAdr({ adresse: v("c-adresse"), adresse2: v("c-adresse2"), cp: v("c-cp"), ville: v("c-ville") });
     var b = $("c-btn"); if (b) { b.disabled = true; b.textContent = "Création en cours…"; }
-    api("/inscription", { prenom: prenom, nom: nom, mail: mail, mdp: mdp, tel: v("c-tel"), adresse: v("c-adresse"), cp: v("c-cp"), ville: v("c-ville"), naissance: nais, accepte: pf.a, newsletter: pf.n, aucun: pf.x }, false).then(function (r) {
+    api("/inscription", { jeton: JETON || undefined, prenom: prenom, nom: nom, mail: mail, mdp: mdp, tel: v("c-tel"), adresse: v("c-adresse"), cp: v("c-cp"), ville: v("c-ville"), naissance: nais, accepte: pf.a, newsletter: pf.n, aucun: pf.x }, false).then(function (r) {
       if (!r.ok) { if (b) { b.disabled = false; b.textContent = "Créer mon compte"; } return dire(r.j.erreur || "Une erreur est survenue. Réessayez."); }
       var e = $("compte-contenu");
       if (e) e.innerHTML = '<div class="compte-card"><div class="compte-titre">📧 Vérifiez votre boîte e-mail</div><p style="font-size:14px;color:var(--brun-m);line-height:1.7;margin-bottom:14px">' + H(r.j.message || "Un e-mail de confirmation vient de vous être envoyé.") + '</p><p style="font-size:12px;color:var(--gris);margin-bottom:14px">Vous ne le trouvez pas ? Regardez dans vos courriers indésirables (spams).</p><button class="btn-p" onclick="afficherConnexion()" style="margin:0 auto">Se connecter</button></div>';
@@ -3386,7 +3389,7 @@ window.exhcPreselect = function(e){
   /* ================= Liens directs (ancres) ================= */
   var HASH0 = String(location.hash || "");
   function ouvrirAncre(h) {
-    h = decodeURIComponent(String(typeof h === "string" ? h : location.hash || "").replace(/^#/, "")); if (!h || h.indexOf("reinit=") === 0) return;
+    h = decodeURIComponent(String(typeof h === "string" ? h : location.hash || "").replace(/^#/, "")); if (!h || h.indexOf("reinit=") === 0 || h.indexOf("creer=") === 0) return;
     var el = document.getElementById(h); if (!el) return;
     var page = el.closest(".page");
     var aller = function () { try { history.replaceState(null, "", "#" + h); el.scrollIntoView({ behavior: "smooth" }); } catch (e) {} };
@@ -3430,12 +3433,23 @@ window.exhcPreselect = function(e){
     var on = ev.target.value === "Point relais"; w.hidden = !on;
     if (on) { var inp = $("exhc-relais"); if (inp && !inp.value) { try { var pr = getProf(); if (pr && pr.relais) inp.value = relaisPart(pr.relais, "Mondial Relay"); } catch (x) {} } }
   });
+  var CREER = ""; try { var mc = String(location.hash || "").match(/^#creer=([\w.\-]+)$/); if (mc) CREER = mc[1]; } catch (e) {}
   var REINIT = ""; try { var mr = String(location.hash || "").match(/^#reinit=(.+)$/); if (mr) REINIT = decodeURIComponent(mr[1]); } catch (e) {}
   /* ---------- au chargement de la page ---------- */
   window.addEventListener("DOMContentLoaded", function () {
     /* anciens comptes enregistrés seulement sur l'appareil : on les déconnecte (ils ont été remplacés par les comptes en ligne) */
     if (!getTok()) { var anc = jget("client_session", null); if (anc) { lsSet("aph_ancien", JSON.stringify({ prenom: anc.prenom, nom: anc.nom, email: anc.email, tel: anc.tel, adresse: anc.adresse, adresse2: anc.adresse2, cp: anc.cp, ville: anc.ville, dateNaissance: anc.dateNaissance })); lsSet("client_session", null); } }
-    if (REINIT) { try { history.replaceState(null, "", location.pathname); } catch (e) {} setTimeout(function () { showPage("compte"); setTimeout(function () { window.afficherReinit(REINIT); }, 80); }, 350); }
+    if (CREER) {
+      try { history.replaceState(null, "", location.pathname); } catch (e) {}
+      setTimeout(function () {
+        showPage("compte");
+        api("/creer/lire", { jeton: CREER }, false).then(function (r) {
+          if (r.ok && r.j.dejaCompte) { window.afficherConnexion("Vous avez déjà un compte : connectez-vous avec votre e-mail et votre mot de passe."); return; }
+          if (r.ok && r.j.prenom !== undefined) { JETON = CREER; PRE = { prenom: r.j.prenom, nom: r.j.nom, email: r.j.mail, tel: r.j.tel, adresse: r.j.adresse, adresse2: "", cp: r.j.cp, ville: r.j.ville, dateNaissance: r.j.naissance }; window.afficherInscription(); return; }
+          window.afficherInscription(); dire("Ce lien n'est plus valable : créez votre compte ci-dessous.");
+        });
+      }, 350);
+    } else if (REINIT) { try { history.replaceState(null, "", location.pathname); } catch (e) {} setTimeout(function () { showPage("compte"); setTimeout(function () { window.afficherReinit(REINIT); }, 80); }, 350); }
     else setTimeout(function () { ouvrirAncre(HASH0); }, 400);
     if (getTok()) rafraichirProfil(function (ok) { if (ok) { restaurerPanier(getProf()); essayerEnvoisEnAttente(); } });
   });
