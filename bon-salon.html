@@ -489,6 +489,11 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   .remis-check input{width:15px;height:15px;accent-color:var(--gold)}
 
   .pay-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .liv-opt{display:flex;gap:8px;align-items:flex-start;padding:9px 11px;border:1px solid #e3d8cc;border-radius:10px;margin-bottom:6px;font-size:14px;cursor:pointer;background:#fff}
+  .liv-opt input{accent-color:var(--gold);width:20px;height:20px;margin-top:2px;flex:none}
+  .liv-opt small{color:var(--text-soft)}
+  .bilan-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee;font-size:14px}
+  .bilan-row.t{font-weight:700;color:var(--dark);border-bottom:2px solid var(--gold)}
   .pay-opt{
     display:flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--line);
     border-radius:10px;padding:11px;font-size:13px;cursor:pointer;color:var(--text-soft);
@@ -623,10 +628,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     <div class="card">
       <p class="section-label">Produits commandés</p>
       <div class="lines" id="linesBox">
-        <div class="line-hdr"><div>Produit</div><div>Prix U.</div><div>Qté</div><div style="text-align:center">Promo</div><div style="text-align:right">Total</div><div></div></div>
+        <div class="line-hdr"><div>Produit</div><div>Prix U.</div><div>Qté</div><div style="text-align:center">Exhal.</div><div style="text-align:right">Total</div><div></div></div>
       </div>
       <button class="add-line" onclick="addLine()">+ Ajouter un produit</button>
-      <p class="hint" style="margin-top:8px;text-align:left">Cochez « Promo » uniquement pour les parfums et cosmétiques Exhalessence (jamais vos créations) : 3 achetés = le moins cher à -50%, 6 achetés = le moins cher offert. Calcul automatique.</p>
+      <p class="hint" style="margin-top:8px;text-align:left">Cochez « Exhalessence » devant chaque parfum ou cosmétique Exhalessence (jamais vos créations en plâtre résine) : ils entrent dans la promotion (3 achetés = le moins cher à -50 %, 6 achetés = le moins cher offert) et dans le bilan de fin de marché.</p>
 
       <div class="totals-box">
         <div class="trow"><span>Total de la commande</span><b id="totCommande">0,00 €</b></div>
@@ -634,9 +639,19 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <div class="trow" id="promoRow" style="display:none"><span>🎁 Remise promotion (3/6)</span><b id="totPromo" style="color:var(--gold)">0,00 €</b></div>
         <div class="trow"><span>Remise / bon fidélité</span><input type="number" id="f-remise" value="0" step="0.5" oninput="calcTotals(true)"> €</div>
         <div class="trow"><span>Frais de port</span><input type="number" id="f-port" value="0" step="0.5" oninput="calcTotals(true)"> €</div>
-        <div class="remis-check">
-          <input type="checkbox" id="f-remisPropre" onchange="onRemisPropre()">
-          <label for="f-remisPropre" style="margin:0">Remis en main propre (pas de frais de port)</label>
+        <div class="liv-box">
+          <p class="section-label" style="margin:10px 0 6px">Livraison</p>
+          <label class="liv-opt"><input type="radio" name="liv" value="marche" checked onchange="onLivChange()"> <span><b>Remis sur le marché</b><br><small>La cliente repart avec son produit : rien à commander.</small></span></label>
+          <label class="liv-opt"><input type="radio" name="liv" value="main" onchange="onLivChange()"> <span><b>Remise en main propre</b><br><small>La cliente viendra le chercher plus tard (sans frais de port).</small></span></label>
+          <label class="liv-opt"><input type="radio" name="liv" value="expedier" onchange="onLivChange()"> <span><b>À expédier</b><br><small>Je l'envoie à la cliente (frais de port 6 €).</small></span></label>
+          <div id="livExp" style="display:none;margin-top:8px">
+            <label class="liv-opt"><input type="radio" name="livmode" value="relais" checked onchange="onLivChange()"> Point relais</label>
+            <label class="liv-opt"><input type="radio" name="livmode" value="domicile" onchange="onLivChange()"> À domicile</label>
+            <div id="livRelaisBox">
+              <a class="share-btn" style="display:block;margin:6px 0" href="https://www.mondialrelay.fr/trouver-le-point-relais-le-plus-proche-de-chez-moi/" target="_blank" rel="noopener">📍 Choisir un point relais (lien Mondial Relay)</a>
+              <input type="text" id="f-relais" placeholder="Nom et adresse du point relais choisi" style="width:100%">
+            </div>
+          </div>
         </div>
         <div class="trow grand"><span>Montant total</span><span id="totFinal">0,00 €</span></div>
       </div>
@@ -680,6 +695,21 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   </div>
 
   <a href="#" class="admin-link" onclick="openAdmin();return false;">Mes bons enregistrés</a>
+  <a href="#" class="admin-link" onclick="openBilan();return false;" style="margin-left:14px">📊 Bilan du marché</a>
+</div>
+
+<div class="overlay" id="bilanOverlay">
+  <div class="panel">
+    <button class="close-x" onclick="closeBilan()">✕</button>
+    <h3>Bilan du marché</h3>
+    <div class="admin-toolbar">
+      <input type="date" id="bilanDate" oninput="renderBilan()">
+      <input type="text" id="bilanEvent" placeholder="Nom du marché (vide = tous ce jour-là)" oninput="renderBilan()">
+    </div>
+    <div id="bilanBox"></div>
+    <button class="new-btn" onclick="copyBilan()" style="margin-top:10px">📋 Copier le bilan</button>
+    <button class="new-btn" onclick="closeBilan()" style="margin-top:8px;background:var(--dark);color:#fff">Fermer</button>
+  </div>
 </div>
 
 <div class="overlay" id="adminOverlay">
@@ -772,7 +802,7 @@ function addLine(prod='', pu='', qte=1, promo=false){
     <input type="text" placeholder="Nom du produit" value="${prod}" oninput="calcTotals()">
     <input type="number" placeholder="0" step="0.5" value="${pu}" oninput="calcTotals()">
     <input type="number" placeholder="1" step="1" value="${qte}" oninput="calcTotals()">
-    <label class="line-promo"><input type="checkbox" ${promo ? 'checked' : ''} onchange="calcTotals()" title="Éligible promo parfum/cosmétique"><span class="promo-txt">Promo</span></label>
+    <label class="line-promo"><input type="checkbox" ${promo ? 'checked' : ''} onchange="calcTotals()" title="Produit EXHALESSENCE (éligible à la promo)"><span class="promo-txt">Exhalessence</span></label>
     <div class="line-total">0,00 €</div>
     <button class="line-del" onclick="removeLine('${id}')">✕</button>
   `;
@@ -790,10 +820,15 @@ function onFideliteChange(){
   document.getElementById('fidelitePct').textContent = pct + '%';
   calcTotals(true);
 }
-function onRemisPropre(){
-  const checked = document.getElementById('f-remisPropre').checked;
+function livValue(){ return document.querySelector('input[name=liv]:checked')?.value || 'marche'; }
+function onLivChange(){
+  const v = livValue();
   const portInput = document.getElementById('f-port');
-  if(checked){ portInput.value = 0; portInput.disabled = true; } else { portInput.disabled = false; }
+  document.getElementById('livExp').style.display = v === 'expedier' ? 'block' : 'none';
+  const dom = document.querySelector('input[name=livmode]:checked')?.value === 'domicile';
+  document.getElementById('livRelaisBox').style.display = dom ? 'none' : 'block';
+  if(v === 'expedier'){ portInput.disabled = false; if(!(parseFloat(portInput.value) > 0)) portInput.value = 6; }
+  else { portInput.value = 0; portInput.disabled = true; }
   calcTotals(true);
 }
 function onPayChange(){
@@ -840,7 +875,7 @@ function calcTotals(manualRemise){
   let nbArt = 0; rows.forEach(r=>{ const i=r.querySelectorAll('input'); if((parseFloat(i[1].value)||0)>0) nbArt += Math.max(0, Math.floor(parseFloat(i[2].value)||0)); });
   const ph = document.getElementById('promoHint');
   if(ph){
-    if(nbArt >= 3 && promoUnits.length < 3){ ph.style.display='block'; ph.textContent = '💡 Vous avez ' + nbArt + ' articles. Pour la promotion (3e à -50 %), cochez « Promo » devant les parfums et cosmétiques (3 cochés minimum).'; }
+    if(nbArt >= 3 && promoUnits.length < 3){ ph.style.display='block'; ph.textContent = '💡 Vous avez ' + nbArt + ' articles. Pour la promotion (3e à -50 %), cochez « Exhalessence » devant les parfums et cosmétiques (3 cochés minimum).'; }
     else ph.style.display='none';
   }
   const promoRow = document.getElementById('promoRow');
@@ -904,6 +939,11 @@ async function submitForm(){
   const lines = getLines();
   if(lines.length === 0){ showToast('Ajoutez au moins un produit à la commande'); return; }
 
+  if(livValue() === 'expedier'){
+    const dom = document.querySelector('input[name=livmode]:checked')?.value === 'domicile';
+    if(!dom && !document.getElementById('f-relais').value.trim()){ showToast('Indiquez le point relais choisi (ou choisissez « À domicile »)'); return; }
+    if(dom && !(document.getElementById('f-adresse').value.trim() && document.getElementById('f-cp').value.trim())){ showToast('Livraison à domicile : indiquez l\'adresse et le code postal'); return; }
+  }
   const btn = document.querySelector('.submit-btn');
   btn.disabled = true; btn.textContent = 'Enregistrement…';
 
@@ -929,7 +969,10 @@ async function submitForm(){
     fidelite: document.getElementById('f-fidelite').value,
     lines,
     total: totals.total, promoDiscount: totals.promoDiscount, remise: totals.remise, port: totals.port, montantTotal: totals.finalTotal,
-    remisPropre: document.getElementById('f-remisPropre').checked,
+    livraison: livValue(),
+    livMode: livValue() === 'expedier' ? (document.querySelector('input[name=livmode]:checked')?.value || 'relais') : '',
+    relais: (livValue() === 'expedier' && document.querySelector('input[name=livmode]:checked')?.value !== 'domicile') ? document.getElementById('f-relais').value.trim() : '',
+    remisPropre: livValue() !== 'expedier',
     paiement: payEl ? payEl.value : '',
     dateCommande: document.getElementById('f-date').value || new Date().toISOString().slice(0,10),
     note: document.getElementById('f-note').value.trim()
@@ -1096,7 +1139,7 @@ function generateOrderPDF(o){
   const totLabelW = colW[1]+colW[2], totValW = colW[3];
   const totRowH = 8;
   const remiseTotal = (o.promoDiscount||0) + (o.remise||0);
-  const portLabel = o.remisPropre ? 'Main propre' : (o.port>0 ? eur(o.port) : eur(0));
+  const portLabel = o.livraison === 'marche' ? 'Remis sur le marché' : (o.remisPropre ? 'Main propre' : (o.port>0 ? eur(o.port) : eur(0)));
   const totRows = [
     ['Total', eur(o.total), false],
     ['Remise', remiseTotal>0 ? '-'+eur(remiseTotal) : eur(0), false],
@@ -1235,7 +1278,7 @@ function drawOrderToCanvas(ctx, o, W, logoImg){
   const totLabelW = colW[1]+colW[2], totValW = colW[3];
   const totRowH = 44;
   const remiseTotal = (o.promoDiscount||0) + (o.remise||0);
-  const portLabel = o.remisPropre ? 'Main propre' : (o.port>0 ? eur(o.port) : eur(0));
+  const portLabel = o.livraison === 'marche' ? 'Remis sur le marché' : (o.remisPropre ? 'Main propre' : (o.port>0 ? eur(o.port) : eur(0)));
   const totRows = [
     ['Total', eur(o.total), false],
     ['Remise', remiseTotal>0 ? '-'+eur(remiseTotal) : eur(0), false],
@@ -1407,8 +1450,10 @@ function resetForm(){
   document.getElementById('linesBox').querySelectorAll('.line-row').forEach(r=>r.remove());
   document.getElementById('f-remise').value = 0;
   document.getElementById('f-port').value = 0;
-  document.getElementById('f-remisPropre').checked = false;
-  document.getElementById('f-port').disabled = false;
+  document.querySelectorAll('input[name=liv]').forEach(r=>r.checked = (r.value === 'marche'));
+  document.querySelectorAll('input[name=livmode]').forEach(r=>r.checked = (r.value === 'relais'));
+  document.getElementById('f-relais').value = '';
+  onLivChange();
   document.getElementById('f-fidelite').selectedIndex = 0;
   document.getElementById('fidelitePct').textContent = '0%';
   document.querySelectorAll('input[name=pay]').forEach(r=>r.checked=false);
@@ -1434,6 +1479,54 @@ function openAdmin(){
   document.getElementById('pwGate').style.display='none';
   document.getElementById('adminBody').style.display='block';
   loadOrders().then(renderList);
+}
+function bilanData(){
+  const d = document.getElementById('bilanDate').value, ev = (document.getElementById('bilanEvent').value || '').trim().toLowerCase();
+  const list = orders.filter(o => (!d || o.dateCommande === d) && (!ev || (o.event||'').toLowerCase().includes(ev)));
+  const r = { n: list.length, exh: 0, promo: 0, crea: 0, fid: 0, port: 0, total: 0, pay: {}, liv: {marche:0, main:0, expedier:0} };
+  list.forEach(o=>{
+    (o.lines||[]).forEach(l=>{ const t = (l.pu||0)*(l.qte||0); if(l.promo) r.exh += t; else r.crea += t; });
+    r.promo += o.promoDiscount||0; r.fid += o.remise||0; r.port += o.port||0; r.total += o.montantTotal||0;
+    const k = o.paiement || 'Non précisé'; r.pay[k] = (r.pay[k]||0) + (o.montantTotal||0);
+    r.liv[o.livraison || 'marche'] = (r.liv[o.livraison || 'marche']||0) + 1;
+  });
+  r.exhNet = r.exh - r.promo;
+  return r;
+}
+function bilanText(){
+  const r = bilanData(), d = document.getElementById('bilanDate').value, ev = document.getElementById('bilanEvent').value.trim();
+  let t = `Bilan du ${formatDateFR(d)}${ev ? ' — ' + ev : ''} : ${r.n} commande${r.n>1?'s':''}\n`;
+  t += `Total encaissé : ${eur(r.total)}\n`;
+  Object.keys(r.pay).forEach(k=>{ t += `  ${k} : ${eur(r.pay[k])}\n`; });
+  t += `Ventes EXHALESSENCE (après promo) : ${eur(r.exhNet)}\n`;
+  t += `Ventes créations plâtre résine : ${eur(r.crea)}\n`;
+  if(r.fid) t += `Remises fidélité : -${eur(r.fid)}\n`;
+  if(r.port) t += `Frais de port : ${eur(r.port)}\n`;
+  t += `Remis sur le marché : ${r.liv.marche} · Main propre plus tard : ${r.liv.main} · À expédier : ${r.liv.expedier}`;
+  return t;
+}
+function renderBilan(){
+  const r = bilanData(), row = (a,b,c)=>`<div class="bilan-row ${c||''}"><span>${a}</span><span>${b}</span></div>`;
+  let h = row(`${r.n} commande${r.n>1?'s':''}`, '', '') + row('Total encaissé', eur(r.total), 't');
+  Object.keys(r.pay).forEach(k=>{ h += row('&nbsp;&nbsp;' + k, eur(r.pay[k])); });
+  h += row('Ventes EXHALESSENCE (après promo)', eur(r.exhNet), 't') + row('Ventes créations plâtre résine', eur(r.crea), 't');
+  if(r.fid) h += row('Remises fidélité', '-' + eur(r.fid));
+  if(r.port) h += row('Frais de port', eur(r.port));
+  h += row('Remis sur le marché', r.liv.marche) + row('Main propre plus tard', r.liv.main) + row('À expédier', r.liv.expedier);
+  document.getElementById('bilanBox').innerHTML = h;
+}
+async function openBilan(){
+  await loadOrders();
+  document.getElementById('bilanDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('bilanEvent').value = '';
+  renderBilan();
+  document.getElementById('bilanOverlay').classList.add('show');
+}
+function closeBilan(){ document.getElementById('bilanOverlay').classList.remove('show'); }
+async function copyBilan(){
+  const t = bilanText();
+  try{ await navigator.clipboard.writeText(t); showToast('Bilan copié ✓'); }
+  catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');showToast('Bilan copié ✓');}catch(_){showToast('Copie impossible');} document.body.removeChild(ta); }
 }
 function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); }
 
