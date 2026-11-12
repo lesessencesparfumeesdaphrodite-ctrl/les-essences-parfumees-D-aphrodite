@@ -645,8 +645,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
           <label class="liv-opt"><input type="radio" name="liv" value="main" onchange="onLivChange()"> <span><b>Remise en main propre</b><br><small>La cliente viendra le chercher plus tard (sans frais de port).</small></span></label>
           <label class="liv-opt"><input type="radio" name="liv" value="expedier" onchange="onLivChange()"> <span><b>À expédier</b><br><small>Je l'envoie à la cliente (frais de port 6 €).</small></span></label>
           <div id="livExp" style="display:none;margin-top:8px">
-            <label class="liv-opt"><input type="radio" name="livmode" value="relais" checked onchange="onLivChange()"> Point relais</label>
-            <label class="liv-opt"><input type="radio" name="livmode" value="domicile" onchange="onLivChange()"> À domicile</label>
+            <p class="hint" style="text-align:left;margin:0 0 4px">Envoi uniquement en point relais.</p>
             <div id="livRelaisBox">
               <a class="share-btn" style="display:block;margin:6px 0" href="https://www.mondialrelay.fr/trouver-le-point-relais-le-plus-proche-de-chez-moi/" target="_blank" rel="noopener">📍 Choisir un point relais (lien Mondial Relay)</a>
               <input type="text" id="f-relais" placeholder="Nom et adresse du point relais choisi" style="width:100%">
@@ -825,8 +824,6 @@ function onLivChange(){
   const v = livValue();
   const portInput = document.getElementById('f-port');
   document.getElementById('livExp').style.display = v === 'expedier' ? 'block' : 'none';
-  const dom = document.querySelector('input[name=livmode]:checked')?.value === 'domicile';
-  document.getElementById('livRelaisBox').style.display = dom ? 'none' : 'block';
   if(v === 'expedier'){ portInput.disabled = false; if(!(parseFloat(portInput.value) > 0)) portInput.value = 6; }
   else { portInput.value = 0; portInput.disabled = true; }
   calcTotals(true);
@@ -940,9 +937,7 @@ async function submitForm(){
   if(lines.length === 0){ showToast('Ajoutez au moins un produit à la commande'); return; }
 
   if(livValue() === 'expedier'){
-    const dom = document.querySelector('input[name=livmode]:checked')?.value === 'domicile';
-    if(!dom && !document.getElementById('f-relais').value.trim()){ showToast('Indiquez le point relais choisi (ou choisissez « À domicile »)'); return; }
-    if(dom && !(document.getElementById('f-adresse').value.trim() && document.getElementById('f-cp').value.trim())){ showToast('Livraison à domicile : indiquez l\'adresse et le code postal'); return; }
+    if(!document.getElementById('f-relais').value.trim()){ showToast('Indiquez le point relais choisi'); return; }
   }
   const btn = document.querySelector('.submit-btn');
   btn.disabled = true; btn.textContent = 'Enregistrement…';
@@ -970,8 +965,8 @@ async function submitForm(){
     lines,
     total: totals.total, promoDiscount: totals.promoDiscount, remise: totals.remise, port: totals.port, montantTotal: totals.finalTotal,
     livraison: livValue(),
-    livMode: livValue() === 'expedier' ? (document.querySelector('input[name=livmode]:checked')?.value || 'relais') : '',
-    relais: (livValue() === 'expedier' && document.querySelector('input[name=livmode]:checked')?.value !== 'domicile') ? document.getElementById('f-relais').value.trim() : '',
+    livMode: livValue() === 'expedier' ? 'relais' : '',
+    relais: livValue() === 'expedier' ? document.getElementById('f-relais').value.trim() : '',
     remisPropre: livValue() !== 'expedier',
     paiement: payEl ? payEl.value : '',
     dateCommande: document.getElementById('f-date').value || new Date().toISOString().slice(0,10),
@@ -1451,7 +1446,6 @@ function resetForm(){
   document.getElementById('f-remise').value = 0;
   document.getElementById('f-port').value = 0;
   document.querySelectorAll('input[name=liv]').forEach(r=>r.checked = (r.value === 'marche'));
-  document.querySelectorAll('input[name=livmode]').forEach(r=>r.checked = (r.value === 'relais'));
   document.getElementById('f-relais').value = '';
   onLivChange();
   document.getElementById('f-fidelite').selectedIndex = 0;
