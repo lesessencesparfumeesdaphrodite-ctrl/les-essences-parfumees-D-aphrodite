@@ -857,13 +857,24 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
 .rt-grp{flex-basis:100%;width:100%;margin:14px 0 2px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--brun-m,#6b4a3a)}.rt-grp:first-child{margin-top:2px}
 
 .pc-stars,.avis-off{display:none!important}
-.avis-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 10px;justify-content:safe center;scroll-behavior:smooth}
-.avis-card{flex:0 0 min(360px,86%);scroll-snap-align:center;margin:0;background:white;border:1px solid rgba(201,169,110,.35);box-shadow:var(--sh);border-radius:12px;padding:20px 22px;text-align:left}
-.avis-card blockquote{margin:10px 0 12px;font-size:14px;line-height:1.8;color:var(--brun)}
+.avis-wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:28px;text-align:left}
+.avis-res{flex:0 0 190px;text-align:center}
+.avis-res p{margin:0}
+.avis-ex{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--brun)}
+.avis-et{color:#B8720A;letter-spacing:2px;font-size:22px;line-height:1.3}
+.avis-base{font-size:13px;color:var(--brun-m);margin-top:2px!important}
+.avis-gg{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px!important;font-size:18px;font-weight:600;color:var(--brun)}
+.avis-car{position:relative;flex:1 1 auto;min-width:0;padding:0 22px}
+.avis-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 10px;scroll-behavior:smooth;scrollbar-width:none}
+.avis-track::-webkit-scrollbar{display:none}
+.avis-card{flex:0 0 calc((100% - 32px)/3);scroll-snap-align:start;margin:0;background:white;border:1px solid rgba(201,169,110,.35);box-shadow:var(--sh);border-radius:12px;padding:18px 20px;text-align:left;box-sizing:border-box}
+.avis-card .avis-et{font-size:16px}
+.avis-card blockquote{margin:10px 0 12px;font-size:13.5px;line-height:1.7;color:var(--brun)}
 .avis-card figcaption{font-size:12px;color:var(--brun-m)}
-.avis-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:38px;height:38px;border-radius:50%;border:none;background:var(--terra);color:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}
-.avis-prec{left:-6px}.avis-suiv{right:-6px}
+.avis-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:40px;height:40px;border-radius:50%;border:none;background:var(--terra);color:#fff;font-size:26px;line-height:1;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.avis-prec{left:-8px}.avis-suiv{right:-8px}
 .avis-track:focus-visible,.avis-nav:focus-visible{outline:3px solid var(--brun);outline-offset:2px}
+@media(max-width:860px){.avis-wrap{flex-direction:column;gap:18px}.avis-res{flex:none}.avis-car{width:100%;box-sizing:border-box}.avis-card{flex:0 0 100%}}
 @media (prefers-reduced-motion:reduce){.avis-track{scroll-behavior:auto}}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .fav-btn{position:absolute;bottom:9px;left:9px;z-index:3;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:var(--terra);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18);padding:0}
@@ -2005,20 +2016,52 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerFAQ()}
 <!-- AVIS GOOGLE (bandeau visible sur toutes les pages, juste avant le pied de page) -->
 <section id="avis" aria-labelledby="avis-titre" style="scroll-margin-top:90px;background:var(--beige);padding:44px 16px 40px;text-align:center">
   <div class="ey">✦ Avis clients</div>
-  <h2 id="avis-titre" style="font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,30px);color:var(--brun);margin:8px 0 4px">Ce qu'en disent mes clientes</h2>
-  <p style="margin:0 0 20px;font-size:14px;color:var(--brun-m)"><span style="color:#B8720A;font-size:20px;letter-spacing:2px" role="img" aria-label="5 étoiles sur 5">★★★★★</span> &nbsp;<strong>Excellent</strong> · avis publiés sur Google</p>
-  <div style="position:relative;max-width:1000px;margin:0 auto">
-    <button type="button" class="avis-nav avis-prec" aria-label="Avis précédent" hidden>‹</button>
-    <div class="avis-track" id="avis-track" role="group" aria-label="Avis Google de mes clientes" tabindex="0">
-      <figure class="avis-card">
-        <div style="color:#B8720A;font-size:16px;letter-spacing:2px" role="img" aria-label="5 étoiles sur 5">★★★★★</div>
-        <blockquote>« Un véritable coup de cœur pour les créations de Zulay. Elle a des mains en or et un talent incroyable ! Chaque pièce est faite avec passion, délicatesse et beaucoup de goût. Des décorations uniques qui apportent une belle touche de douceur et d'élégance. Je recommande les yeux fermés ! »</blockquote>
-        <figcaption>Avis publié sur Google</figcaption>
-      </figure>
+  <h2 id="avis-titre" style="font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,30px);color:var(--brun);margin:8px 0 22px">Ce qu'en disent mes clientes</h2>
+  <div class="avis-wrap">
+    <div class="avis-res">
+      <p class="avis-ex">Excellent</p>
+      <span class="avis-et" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+      <p class="avis-base">Basé sur <strong>6 avis</strong></p>
+      <p class="avis-gg"><svg class="avis-g" width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Google</span></p>
     </div>
-    <button type="button" class="avis-nav avis-suiv" aria-label="Avis suivant" hidden>›</button>
+    <div class="avis-car">
+      <button type="button" class="avis-nav avis-prec" aria-label="Avis précédent">‹</button>
+      <div class="avis-track" id="avis-track" role="group" aria-label="Avis Google de mes clientes" tabindex="0">
+      <figure class="avis-card">
+        <div class="avis-et" role="img" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>Des beaux produits de qualité faits main et avec soin, commande rapide et soignée. Merci beaucoup pour ce beau travail. Côté parfum toujours satisfaite aussi. Zulay est de bons conseils, elle fait son travail avec passion et aime faire plaisir, elle est une belle créatrice. Merci a toi.</blockquote>
+        <figcaption><strong>Alex P.</strong> · Avis Google</figcaption>
+      </figure>
+      <figure class="avis-card">
+        <div class="avis-et" role="img" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>J’utilise depuis plusieurs années les parfums exhalessence. Les fragrances sont agréables et durent tout au long de la journée. De plus il y en a pour tous les goûts. En plus Zulay est très agréable et toujours de bons conseils. Je recommande sans hésiter 😊</blockquote>
+        <figcaption><strong>Scarlett</strong> · Avis Google</figcaption>
+      </figure>
+      <figure class="avis-card">
+        <div class="avis-et" role="img" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>J apprécié beaucoup les produits Exhalssence, tant les parfums que les produits pour se nettoyer le visage que je commande régulièrement. Ils ont un très bon rapport qualité /prix. Mais surtout ce que j aime et qui fait la différence, cest la délicate préparation du paquet parfumé que Zulay fait à chaque fois . Et la rapidité de livraison. 100%confiance en Zulay et ses produits</blockquote>
+        <figcaption><strong>Nathalie F.</strong> · Avis Google</figcaption>
+      </figure>
+      <figure class="avis-card">
+        <div class="avis-et" role="img" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>Très belle surprise ! Le parfum ressemble beaucoup à l’original, avec une senteur élégante et agréable. La tenue est excellente, il reste longtemps sur la peau et les vêtements. Un très bon rapport qualité/prix, je suis vraiment satisfaite de mon achat.</blockquote>
+        <figcaption><strong>Prisc Mél</strong> · Avis Google</figcaption>
+      </figure>
+      <figure class="avis-card">
+        <div class="avis-et" role="img" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>Un véritable coup de cœur pour les créations de Zulay. Elle a des mains en or et un talent incroyable ! Chaque pièce est faite avec passion, délicatesse et beaucoup de goût. Des décorations uniques qui apportent une belle touche de douceur et d’élégance. Je recommande les yeux fermés !</blockquote>
+        <figcaption><strong>Danaë</strong> · Avis Google</figcaption>
+      </figure>
+      <figure class="avis-card">
+        <div class="avis-et" role="img" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>Achat de parfums</blockquote>
+        <figcaption><strong>Sylvie L.</strong> · Avis Google</figcaption>
+      </figure>
+      </div>
+      <button type="button" class="avis-nav avis-suiv" aria-label="Avis suivant">›</button>
+    </div>
   </div>
-  <p style="margin:22px 0 0"><a class="btn-p" href="https://g.page/r/CcnMG7hOJyrXEBI/review" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;font-size:13px;padding:11px 24px">⭐ Laisser un avis sur Google<span class="sr-only"> (s'ouvre dans un nouvel onglet)</span></a></p>
+  <p style="margin:24px 0 0"><a class="btn-p" href="https://g.page/r/CcnMG7hOJyrXEBI/review" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;font-size:14px;padding:12px 30px">Laissez votre avis<span class="sr-only"> sur Google (s'ouvre dans un nouvel onglet)</span></a></p>
 </section>
 
 <footer>
@@ -3290,9 +3333,15 @@ window.exhcPreselect = function(e){
   function boutonsAvis() {
     var t = $("avis-track"); if (!t) return;
     var pr = document.querySelector(".avis-prec"), su = document.querySelector(".avis-suiv");
-    var plus = t.scrollWidth > t.clientWidth + 4;
-    if (pr) pr.hidden = !plus; if (su) su.hidden = !plus;
-    if (pr && !pr.getAttribute("data-ok")) { pr.setAttribute("data-ok", "1"); pr.addEventListener("click", function () { t.scrollBy({ left: -t.clientWidth * 0.8 }); }); su.addEventListener("click", function () { t.scrollBy({ left: t.clientWidth * 0.8 }); }); }
+    function pas() { var c = t.querySelector(".avis-card"); return c ? c.getBoundingClientRect().width + 16 : t.clientWidth; }
+    function etat() { var max = t.scrollWidth - t.clientWidth - 4; if (pr) pr.hidden = max <= 0 || t.scrollLeft <= 4; if (su) su.hidden = max <= 0 || t.scrollLeft >= max; }
+    if (pr && !pr.getAttribute("data-ok")) {
+      pr.setAttribute("data-ok", "1");
+      pr.addEventListener("click", function () { t.scrollBy({ left: -pas() }); });
+      su.addEventListener("click", function () { t.scrollBy({ left: pas() }); });
+      t.addEventListener("scroll", etat);
+    }
+    etat();
   }
   window.addEventListener("resize", boutonsAvis);
   window.addEventListener("DOMContentLoaded", function () {
