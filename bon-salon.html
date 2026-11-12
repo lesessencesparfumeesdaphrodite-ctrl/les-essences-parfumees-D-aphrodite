@@ -671,8 +671,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     </div>
     <p class="hint" style="text-align:left;margin:-4px 0 12px">Téléchargez PDF (mail) ou JPEG (plus simple pour un SMS), puis joignez-le vous-même avant d'envoyer (aucune appli ne peut le faire automatiquement).</p>
     <div class="share-row">
-      <a href="#" id="smsBtn" class="share-btn" target="_top" rel="noopener">💬 Ouvrir SMS</a>
-      <a href="#" id="mailBtn" class="share-btn" target="_top" rel="noopener">✉️ Ouvrir Mail</a>
+      <a href="#" id="smsBtn" class="share-btn" target="_top" rel="noopener" onclick="envoyerSMS(event)">💬 Ouvrir SMS</a>
+      <a href="#" id="mailBtn" class="share-btn" target="_top" rel="noopener" onclick="envoyerMail(event)">✉️ Ouvrir Mail</a>
     </div>
     <button class="new-btn" id="copyBtn" onclick="copyRecapMessage()" style="margin-bottom:10px">📋 Copier le message (si SMS/mail ne s'ouvre pas)</button>
     <button class="new-btn" id="contactBtn" onclick="downloadContact()" style="margin-bottom:10px">📇 Ajouter cette cliente à mes contacts</button>
@@ -951,16 +951,40 @@ async function submitForm(){
   syncPending();
 }
 
-function buildRecap(o){
+function buildRecap(o, canal){
+  canal = canal || 'sms';
   const prodList = o.lines.map(l => `${l.prod} x${l.qte}`).join(', ');
-  let t = `Bonjour ${o.prenom}, voici le récapitulatif de votre commande du ${formatDateFR(o.dateCommande)} chez Les Essences Parfumées d'Aphrodite : ${prodList}. Montant total : ${eur(o.montantTotal)}.`;
+  const ou = (o.event && o.event.trim()) ? ('à l\'occasion de « ' + o.event.trim() + ' »') : 'lors du marché';
+  let t = `Bonjour ${o.prenom}, merci pour votre commande ${ou} le ${formatDateFR(o.dateCommande)} chez Les Essences Parfumées d'Aphrodite : ${prodList}. Montant total : ${eur(o.montantTotal)}.`;
+  t += canal === 'mail' ? ` Vous trouverez en pièce jointe votre bon de commande.` : ` Vous trouverez en photo le détail de votre commande.`;
   if(o.sync === true && typeof o.points === 'number'){
     t += ` Vous gagnez ${o.points} point${o.points>1?'s':''} de fidélité (solde : ${o.solde} point${o.solde>1?'s':''}, gardés à vie ; 1 € dépensé, hors frais de port = 1 point).`;
     (o.bonsCrees||[]).forEach(b=>{ t += ` Un bon fidélité de ${b.montant} € (dès ${b.mini} € d'achat) vous attend : ${b.code}.`; });
-    if(o.lienCompte) t += ` Créez votre compte pour retrouver vos points et vos commandes (il ne vous reste qu'à choisir un mot de passe) : ${o.lienCompte}`;
+    if(o.lienCompte) t += ` Pour créer votre compte et choisir votre mot de passe, cliquez sur ce lien (vos informations sont déjà remplies) : ${o.lienCompte}`;
   }
   t += ` Merci pour votre confiance, à très vite ! Zulay 🤍`;
   return t;
+}
+async function prepareEnvoi(){
+  if(lastEntry && lastEntry.sync !== true && lastEntry.sync !== 'erreur'){
+    showToast('Enregistrement en cours… un instant');
+    try{ await syncPending(); }catch(e){}
+  }
+  return lastEntry;
+}
+async function envoyerSMS(e){
+  e.preventDefault();
+  const o = await prepareEnvoi(); if(!o) return;
+  if(!o.tel){ showToast('Pas de numéro de téléphone : utilisez « Copier le message » ou Mail'); return; }
+  if(o.sync !== true) showToast('⚠️ Le lien « Créer mon compte » n\'est pas encore prêt (pas de réseau ?)');
+  openExternal(`sms:${o.tel.replace(/\s/g,'')}?body=${encodeURIComponent(buildRecap(o,'sms'))}`);
+}
+async function envoyerMail(e){
+  e.preventDefault();
+  const o = await prepareEnvoi(); if(!o) return;
+  if(!o.email){ showToast('Aucune adresse e-mail renseignée'); return; }
+  if(o.sync !== true) showToast('⚠️ Le lien « Créer mon compte » n\'est pas encore prêt (pas de réseau ?)');
+  openExternal(`mailto:${o.email}?subject=${encodeURIComponent("Votre commande — Les Essences Parfumées d'Aphrodite")}&body=${encodeURIComponent(buildRecap(o,'mail'))}`);
 }
 
 function generateOrderPDF(o){
@@ -1287,7 +1311,8 @@ function openExternal(url){
 
 async function copyRecapMessage(){
   if(!lastEntry){ return; }
-  const text = buildRecap(lastEntry);
+  await prepareEnvoi();
+  const text = buildRecap(lastEntry, lastEntry.envoiPref === 'Mail' ? 'mail' : 'sms');
   try{
     await navigator.clipboard.writeText(text);
     showToast('Message copié ✓ Collez-le dans SMS ou Mail');
@@ -1312,7 +1337,7 @@ function resendMail(id){
   const o = orders.find(x=>x.id===id);
   if(!o) return;
   if(!o.email){ showToast('Aucune adresse e-mail pour cette cliente'); return; }
-  openExternal(`mailto:${o.email}?subject=${encodeURIComponent("Votre commande — Les Essences Parfumées d'Aphrodite")}&body=${encodeURIComponent(buildRecap(o))}`);
+  openExternal(`mailto:${o.email}?subject=${encodeURIComponent("Votre commande — Les Essences Parfumées d'Aphrodite")}&body=${encodeURIComponent(buildRecap(o,"mail"))}`);
 }
 
 function showConfirmation(entry){
@@ -1332,26 +1357,16 @@ function showConfirmation(entry){
   if(entry.envoiPref) html += `<div class="rline"><span>Envoi souhaité</span><span>${entry.envoiPref}</span></div>`;
   document.getElementById('recapBox').innerHTML = html;
 
-  const recap = buildRecap(entry);
-
   const smsBtn = document.getElementById('smsBtn');
   const syncLine = document.getElementById('syncLine');
   if(entry.sync === true){ syncLine.textContent = entry.deja ? '✅ Déjà enregistré dans Notion.' : '✅ Enregistré dans Notion.' + (entry.lienCompte ? ' Le SMS contient le lien « Créer mon compte ».' : ''); syncLine.style.color = 'var(--gold)'; }
   else if(entry.sync === 'erreur'){ syncLine.textContent = '⚠️ Non enregistré dans Notion : ' + (entry.syncErreur||'erreur') + ' Appelez Claude pour corriger.'; syncLine.style.color = 'var(--err)'; }
   else { syncLine.textContent = '⏳ Pas encore envoyé dans Notion (réseau). Dès que le réseau revient, les points et le lien « Créer mon compte » s\'ajoutent : revenez ici et appuyez sur « Ouvrir SMS ».'; syncLine.style.color = 'var(--text-soft)'; }
-  smsBtn.href = entry.tel ? `sms:${entry.tel.replace(/\s/g,'')}?body=${encodeURIComponent(recap)}` : '#';
   smsBtn.style.opacity = entry.tel ? '1' : '.4';
-  smsBtn.onclick = entry.tel ? null : (e)=>{e.preventDefault(); showToast('Pas de numéro de téléphone : utilisez « Copier le message » ou Mail');};
   smsBtn.classList.toggle('preferred', entry.envoiPref === 'SMS' || entry.envoiPref === 'Les deux');
   const mailBtn = document.getElementById('mailBtn');
   mailBtn.classList.toggle('preferred', entry.envoiPref === 'Mail' || entry.envoiPref === 'Les deux');
-  if(entry.email){
-    mailBtn.href = `mailto:${entry.email}?subject=${encodeURIComponent("Votre commande — Les Essences Parfumées d'Aphrodite")}&body=${encodeURIComponent(recap)}`;
-    mailBtn.style.opacity = '1'; mailBtn.onclick = null;
-  } else {
-    mailBtn.href = '#'; mailBtn.style.opacity = '.4';
-    mailBtn.onclick = (e)=>{e.preventDefault(); showToast('Aucune adresse e-mail renseignée');};
-  }
+  mailBtn.style.opacity = entry.email ? '1' : '.4';
 }
 
 function vcfEscape(s){
