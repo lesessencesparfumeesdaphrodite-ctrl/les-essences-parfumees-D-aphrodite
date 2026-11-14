@@ -3488,7 +3488,7 @@ html.bf-on #m-prix{display:none}
 #popup-bf .bfx{position:absolute;top:8px;right:8px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#111;font-size:24px;line-height:1;cursor:pointer}
 #popup-bf .bfson.bfplay{top:50%;bottom:auto;transform:translate(-50%,-50%);font-size:17px;line-height:1.4;padding:16px 24px;text-align:center}
 #popup-bf .bfplay small{font-weight:400;font-size:13px}
-#popup-bf .bfson{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;border:0;border-radius:30px;background:#C0182B;color:#fff;font-weight:700;font-size:14px;padding:10px 18px;cursor:pointer}
+#popup-bf .bfson{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:2;border:2px solid #fff;border-radius:30px;background:#C0182B;color:#fff;font-weight:700;font-size:17px;padding:12px 22px;cursor:pointer;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.5)}
 </style>
 <script id="bf-js">
 (function(){try{var p=new Intl.DateTimeFormat("fr-CA",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"}).format(window.__BF_NOW?new Date(window.__BF_NOW):new Date());
@@ -3543,11 +3543,10 @@ if(videoActive()){
    document.body.appendChild(o);var v=o.querySelector("video"),box=o.querySelector(".bfbox");
    o.querySelector(".bfx").addEventListener("click",fin);o.addEventListener("click",function(e){if(e.target===o)fin()});
    document.addEventListener("keydown",esc);v.addEventListener("ended",fin);v.addEventListener("error",fin);
-   function lancer(){v.muted=false;v.volume=1;var q=v.play();if(q&&q.catch)q.catch(function(){});var b=box.querySelector(".bfson");if(b)b.remove()}
-   function playBtn(){var b=document.createElement("button");b.type="button";b.className="bfson bfplay";b.innerHTML="▶ Touchez pour lancer la vidéo<br><small>avec le son</small>";
-    b.addEventListener("click",lancer);box.appendChild(b)}
+   function son(){v.muted=false;v.volume=1;var q=v.play();if(q&&q.catch)q.catch(function(){});var b=box.querySelector(".bfson");if(b)b.remove()}
+   function sonBtn(){var b=document.createElement("button");b.type="button";b.className="bfson";b.innerHTML="🔊 Activer le son";b.addEventListener("click",function(e){e.stopPropagation();son()});box.appendChild(b);v.addEventListener("click",function(){if(v.muted)son()})}
    v.muted=false;var pr=v.play();
-   if(pr&&pr.catch)pr.catch(function(){v.pause();playBtn()})}
+   if(pr&&pr.catch)pr.catch(function(){v.muted=true;var p2=v.play();if(p2&&p2.catch)p2.catch(function(){});sonBtn()})}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",ouvrir);else ouvrir();
  }}
 })();
