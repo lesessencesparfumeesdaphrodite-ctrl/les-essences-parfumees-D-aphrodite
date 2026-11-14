@@ -3486,6 +3486,8 @@ html.bf-on #m-prix{display:none}
 #popup-bf .bfbox{position:relative;height:88vh;max-height:880px;aspect-ratio:9/16;max-width:94vw;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.6)}
 #popup-bf video{width:100%;height:100%;object-fit:contain;display:block}
 #popup-bf .bfx{position:absolute;top:8px;right:8px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#111;font-size:24px;line-height:1;cursor:pointer}
+#popup-bf .bfson.bfplay{top:50%;bottom:auto;transform:translate(-50%,-50%);font-size:17px;line-height:1.4;padding:16px 24px;text-align:center}
+#popup-bf .bfplay small{font-weight:400;font-size:13px}
 #popup-bf .bfson{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;border:0;border-radius:30px;background:#C0182B;color:#fff;font-weight:700;font-size:14px;padding:10px 18px;cursor:pointer}
 </style>
 <script id="bf-js">
@@ -3541,10 +3543,11 @@ if(videoActive()){
    document.body.appendChild(o);var v=o.querySelector("video"),box=o.querySelector(".bfbox");
    o.querySelector(".bfx").addEventListener("click",fin);o.addEventListener("click",function(e){if(e.target===o)fin()});
    document.addEventListener("keydown",esc);v.addEventListener("ended",fin);v.addEventListener("error",fin);
-   function sonBtn(){var b=document.createElement("button");b.type="button";b.className="bfson";b.textContent="🔊 Activer le son";
-    b.addEventListener("click",function(){v.muted=false;v.volume=1;v.play();b.remove()});box.appendChild(b)}
+   function lancer(){v.muted=false;v.volume=1;var q=v.play();if(q&&q.catch)q.catch(function(){});var b=box.querySelector(".bfson");if(b)b.remove()}
+   function playBtn(){var b=document.createElement("button");b.type="button";b.className="bfson bfplay";b.innerHTML="▶ Touchez pour lancer la vidéo<br><small>avec le son</small>";
+    b.addEventListener("click",lancer);box.appendChild(b)}
    v.muted=false;var pr=v.play();
-   if(pr&&pr.catch)pr.catch(function(){v.muted=true;var p2=v.play();if(p2&&p2.catch)p2.catch(function(){});sonBtn()})}
+   if(pr&&pr.catch)pr.catch(function(){v.pause();playBtn()})}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",ouvrir);else ouvrir();
  }}
 })();
