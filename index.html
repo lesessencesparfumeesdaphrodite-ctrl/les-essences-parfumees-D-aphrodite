@@ -3531,11 +3531,10 @@ decorer();
 /* video pop-up */
 var enCours=false,suite=null;
 if(videoActive()){
- var dejaVu=false;try{dejaVu=sessionStorage.getItem("bf_video_vu")==="1"}catch(e){}
- if(!dejaVu&&typeof afficherAnnonce==="function"){
+ if(typeof afficherAnnonce==="function"){
   enCours=true;var _aff=afficherAnnonce;
   afficherAnnonce=function(r){if(enCours){suite=function(){_aff(r)};return}return _aff(r)};
-  function fin(){var o=document.getElementById("popup-bf");if(o)o.remove();document.removeEventListener("keydown",esc);enCours=false;try{sessionStorage.setItem("bf_video_vu","1")}catch(e){}if(suite){var f=suite;suite=null;f()}}
+  function fin(){var o=document.getElementById("popup-bf");if(o)o.remove();document.removeEventListener("keydown",esc);enCours=false;if(suite){var f=suite;suite=null;f()}}
   function esc(e){if(e.key==="Escape")fin()}
   function ouvrir(){var o=document.createElement("div");o.id="popup-bf";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Black Friday : offre spéciale");
    o.innerHTML='<div class="bfbox"><button type="button" class="bfx" aria-label="Fermer">×</button><video playsinline preload="auto" poster="black-friday-poster.jpg" aria-label="Vidéo Black Friday, offres spéciales"><source src="black-friday.mp4" type="video/mp4"></video></div>';
