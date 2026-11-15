@@ -1296,15 +1296,16 @@ footer{background:var(--brun);color:rgba(253,250,247,.8);padding:55px 24px 26px}
     <p><strong>Règles importantes :</strong></p>
     <ul>
       <li>Un seul bon de réduction est utilisable par commande.</li>
-      <li>Les points correspondants sont <strong>déduits de votre solde au moment où vous utilisez le bon</strong> pour une commande (par exemple : avec 400 points, si vous utilisez le bon de 300 points, il vous reste 100 points).</li>
+      <li>Les points correspondants sont <strong>déduits de votre solde au moment où vous utilisez le bon</strong> pour une commande (par exemple : avec 400 points, si vous utilisez le bon de 300 points, il vous reste 100 points ; avec 350 points, il vous reste 50 points, qui ne sont pas perdus et s'ajoutent à vos prochains achats).</li>
       <li>Le bon est à usage unique — il ne peut pas être réutilisé une fois la commande passée.</li>
       <li>Les bons de réduction ne sont pas cumulables entre eux.</li>
-      <li>Les bons sont valables sur les créations faites main, parfums et beauté (hors frais de port).</li>
+      <li>Les bons de réduction fidélité sont valables sur mes créations faites main en plâtre résine et sur toutes les gammes EXHALESSENCE (hors frais de port).</li>
+      <li>Pour une commande EXHALESSENCE, qui ne se passe pas sur ce site, il suffit de me communiquer votre code au moment de commander.</li>
     </ul>
 
     <h2>🎂 Carte cadeau anniversaire</h2>
     <p>Le jour de votre anniversaire, vous recevez automatiquement par email un <strong>bon cadeau de 5€ pour 25€ d'achat minimum</strong>, valable <strong>1 mois</strong> (renseignez votre date de naissance dans votre espace "Mon Compte" pour en bénéficier).</p>
-    <p>Cette carte cadeau est valable aussi bien sur nos <strong>créations faites main en plâtre résine</strong> que sur nos <strong>parfums et produits de beauté Exhalessence</strong> :</p>
+    <p>Cette carte cadeau est valable aussi bien sur nos <strong>créations faites main en plâtre résine</strong> que sur <strong>toutes les gammes EXHALESSENCE</strong> :</p>
     <ul>
       <li><strong>Créations en plâtre résine</strong> → saisissez directement votre code dans le champ "Bon de réduction" de votre panier, sur ce site.</li>
       <li><strong>Parfums & produits de beauté Exhalessence</strong> (non vendus sur ce site) → contactez-nous directement en message privé avec votre code pour en bénéficier.</li>
@@ -2824,7 +2825,7 @@ window.exhcPreselect = function(e){
     }).join("");
     return '<div class="compte-card"><div class="compte-titre">⭐ Programme de fidélité</div>' +
       '<div class="fid-barre"><div style="font-size:12px;color:var(--gris);margin-bottom:4px">Vos points accumulés</div><div class="fid-pts">' + pts + ' pts</div>' +
-      '<div style="font-size:11px;color:var(--gris);margin-top:4px">1 € dépensé, hors frais de port, = 1 point.<br>Vos points sont gardés à vie, tant que vous ne les utilisez pas.</div>' +
+      '<div style="font-size:11px;color:var(--gris);margin-top:4px">1 € dépensé, hors frais de port, = 1 point.<br>Vos points non utilisés sont conservés à vie.</div>' +
       (libres !== pts ? '<div style="font-size:11px;color:var(--terra);margin-top:4px">Dont ' + (pts - libres) + " points déjà réservés pour un bon non utilisé.</div>" : "") + "</div>" +
       "<div>" + rows + "</div>" +
       (bons ? '<div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(201,169,110,.3)"><div style="font-size:12px;font-weight:700;color:var(--brun);margin-bottom:4px">🎁 Mes bons disponibles</div>' + bons + '<p style="font-size:11px;color:var(--gris);margin-top:8px">Saisissez le code dans votre panier. Un seul bon par commande.</p></div>' : "") + "</div>";
