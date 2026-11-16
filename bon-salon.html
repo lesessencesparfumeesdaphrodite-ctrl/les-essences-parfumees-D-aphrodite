@@ -993,17 +993,18 @@ async function submitForm(){
 }
 
 function buildRecap(o, canal){
-  canal = canal || 'sms';
-  const prodList = o.lines.map(l => `${l.prod} x${l.qte}`).join(', ');
-  const ou = (o.event && o.event.trim()) ? ('à l\'occasion de « ' + o.event.trim() + ' »') : 'lors du marché';
-  let t = `Bonjour ${o.prenom}, merci pour votre commande ${ou} le ${formatDateFR(o.dateCommande)} chez Les Essences Parfumées d'Aphrodite : ${prodList}. Montant total : ${eur(o.montantTotal)}.`;
-  t += canal === 'mail' ? ` Vous trouverez en pièce jointe votre bon de commande.` : ` Vous trouverez en photo le détail de votre commande.`;
-  if(o.sync === true && typeof o.points === 'number'){
-    t += ` Vous gagnez ${o.points} point${o.points>1?'s':''} de fidélité (solde : ${o.solde} point${o.solde>1?'s':''}, gardés à vie ; 1 € dépensé, hors frais de port = 1 point).`;
-    (o.bonsCrees||[]).forEach(b=>{ t += ` Un bon fidélité de ${b.montant} € (dès ${b.mini} € d'achat) vous attend : ${b.code}.`; });
-    if(o.lienCompte) t += ` Pour créer votre compte et choisir votre mot de passe, cliquez sur ce lien (vos informations sont déjà remplies) : ${o.lienCompte}`;
+  /* Même texte pour le SMS et le mail : court, aéré, sans le détail des points (expliqué de vive voix). */
+  const ou = (o.event && o.event.trim()) ? ('à l\'occasion du « ' + o.event.trim() + ' »') : 'lors du marché';
+  let t = `Bonjour ${o.prenom},\n\n`;
+  t += `Merci pour votre commande ${ou} le ${formatDateFR(o.dateCommande)} chez Les Essences Parfumées d'Aphrodite.\n\n`;
+  t += `Vous trouverez en pièce jointe le détail de votre commande.\n\n`;
+  if(o.sync === true && o.lienCompte){
+    t += `Je vous invite à finaliser la création de votre compte et à choisir votre mot de passe.\n\n`;
+    t += `Cela vous permettra de conserver vos points de fidélité.\n\n`;
+    t += `Cliquez sur ce lien (vos informations sont déjà pré-remplies) :\n${o.lienCompte}\n\n`;
   }
-  t += ` Merci pour votre confiance, à très vite ! Zulay 🤍`;
+  t += `Merci pour votre confiance, à très vite !\n\n`;
+  t += `𝐙𝐮𝐥𝐚𝐲 🌸𝐋𝐞𝐬 𝐄𝐬𝐬𝐞𝐧𝐜𝐞𝐬 𝐏𝐚𝐫𝐟𝐮𝐦𝐞́𝐞𝐬 𝐝'𝐀𝐩𝐡𝐫𝐨𝐝𝐢𝐭𝐞🌸`;
   return t;
 }
 async function prepareEnvoi(){
