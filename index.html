@@ -3589,7 +3589,7 @@ if(videoActive()){
   document.addEventListener("DOMContentLoaded",majNav);setTimeout(majNav,600);setTimeout(majNav,2500);
 
   var API="https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev";
-  var STAT=["Reçue","En cours de création","Prête","Expédiée","Terminée"];
+  var STAT=["Reçue","En cours de création","En cours de commande","Prête","Expédiée","Terminée"];
   var code="",cmds=[],msg="";try{code=localStorage.getItem("aph_adm_code")||"";}catch(e){}
   function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
   function post(p,b){b.code=code;return fetch(API+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});}).catch(function(){return{ok:false,j:{erreur:"Connexion impossible. Réessayez."}};});}
