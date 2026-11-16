@@ -997,7 +997,7 @@ function buildRecap(o, canal){
   const ou = (o.event && o.event.trim()) ? ('à l\'occasion du « ' + o.event.trim() + ' »') : 'lors du marché';
   let t = `Bonjour ${o.prenom},\n\n`;
   t += `Merci pour votre commande ${ou} le ${formatDateFR(o.dateCommande)} chez Les Essences Parfumées d'Aphrodite.\n\n`;
-  t += `Vous trouverez en pièce jointe le détail de votre commande.\n\n`;
+  t += `Vous trouverez en pièce jointe votre facture.\n\n`;
   if(o.sync === true && o.lienCompte){
     t += `Je vous invite à finaliser la création de votre compte et à choisir votre mot de passe.\n\n`;
     t += `Cela vous permettra de conserver vos points de fidélité.\n\n`;
@@ -1029,16 +1029,27 @@ async function envoyerMail(e){
 }
 
 function fideliteLignes(o){
-  /* Lignes « Fidélité » du bon : seulement si les points sont enregistrés (synchronisés avec Notion). */
+  /* Lignes « Fidélité » de la facture : points gagnés et solde, seulement si les points sont enregistrés (Notion). */
   const l = [];
   if(o.sync === true && typeof o.points === 'number'){
     l.push(`Points gagnés avec cette commande : ${o.points}`);
-    l.push(`Votre solde : ${o.solde} point${o.solde>1?'s':''} (gardés à vie ; 1 € dépensé, hors frais de port = 1 point)`);
-    (o.bonsCrees||[]).forEach(b=>{
-      l.push(`Bon fidélité de ${b.montant} € (dès ${b.mini} € d'achat) : code ${b.code}`);
-      l.push(`Pour l'utiliser, indiquez ce code lors de votre prochaine commande.`);
-    });
+    l.push(`Solde de points de fidélité : ${o.solde} point${o.solde>1?'s':''}`);
   }
+  return l;
+}
+
+/* Lignes du bloc cliente (une par ligne) */
+function blocCliente(o){
+  const nomC = `${o.prenom} ${(o.nom||'').toUpperCase()}`.trim();
+  const l = [];
+  if(o.numClient) l.push({t:`N° client : ${o.numClient}`, b:false});
+  l.push({t:nomC, b:true});
+  const adr = `${o.adresse || ''}${o.complement ? ' ' + o.complement : ''}`.trim();
+  if(adr) l.push({t:adr, b:false});
+  const ville = `${o.cp || ''} ${o.ville || ''}`.trim();
+  if(ville) l.push({t:ville, b:false});
+  if(o.tel) l.push({t:`Tél : ${o.tel}`, b:false});
+  if(o.email) l.push({t:`Email : ${o.email}`, b:false});
   return l;
 }
 
@@ -1053,7 +1064,10 @@ function generateOrderPDF(o){
   const lColX = mx, lColW = half - gutter/2;
   const rColX = mx + half + gutter/2, rColW = half - gutter/2, rColCenter = rColX + rColW/2, rColRight = mx + tableW;
 
-  let yLogoTop = 12;
+  /* Titre tout en haut, au milieu de la page */
+  doc.setFont('helvetica','bold'); doc.setFontSize(22); doc.setTextColor(...dark);
+  doc.text('FACTURE', 105, 17, {align:'center'});
+  let yLogoTop = 26;
   doc.setFont('helvetica','bold'); doc.setFontSize(12);
   const nameW = doc.getTextWidth("Les Essences Parfumées d'Aphrodite");
   const logoSize = 18, logoX = lColX + Math.max(0, (nameW - logoSize) / 2);
@@ -1073,8 +1087,6 @@ function generateOrderPDF(o){
   const row2Y = yLogoTop + logoSize + 6;
   doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(...dark);
   doc.text("Les Essences Parfumées d'Aphrodite", lColX, row2Y);
-  doc.setFont('helvetica','bold'); doc.setFontSize(11);
-  doc.text(`${o.nom.toUpperCase()} ${o.prenom}`, rColCenter, row2Y, {align:'center'});
 
   /* Colonne gauche : suite des coordonnées */
   let yL = row2Y + 5.5;
@@ -1090,15 +1102,12 @@ function generateOrderPDF(o){
   doc.text('Site : www.lesessencesparfumeesdaphrodite.fr', lColX, yL); yL += 4;
   doc.text('SIRET : 890 868 656 00012', lColX, yL); yL += 4;
 
-  /* Colonne droite : suite de l'adresse cliente */
-  let yR = row2Y + 5.5;
-  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(...dark);
-  const adresseLigne = `${o.adresse || ''}${o.complement ? ' ' + o.complement : ''}`.trim();
-  if(adresseLigne){ doc.text(adresseLigne, rColCenter, yR, {align:'center'}); yR += 4.8; }
-  const villeLigne = `${o.cp || ''} ${o.ville || ''}`.trim();
-  if(villeLigne){ doc.text(villeLigne, rColCenter, yR, {align:'center'}); yR += 4.8; }
-  if(o.tel){ doc.text(`Tél : ${o.tel}`, rColCenter, yR, {align:'center'}); yR += 4.8; }
-  if(o.email){ doc.text(`Email : ${o.email}`, rColCenter, yR, {align:'center'}); yR += 4.8; }
+  /* Colonne droite : cliente, une information par ligne */
+  let yR = row2Y;
+  blocCliente(o).forEach(L=>{
+    doc.setFont('helvetica', L.b ? 'bold' : 'normal'); doc.setFontSize(L.b ? 11 : 9); doc.setTextColor(...dark);
+    doc.text(L.t, rColCenter, yR, {align:'center'}); yR += L.b ? 5.6 : 4.8;
+  });
 
   let y = Math.max(yL, yR) + 6;
   doc.setDrawColor(...gold); doc.setLineWidth(0.5);
@@ -1188,7 +1197,7 @@ function generateOrderPDF(o){
   }
   y += 6;
   doc.setFont('helvetica','italic'); doc.setFontSize(8.5); doc.setTextColor(138,117,112);
-  doc.text(`Bon de commande envoyé le ${formatDateFR(new Date().toISOString().slice(0,10))} — Merci pour votre confiance, Zulay`, mx, y); y += 4.5;
+  doc.text(`Facture envoyée le ${formatDateFR(new Date().toISOString().slice(0,10))} — Merci pour votre confiance, Zulay`, mx, y); y += 4.5;
   doc.text("Les Essences Parfumées d'Aphrodite", mx, y);
 
   return doc;
@@ -1198,7 +1207,7 @@ function downloadPDF(entry){
   if(!entry){ showToast('Aucune commande sélectionnée'); return; }
   if(!(window.jspdf && window.jspdf.jsPDF)){ showToast('Le générateur de PDF ne s\'est pas chargé — vérifiez la connexion internet'); return; }
   const doc = generateOrderPDF(entry);
-  doc.save(`Bon_commande_${entry.prenom}_${entry.nom}_${entry.dateCommande}.pdf`);
+  doc.save(`Facture_${entry.prenom}_${entry.nom}_${entry.dateCommande}.pdf`);
   showToast('PDF téléchargé ✓ Joignez-le à votre SMS ou mail');
 }
 
@@ -1213,7 +1222,10 @@ function drawOrderToCanvas(ctx, o, W, logoImg){
   const lColX = mx, lColW = half - gutter/2;
   const rColX = mx + half + gutter/2, rColW = half - gutter/2, rColCenter = rColX + rColW/2, rColRight = mx + tableW;
 
-  let yLogoTop = 26;
+  /* Titre tout en haut, au milieu de la page */
+  ctx.textAlign = 'center'; ctx.fillStyle = dark; ctx.font = 'bold 34px Helvetica, Arial, sans-serif';
+  ctx.fillText('FACTURE', W/2, 58);
+  let yLogoTop = 84;
   const logoSize = 66, logoX = lColX;
   if(logoImg){ try{ ctx.drawImage(logoImg, logoX, yLogoTop, logoSize, logoSize); }catch(e){} }
 
@@ -1231,8 +1243,6 @@ function drawOrderToCanvas(ctx, o, W, logoImg){
   const row2Y = yLogoTop + logoSize + 30;
   ctx.textAlign = 'left'; ctx.fillStyle = dark; ctx.font = 'bold 19px Helvetica, Arial, sans-serif';
   ctx.fillText("Les Essences Parfumées d'Aphrodite", lColX, row2Y);
-  ctx.textAlign = 'center'; ctx.font = 'bold 20px Helvetica, Arial, sans-serif';
-  ctx.fillText(`${o.nom.toUpperCase()} ${o.prenom}`, rColCenter, row2Y);
 
   /* Colonne gauche : suite des coordonnées */
   let yL = row2Y + 26;
@@ -1249,15 +1259,13 @@ function drawOrderToCanvas(ctx, o, W, logoImg){
   ctx.fillText('Site : www.lesessencesparfumeesdaphrodite.fr', lColX, yL); yL += 19;
   ctx.fillText('SIRET : 890 868 656 00012', lColX, yL); yL += 19;
 
-  /* Colonne droite : suite de l'adresse cliente */
-  let yR = row2Y + 26;
-  ctx.textAlign = 'center'; ctx.fillStyle = dark; ctx.font = '18px Helvetica, Arial, sans-serif';
-  const adresseLigne = `${o.adresse || ''}${o.complement ? ' ' + o.complement : ''}`.trim();
-  if(adresseLigne){ ctx.fillText(adresseLigne, rColCenter, yR); yR += 22; }
-  const villeLigne = `${o.cp || ''} ${o.ville || ''}`.trim();
-  if(villeLigne){ ctx.fillText(villeLigne, rColCenter, yR); yR += 22; }
-  if(o.tel){ ctx.fillText(`Tél : ${o.tel}`, rColCenter, yR); yR += 22; }
-  if(o.email){ ctx.fillText(`Email : ${o.email}`, rColCenter, yR); yR += 22; }
+  /* Colonne droite : cliente, une information par ligne */
+  let yR = row2Y;
+  ctx.textAlign = 'center'; ctx.fillStyle = dark;
+  blocCliente(o).forEach(L=>{
+    ctx.font = (L.b ? 'bold 20px' : '18px') + ' Helvetica, Arial, sans-serif';
+    ctx.fillText(L.t, rColCenter, yR); yR += L.b ? 26 : 22;
+  });
 
   let y = Math.max(yL, yR) + 28;
   ctx.textAlign = 'left';
@@ -1336,7 +1344,7 @@ function drawOrderToCanvas(ctx, o, W, logoImg){
   }
   y += 20;
   ctx.fillStyle = soft; ctx.font = 'italic 17px Helvetica, Arial, sans-serif';
-  ctx.fillText(`Bon de commande envoyé le ${formatDateFR(new Date().toISOString().slice(0,10))} — Merci pour votre confiance, Zulay`, mx, y); y += 24;
+  ctx.fillText(`Facture envoyée le ${formatDateFR(new Date().toISOString().slice(0,10))} — Merci pour votre confiance, Zulay`, mx, y); y += 24;
   ctx.fillText("Les Essences Parfumées d'Aphrodite", mx, y);
   y += 40;
 
@@ -1376,7 +1384,7 @@ async function downloadJPEG(entry){
   const dataUrl = await generateOrderImageDataURL(entry);
   const a = document.createElement('a');
   a.href = dataUrl;
-  a.download = `Bon_commande_${entry.prenom}_${entry.nom}_${entry.dateCommande}.jpg`;
+  a.download = `Facture_${entry.prenom}_${entry.nom}_${entry.dateCommande}.jpg`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   showToast('Image téléchargée ✓ Joignez-la à votre SMS ou mail');
 }
@@ -1686,7 +1694,7 @@ async function syncPending(){
       if(o.sync === true || o.sync === 'erreur') continue;
       const r = await relais('/salon/enregistrer', { bon: Object.assign({}, o, { mail: o.email }) });
       if(r.ok && r.j && r.j.ok){
-        o.sync = true; o.numero = r.j.numero; o.points = r.j.points; o.solde = r.j.solde; o.lienCompte = r.j.lien || ''; o.bonsCrees = r.j.bonsCrees || []; o.deja = !!r.j.deja;
+        o.sync = true; o.numero = r.j.numero; o.numClient = r.j.numClient || ''; o.points = r.j.points; o.solde = r.j.solde; o.lienCompte = r.j.lien || ''; o.bonsCrees = r.j.bonsCrees || []; o.deja = !!r.j.deja;
         await saveOrders();
         if(lastEntry && lastEntry.id === o.id){ lastEntry = o; if(document.getElementById('confirmCard').style.display === 'block') showConfirmation(o); }
       } else if(r.status === 401){ lsSet(CODE_KEY,''); document.getElementById('gate').classList.add('show'); break; }
