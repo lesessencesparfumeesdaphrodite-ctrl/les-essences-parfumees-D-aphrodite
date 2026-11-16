@@ -3595,7 +3595,7 @@ if(videoActive()){
   function post(p,b){b.code=code;return fetch(API+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});}).catch(function(){return{ok:false,j:{erreur:"Connexion impossible. Réessayez."}};});}
   function zone(){var e=document.getElementById("admin-contenu");if(!e)return null;var z=document.getElementById("admin-site");if(!z){z=document.createElement("div");z.id="admin-site";e.insertBefore(z,e.firstChild);}return z;}
   function charger(){post("/admin/commandes",{}).then(function(r){if(!r.ok){msg=r.j.erreur||"Erreur";if(/Code/.test(msg)){code="";try{sessionStorage.removeItem("aph_adm_code");}catch(e){}}cmds=[];}else{cmds=r.j.commandes||[];msg="";}dessiner();});}
-  window.admSiteCode=function(){var i=document.getElementById("adm-code");if(!i||!i.value)return;code=i.value;try{sessionStorage.setItem("aph_adm_code",code);}catch(e){}msg="Chargement…";dessiner();charger();};
+  window.admSiteCode=function(){var i=document.getElementById("adm-code");if(!i||!i.value)return;code=i.value;try{sessionStorage.setItem("aph_adm_code",code);}catch(e){}msg="Chargement…";dessiner();charger();chargerX();};
   window.admSiteSave=function(i){
     var o=cmds[i];if(!o)return;var g=function(k){return document.getElementById("adm-"+k+"-"+i);};
     var b={id:o.id,statut:g("st").value,paiement:g("pa").value,suivi:g("su").value};
@@ -3624,9 +3624,43 @@ if(videoActive()){
     }
     z.innerHTML=h+'</div>';
   }
+
+  /* ---- commandes EXHALESSENCE ---- */
+  var STX=["Nouvelle","Validée","À récupérer","Expédiée","Terminée"],REG=["","Virement","Carte bancaire","Espèces","PayPal","Chèque","Wero","Autre"],ex=[],msgX="";
+  function zoneX(){var e=document.getElementById("admin-contenu");if(!e)return null;var z=document.getElementById("admin-exh");if(!z){z=document.createElement("div");z.id="admin-exh";var a=document.getElementById("admin-site");if(a&&a.nextSibling)e.insertBefore(z,a.nextSibling);else e.insertBefore(z,e.firstChild&&e.firstChild.nextSibling||null);}return z;}
+  function chargerX(){post("/admin/exh-commandes",{}).then(function(r){if(!r.ok){msgX=r.j.erreur||"Erreur";ex=[];}else{ex=r.j.commandes||[];msgX="";}dessinerX();});}
+  window.admExhCharger=function(){chargerX();};
+  window.admExhSave=function(i){
+    var o=ex[i];if(!o)return;var g=function(k){return document.getElementById("adx-"+k+"-"+i);};
+    var b={id:o.id,statut:g("st").value,regle:g("re").value,delai:g("de").value,suivi:g("su").value,mot:g("mo").value};
+    msgX="Enregistrement…";dessinerX();
+    post("/admin/exh-maj",b).then(function(r){if(!r.ok){msgX="⚠️ "+(r.j.erreur||"Erreur");dessinerX();return;}msgX="✅ Enregistré."+(r.j.mailsEnvoyes?" Le mail est parti à la cliente.":"");chargerX();});
+  };
+  function dessinerX(){
+    var z=zoneX();if(!z)return;
+    var h='<div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🌸 Commandes EXHALESSENCE (reçues automatiquement)</div>';
+    if(!code){z.innerHTML="";return;}
+    if(msgX)h+='<p role="status" style="font-size:13px;color:var(--teal);margin-bottom:10px">'+esc(msgX)+'</p>';
+    if(!ex.length&&!msgX)h+='<p style="color:var(--gris);font-size:13px">Aucune commande EXHALESSENCE pour le moment.</p>';
+    ex.forEach(function(o,i){
+      h+='<div style="padding:14px 0;border-top:1px solid rgba(201,169,110,.25)"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span style="color:var(--terra);font-weight:700">'+esc(String(o.total).replace(".",","))+' €</span></div>'
+        +'<div style="font-size:13px;color:var(--brun);margin:4px 0">'+esc(o.nom)+' — '+esc(o.mail)+' — '+esc(o.tel)+'</div>'
+        +'<div style="font-size:12px;color:var(--gris);white-space:pre-line;line-height:1.6">'+esc(o.produits)+'</div>'
+        +'<div style="font-size:12px;color:var(--gris);margin:4px 0">🚚 '+esc(o.livraison)+' — '+esc(o.adresse)+'<br>💳 Paiement souhaité : <b>'+esc(o.souhaite)+'</b></div>'
+        +(o.notes?'<div style="font-size:12px;color:var(--gris)">📝 '+esc(o.notes)+'</div>':'')
+        +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><div style="flex:1;min-width:140px"><label class="bc-l" for="adx-st-'+i+'">Statut</label><select id="adx-st-'+i+'" class="bc-s">'+STX.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
+        +'<div style="flex:1;min-width:140px"><label class="bc-l" for="adx-re-'+i+'">Réglé par</label><select id="adx-re-'+i+'" class="bc-s">'+REG.map(function(s){return'<option value="'+s+'"'+(s===o.regle?' selected':'')+'>'+(s||"—")+'</option>';}).join('')+'</select></div>'
+        +'<div style="flex:2;min-width:200px"><label class="bc-l" for="adx-de-'+i+'">Délai estimé (obligatoire pour valider)</label><input id="adx-de-'+i+'" class="bc-in" type="text" placeholder="Ex : livraison entre le 24 et le 26 novembre" value="'+esc(o.delai)+'"/></div>'
+        +'<div style="flex:1;min-width:140px"><label class="bc-l" for="adx-su-'+i+'">N° de suivi</label><input id="adx-su-'+i+'" class="bc-in" type="text" value="'+esc(o.suivi)+'"/></div></div>'
+        +'<label class="bc-l" for="adx-mo-'+i+'">Petit mot pour la cliente (facultatif)</label><input id="adx-mo-'+i+'" class="bc-in" type="text" value="'+esc(o.mot)+'"/>'
+        +'<button class="btn-p" style="margin-top:10px;font-size:12px;padding:8px 20px" onclick="admExhSave('+i+')">Enregistrer</button></div>';
+    });
+    h+='<button class="btn-s" style="font-size:12px;margin-top:10px" onclick="admExhCharger()">↻ Actualiser</button>';
+    z.innerHTML=h+'</div>';
+  }
   window.admSiteCharger=function(){charger();};
   var ra=window.renderAdmin;
-  if(typeof ra==="function"){window.renderAdmin=function(){var r=ra.apply(this,arguments);var ok=false;try{ok=!!adminConnecte;}catch(e){}if(ok){dessiner();if(code&&!cmds.length&&!msg)charger();}return r;};}
+  if(typeof ra==="function"){window.renderAdmin=function(){var r=ra.apply(this,arguments);var ok=false;try{ok=!!adminConnecte;}catch(e){}if(ok){dessiner();dessinerX();if(code&&!cmds.length&&!msg)charger();if(code&&!ex.length&&!msgX)chargerX();}return r;};}
 })();
 </script>
 </body>
