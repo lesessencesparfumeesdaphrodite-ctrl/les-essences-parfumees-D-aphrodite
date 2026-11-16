@@ -3602,25 +3602,32 @@ if(videoActive()){
     msg="Enregistrement…";dessiner();
     post("/admin/maj",b).then(function(r){if(!r.ok){msg=r.j.erreur||"Erreur";dessiner();return;}msg="✅ Enregistré."+(r.j.mailsEnvoyes?" Le mail est parti à la cliente.":"");charger();});
   };
+  function carte(o,i){
+    return '<div style="padding:14px 0;border-top:1px solid rgba(201,169,110,.25)"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span style="color:var(--terra);font-weight:700">'+esc(String(o.total).replace(".",","))+' €</span></div>'
+      +'<div style="font-size:13px;color:var(--brun);margin:4px 0">'+esc(o.nom)+' — '+esc(o.mail)+'</div>'
+      +'<div style="font-size:12px;color:var(--gris);white-space:pre-line;line-height:1.6">'+esc(o.produits)+'</div>'
+      +'<div style="font-size:12px;color:var(--gris);margin:4px 0">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>'
+      +(o.note?'<div style="font-size:12px;color:var(--gris)">📝 '+esc(o.note)+'</div>':'')
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><div style="flex:1;min-width:150px"><label class="bc-l" for="adm-st-'+i+'">Statut</label><select id="adm-st-'+i+'" class="bc-s">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
+      +'<div style="flex:1;min-width:150px"><label class="bc-l" for="adm-pa-'+i+'">Paiement reçu</label><input id="adm-pa-'+i+'" class="bc-in" type="text" placeholder="Ex : virement, PayPal, espèces" value="'+esc(o.paiement)+'"/></div>'
+      +'<div style="flex:1;min-width:150px"><label class="bc-l" for="adm-su-'+i+'">N° de suivi Mondial Relay</label><input id="adm-su-'+i+'" class="bc-in" type="text" value="'+esc(o.suivi)+'"/></div></div>'
+      +'<button class="btn-p" style="margin-top:10px;font-size:12px;padding:8px 20px" onclick="admSiteSave('+i+')">Enregistrer</button></div>';
+  }
+  function zoneS(){var e=document.getElementById("admin-contenu");if(!e)return null;var z=document.getElementById("admin-sal");if(!z){z=document.createElement("div");z.id="admin-sal";var a=document.getElementById("admin-exh")||document.getElementById("admin-site");if(a&&a.nextSibling)e.insertBefore(z,a.nextSibling);else e.appendChild(z);}return z;}
   function dessiner(){
     var z=zone();if(!z)return;
-    var h='<div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🛍️ Commandes du site et des marchés/salons (reçues automatiquement)</div>';
-    if(!code){h+='<div class="form-field"><label for="adm-code">Code du bon de commande</label><input id="adm-code" type="password" autocomplete="off" onkeydown="if(event.key===\'Enter\')admSiteCode()"/></div><button class="btn-p" onclick="admSiteCode()" style="width:100%">Voir les commandes du site</button>';}
+    var h='<h2 style="text-align:center;margin:0 0 14px;font-family:inherit">🛍️ Commandes du site (reçues automatiquement)</h2><div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🎨 Créations plâtre résine</div>';
+    var zs=zoneS(),hs='<div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🎪 Commandes Marché/Salon</div>';
+    if(!code){h+='<div class="form-field"><label for="adm-code">Code du bon de commande</label><input id="adm-code" type="password" autocomplete="off" onkeydown="if(event.key===\'Enter\')admSiteCode()"/></div><button class="btn-p" onclick="admSiteCode()" style="width:100%">Voir les commandes du site</button>';if(zs)zs.innerHTML="";}
     else{
-      if(msg)h+='<p role="status" style="font-size:13px;color:var(--teal);margin-bottom:10px">'+esc(msg)+'</p>';
-      if(!cmds.length&&!msg)h+='<p style="color:var(--gris);font-size:13px">Aucune commande du site pour le moment.</p>';
-      cmds.forEach(function(o,i){
-        h+='<div style="padding:14px 0;border-top:1px solid rgba(201,169,110,.25)"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>'+esc(o.numero)+' · '+esc(o.date)+(o.origine==='Salon'?' · 🎪 Marché/salon':'')+'</strong><span style="color:var(--terra);font-weight:700">'+esc(String(o.total).replace(".",","))+' €</span></div>'
-          +'<div style="font-size:13px;color:var(--brun);margin:4px 0">'+esc(o.nom)+' — '+esc(o.mail)+'</div>'
-          +'<div style="font-size:12px;color:var(--gris);white-space:pre-line;line-height:1.6">'+esc(o.produits)+'</div>'
-          +'<div style="font-size:12px;color:var(--gris);margin:4px 0">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>'
-          +(o.note?'<div style="font-size:12px;color:var(--gris)">📝 '+esc(o.note)+'</div>':'')
-          +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><div style="flex:1;min-width:150px"><label class="bc-l" for="adm-st-'+i+'">Statut</label><select id="adm-st-'+i+'" class="bc-s">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
-          +'<div style="flex:1;min-width:150px"><label class="bc-l" for="adm-pa-'+i+'">Paiement reçu</label><input id="adm-pa-'+i+'" class="bc-in" type="text" placeholder="Ex : virement, PayPal, espèces" value="'+esc(o.paiement)+'"/></div>'
-          +'<div style="flex:1;min-width:150px"><label class="bc-l" for="adm-su-'+i+'">N° de suivi Mondial Relay</label><input id="adm-su-'+i+'" class="bc-in" type="text" value="'+esc(o.suivi)+'"/></div></div>'
-          +'<button class="btn-p" style="margin-top:10px;font-size:12px;padding:8px 20px" onclick="admSiteSave('+i+')">Enregistrer</button></div>';
-      });
+      if(msg){h+='<p role="status" style="font-size:13px;color:var(--teal);margin-bottom:10px">'+esc(msg)+'</p>';hs+='<p role="status" style="font-size:13px;color:var(--teal);margin-bottom:10px">'+esc(msg)+'</p>';}
+      var nc=0,ns=0;
+      cmds.forEach(function(o,i){if(o.origine==='Salon'){ns++;hs+=carte(o,i);}else{nc++;h+=carte(o,i);}});
+      if(!nc&&!msg)h+='<p style="color:var(--gris);font-size:13px">Aucune commande de création pour le moment.</p>';
+      if(!ns&&!msg)hs+='<p style="color:var(--gris);font-size:13px">Aucune commande Marché/Salon pour le moment.</p>';
       h+='<button class="btn-s" style="font-size:12px;margin-top:10px" onclick="admSiteCharger()">↻ Actualiser</button>';
+      hs+='<button class="btn-s" style="font-size:12px;margin-top:10px" onclick="admSiteCharger()">↻ Actualiser</button>';
+      if(zs)zs.innerHTML=hs+'</div>';
     }
     z.innerHTML=h+'</div>';
   }
@@ -3638,7 +3645,7 @@ if(videoActive()){
   };
   function dessinerX(){
     var z=zoneX();if(!z)return;
-    var h='<div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🌸 Commandes EXHALESSENCE (reçues automatiquement)</div>';
+    var h='<div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🌸 EXHALESSENCE</div>';
     if(!code){z.innerHTML="";return;}
     if(msgX)h+='<p role="status" style="font-size:13px;color:var(--teal);margin-bottom:10px">'+esc(msgX)+'</p>';
     if(!ex.length&&!msgX)h+='<p style="color:var(--gris);font-size:13px">Aucune commande EXHALESSENCE pour le moment.</p>';

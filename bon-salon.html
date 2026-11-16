@@ -475,6 +475,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   .promo-txt{display:none;font-size:13px;font-weight:600;color:var(--dark)}
   .promo-hint{display:none;margin:6px 0 10px;padding:9px 11px;border-radius:10px;background:#fff6dc;border:1px solid var(--gold);font-size:13px;color:var(--dark)}
   @media(max-width:420px){.promo-txt{display:inline}}
+  .line-flags{grid-column:1/-1;display:flex;gap:18px;font-size:13px;color:var(--dark);padding:0 2px 4px}
+  .line-flags label{display:flex;align-items:center;gap:6px;cursor:pointer}
+  .line-flags input{width:20px;height:20px;accent-color:var(--gold);cursor:pointer}
   .line-total{font-size:13.5px;font-weight:600;color:var(--dark);text-align:right;padding-right:4px}
   .line-del{background:none;border:none;color:var(--err);font-size:16px;cursor:pointer;opacity:.6;padding:0}
   .add-line{
@@ -580,7 +583,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   </div>
 
   <div class="event-bar">
-    <span class="lbl">📍 Lieu :</span>
+    <span class="lbl">📍 Lieu du Marché/Salon :</span>
     <input type="text" id="eventName" placeholder="Ex : Marché de Noël Simandres" oninput="saveEvent()">
   </div>
   <div class="event-bar">
@@ -645,7 +648,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <div class="trow"><span>Frais de port</span><input type="number" id="f-port" value="0" step="0.5" oninput="calcTotals(true)"> €</div>
         <div class="liv-box">
           <p class="section-label" style="margin:10px 0 6px">Livraison</p>
-          <label class="liv-opt"><input type="radio" name="liv" value="marche" checked onchange="onLivChange()"> <span><b>Remis sur le marché</b><br><small>La cliente repart avec son produit : rien à commander.</small></span></label>
+          <label class="liv-opt"><input type="radio" name="liv" value="marche" checked onchange="onLivChange()"> <span><b>Remis sur le marché</b><br><small>La cliente repart avec tous ses produits (aucune case « À commander »).</small></span></label>
           <label class="liv-opt"><input type="radio" name="liv" value="main" onchange="onLivChange()"> <span><b>Remise en main propre</b><br><small>La cliente viendra le chercher plus tard (sans frais de port).</small></span></label>
           <label class="liv-opt"><input type="radio" name="liv" value="expedier" onchange="onLivChange()"> <span><b>À expédier</b><br><small>Je l'envoie à la cliente (frais de port 6 €).</small></span></label>
           <div id="livExp" style="display:none;margin-top:8px">
@@ -807,9 +810,15 @@ function addLine(prod='', pu='', qte=1, promo=false){
     <label class="line-promo"><input type="checkbox" ${promo ? 'checked' : ''} onchange="calcTotals()" title="Produit EXHALESSENCE (éligible à la promo)"><span class="promo-txt">Exhalessence</span></label>
     <div class="line-total">0,00 €</div>
     <button class="line-del" onclick="removeLine('${id}')">✕</button>
+    <div class="line-flags"><label><input type="checkbox" class="fl-remis" checked onchange="flagLine(this)"> Remis</label><label><input type="checkbox" class="fl-cmd" onchange="flagLine(this)"> À commander</label></div>
   `;
   box.appendChild(row);
   calcTotals();
+}
+function flagLine(el){
+  const row = el.closest('.line-row');
+  if(el.checked){ row.querySelector(el.classList.contains('fl-remis') ? '.fl-cmd' : '.fl-remis').checked = false; }
+  else { row.querySelector(el.classList.contains('fl-remis') ? '.fl-cmd' : '.fl-remis').checked = true; }
 }
 function removeLine(id){
   const el = document.getElementById(id);
@@ -929,7 +938,8 @@ function getLines(){
     const pu = parseFloat(inputs[1].value) || 0;
     const qte = parseFloat(inputs[2].value) || 0;
     const promo = inputs[3].checked;
-    if(prod || pu || qte) lines.push({prod, pu, qte, promo, total: pu*qte});
+    const acommander = row.querySelector('.fl-cmd').checked;
+    if(prod || pu || qte) lines.push({prod, pu, qte, promo, remis: !acommander, acommander, total: pu*qte});
   });
   return lines;
 }
@@ -939,6 +949,7 @@ async function submitForm(){
   const lines = getLines();
   if(lines.length === 0){ showToast('Ajoutez au moins un produit à la commande'); return; }
 
+  if(lines.some(l=>l.acommander) && livValue() === 'marche'){ showToast('Des articles sont « À commander » : choisissez Remise en main propre ou À expédier'); return; }
   if(livValue() === 'expedier'){
     if(!document.getElementById('f-relais').value.trim()){ showToast('Indiquez le point relais choisi'); return; }
   }
@@ -1644,7 +1655,7 @@ function exportCSV(){
     o.adresse, o.complement, o.cp, o.ville, o.tel, o.email,
     o.fidelite,
     formatDateFR(o.dateCommande),
-    o.lines.map(l=>`${l.prod}${l.promo ? ' [promo]' : ''} x${l.qte} (${eur(l.total)})`).join(' ; '),
+    o.lines.map(l=>`${l.prod}${l.promo ? ' [promo]' : ''} x${l.qte} (${eur(l.total)})${l.acommander ? ' [à commander]' : ''}`).join(' ; '),
     eur(o.total), eur(o.promoDiscount||0), eur(o.remise), eur(o.port), eur(o.montantTotal),
     o.paiement, o.envoiPref||'', o.note
   ]);
