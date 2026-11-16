@@ -475,7 +475,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   .promo-txt{display:none;font-size:13px;font-weight:600;color:var(--dark)}
   .promo-hint{display:none;margin:6px 0 10px;padding:9px 11px;border-radius:10px;background:#fff6dc;border:1px solid var(--gold);font-size:13px;color:var(--dark)}
   @media(max-width:420px){.promo-txt{display:inline}}
-  .line-flags{grid-column:1/-1;display:flex;gap:18px;font-size:13px;color:var(--dark);padding:0 2px 4px}
+  .line-flags{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--dark);padding:0 2px 4px}
   .line-flags label{display:flex;align-items:center;gap:6px;cursor:pointer}
   .line-flags input{width:20px;height:20px;accent-color:var(--gold);cursor:pointer}
   .line-total{font-size:13.5px;font-weight:600;color:var(--dark);text-align:right;padding-right:4px}
@@ -638,7 +638,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <div class="line-hdr"><div>Produit</div><div>Prix U.</div><div>Qté</div><div style="text-align:center">Exhal.</div><div style="text-align:right">Total</div><div></div></div>
       </div>
       <button class="add-line" onclick="addLine()">+ Ajouter un produit</button>
-      <p class="hint" style="margin-top:8px;text-align:left">Cochez « Exhalessence » devant chaque parfum ou cosmétique Exhalessence (jamais vos créations en plâtre résine) : ils entrent dans la promotion et dans le bilan de fin de marché. Du 15/11 au 31/12 : 2 achetés, le 3e (le moins cher) à -50 % ; 5 achetés, le 6e (le moins cher) offert. Le 27/11 (Black Friday) : 1 acheté, le 2e (le moins cher) à -50 %. Un bon de réduction ou une carte cadeau remplace la promotion : pas de cumul.</p>
+      <p class="hint" style="margin-top:8px;text-align:left">Cochez « Exhalessence » devant chaque parfum ou cosmétique Exhalessence (jamais vos créations en plâtre résine) : ils entrent dans la promotion et dans le bilan de fin de marché. Du 15/11 au 31/12 : 2 achetés, le 3e (le moins cher) à -50 % ; 5 achetés, le 6e (le moins cher) offert ; gamme Home (case « Gamme Home ») : 2 achetés, le 3e à -25 % ; duo ou coffret (case « Duo / coffret ») : -10 %. Le 27/11 (Black Friday) : 1 acheté, le 2e (le moins cher) à -50 % ; gamme Home : le 2e à -20 %. Un bon de réduction ou une carte cadeau remplace la promotion : pas de cumul.</p>
 
       <div class="totals-box">
         <div class="trow"><span>Total de la commande</span><b id="totCommande">0,00 €</b></div>
@@ -810,7 +810,7 @@ function addLine(prod='', pu='', qte=1, promo=false){
     <label class="line-promo"><input type="checkbox" ${promo ? 'checked' : ''} onchange="calcTotals()" title="Produit EXHALESSENCE (éligible à la promo)"><span class="promo-txt">Exhalessence</span></label>
     <div class="line-total">0,00 €</div>
     <button class="line-del" onclick="removeLine('${id}')">✕</button>
-    <div class="line-flags"><label><input type="checkbox" class="fl-remis" checked onchange="flagLine(this)"> Remis</label><label><input type="checkbox" class="fl-cmd" onchange="flagLine(this)"> À commander</label></div>
+    <div class="line-flags"><label><input type="checkbox" class="fl-remis" checked onchange="flagLine(this)"> Remis</label><label><input type="checkbox" class="fl-cmd" onchange="flagLine(this)"> À commander</label><label><input type="checkbox" class="fl-home" onchange="typeLine(this)"> Gamme Home</label><label><input type="checkbox" class="fl-duo" onchange="typeLine(this)"> Duo / coffret</label></div>
   `;
   box.appendChild(row);
   calcTotals();
@@ -819,6 +819,14 @@ function flagLine(el){
   const row = el.closest('.line-row');
   if(el.checked){ row.querySelector(el.classList.contains('fl-remis') ? '.fl-cmd' : '.fl-remis').checked = false; }
   else { row.querySelector(el.classList.contains('fl-remis') ? '.fl-cmd' : '.fl-remis').checked = true; }
+}
+function typeLine(el){
+  const row = el.closest('.line-row');
+  if(el.checked){
+    row.querySelector(el.classList.contains('fl-home') ? '.fl-duo' : '.fl-home').checked = false;
+    row.querySelector('.line-promo input').checked = true; // un article Home ou duo est un article Exhalessence
+  }
+  calcTotals();
 }
 function removeLine(id){
   const el = document.getElementById(id);
@@ -855,29 +863,31 @@ function promoMode(){
   if(d >= '2026-11-15' && d <= '2026-12-31') return 'noel';
   return '';
 }
-function computePromoDiscount(promoUnits, mode){
-  // promoUnits : prix unitaires des articles EXHALESSENCE (le moins cher est toujours celui qui est remisé)
-  const sorted = promoUnits.slice().sort((a,b)=> a-b); // du moins cher au plus cher
+function computePromoDiscount(u, mode){
+  // u = { std:[prix], home:[prix], duo:[prix] } (un prix par article ; le moins cher est toujours celui qui est remisé)
+  const asc = (arr)=> arr.slice().sort((a,b)=> a-b);
+  const std = asc(u.std), home = asc(u.home);
   let discount = 0;
   if(mode === 'bf'){
-    // Black Friday : 1 acheté, le 2e à -50 % (le moins cher de chaque paire)
-    const nHalf = Math.floor(sorted.length / 2);
-    for(let i=0; i<nHalf; i++) discount += sorted[i] * 0.5;
+    // Black Friday : gamme classique 1 acheté, le 2e à -50 % ; gamme Home 1 acheté, le 2e à -20 %
+    for(let i=0; i<Math.floor(std.length/2); i++) discount += std[i] * 0.5;
+    for(let i=0; i<Math.floor(home.length/2); i++) discount += home[i] * 0.2;
   } else if(mode === 'noel'){
-    // Noël : 2 achetés, le 3e à -50 % (le moins cher des 3) ; 5 achetés, le 6e offert (le moins cher des 6)
-    const nFree = Math.floor(sorted.length / 6);
-    const nHalf = (sorted.length % 6) >= 3 ? 1 : 0;
-    for(let i=0; i<nFree; i++) discount += sorted[i];
-    for(let i=nFree; i<nFree+nHalf; i++) discount += sorted[i] * 0.5;
+    // Noël : classique 2 achetés le 3e à -50 %, 5 achetés le 6e offert ; Home 2 achetés le 3e à -25 % ; duo/coffret -10 %
+    const nFree = Math.floor(std.length / 6), nHalf = (std.length % 6) >= 3 ? 1 : 0;
+    for(let i=0; i<nFree; i++) discount += std[i];
+    for(let i=nFree; i<nFree+nHalf; i++) discount += std[i] * 0.5;
+    for(let i=0; i<Math.floor(home.length/3); i++) discount += home[i] * 0.25;
+    u.duo.forEach(p=> discount += p * 0.1);
   }
-  return discount;
+  return Math.round(discount * 100) / 100;
 }
 
 function calcTotals(manualRemise){
   if(manualRemise) remiseAuto = false;
   const rows = document.querySelectorAll('.line-row');
   let total = 0;
-  const promoUnits = [];
+  const promoUnits = { std: [], home: [], duo: [] };
   rows.forEach(row=>{
     const inputs = row.querySelectorAll('input');
     const pu = parseFloat(inputs[1].value) || 0;
@@ -887,7 +897,8 @@ function calcTotals(manualRemise){
     row.querySelector('.line-total').textContent = eur(lineTot);
     total += lineTot;
     if(isPromo && pu > 0){
-      for(let i=0; i<qte; i++) promoUnits.push(pu);
+      const cat = row.querySelector('.fl-duo').checked ? 'duo' : row.querySelector('.fl-home').checked ? 'home' : 'std';
+      for(let i=0; i<qte; i++) promoUnits[cat].push(pu);
     }
   });
   document.getElementById('totCommande').textContent = eur(total);
@@ -898,9 +909,9 @@ function calcTotals(manualRemise){
   let nbArt = 0; rows.forEach(r=>{ const i=r.querySelectorAll('input'); if((parseFloat(i[1].value)||0)>0) nbArt += Math.max(0, Math.floor(parseFloat(i[2].value)||0)); });
   const ph = document.getElementById('promoHint');
   if(ph){
-    const seuil = mode === 'bf' ? 2 : 3;
+    const seuil = mode === 'bf' ? 2 : 3, nbPromo = promoUnits.std.length + promoUnits.home.length + promoUnits.duo.length;
     if(selectedBon && promoBrut > 0){ ph.style.display='block'; ph.textContent = 'ℹ️ Le bon / la carte cadeau remplace la promotion en cours : les deux ne se cumulent pas (promotion non appliquée).'; }
-    else if(mode && nbArt >= seuil && promoUnits.length < seuil){ ph.style.display='block'; ph.textContent = '💡 Vous avez ' + nbArt + ' articles. Pour la promotion, cochez « Exhalessence » devant les parfums et cosmétiques (' + seuil + ' cochés minimum).'; }
+    else if(mode && nbArt >= seuil && nbPromo < seuil){ ph.style.display='block'; ph.textContent = '💡 Vous avez ' + nbArt + ' articles. Pour la promotion, cochez « Exhalessence » devant les parfums et cosmétiques (' + seuil + ' cochés minimum).'; }
     else ph.style.display='none';
   }
   const promoRow = document.getElementById('promoRow');
