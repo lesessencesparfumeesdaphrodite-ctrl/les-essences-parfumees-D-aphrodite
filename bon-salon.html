@@ -588,7 +588,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   </div>
   <div class="event-bar">
     <label class="lbl" for="f-date">📅 Date de la commande :</label>
-    <input type="date" id="f-date">
+    <input type="date" id="f-date" onchange="calcTotals()">
   </div>
 
   <div id="formCard">
@@ -638,7 +638,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <div class="line-hdr"><div>Produit</div><div>Prix U.</div><div>Qté</div><div style="text-align:center">Exhal.</div><div style="text-align:right">Total</div><div></div></div>
       </div>
       <button class="add-line" onclick="addLine()">+ Ajouter un produit</button>
-      <p class="hint" style="margin-top:8px;text-align:left">Cochez « Exhalessence » devant chaque parfum ou cosmétique Exhalessence (jamais vos créations en plâtre résine) : ils entrent dans la promotion (3 achetés = le moins cher à -50 %, 6 achetés = le moins cher offert) et dans le bilan de fin de marché.</p>
+      <p class="hint" style="margin-top:8px;text-align:left">Cochez « Exhalessence » devant chaque parfum ou cosmétique Exhalessence (jamais vos créations en plâtre résine) : ils entrent dans la promotion et dans le bilan de fin de marché. Du 15/11 au 31/12 : 2 achetés, le 3e (le moins cher) à -50 % ; 5 achetés, le 6e (le moins cher) offert. Le 27/11 (Black Friday) : 1 acheté, le 2e (le moins cher) à -50 %. Un bon de réduction ou une carte cadeau remplace la promotion : pas de cumul.</p>
 
       <div class="totals-box">
         <div class="trow"><span>Total de la commande</span><b id="totCommande">0,00 €</b></div>
@@ -848,16 +848,28 @@ function onPayChange(){
 }
 
 let remiseAuto = false;
-function computePromoDiscount(promoUnits){
-  // promoUnits: array of unit prices (each item = 1 unit), eligible for the 3/6 promo
-  if(promoUnits.length < 3) return 0;
-  const sorted = promoUnits.slice().sort((a,b)=> a-b); // cheapest first
-  const nFree = Math.floor(sorted.length / 6);
-  const remainder = sorted.length % 6;
-  const nHalf = remainder >= 3 ? 1 : 0;
+function promoMode(){
+  // Offres EXHALESSENCE : Black Friday le 27/11/2026 ; offre de Noël du 15/11 au 31/12/2026
+  const d = (document.getElementById('f-date') || {}).value || new Date().toISOString().slice(0,10);
+  if(d === '2026-11-27') return 'bf';
+  if(d >= '2026-11-15' && d <= '2026-12-31') return 'noel';
+  return '';
+}
+function computePromoDiscount(promoUnits, mode){
+  // promoUnits : prix unitaires des articles EXHALESSENCE (le moins cher est toujours celui qui est remisé)
+  const sorted = promoUnits.slice().sort((a,b)=> a-b); // du moins cher au plus cher
   let discount = 0;
-  for(let i=0; i<nFree; i++) discount += sorted[i]; // cheapest items: 100% off
-  for(let i=nFree; i<nFree+nHalf; i++) discount += sorted[i] * 0.5; // next cheapest: 50% off
+  if(mode === 'bf'){
+    // Black Friday : 1 acheté, le 2e à -50 % (le moins cher de chaque paire)
+    const nHalf = Math.floor(sorted.length / 2);
+    for(let i=0; i<nHalf; i++) discount += sorted[i] * 0.5;
+  } else if(mode === 'noel'){
+    // Noël : 2 achetés, le 3e à -50 % (le moins cher des 3) ; 5 achetés, le 6e offert (le moins cher des 6)
+    const nFree = Math.floor(sorted.length / 6);
+    const nHalf = (sorted.length % 6) >= 3 ? 1 : 0;
+    for(let i=0; i<nFree; i++) discount += sorted[i];
+    for(let i=nFree; i<nFree+nHalf; i++) discount += sorted[i] * 0.5;
+  }
   return discount;
 }
 
@@ -880,11 +892,15 @@ function calcTotals(manualRemise){
   });
   document.getElementById('totCommande').textContent = eur(total);
 
-  const promoDiscount = computePromoDiscount(promoUnits);
+  const mode = promoMode();
+  const promoBrut = computePromoDiscount(promoUnits, mode);
+  const promoDiscount = selectedBon ? 0 : promoBrut; // bon ou carte cadeau = pas de promotion en plus
   let nbArt = 0; rows.forEach(r=>{ const i=r.querySelectorAll('input'); if((parseFloat(i[1].value)||0)>0) nbArt += Math.max(0, Math.floor(parseFloat(i[2].value)||0)); });
   const ph = document.getElementById('promoHint');
   if(ph){
-    if(nbArt >= 3 && promoUnits.length < 3){ ph.style.display='block'; ph.textContent = '💡 Vous avez ' + nbArt + ' articles. Pour la promotion (3e à -50 %), cochez « Exhalessence » devant les parfums et cosmétiques (3 cochés minimum).'; }
+    const seuil = mode === 'bf' ? 2 : 3;
+    if(selectedBon && promoBrut > 0){ ph.style.display='block'; ph.textContent = 'ℹ️ Le bon / la carte cadeau remplace la promotion en cours : les deux ne se cumulent pas (promotion non appliquée).'; }
+    else if(mode && nbArt >= seuil && promoUnits.length < seuil){ ph.style.display='block'; ph.textContent = '💡 Vous avez ' + nbArt + ' articles. Pour la promotion, cochez « Exhalessence » devant les parfums et cosmétiques (' + seuil + ' cochés minimum).'; }
     else ph.style.display='none';
   }
   const promoRow = document.getElementById('promoRow');
