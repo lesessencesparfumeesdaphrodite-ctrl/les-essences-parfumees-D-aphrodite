@@ -3604,13 +3604,13 @@ if(videoActive()){
   };
   function dessiner(){
     var z=zone();if(!z)return;
-    var h='<div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🛍️ Commandes du site (reçues automatiquement)</div>';
+    var h='<div class="compte-card" style="margin-bottom:20px"><div class="compte-titre">🛍️ Commandes du site et des marchés/salons (reçues automatiquement)</div>';
     if(!code){h+='<div class="form-field"><label for="adm-code">Code du bon de commande</label><input id="adm-code" type="password" autocomplete="off" onkeydown="if(event.key===\'Enter\')admSiteCode()"/></div><button class="btn-p" onclick="admSiteCode()" style="width:100%">Voir les commandes du site</button>';}
     else{
       if(msg)h+='<p role="status" style="font-size:13px;color:var(--teal);margin-bottom:10px">'+esc(msg)+'</p>';
       if(!cmds.length&&!msg)h+='<p style="color:var(--gris);font-size:13px">Aucune commande du site pour le moment.</p>';
       cmds.forEach(function(o,i){
-        h+='<div style="padding:14px 0;border-top:1px solid rgba(201,169,110,.25)"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span style="color:var(--terra);font-weight:700">'+esc(String(o.total).replace(".",","))+' €</span></div>'
+        h+='<div style="padding:14px 0;border-top:1px solid rgba(201,169,110,.25)"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>'+esc(o.numero)+' · '+esc(o.date)+(o.origine==='Salon'?' · 🎪 Marché/salon':'')+'</strong><span style="color:var(--terra);font-weight:700">'+esc(String(o.total).replace(".",","))+' €</span></div>'
           +'<div style="font-size:13px;color:var(--brun);margin:4px 0">'+esc(o.nom)+' — '+esc(o.mail)+'</div>'
           +'<div style="font-size:12px;color:var(--gris);white-space:pre-line;line-height:1.6">'+esc(o.produits)+'</div>'
           +'<div style="font-size:12px;color:var(--gris);margin:4px 0">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>'
