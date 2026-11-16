@@ -3590,12 +3590,12 @@ if(videoActive()){
 
   var API="https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev";
   var STAT=["Reçue","En cours de création","Prête","Expédiée","Terminée"];
-  var code="",cmds=[],msg="";try{code=sessionStorage.getItem("aph_adm_code")||"";}catch(e){}
+  var code="",cmds=[],msg="";try{code=localStorage.getItem("aph_adm_code")||"";}catch(e){}
   function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
   function post(p,b){b.code=code;return fetch(API+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});}).catch(function(){return{ok:false,j:{erreur:"Connexion impossible. Réessayez."}};});}
   function zone(){var e=document.getElementById("admin-contenu");if(!e)return null;var z=document.getElementById("admin-site");if(!z){z=document.createElement("div");z.id="admin-site";e.insertBefore(z,e.firstChild);}return z;}
-  function charger(){post("/admin/commandes",{}).then(function(r){if(!r.ok){msg=r.j.erreur||"Erreur";if(/Code/.test(msg)){code="";try{sessionStorage.removeItem("aph_adm_code");}catch(e){}}cmds=[];}else{cmds=r.j.commandes||[];msg="";}dessiner();});}
-  window.admSiteCode=function(){var i=document.getElementById("adm-code");if(!i||!i.value)return;code=i.value;try{sessionStorage.setItem("aph_adm_code",code);}catch(e){}msg="Chargement…";dessiner();charger();chargerX();};
+  function charger(){post("/admin/commandes",{}).then(function(r){if(!r.ok){msg=r.j.erreur||"Erreur";if(/Code/.test(msg)){code="";try{localStorage.removeItem("aph_adm_code");}catch(e){}}cmds=[];}else{cmds=r.j.commandes||[];msg="";}dessiner();});}
+  window.admSiteCode=function(){var i=document.getElementById("adm-code");if(!i||!i.value)return;code=i.value;try{localStorage.setItem("aph_adm_code",code);}catch(e){}msg="Chargement…";dessiner();charger();chargerX();};
   window.admSiteSave=function(i){
     var o=cmds[i];if(!o)return;var g=function(k){return document.getElementById("adm-"+k+"-"+i);};
     var b={id:o.id,statut:g("st").value,paiement:g("pa").value,suivi:g("su").value};
