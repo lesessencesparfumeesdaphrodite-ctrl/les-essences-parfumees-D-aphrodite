@@ -1028,12 +1028,18 @@ async function envoyerMail(e){
   openExternal(`mailto:${o.email}?subject=${encodeURIComponent("Votre commande — Les Essences Parfumées d'Aphrodite")}&body=${encodeURIComponent(buildRecap(o,'mail'))}`);
 }
 
+function modeLivraisonTexte(o){
+  if(o.livraison === 'marche') return 'Remis sur le marché';
+  if(o.livraison === 'main') return 'Remis en main propre à Irigny';
+  return 'Livraison en point relais';
+}
+
 function fideliteLignes(o){
   /* Lignes « Fidélité » de la facture : points gagnés et solde, seulement si les points sont enregistrés (Notion). */
   const l = [];
   if(o.sync === true && typeof o.points === 'number'){
     l.push(`Points gagnés avec cette commande : ${o.points}`);
-    l.push(`Solde de points de fidélité : ${o.solde} point${o.solde>1?'s':''}`);
+    l.push(`Solde de vos points de fidélité : ${o.solde} point${o.solde>1?'s':''}`);
   }
   return l;
 }
@@ -1162,7 +1168,7 @@ function generateOrderPDF(o){
   const totLabelW = colW[1]+colW[2], totValW = colW[3];
   const totRowH = 8;
   const remiseTotal = (o.promoDiscount||0) + (o.remise||0);
-  const portLabel = o.livraison === 'marche' ? 'Remis sur le marché' : (o.remisPropre ? 'Main propre' : (o.port>0 ? eur(o.port) : eur(0)));
+  const portLabel = eur(o.port>0 ? o.port : 0);
   const totRows = [
     ['Total', eur(o.total), false],
     ['Remise', remiseTotal>0 ? '-'+eur(remiseTotal) : eur(0), false],
@@ -1185,20 +1191,22 @@ function generateOrderPDF(o){
   /* ---- Pied ---- */
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...dark);
   doc.text(`Règlement : ${o.paiement || 'à convenir'}`, mx, y); y += 6;
+  doc.text(`Mode de livraison : ${modeLivraisonTexte(o)}`, mx, y); y += 6;
   if(o.note){ doc.text(`Notes : ${o.note}`, mx, y); y += 6; }
   const fid = fideliteLignes(o);
   if(fid.length){
     y += 3;
     if(y + 8 + fid.length*5.5 > 272){ doc.addPage(); y = 22; }
     doc.setFont('helvetica','bold'); doc.setFontSize(9.5); doc.setTextColor(...gold);
-    doc.text('Fidélité', mx, y); y += 5.5;
+    doc.text('Programme de fidélité', mx, y); y += 5.5;
     doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...dark);
     fid.forEach(t=>{ doc.text(t, mx, y); y += 5.5; });
   }
   y += 6;
   doc.setFont('helvetica','italic'); doc.setFontSize(8.5); doc.setTextColor(138,117,112);
-  doc.text(`Facture envoyée le ${formatDateFR(new Date().toISOString().slice(0,10))} — Merci pour votre confiance, Zulay`, mx, y); y += 4.5;
-  doc.text("Les Essences Parfumées d'Aphrodite", mx, y);
+  doc.text(`Facture envoyée le ${formatDateFR(new Date().toISOString().slice(0,10))}`, mx, y); y += 4.5;
+  doc.text('Merci pour votre confiance,', mx, y); y += 4.5;
+  doc.text("Zulay — Les Essences Parfumées d'Aphrodite", mx, y);
 
   return doc;
 }
@@ -1312,7 +1320,7 @@ function drawOrderToCanvas(ctx, o, W, logoImg){
   const totLabelW = colW[1]+colW[2], totValW = colW[3];
   const totRowH = 44;
   const remiseTotal = (o.promoDiscount||0) + (o.remise||0);
-  const portLabel = o.livraison === 'marche' ? 'Remis sur le marché' : (o.remisPropre ? 'Main propre' : (o.port>0 ? eur(o.port) : eur(0)));
+  const portLabel = eur(o.port>0 ? o.port : 0);
   const totRows = [
     ['Total', eur(o.total), false],
     ['Remise', remiseTotal>0 ? '-'+eur(remiseTotal) : eur(0), false],
@@ -1333,19 +1341,21 @@ function drawOrderToCanvas(ctx, o, W, logoImg){
 
   ctx.textAlign = 'left'; ctx.fillStyle = dark; ctx.font = '19px Helvetica, Arial, sans-serif';
   ctx.fillText(`Règlement : ${o.paiement || 'à convenir'}`, mx, y); y += 28;
+  ctx.fillText(`Mode de livraison : ${modeLivraisonTexte(o)}`, mx, y); y += 28;
   if(o.note){ ctx.fillText(`Notes : ${o.note}`, mx, y); y += 28; }
   const fid = fideliteLignes(o);
   if(fid.length){
     y += 10;
     ctx.fillStyle = gold; ctx.font = 'bold 19px Helvetica, Arial, sans-serif';
-    ctx.fillText('Fidélité', mx, y); y += 28;
+    ctx.fillText('Programme de fidélité', mx, y); y += 28;
     ctx.fillStyle = dark; ctx.font = '19px Helvetica, Arial, sans-serif';
     fid.forEach(t=>{ ctx.fillText(t, mx, y); y += 28; });
   }
   y += 20;
   ctx.fillStyle = soft; ctx.font = 'italic 17px Helvetica, Arial, sans-serif';
-  ctx.fillText(`Facture envoyée le ${formatDateFR(new Date().toISOString().slice(0,10))} — Merci pour votre confiance, Zulay`, mx, y); y += 24;
-  ctx.fillText("Les Essences Parfumées d'Aphrodite", mx, y);
+  ctx.fillText(`Facture envoyée le ${formatDateFR(new Date().toISOString().slice(0,10))}`, mx, y); y += 24;
+  ctx.fillText('Merci pour votre confiance,', mx, y); y += 24;
+  ctx.fillText("Zulay — Les Essences Parfumées d'Aphrodite", mx, y);
   y += 40;
 
   return y;
