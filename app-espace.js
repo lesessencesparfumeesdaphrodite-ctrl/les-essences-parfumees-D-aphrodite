@@ -115,7 +115,7 @@ function ficheCl(c){
    +'<button class="petit" onclick="ESPACE.enregCl(\''+c.id+'\')">Enregistrer</button><p id="e-msg" class="msg" role="status"></p></div>';
   h+=ligne('👰','Nom de naissance',esc(c.nomNaiss))+ligne('📞','Téléphone',esc(c.tel))+ligne('✉️','Mail',esc(c.mail))+ligne('🏠','Adresse',esc([c.adresse,c.compl,[c.cp,c.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ')))
    +ligne('🎂','Naissance',c.naiss?esc(new Date(c.naiss+'T12:00:00').toLocaleDateString('fr-FR')):'')
-   +ligne('⭐','Points fidélité','<b>'+c.points+' pts</b>'+(c.carte&&c.carte!=='------'?' · '+esc(c.carte):''))
+   +ligne('⭐','Points fidélité','<b>'+c.points+' pts</b>')
    +ligne('📍','Rencontrée','<span>'+esc(c.lieu)+'</span>')+ligne('🌸','Univers',esc(c.univers==='CREA'?'Créations':c.univers==='EXHA'?'EXHALESSENCE':''))
    +ligne('💻','Compte sur le site',c.compte?'✅ créé'+(c.compteLe?' le '+esc(new Date(c.compteLe+'T12:00:00').toLocaleDateString('fr-FR')):''):'❌ pas encore')
    +ligne('🧴','Diagnostic peau',esc(c.diag))+ligne('📦','BOX testée',esc(c.box))+ligne('🎁','Cadeau',esc(c.cadeau));
