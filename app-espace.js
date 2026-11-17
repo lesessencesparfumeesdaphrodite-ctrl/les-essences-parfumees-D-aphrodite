@@ -189,7 +189,7 @@ ESPACE.ajoutTa=function(){
 };
 
 /* =============== CALENDRIER ÉDITORIAL =============== */
-var CA=[],caInfo=null,caTous=false;
+var CA=[],caInfo=null,caTous=false,caFin='';
 var CONSIGNE='Écris la publication ci-dessous pour Les Essences Parfumées d\'Aphrodite. Règles : respecter les 3 archétypes de contenu (Attraction pour accrocher, Qualification pour dire à qui ça s\'adresse avec une liste « C\'est fait pour vous si… », Conversion pour faire passer à l\'action : lien, contact, réservation, commande) ; après le texte, indiquer en une ligne comment les 3 archétypes sont remplis. Le texte est partagé tel quel sur Facebook, Instagram, TikTok et LinkedIn : gras uniquement en Unicode compatible Facebook (jamais d\'astérisques ni de Markdown), liens écrits en entier, emojis simples, texte pas trop long. Ne jamais écrire « artisanal » : écrire « fait main ». Terminer par la bonne conclusion et la bonne signature selon l\'univers.\n\nPublication à écrire : ';
 ESPACE.calendrier=function(){
   $('v-calendrier').innerHTML='<div class="liste" id="ca-zone"></div>';
@@ -200,18 +200,21 @@ function dessCa(){
   CA.forEach(function(it,i){
     if(!caTous&&it.fait)return;
     if(it.section!==sect){sect=it.section;h+='<h3 class="sect">'+esc(sect||'Divers')+'</h3>';}
-    h+='<div class="tache'+(it.fait?' fait':'')+'"><button class="coche'+(it.fait?' on':'')+'" role="checkbox" aria-checked="'+it.fait+'" aria-label="Publié : '+esc(it.texte)+'" onclick="ESPACE.cocherCa('+i+')">'+(it.fait?'✓':'')+'</button><div style="flex:1"><div class="tn">'+esc(it.texte)+'</div></div><button class="mini" onclick="ESPACE.copierCa('+i+',this)">📋 Copier</button></div>';
+    var e=it.fait?'t':it.cours?'c':'p';
+    h+='<div class="tache'+(it.fait?' fait':'')+'"><select class="etat-sel es-'+e+'" aria-label="État : '+esc(it.texte)+'" onchange="ESPACE.etatCa('+i+',this.value)"><option value="À faire"'+(e==='p'?' selected':'')+'>À faire</option><option value="En cours"'+(e==='c'?' selected':'')+'>En cours</option><option value="Terminé"'+(e==='t'?' selected':'')+'>Terminé</option></select><div style="flex:1"><div class="tn">'+esc(it.texte)+'</div></div><button class="mini" onclick="ESPACE.copierCa('+i+',this)">📋 Copier</button></div>';
   });
+  var fin='';if(!caTous){CA.map(function(it,i){return{it:it,i:i};}).filter(function(x){return x.it.fait;}).slice(-10).reverse().forEach(function(x){fin+='<div class="tache fait"><select class="etat-sel es-t" aria-label="État : '+esc(x.it.texte)+'" onchange="ESPACE.etatCa('+x.i+',this.value)"><option value="À faire">À faire</option><option value="En cours">En cours</option><option value="Terminé" selected>Terminé</option></select><div style="flex:1"><div class="tn">'+esc(x.it.texte)+'</div></div></div>';});}
   var rest=CA.filter(function(x){return !x.fait;}).length;
-  z.innerHTML='<h2 class="titre-g">📅 Calendrier éditorial</h2>'+etat(caInfo)
+  z.innerHTML='<h2 class="titre-g">📅 Calendrier éditorial</h2>'+etat(caInfo)+(caFin?'<p class="msg" role="status">'+esc(caFin)+'</p>':'')
    +'<p class="vide" style="text-align:center">'+rest+' publication'+(rest>1?'s':'')+' à faire. « Copier » prépare le texte à coller dans ChatGPT.</p>'
    +(CA.length?'':'<p class="msg" style="color:#a3301f">Notion n\'a renvoyé aucune ligne (0 reçue). Dis-le moi : la connexion de l\'appli à cette page est à vérifier.</p>')+'<div class="chips"><button class="chip'+(!caTous?' on':'')+'" onclick="ESPACE.voirCa(false)">À faire</button><button class="chip'+(caTous?' on':'')+'" onclick="ESPACE.voirCa(true)">Tout voir</button></div>'
-   +'<div class="boite">'+(h||'<p class="vide">Tout est publié 🎉</p>')+'</div>';
+   +'<div class="boite">'+(h||'<p class="vide">Tout est publié 🎉</p>')+'</div>'+(fin?'<div class="boite"><h3>Terminées récemment</h3>'+fin+'</div>':'');
 }
 ESPACE.voirCa=function(v){caTous=v;dessCa();};
-ESPACE.cocherCa=function(i){
-  var it=CA[i];if(!it)return;it.fait=!it.fait;cacheSet('calendrier',{items:CA});dessCa();
-  ecrire('/app/calendrier-coche',{id:it.id,fait:it.fait},function(){});
+ESPACE.etatCa=function(i,v){
+  var it=CA[i];if(!it)return;it.fait=v==='Terminé';it.cours=v==='En cours';cacheSet('calendrier',{items:CA});
+  caFin=v==='Terminé'?'✅ « '+it.texte+' » est terminée : elle est dans « Terminées récemment » (en bas). Pour la remettre, change son état.':'';dessCa();
+  ecrire('/app/calendrier-coche',{id:it.id,etat:v},function(r){if(!r.ok){caFin='⚠️ '+((r.j&&r.j.erreur)||'Erreur');dessCa();}});
 };
 ESPACE.copierCa=function(i,b){
   var it=CA[i];if(!it)return;
