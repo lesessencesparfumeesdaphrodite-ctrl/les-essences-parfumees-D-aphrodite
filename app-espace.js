@@ -50,7 +50,7 @@ function copier(t,ok){
 var ESPACE=window.ESPACE={};
 
 /* =============== CLIENTES =============== */
-var CL=[],clFiltre='',clType='',clOuvert=null,clInfo=null;
+var clPend=null,CL=[],clFiltre='',clType='',clOuvert=null,clInfo=null;
 var TYPES={femme:'Femme',homme:'Homme',societe:'Société',famille:'Famille'};
 function typeCli(c){
   var t=norm(c.type);if(TYPES[t])return t;
@@ -68,7 +68,7 @@ function prodsHabituels(cs){
 }
 ESPACE.clients=function(){
   $('v-clients').innerHTML='<div class="liste" id="cl-zone"></div>';
-  clOuvert=null;
+  clOuvert=clPend||null;clPend=null;if(!clOuvert)clFrom=null;
   lire('clients','/app/clients',function(d,info){clInfo=info;if(d)CL=d.clients||[];dessCl();});
 };
 function dessCl(){
@@ -88,8 +88,8 @@ function dessCl(){
   });
   var chips='<button class="chip'+(clType===''?' on':'')+'" onclick="ESPACE.typeCl(\'\')">Toutes</button>';
   Object.keys(TYPES).forEach(function(k){chips+='<button class="chip t-'+k+(clType===k?' on':'')+'" onclick="ESPACE.typeCl(\''+k+'\')">'+TYPES[k]+'</button>';});
-  z.innerHTML='<h2 class="titre-g">👩 Mes clientes</h2>'+etat(clInfo)
-   +'<input id="cl-q" class="recherche" type="search" placeholder="🔍 Chercher un nom, une ville, un téléphone…" aria-label="Chercher une cliente" value="'+esc(clFiltre)+'" oninput="ESPACE.rechCl(this.value)">'
+  z.innerHTML='<h2 class="titre-g">Mes client(e)s</h2>'+etat(clInfo)
+   +'<input id="cl-q" class="recherche" type="search" placeholder="🔍 Chercher un nom, une ville, un téléphone…" aria-label="Chercher un(e) client(e)" value="'+esc(clFiltre)+'" oninput="ESPACE.rechCl(this.value)">'
    +'<div class="chips">'+chips+'</div><p class="maj">'+liste.length+' fiche'+(liste.length>1?'s':'')+'</p>'+html;
 }
 ESPACE.rechCl=function(v){clFiltre=v;var p=document.activeElement;dessCl();var i=$('cl-q');if(i){i.focus();try{i.setSelectionRange(v.length,v.length);}catch(e){}}};
@@ -102,11 +102,18 @@ function ficheCl(c){
   var hab=prodsHabituels(c.cmds);
   var bonsOk=c.bons.filter(function(b){return !b.utilise&&(!b.fin||b.fin>=auj)&&(b.type!=='Carte cadeau'||b.payee);});
   var bonsR=bonsOk.filter(function(b){return b.type!=='Carte cadeau';}),cartes=bonsOk.filter(function(b){return b.type==='Carte cadeau';});
-  var h='<button class="petit sec" onclick="ESPACE.fermerCl()">← Toutes les clientes</button>'
+  var h='<button class="petit sec" onclick="ESPACE.fermerCl()">← Tous les client(e)s</button>'
    +'<div class="fiche t-'+t+'"><div class="fh"><span class="tag">'+TYPES[t]+'</span><h2>'+esc(c.nom)+'</h2>'+(c.num?'<small>N° client '+esc(c.num)+'</small>':'')+'</div>';
   h+='<div class="actions">'+(c.tel?'<a class="btn-l" href="tel:'+esc(c.tel.replace(/\s/g,''))+'">📞 Appeler</a><a class="btn-l" href="sms:'+esc(c.tel.replace(/\s/g,''))+'">💬 SMS</a>':'')+(c.mail?'<a class="btn-l" href="mailto:'+esc(c.mail)+'">✉️ Écrire</a>':'')
-   +'<button class="btn-l" onclick="ESPACE.bonPour(\''+c.id+'\')">📝 Bon de commande</button></div>';
-  h+=ligne('📞','Téléphone',esc(c.tel))+ligne('✉️','Mail',esc(c.mail))+ligne('🏠','Adresse',esc([c.adresse,c.compl,[c.cp,c.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ')))
+   +'<button class="btn-l" onclick="ESPACE.bonPour(\''+c.id+'\')">📝 Bon de commande</button><button class="btn-l" onclick="ESPACE.editBox()">✏️ Modifier la fiche</button></div>'
+   +'<div class="boite" id="edit-box" hidden><h3>✏️ Modifier la fiche</h3><div class="champs">'
+   +ch('e-nom','Prénom NOM',c.nom)+ch('e-nn','Nom de naissance (nom de jeune fille)',c.nomNaiss)+ch('e-tel','Téléphone',c.tel)+ch('e-mail','Mail',c.mail)+ch('e-adr','Adresse',c.adresse)+ch('e-compl','Complément d\'adresse',c.compl)+ch('e-cp','Code postal',c.cp)+ch('e-ville','Ville',c.ville)+ch('e-naiss','Date de naissance',c.naiss,'date')
+   +'<div><label for="e-sexe">Sexe</label><select id="e-sexe"><option value="F"'+(c.sexe!=='M'?' selected':'')+'>Femme</option><option value="M"'+(c.sexe==='M'?' selected':'')+'>Homme</option></select></div>'
+   +'<div><label for="e-type">Type de fiche</label><select id="e-type">'+Object.keys(TYPES).map(function(k){return '<option value="'+TYPES[k]+'"'+(k===t?' selected':'')+'>'+TYPES[k]+'</option>';}).join('')+'</select></div>'
+   +ch('e-fam','Nom de la famille (pour regrouper)',c.famille)+'</div>'
+   +'<label for="e-rem" style="display:block;font-size:12.5px;font-weight:700;margin:10px 0 4px">Remarque</label><textarea id="e-rem" rows="3" style="width:100%;padding:10px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font:inherit">'+esc(c.remarque)+'</textarea>'
+   +'<button class="petit" onclick="ESPACE.enregCl(\''+c.id+'\')">Enregistrer</button><p id="e-msg" class="msg" role="status"></p></div>';
+  h+=ligne('👰','Nom de naissance',esc(c.nomNaiss))+ligne('📞','Téléphone',esc(c.tel))+ligne('✉️','Mail',esc(c.mail))+ligne('🏠','Adresse',esc([c.adresse,c.compl,[c.cp,c.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ')))
    +ligne('🎂','Naissance',c.naiss?esc(new Date(c.naiss+'T12:00:00').toLocaleDateString('fr-FR')):'')
    +ligne('⭐','Points fidélité','<b>'+c.points+' pts</b>'+(c.carte&&c.carte!=='------'?' · '+esc(c.carte):''))
    +ligne('📍','Rencontrée','<span>'+esc(c.lieu)+'</span>')+ligne('🌸','Univers',esc(c.univers==='CREA'?'Créations':c.univers==='EXHA'?'EXHALESSENCE':''))
@@ -124,26 +131,21 @@ function ficheCl(c){
       +(all.length?prodsHabituels(all).map(function(p){return '<div class="hab"><span>'+esc(p[0])+'</span><b>× '+p[1]+'</b></div>';}).join(''):'<p class="vide">Aucune commande de la famille.</p>')+'</div>';
   }
   h+='<div class="boite"><h3>📜 Historique des commandes ('+c.cmds.length+')</h3>'+(c.cmds.length?c.cmds.map(function(o){return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+eur(o.total)+'</span></div><div class="s">'+esc(o.statut)+(o.origine?' · '+esc(o.origine):'')+'</div><div class="p">'+esc(o.produits)+'</div></div>';}).join(''):'<p class="vide">Aucune commande.</p>')+'</div>';
-  h+='<div class="boite"><h3>✏️ Modifier la fiche</h3><div class="champs">'
-   +ch('e-tel','Téléphone',c.tel)+ch('e-mail','Mail',c.mail)+ch('e-adr','Adresse',c.adresse)+ch('e-cp','Code postal',c.cp)+ch('e-ville','Ville',c.ville)+ch('e-naiss','Date de naissance',c.naiss,'date')
-   +'<div><label for="e-type">Type de fiche</label><select id="e-type">'+Object.keys(TYPES).map(function(k){return '<option value="'+TYPES[k]+'"'+(k===t?' selected':'')+'>'+TYPES[k]+'</option>';}).join('')+'</select></div>'
-   +ch('e-fam','Nom de la famille (pour regrouper)',c.famille)+'</div>'
-   +'<label for="e-rem" style="display:block;font-size:12.5px;font-weight:700;margin:10px 0 4px">Remarque</label><textarea id="e-rem" rows="3" style="width:100%;padding:10px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font:inherit">'+esc(c.remarque)+'</textarea>'
-   +'<button class="petit" onclick="ESPACE.enregCl(\''+c.id+'\')">Enregistrer</button><p id="e-msg" class="msg" role="status"></p></div>';
   return h;
 }
 function ch(id,l,v,ty){return '<div><label for="'+id+'">'+l+'</label><input id="'+id+'" type="'+(ty||'text')+'" value="'+esc(v||'')+'"></div>';}
 ESPACE.enregCl=function(id){
   var c=CL.filter(function(x){return x.id===id;})[0];if(!c)return;
-  var f={tel:$('e-tel').value.trim(),mail:$('e-mail').value.trim(),adresse:$('e-adr').value.trim(),cp:$('e-cp').value.trim(),ville:$('e-ville').value.trim(),naiss:$('e-naiss').value,remarque:$('e-rem').value,type:$('e-type').value,famille:$('e-fam').value.trim()};
+  var f={nom:$('e-nom').value.trim(),nomNaiss:$('e-nn').value.trim(),compl:$('e-compl').value.trim(),sexe:$('e-sexe').value,tel:$('e-tel').value.trim(),mail:$('e-mail').value.trim(),adresse:$('e-adr').value.trim(),cp:$('e-cp').value.trim(),ville:$('e-ville').value.trim(),naiss:$('e-naiss').value,remarque:$('e-rem').value,type:$('e-type').value,famille:$('e-fam').value.trim()};
   $('e-msg').textContent='Enregistrement…';
   ecrire('/app/client-maj',{id:id,champs:f},function(r){
     if(!r.ok){$('e-msg').textContent='⚠️ '+(r.j.erreur||'Erreur');return;}
-    c.tel=f.tel;c.mail=f.mail;c.adresse=f.adresse;c.cp=f.cp;c.ville=f.ville;c.naiss=f.naiss;c.remarque=f.remarque;c.type=f.type;c.famille=f.famille;
+    if(f.nom)c.nom=f.nom;c.nomNaiss=f.nomNaiss;c.compl=f.compl;c.sexe=f.sexe;c.tel=f.tel;c.mail=f.mail;c.adresse=f.adresse;c.cp=f.cp;c.ville=f.ville;c.naiss=f.naiss;c.remarque=f.remarque;c.type=f.type;c.famille=f.famille;
     cacheSet('clients',{clients:CL});
     $('e-msg').textContent=r.differe?'📴 Gardé sur le téléphone, envoyé à Notion dès que le réseau revient.':'✅ Enregistré dans Notion.';
   });
 };
+ESPACE.editBox=function(){var b=$('edit-box');if(!b)return;b.hidden=!b.hidden;if(!b.hidden)b.scrollIntoView({behavior:'smooth',block:'start'});};
 ESPACE.bonPour=function(id){
   var c=CL.filter(function(x){return x.id===id;})[0];if(!c)return;
   var p=c.nom.split(/\s+/);
@@ -164,7 +166,7 @@ function dessTa(){
   function lg(t){var re=t.echeance&&t.echeance<auj&&t.etat!=='Terminé';
     return '<div class="tache'+(t.etat==='Terminé'?' fait':'')+'"><button class="coche'+(t.etat==='Terminé'?' on':'')+'" role="checkbox" aria-checked="'+(t.etat==='Terminé')+'" aria-label="Terminer : '+esc(t.nom)+'" onclick="ESPACE.cocherTa(\''+t.id+'\')">'+(t.etat==='Terminé'?'✓':'')+'</button><div><div class="tn">'+esc(t.nom)+'</div><div class="ts'+(re?' retard':'')+'">'+(t.type==='Publication'?'📱 Publication · ':'')+(t.echeance?(re?'⚠️ ':'')+esc(t.echeance.split('-').reverse().join('/')):'sans date')+(t.etat==='En cours'?' · en cours':'')+'</div></div></div>';}
   z.innerHTML='<h2 class="titre-g">✅ Mes tâches</h2>'+etat(taInfo)
-   +'<div class="boite"><h3>À faire ('+en.length+')</h3>'+(en.length?en.map(lg).join(''):'<p class="vide">Rien à faire, bravo ! 🌸</p>')+'</div>'
+   +(TA.length?'':'<p class="msg" style="color:#a3301f">Notion n\'a renvoyé aucune tâche (0 reçue). Dis-le moi : la connexion de l\'appli à cette page est à vérifier.</p>')+'<div class="boite"><h3>À faire ('+en.length+')</h3>'+(en.length?en.map(lg).join(''):'<p class="vide">Rien à faire, bravo ! 🌸</p>')+'</div>'
    +'<div class="boite"><h3>➕ Nouvelle tâche</h3><div class="champs"><div style="flex:2;min-width:200px"><label for="ta-n">La tâche</label><input id="ta-n" type="text"></div><div><label for="ta-d">Pour le</label><input id="ta-d" type="date"></div></div><button class="petit" onclick="ESPACE.ajoutTa()">Ajouter</button> '+(taMsg?'<span class="msg" role="status">'+esc(taMsg)+'</span>':'')+'</div>'
    +(fi.length?'<div class="boite"><h3>Terminées récemment</h3>'+fi.map(lg).join('')+'</div>':'');
 }
@@ -200,7 +202,7 @@ function dessCa(){
   var rest=CA.filter(function(x){return !x.fait;}).length;
   z.innerHTML='<h2 class="titre-g">📅 Calendrier éditorial</h2>'+etat(caInfo)
    +'<p class="vide" style="text-align:center">'+rest+' publication'+(rest>1?'s':'')+' à faire. « Copier » prépare le texte à coller dans ChatGPT.</p>'
-   +'<div class="chips"><button class="chip'+(!caTous?' on':'')+'" onclick="ESPACE.voirCa(false)">À faire</button><button class="chip'+(caTous?' on':'')+'" onclick="ESPACE.voirCa(true)">Tout voir</button></div>'
+   +(CA.length?'':'<p class="msg" style="color:#a3301f">Notion n\'a renvoyé aucune ligne (0 reçue). Dis-le moi : la connexion de l\'appli à cette page est à vérifier.</p>')+'<div class="chips"><button class="chip'+(!caTous?' on':'')+'" onclick="ESPACE.voirCa(false)">À faire</button><button class="chip'+(caTous?' on':'')+'" onclick="ESPACE.voirCa(true)">Tout voir</button></div>'
    +'<div class="boite">'+(h||'<p class="vide">Tout est publié 🎉</p>')+'</div>';
 }
 ESPACE.voirCa=function(v){caTous=v;dessCa();};
@@ -224,40 +226,83 @@ function contactAn(a){
   return{k:'non',t:'Pas d\'envoi (ni mail ni téléphone)'};
 }
 ESPACE.anniv=function(){
+  ANM=null;
   $('v-anniv').innerHTML='<div class="liste" id="an-zone"></div>';
   lire('anniv','/app/anniv',function(d,info){anInfo=info;if(d)AN=d.anniv||[];dessAn();});
   lire('clients','/app/clients',function(d){if(d)dessAn();});
   lire('filleules','/app/filleules',function(d){if(d)dessAn();});
 };
+var ANM=null,clFrom=null,fiPend=null,fiFrom=false;
+ESPACE.ouvrirAn=function(i){
+  var a=AN[i];if(!a)return;var fil=a.qui==='Filleule',src=cacheGet(fil?'filleules':'clients'),liste=src&&src.d?(fil?src.d.filleules:src.d.clients)||[]:[],k=cleN(a.nom),f=null;
+  for(var n=0;n<liste.length;n++){if(cleN(liste[n].nom)===k){f=liste[n];break;}}
+  if(!f){var z=$('an-zone');if(z&&!z.querySelector('.msg.intr'))z.insertAdjacentHTML('afterbegin','<p class="msg intr" style="color:#a3301f">Fiche de '+esc(a.nom)+' introuvable (le nom n\'est pas écrit pareil dans les fiches).</p>');return;}
+  if(fil){fiPend=f.id;fiQ='';fiFrom=true;aller('filleules');}else{CL=liste;clPend=f.id;clFrom='anniv';aller('clients');}
+};
+ESPACE.moisAn=function(d){var t=new Date();if(!ANM)ANM={y:t.getFullYear(),m:t.getMonth()};if(d===0){ANM={y:t.getFullYear(),m:t.getMonth()};}else{var x=new Date(ANM.y,ANM.m+d,1);ANM={y:x.getFullYear(),m:x.getMonth()};}dessAn();};
 function dessAn(){
   var z=$('an-zone');if(!z)return;var now=new Date();now.setHours(0,0,0,0);
-  var L=AN.map(function(a){var p=a.date.split('-'),m=+p[1]-1,j=+p[2],d=new Date(now.getFullYear(),m,j);if(d<now)d=new Date(now.getFullYear()+1,m,j);return{a:a,d:d,n:Math.round((d-now)/864e5)};}).sort(function(x,y){return x.n-y.n;});
-  var h=L.slice(0,120).map(function(x){var a=x.a,pr=(a.nom||'').split(/\s+/)[0],c=contactAn(a);
+  if(!ANM)ANM={y:now.getFullYear(),m:now.getMonth()};
+  var Y=ANM.y,M=ANM.m,jm={};
+  AN.forEach(function(a,ix){var p=a.date.split('-');if(+p[1]-1===M){a._i=ix;(jm[+p[2]]=jm[+p[2]]||[]).push(a);}});
+  var prem=new Date(Y,M,1),dec=(prem.getDay()+6)%7,nb=new Date(Y,M+1,0).getDate(),cells='',tot=Math.ceil((dec+nb)/7)*7;
+  var J=['lun.','mar.','mer.','jeu.','ven.','sam.','dim.'];
+  for(var k=0;k<tot;k++){
+    var jr=k-dec+1,ok=jr>=1&&jr<=nb,dt=new Date(Y,M,jr),auj=ok&&dt.getTime()===now.getTime(),we=(k%7)>=5;
+    var evs=ok&&jm[jr]?jm[jr].map(function(a){return '<button class="ev '+(a.qui==='Filleule'?'fil':'cli')+'" onclick="ESPACE.ouvrirAn('+a._i+')" aria-label="Ouvrir la fiche de '+esc(a.nom)+'">🎂 '+esc((a.nom||'').split(/\s+/)[0])+'</button>';}).join(''):'';
+    cells+='<div class="cj'+(ok?'':' hors')+(we?' we':'')+'"><span class="nj'+(auj?' auj':'')+'">'+(ok?jr:new Date(Y,M,jr).getDate())+'</span>'+evs+'</div>';
+  }
+  var L=[];Object.keys(jm).forEach(function(d){jm[d].forEach(function(a){L.push({a:a,j:+d});});});L.sort(function(x,y){return x.j-y.j;});
+  var liste=L.map(function(x){var a=x.a,pr=(a.nom||'').split(/\s+/)[0],c=contactAn(a),dt=new Date(Y,M,x.j),n=Math.round((dt-now)/864e5);
     var btn=c.k==='sms'?'<a class="mini" href="sms:'+esc(c.tel.replace(/\s/g,''))+'?&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':'';
-    return '<div class="tache"><div class="jour '+(a.qui==='Filleule'?'fil':'cli')+(x.n===0?' auj':'')+'">'+(x.n===0?'🎉':x.d.getDate()+'<small>'+x.d.toLocaleDateString('fr-FR',{month:'short'})+'</small>')+'</div><div style="flex:1"><div class="tn">'+esc(a.nom)+'</div><div class="ts">'+(a.qui==='Filleule'?'Filleule':'Cliente')+' · '+(x.n===0?'aujourd\'hui':x.n===1?'demain':'dans '+x.n+' jours')+'</div><div class="ts"><span class="stat">'+c.t+'</span></div></div>'+btn+'</div>';}).join('');
-  z.innerHTML='<h2 class="titre-g">Anniversaires</h2>'+etat(anInfo)+'<div class="chips"><span class="chip" style="background:#FBE3EA">Clientes</span><span class="chip" style="background:#FFE9A8">Filleules</span></div><div class="boite">'+(h||'<p class="vide">Aucun anniversaire.</p>')+'</div>';
+    return '<div class="tache" style="cursor:pointer" onclick="if(!event.target.closest(\'a\'))ESPACE.ouvrirAn('+a._i+')"><div class="jour '+(a.qui==='Filleule'?'fil':'cli')+(n===0?' auj':'')+'">'+(n===0?'🎉':x.j+'<small>'+dt.toLocaleDateString('fr-FR',{month:'short'})+'</small>')+'</div><div style="flex:1"><div class="tn">'+esc(a.nom)+'</div><div class="ts">'+(a.qui==='Filleule'?'Filleul(e)':'Client(e)')+(n>=0?' · '+(n===0?'aujourd\'hui':n===1?'demain':'dans '+n+' jours'):'')+'</div><div class="ts"><span class="stat">'+c.t+'</span></div></div>'+btn+'</div>';}).join('');
+  z.innerHTML='<h2 class="titre-g">Anniversaires</h2>'+etat(anInfo)+(AN.length?'':'<p class="msg" style="color:#a3301f">Notion n\'a renvoyé aucun anniversaire (0 reçu). Dis-le moi : la connexion de l\'appli à cette base est à vérifier.</p>')
+   +'<div class="cal-nav"><button class="mini" onclick="ESPACE.moisAn(-1)" aria-label="Mois précédent">‹</button><b>'+MOIS[M]+' '+Y+'</b><button class="mini" onclick="ESPACE.moisAn(1)" aria-label="Mois suivant">›</button><button class="mini" onclick="ESPACE.moisAn(0)">Aujourd\'hui</button></div>'
+   +'<div class="chips"><span class="ev cli" style="font-size:12px">Client(e)s</span><span class="ev fil" style="font-size:12px">Filleul(e)s</span></div>'
+   +'<div class="cal"><div class="cal-h">'+J.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div><div class="cal-g">'+cells+'</div></div>'
+   +'<div class="boite"><h3>Ce mois-ci ('+L.length+')</h3>'+(liste||'<p class="vide">Aucun anniversaire ce mois-ci.</p>')+'</div>';
 }
 
 /* =============== FILLEULES =============== */
 var FI=[],fiInfo=null,fiQ='';
-ESPACE.filleules=function(){
+ESPACE.filleules=function(){if(!fiPend)fiFrom=false;
   $('v-filleules').innerHTML='<div class="liste" id="fi-zone"></div>';
-  lire('filleules','/app/filleules',function(d,info){fiInfo=info;if(d)FI=d.filleules||[];dessFi();});
+  lire('filleules','/app/filleules',function(d,info){fiInfo=info;if(d)FI=d.filleules||[];dessFi();if(fiPend){var c=$('fc-'+fiPend);if(c){c.scrollIntoView({block:'start'});c.style.outline='2px solid #c9a96e';}fiPend=null;}});
 };
+function dateFr(d){return d?d.split('-').reverse().join('/'):'';}
 function dessFi(){
   var z=$('fi-zone');if(!z)return;var q=norm(fiQ);
   var L=FI.filter(function(f){return !q||norm(f.nom+' '+f.ville+' '+f.tel).indexOf(q)>=0;});
-  z.innerHTML='<h2 class="titre-g">🌸 Mes filleules</h2>'+etat(fiInfo)+'<input id="fi-q" class="recherche" type="search" placeholder="🔍 Chercher une filleule" aria-label="Chercher une filleule" value="'+esc(fiQ)+'" oninput="ESPACE.rechFi(this.value)">'
-   +'<p class="maj">'+L.length+' filleule'+(L.length>1?'s':'')+'</p>'+L.map(function(f){return '<div class="boite t-'+(f.sexe==='M'?'homme':'femme')+'"><b>'+esc(f.nom)+'</b>'
-   +ligne('📞','Téléphone',f.tel?'<a href="tel:'+esc(f.tel.replace(/\s/g,''))+'">'+esc(f.tel)+'</a>':'')+ligne('✉️','Mail',esc(f.mail))+ligne('📍','Ville',esc([f.cp,f.ville].filter(Boolean).join(' ')))
-   +ligne('🎂','Naissance',f.naiss?esc(f.naiss.split('-').reverse().join('/')):'')+ligne('📅','Entrée',f.entree?esc(f.entree.split('-').reverse().join('/')):'')+(f.notes?'<div class="rem">📝 '+esc(f.notes)+'</div>':'')+'</div>';}).join('');
+  z.innerHTML='<h2 class="titre-g">Mes filleul(e)s</h2>'+etat(fiInfo)+'<input id="fi-q" class="recherche" type="search" placeholder="🔍 Chercher un(e) filleul(e)" aria-label="Chercher un(e) filleul(e)" value="'+esc(fiQ)+'" oninput="ESPACE.rechFi(this.value)">'
+   +'<p class="maj">'+L.length+' filleul(e)'+(L.length>1?'s':'')+'</p>'+L.map(function(f){var id=f.id;return '<div class="boite t-'+(f.sexe==='M'?'homme':'femme')+'" id="fc-'+id+'"><b>'+esc(f.nom)+'</b>'+(f.nomNaiss?' <small>(née '+esc(f.nomNaiss)+')</small>':'')
+   +'<label class="cn" for="fn-'+id+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 3px">Note</label><textarea id="fn-'+id+'" rows="2" placeholder="Écrire ici…" style="width:100%;padding:8px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font:inherit" onchange="ESPACE.noteFi(\''+id+'\',this)">'+esc(f.notes)+'</textarea><span class="msg" id="fm-'+id+'" role="status"></span>'
+   +ligne('📞','Téléphone',f.tel?'<a href="tel:'+esc(f.tel.replace(/\s/g,''))+'">'+esc(f.tel)+'</a>':'')+ligne('✉️','Mail',esc(f.mail))+ligne('🏠','Adresse',esc([f.adresse,f.compl,[f.cp,f.ville].filter(Boolean).join(' '),f.pays].filter(Boolean).join(', ')))
+   +ligne('🎂','Naissance',esc(dateFr(f.naiss)))+ligne('📅','Entrée',esc(dateFr(f.entree)))
+   +'<button class="petit sec" onclick="ESPACE.editFi(\''+id+'\')">✏️ Modifier la fiche</button>'
+   +'<div id="fe-'+id+'" hidden style="margin-top:8px"><div class="champs">'+ch('fe-nom-'+id,'Prénom NOM',f.nom)+ch('fe-nn-'+id,'Nom de naissance (nom de jeune fille)',f.nomNaiss)+ch('fe-tel-'+id,'Téléphone',f.tel)+ch('fe-mail-'+id,'Mail',f.mail)+ch('fe-adr-'+id,'Adresse',f.adresse)+ch('fe-compl-'+id,'Complément d\'adresse',f.compl)+ch('fe-cp-'+id,'Code postal',f.cp)+ch('fe-ville-'+id,'Ville',f.ville)+ch('fe-pays-'+id,'Pays',f.pays)+ch('fe-naiss-'+id,'Date de naissance',f.naiss,'date')+ch('fe-ent-'+id,'Date d\'entrée',f.entree,'date')
+   +'<div><label for="fe-sexe-'+id+'">Sexe</label><select id="fe-sexe-'+id+'"><option value="F"'+(f.sexe!=='M'?' selected':'')+'>Femme</option><option value="M"'+(f.sexe==='M'?' selected':'')+'>Homme</option></select></div></div>'
+   +'<button class="petit" onclick="ESPACE.enregFi(\''+id+'\')">Enregistrer</button><p id="fx-'+id+'" class="msg" role="status"></p></div></div>';}).join('');
 }
+function majFi(id,champs,cb){
+  ecrire('/app/filleule-maj',{id:id,champs:champs},function(r){
+    if(!r.ok){cb('⚠️ '+(r.j.erreur||'Erreur'));return;}
+    var f=FI.filter(function(x){return x.id===id;})[0];if(f)for(var k in champs)f[k]=champs[k];
+    cacheSet('filleules',{filleules:FI});cb(r.differe?'📴 Gardé sur le téléphone, envoyé à Notion dès que le réseau revient.':'✅ Enregistré dans Notion.');
+  });
+}
+ESPACE.noteFi=function(id,el){var m=$('fm-'+id);m.textContent='Enregistrement…';majFi(id,{notes:el.value},function(t){m.textContent=t;});};
+ESPACE.editFi=function(id){var b=$('fe-'+id);if(b)b.hidden=!b.hidden;};
+ESPACE.enregFi=function(id){
+  var g=function(k){return $('fe-'+k+'-'+id).value.trim();};
+  var c={nom:g('nom'),nomNaiss:g('nn'),tel:g('tel'),mail:g('mail'),adresse:g('adr'),compl:g('compl'),cp:g('cp'),ville:g('ville'),pays:g('pays'),naiss:g('naiss'),entree:g('ent'),sexe:g('sexe')};
+  var m=$('fx-'+id);m.textContent='Enregistrement…';majFi(id,c,function(t){m.textContent=t;});
+};
 ESPACE.rechFi=function(v){fiQ=v;dessFi();var i=$('fi-q');if(i){i.focus();try{i.setSelectionRange(v.length,v.length);}catch(e){}}};
 
 /* =============== FINANCES EXHALESSENCE (données gardées dans l'app) =============== */
-var FIN_TAB=null,FIN_AN=2025,PQ='';
+var FIN_TAB=null,FIN_AN=new Date().getFullYear(),PQ='',FINN=[],FINMSG='';
 var MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-ESPACE.finances=function(){FIN_TAB=null;$('v-finances').innerHTML='<div class="liste" id="fin-zone"></div>';dessFin();};
+ESPACE.finances=function(){FIN_TAB=null;$('v-finances').innerHTML='<div class="liste" id="fin-zone"></div>';dessFin();lire('fin','/app/fin',function(d){if(d){FINN=d.lignes||[];if(FIN_TAB&&FIN_TAB!=='prix')dessFin();}});};
 function dessFin(){
   var D=window.DONNEES_EXH,z=$('fin-zone');if(!z||!D)return;
   var h='<h2 class="titre-g">Suivi financier EXHALESSENCE</h2>';
@@ -271,31 +316,58 @@ function dessFin(){
       h+='<div class="boite"><h3>'+esc(g.titre)+'</h3><div class="tab"><div class="th"><span>Produit</span><span>Pts</span><span>Cons.</span><span>Client</span></div>'+it.map(function(i){return '<div class="tr"><span>'+esc(i.nom)+'</span><span>'+(i.pts==null?'—':i.pts)+'</span><span>'+eur(i.cons)+'</span><span>'+eur(i.client)+'</span></div>';}).join('')+'</div></div>';
     });
   }else{
-    var ans=Object.keys(FIN_TAB==='comm'?D.commissions:D.marges).sort().reverse();
-    h+='<div class="chips">'+ans.map(function(a){return '<button class="chip'+(+a===FIN_AN?' on':'')+'" onclick="ESPACE.anFin('+a+')">'+a+'</button>';}).join('')+'</div>';
-    var rows=(FIN_TAB==='comm'?D.commissions:D.marges)[FIN_AN]||[];
-    if(FIN_TAB==='comm'){
-      var tp=0,tr=0,tt=0,tc=0;
-      h+='<div class="boite"><h3>Année '+FIN_AN+'</h3><div class="tab"><div class="th c5"><span>Mois</span><span>Perso</span><span>Réseau</span><span>Total</span><span>Commission</span></div>'
-       +rows.map(function(r,i){tp+=r[0];tr+=r[1];tt+=r[2];tc+=r[3];return '<div class="tr c5"><span>'+MOIS[i]+'</span><span>'+r[0]+'</span><span>'+r[1]+'</span><span>'+r[2]+'</span><span>'+eur(r[3])+'</span></div>';}).join('')
-       +'<div class="tr c5 tot"><span>Total</span><span>'+tp+'</span><span>'+tr+'</span><span>'+tt+'</span><span>'+eur(tc)+'</span></div></div></div>';
-    }else{
-      var tv=0,ta=0,tk=0;
-      h+='<div class="boite"><h3>Beauté &amp; Parfum '+FIN_AN+'</h3><div class="tab"><div class="th c5"><span>Mois</span><span>Ventes</span><span>Achats</span><span>Solde</span><span>Commission</span></div>'
-       +rows.map(function(r,i){tv+=r[0];ta+=r[1];tk+=r[2];return '<div class="tr c5"><span>'+MOIS[i]+'</span><span>'+eur(r[0])+'</span><span>'+eur(r[1])+'</span><span>'+eur(r[0]-r[1])+'</span><span>'+eur(r[2])+'</span></div>';}).join('')
-       +'<div class="tr c5 tot"><span>Total</span><span>'+eur(tv)+'</span><span>'+eur(ta)+'</span><span>'+eur(tv-ta)+'</span><span>'+eur(tk)+'</span></div></div></div>'
-       +'<p class="vide">Avant 2023 : '+Object.keys(D.anciennesMarges).map(function(k){return k+' — '+D.anciennesMarges[k];}).join(' · ')+'. Le détail est dans Notion.</p>';
-    }
+    h+=tabEdit(FIN_TAB,FIN_AN,'ESPACE.anFin');
   }
   z.innerHTML=h;
 }
-ESPACE.tabFin=function(t){FIN_TAB=t;if(t==='comm'&&!window.DONNEES_EXH.commissions[FIN_AN])FIN_AN=2025;dessFin();};
-ESPACE.anFin=function(a){FIN_AN=a;dessFin();};
+ESPACE.tabFin=function(t){FIN_TAB=t;FINMSG='';dessFin();};
+
+var TYPE_N={marge:'Marge EXHA',comm:'Points EXHA',urssaf:'URSSAF créations'};
+var KEYS={marge:['ventes','achats','commission'],comm:['perso','reseau','total','commission'],urssaf:['ventes','achats','paypal','declaration','paiement']};
+function statRow(type,an,m){var D=window.DONNEES_EXH,C=window.DONNEES_CREA;var src=type==='marge'?D.marges:type==='comm'?D.commissions:C.urssaf;return ((src||{})[an]||[])[m]||[];}
+function ligneFin(type,an,m){return FINN.filter(function(x){return x.type===TYPE_N[type]&&x.annee===an&&x.mois===m+1;})[0];}
+function fv(type,an,m){var st=statRow(type,an,m),ln=ligneFin(type,an,m);return KEYS[type].map(function(k,i){return ln&&ln[k]!=null?ln[k]:(st[i]!==undefined?st[i]:null);});}
+function cel(type,an,m,i,v,lib){return '<input class="cel" inputmode="decimal" aria-label="'+esc(lib+' '+MOIS[m]+' '+an)+'" value="'+(v==null?'':esc(String(v).replace('.',',')))+'" onchange="ESPACE.celFin(\''+type+'\','+an+','+m+','+i+',this)">';}
+function anneesFin(type){
+  var D=window.DONNEES_EXH,C=window.DONNEES_CREA,src=type==='marge'?D.marges:type==='comm'?D.commissions:C.urssaf,s={};
+  Object.keys(src||{}).forEach(function(a){s[a]=1;});FINN.forEach(function(x){if(x.type===TYPE_N[type])s[x.annee]=1;});s[new Date().getFullYear()]=1;s[new Date().getFullYear()+1]=1;
+  return Object.keys(s).map(Number).sort(function(a,b){return b-a;});
+}
+function tabEdit(type,an,fnAn){
+  var D=window.DONNEES_EXH,m,r,h='',tot=[];
+  h+='<div class="chips">'+anneesFin(type).map(function(a){return '<button class="chip'+(a===an?' on':'')+'" onclick="'+fnAn+'('+a+')">'+a+'</button>';}).join('')+'</div>';
+  if(FINMSG)h+='<p class="msg" role="status">'+esc(FINMSG)+'</p>';
+  var labs={marge:['Ventes','Achats','Solde','Commission'],comm:['Perso','Réseau','Total','Commission'],urssaf:['Ventes','Achats','PayPal','Déclar.','Payé']};
+  var ks=KEYS[type],nc=ks.length+(type==='marge'?1:0),cls=nc===4?'c5':nc===5?'c5':'c6';
+  if(type==='comm')cls='c5';if(type==='marge')cls='c5';if(type==='urssaf')cls='c6';
+  h+='<div class="boite"><h3>Année '+an+'</h3><p class="vide">Touche une case pour écrire ou corriger : c\'est enregistré tout de suite dans Notion.</p><div class="tab"><div class="th '+cls+'"><span>Mois</span>'+labs[type].map(function(l){return '<span>'+l+'</span>';}).join('')+'</div>';
+  var T=[0,0,0,0,0,0];
+  for(m=0;m<12;m++){
+    r=fv(type,an,m);var cells='';
+    if(type==='marge'){T[0]+=r[0]||0;T[1]+=r[1]||0;T[2]+=r[2]||0;cells=cel(type,an,m,0,r[0],'Ventes')+cel(type,an,m,1,r[1],'Achats')+'<span>'+eur((r[0]||0)-(r[1]||0))+'</span>'+cel(type,an,m,2,r[2],'Commission');}
+    else{r.forEach(function(v,i){T[i]+=v||0;cells+=cel(type,an,m,i,v,labs[type][i]);});}
+    h+='<div class="tr '+cls+'"><span>'+MOIS[m].slice(0,4)+'.</span>'+cells+'</div>';
+  }
+  var tl=type==='marge'?[eur(T[0]),eur(T[1]),eur(T[0]-T[1]),eur(T[2])]:type==='comm'?[T[0],T[1],T[2],eur(T[3])]:T.slice(0,5).map(eur);
+  h+='<div class="tr '+cls+' tot"><span>Total</span>'+tl.map(function(v){return '<span>'+v+'</span>';}).join('')+'</div></div></div>';
+  if(type==='marge')h+='<p class="vide">Avant 2023 : '+Object.keys(D.anciennesMarges).map(function(k){return k+' — '+D.anciennesMarges[k];}).join(' · ')+'.</p>';
+  return h;
+}
+ESPACE.celFin=function(type,an,m,i,el){
+  var raw=el.value.trim().replace(',','.').replace(/\s/g,''),v=raw===''?0:parseFloat(raw);
+  if(isNaN(v)){el.style.borderColor='#a3301f';FINMSG='⚠️ Écris seulement un nombre.';return;}
+  var k=KEYS[type][i],ln=ligneFin(type,an,m);if(!ln){ln={type:TYPE_N[type],annee:an,mois:m+1};FINN.push(ln);}
+  ln[k]=v;var vals={};vals[k]=v;cacheSet('fin',{lignes:FINN});FINMSG='Enregistrement…';
+  var redraw=function(){if(type==='urssaf')dessUr();else dessFin();};redraw();
+  ecrire('/app/fin-maj',{type:TYPE_N[type],annee:an,mois:m+1,vals:vals},function(r){FINMSG=!r.ok?'⚠️ '+(r.j.erreur||'Erreur'):(r.differe?'📴 Gardé sur le téléphone, envoyé à Notion dès que le réseau revient.':'✅ Enregistré dans Notion.');redraw();});
+};
+ESPACE.anFin=function(a){FIN_AN=a;FINMSG='';dessFin();};
 ESPACE.rechP=function(v){PQ=v;dessFin();var i=$('pq');if(i){i.focus();try{i.setSelectionRange(v.length,v.length);}catch(e){}}};
 
 /* =============== PAGES D'ACTIVITÉ =============== */
 ESPACE.retourInterne=function(v){
-  if(v==='clients'&&clOuvert){clOuvert=null;dessCl();return true;}
+  if(v==='filleules'&&fiFrom){fiFrom=false;aller('anniv',true);return true;}
+  if(v==='clients'&&clOuvert){clOuvert=null;if(clFrom){clFrom=null;aller('anniv');return true;}dessCl();return true;}
   if(v==='finances'&&FIN_TAB){FIN_TAB=null;dessFin();return true;}
   return false;
 };
@@ -306,11 +378,9 @@ ESPACE.tarifs=function(){
    +'<div class="boite"><h3>Suppléments de personnalisation (prix unitaire)</h3>'+D.supplements.map(function(f){return '<div class="hab"><span>'+esc(f[0])+'</span><b>'+eur(f[1])+'</b></div>';}).join('')+'</div>'
    +'<div class="boite"><h3>Comment le prix est calculé</h3>'+D.formules.map(function(f){return '<p class="vide" style="margin:6px 0">'+esc(f)+'</p>';}).join('')+'</div></div>';
 };
-ESPACE.urssaf=function(){
-  var D=window.DONNEES_CREA,z=$('v-urssaf'),rows=D.urssaf['2026'],t=[0,0,0,0,0];
-  function c(v){return v==null?'—':eur(v);}
-  z.innerHTML='<div class="liste"><h2 class="titre-g">Ventes et URSSAF (créations)</h2><p class="vide" style="text-align:center">Uniquement tes créations. Pour la déclaration URSSAF et les impôts. Année 2026.</p><div class="boite"><div class="tab"><div class="th c6"><span>Mois</span><span>Ventes</span><span>Achats</span><span>PayPal</span><span>Déclar.</span><span>Payé</span></div>'
-   +rows.map(function(r,i){for(var k=0;k<5;k++)t[k]+=r[k]||0;return '<div class="tr c6"><span>'+MOIS[i]+'</span>'+r.map(function(v){return '<span>'+c(v)+'</span>';}).join('')+'</div>';}).join('')
-   +'<div class="tr c6 tot"><span>Total</span>'+t.map(function(v){return '<span>'+eur(v)+'</span>';}).join('')+'</div></div></div><p class="vide">Ventes = payé par les clients · Achats = pour tes créations · PayPal = reçu après frais · Déclar. = chiffre déclaré à l\'URSSAF · Payé = versé à l\'URSSAF. Les données se complètent dans Notion.</p></div>';
-};
+var UR_AN=new Date().getFullYear();
+function dessUr(){var z=$('v-urssaf');if(!z)return;
+  z.innerHTML='<div class="liste"><h2 class="titre-g">Ventes et URSSAF (créations)</h2><p class="vide" style="text-align:center">Uniquement tes créations plâtre résine.</p>'+tabEdit('urssaf',UR_AN,'ESPACE.anUr')+'<p class="vide">Ventes = payé par les clients · Achats = pour tes créations · PayPal = reçu après frais · Déclar. = chiffre déclaré à l\'URSSAF · Payé = versé à l\'URSSAF.</p></div>';}
+ESPACE.anUr=function(a){UR_AN=a;FINMSG='';dessUr();};
+ESPACE.urssaf=function(){FINMSG='';dessUr();lire('fin','/app/fin',function(d){if(d){FINN=d.lignes||[];dessUr();}});};
 })();

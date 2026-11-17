@@ -140,6 +140,10 @@ body{background:#FFFDF9}
 .jour.fil{background:#FFE9A8}.jour.cli{background:#FBE3EA}
 .stat{display:inline-block;font-size:11.5px;border-radius:10px;padding:1px 8px;background:var(--sable);margin-left:4px}
 .hubf{display:grid;gap:10px;margin:12px 0}
+.annee{font-family:Georgia,serif;font-size:24px;color:#4a2f2b;margin:18px 4px 2px;border-bottom:2px solid #c9a96e}.mois{font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#8a5a44;margin:14px 6px 4px}.mois span{font-weight:400;color:#9a8a7a}.cel{width:100%;min-width:0;padding:6px 4px;border:1px solid #d9c9a8;border-radius:8px;font:inherit;font-size:12.5px;text-align:right;background:#fff}.hubf{display:grid;gap:10px;margin-top:10px}
+.siteweb{display:block;margin:14px 0 6px;padding:14px;text-align:center;border:1.5px solid #c9a96e;border-radius:14px;background:#fff;color:#4a2f2b;font-weight:700;text-decoration:none}
+.cal-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0}.cal-nav b{min-width:140px;text-align:center;font-family:Georgia,serif;font-size:18px;color:#4a2f2b}.cal{background:#fff;border:1px solid #e3d6bd;border-radius:12px;overflow:hidden;margin-bottom:12px}.cal-h{display:grid;grid-template-columns:repeat(7,1fr);font-size:10.5px;color:#9a8a7a;text-align:center;padding:5px 0;border-bottom:1px solid #eee3cf}.cal-g{display:grid;grid-template-columns:repeat(7,1fr)}.cj{min-height:66px;border-right:1px solid #f0e6d3;border-bottom:1px solid #f0e6d3;padding:2px;display:flex;flex-direction:column;gap:2px;min-width:0}.cj:nth-child(7n){border-right:0}.cj.we{background:#f9f7f3}.cj.hors .nj{color:#c8bda9}.nj{align-self:flex-end;font-size:11px;color:#6b5b4b;min-width:18px;height:18px;line-height:18px;text-align:center}.nj.auj{background:#e0584b;color:#fff;border-radius:50%}.ev{display:block;font-size:9.5px;font-weight:700;border-radius:5px;padding:1px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#3a2a22}.ev.fil{background:#FFE08A}.ev.cli{background:#BFE3DC}.jour.cli{background:#BFE3DC!important}.jour.fil{background:#FFE08A!important}
+button.ev{border:0;width:100%;text-align:left;font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -165,7 +169,7 @@ body{background:#FFFDF9}
     <div class="accueil">
       <div class="hdr"><p class="hdate" id="hdate"></p><p class="hmeteo" id="hmeteo"></p></div>
       <div class="nvs">
-        <button class="nv" onclick="aller('clients')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Clientes</span></button>
+        <button class="nv" onclick="aller('clients')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Client(e)s</span></button>
         <button class="nv" onclick="aller('bon')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span>Bon de commande</span></button>
         <button class="nv" onclick="aller('taches')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Mes tâches</span></button>
         <button class="nv" onclick="aller('calendrier')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Calendrier éditorial</span></button>
@@ -174,8 +178,9 @@ body{background:#FFFDF9}
       </div>
       <div class="activites">
         <button class="act a1" onclick="aller('creations')"><b>Créations plâtre résine</b><small>Calcul, tarifs, URSSAF</small></button>
-        <button class="act a2" onclick="aller('exha')"><b>EXHALESSENCE</b><small>Filleules, suivi financier</small></button>
+        <button class="act a2" onclick="aller('exha')"><b>EXHALESSENCE</b><small>Filleul(e)s, suivi financier</small></button>
       </div>
+      <a class="siteweb" href="https://www.lesessencesparfumeesdaphrodite.fr/" target="_blank" rel="noopener">Site internet</a>
     </div>
   </section>
   <section class="vue" id="v-creations"><div class="hub">
@@ -184,7 +189,7 @@ body{background:#FFFDF9}
     <button class="nv" onclick="aller('urssaf')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Ventes et URSSAF (créations)</span></button>
   </div></section>
   <section class="vue" id="v-exha"><div class="hub">
-    <button class="nv" onclick="aller('filleules')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Filleules</span></button>
+    <button class="nv" onclick="aller('filleules')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Filleul(e)s</span></button>
     <button class="nv" onclick="aller('finances')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Suivi financier</span></button>
   </div></section>
   <section class="vue" id="v-clients"></section>
@@ -208,7 +213,7 @@ var code='';try{code=localStorage.getItem(CLE)||'';}catch(e){}
 var PAGES={bon:'bon-salon.html',outil:'outil.html',fidelite:'carnet-fidelite.html'};
 var PARENT={commandes:'accueil',bon:'accueil',clients:'accueil',taches:'accueil',calendrier:'accueil',anniv:'accueil',creations:'accueil',exha:'accueil',fidelite:'accueil',outil:'creations',tarifs:'creations',urssaf:'creations',filleules:'exha',finances:'exha'};
 var cur='accueil';
-var TITRES={tarifs:'Tarifs finitions et suppléments',urssaf:'Ventes et URSSAF',accueil:'Espace administrateur',commandes:'Commandes',bon:'Bon de commande',outil:'Calcul rapide et catalogue',fidelite:'Fidélité',creations:'Créations plâtre résine',exha:'EXHALESSENCE',clients:'Clientes',taches:'Mes tâches',calendrier:'Calendrier éditorial',anniv:'Anniversaires',filleules:'Filleules',finances:'Suivi financier'};
+var TITRES={tarifs:'Tarifs finitions et suppléments',urssaf:'Ventes et URSSAF',accueil:'Espace administrateur',commandes:'Commandes',bon:'Bon de commande',outil:'Calcul rapide et catalogue',fidelite:'Fidélité',creations:'Créations plâtre résine',exha:'EXHALESSENCE',clients:"Client(e)s",taches:'Mes tâches',calendrier:'Calendrier éditorial',anniv:'Anniversaires',filleules:"Filleul(e)s",finances:'Suivi financier'};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function post(p,b){b=b||{};b.code=code;return fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,st:r.status,j:j};});}).catch(function(){return{ok:false,st:0,j:{erreur:'Pas de réseau.'}};});}
 function memoriser(c){code=c;try{localStorage.setItem(CLE,c);localStorage.setItem('aph_adm_code',c);}catch(e){}}
@@ -237,7 +242,7 @@ function aller(v,np){
   document.getElementById('titre').textContent=TITRES[v];
   document.getElementById('retour').style.display=v==='accueil'?'none':'';
   if(PAGES[v]){var f=document.getElementById('f-'+v);if(!f.getAttribute('src')||(v==='bon'&&!window._bonPref&&f.getAttribute('src').indexOf('?')>0))f.setAttribute('src',PAGES[v]);if(v==='bon')window._bonPref=false;}
-  if(v==='commandes'){chargerSite();chargerExh();}
+  if(v==='commandes'){chargerCmd();}
   if(window.ESPACE&&ESPACE[v])ESPACE[v]();
   window.scrollTo(0,0);
 }
@@ -245,23 +250,24 @@ function aller(v,np){
 var STAT=['Reçue','En cours de création','En cours de commande','Prête','Expédiée','Terminée'];
 var STX=['Nouvelle','Validée','En cours de commande','Expédiée','À récupérer','Terminée'];
 var REG=['','Virement','Carte bancaire','Espèces','PayPal','Chèque','Wero','Autre'];
-var cmds=[],ex=[],msgS='',msgX='';
-function chargerSite(){msgS='Chargement…';dessiner();post('/admin/commandes').then(function(r){if(!r.ok){msgS=r.j.erreur||'Erreur';cmds=[];}else{cmds=r.j.commandes||[];msgS='';}dessiner();});}
-function chargerExh(){msgX='Chargement…';dessiner();post('/admin/exh-commandes').then(function(r){if(!r.ok){msgX=r.j.erreur||'Erreur';ex=[];}else{ex=r.j.commandes||[];msgX='';}dessiner();});}
-function repli(id,tete,corps){var o=OUV[id];return '<div class="cmd2"><button class="lg" aria-expanded="'+(!!o)+'" onclick="basc(this,\''+id+'\')"><span class="lt">'+tete+'</span><span class="fl2">'+(o?'▲':'▼')+'</span></button><div class="corps"'+(o?'':' hidden')+'>'+corps+'</div></div>';}
-var OUV={};
-function basc(b,id){var c=b.nextElementSibling;var h=!c.hidden;c.hidden=h;OUV[id]=!h;b.setAttribute('aria-expanded',String(!h));b.lastChild.textContent=h?'▼':'▲';}
-function carteS(o,i){
-  return repli('s'+o.id,'<b>'+esc(o.nom||o.mail)+'</b><small>'+esc(o.numero)+' · '+esc(o.date)+' · '+esc(String(o.total).replace('.',','))+' € · '+esc(o.statut)+'</small>','<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
-  +'<div class="s">'+esc(o.nom)+' — '+esc(o.mail)+'</div><div class="p">'+esc(o.produits)+'</div>'
-  +'<div class="p">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>'+(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
-  +'<div class="champs"><div><label for="s-st-'+i+'">Statut</label><select id="s-st-'+i+'">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
+var all=[],msgC='',OUV={},FN={};
+function nomAff(n){n=String(n||'').trim();var t=n.split(/\s+/);if(t.length>=2&&t[0].length>1&&t[0]===t[0].toUpperCase()&&/[a-zà-ÿ]/.test(t.slice(1).join(' '))&&t[t.length-1]!==t[t.length-1].toUpperCase())return t.slice(1).join(' ')+' '+t[0];return n;}
+function dfr(d){return d?d.split('-').reverse().join('/'):'';}
+function chargerCmd(){msgC='Chargement…';dessiner();post('/app/commandes').then(function(r){if(!r.ok){msgC=r.j.erreur||'Erreur';all=[];}else{all=r.j.commandes||[];all.sort(function(x,y){return (y.date||'').localeCompare(x.date||'')||(y.cree||'').localeCompare(x.cree||'');});msgC='';}dessiner();});}
+function repli(id,tete,fn){FN[id]=fn;var o=OUV[id];return '<div class="cmd2"><button class="lg" aria-expanded="'+(!!o)+'" onclick="basc(this,\''+id+'\')"><span class="lt">'+tete+'</span><span class="fl2">'+(o?'▲':'▼')+'</span></button><div class="corps"'+(o?'':' hidden')+'>'+(o?fn():'')+'</div></div>';}
+function basc(b,id){var c=b.nextElementSibling;var h=!c.hidden;if(!h&&!c.innerHTML)c.innerHTML=FN[id]();c.hidden=h;OUV[id]=!h;b.setAttribute('aria-expanded',String(!h));b.lastChild.textContent=h?'▼':'▲';}
+function eu(n){return esc(String(n).replace('.',','))+' €';}
+function bodyS(o,i){
+  return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(dfr(o.date))+'</strong><span>'+eu(o.total)+'</span></div>'
+  +'<div class="s">'+esc(o.nom)+(o.mail?' — '+esc(o.mail):'')+'</div><div class="p">'+esc(o.produits)+'</div>'
+  +((o.mode||o.relais||o.adresse)?'<div class="p">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>':'')+(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
+  +'<div class="champs"><div><label for="s-st-'+i+'">Statut</label><select id="s-st-'+i+'">'+(o.statut?'':'<option value="">—</option>')+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
   +'<div><label for="s-pa-'+i+'">Paiement reçu</label><input id="s-pa-'+i+'" type="text" placeholder="Ex : virement, espèces" value="'+esc(o.paiement)+'"></div>'
   +'<div><label for="s-su-'+i+'">N° de suivi</label><input id="s-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
-  +'<button class="petit" onclick="saveS('+i+')">Enregistrer</button></div>');
+  +'<button class="petit" onclick="saveS('+i+')">Enregistrer</button></div>';
 }
-function carteX(o,i){
-  return repli('x'+o.id,'<b>'+esc(o.nom||o.mail)+'</b><small>'+esc(o.numero)+' · '+esc(o.date)+' · '+esc(String(o.total).replace('.',','))+' € · '+esc(o.statut)+'</small>','<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
+function bodyX(o,i){
+  return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(dfr(o.date))+'</strong><span>'+eu(o.total)+'</span></div>'
   +'<div class="s">'+esc(o.nom)+' — '+esc(o.mail)+' — '+esc(o.tel)+'</div><div class="p">'+esc(o.produits)+'</div>'
   +'<div class="p">🚚 '+esc(o.livraison)+' — '+esc(o.adresse)+'<br>💳 Paiement souhaité : <b>'+esc(o.souhaite)+'</b></div>'+(o.notes?'<div class="p">📝 '+esc(o.notes)+'</div>':'')
   +'<div class="champs"><div><label for="x-st-'+i+'">Statut</label><select id="x-st-'+i+'">'+STX.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
@@ -269,25 +275,26 @@ function carteX(o,i){
   +'<div class="champs"><div style="flex:2;min-width:200px"><label for="x-de-'+i+'">Livraison estimée (obligatoire pour valider)</label><input id="x-de-'+i+'" type="text" placeholder="Ex : entre le 24 et le 27 novembre" value="'+esc(o.delai)+'"></div>'
   +'<div><label for="x-su-'+i+'">N° de suivi Chronopost relais</label><input id="x-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
   +'<label for="x-mo-'+i+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 4px">Petit mot pour la cliente (facultatif)</label><div class="champs"><div><input id="x-mo-'+i+'" type="text" value="'+esc(o.mot)+'"></div></div>'
-  +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>');
+  +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>';
 }
+var MM=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 function dessiner(){
-  var cr='',ma='',nc=0,nm=0;
-  cmds.forEach(function(o,i){if(o.origine==='Salon'){nm++;ma+=carteS(o,i);}else{nc++;cr+=carteS(o,i);}});
-  var ee='';ex.forEach(function(o,i){ee+=carteX(o,i);});
-  var m1=msgS?'<p class="msg" role="status">'+esc(msgS)+'</p>':'',m2=msgX?'<p class="msg" role="status">'+esc(msgX)+'</p>':'';
-  document.getElementById('liste').innerHTML=
-   '<h2 class="titre-g">Commandes</h2>'
-  +'<div class="boite"><h3>🎨 Créations plâtre résine</h3>'+m1+(nc||msgS?'':'<p class="vide">Aucune commande pour le moment.</p>')+cr+'</div>'
-  +'<div class="boite"><h3>🌸 EXHALESSENCE</h3>'+m2+(ex.length||msgX?'':'<p class="vide">Aucune commande pour le moment.</p>')+ee+'</div>'
-  +'<div class="boite"><h3>🎪 Commandes Marché/Salon</h3>'+m1+(nm||msgS?'':'<p class="vide">Aucune commande pour le moment.</p>')+ma+'</div>'
-  +'<button class="petit sec" onclick="aller(\'commandes\')">↻ Actualiser</button>';
+  var h='',an='',mo='',n={};
+  all.forEach(function(o){var k=(o.date||'0000-00').slice(0,7);n[k]=(n[k]||0)+1;});
+  all.forEach(function(o,i){
+    var d=o.date||'',y=d.slice(0,4)||'?',m=d.slice(0,7);
+    if(y!==an){an=y;mo='';h+='<h2 class="annee">'+esc(y)+'</h2>';}
+    if(m!==mo){mo=m;h+='<h3 class="mois">'+esc(MM[(+d.slice(5,7)||1)-1])+' <span>('+n[m]+')</span></h3>';}
+    var tete='<b>'+esc(nomAff(o.nom||o.mail))+'</b><small>'+esc(dfr(d))+' · '+eu(o.total)+' · '+esc(o.statut||'—')+'</small>';
+    h+=repli(o.src+o.id,tete,function(){return o.src==='X'?bodyX(o,i):bodyS(o,i);});
+  });
+  document.getElementById('liste').innerHTML='<h2 class="titre-g">Commandes</h2>'+(msgC?'<p class="msg" role="status">'+esc(msgC)+'</p>':'')+(all.length||msgC?'':'<p class="vide">Aucune commande pour le moment.</p>')+'<div class="boite" style="padding:6px 8px">'+h+'</div><button class="petit sec" onclick="aller(\'commandes\')">↻ Actualiser</button>';
 }
 function g(id){return document.getElementById(id).value;}
-function saveS(i){var o=cmds[i];if(!o)return;msgS='Enregistrement…';dessiner();
-  post('/admin/maj',{id:o.id,statut:g('s-st-'+i),paiement:g('s-pa-'+i),suivi:g('s-su-'+i)}).then(function(r){if(!r.ok){msgS='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgS='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerSite();});}
-function saveX(i){var o=ex[i];if(!o)return;var b={id:o.id,statut:g('x-st-'+i),regle:g('x-re-'+i),delai:g('x-de-'+i),suivi:g('x-su-'+i),mot:g('x-mo-'+i)};msgX='Enregistrement…';dessiner();
-  post('/admin/exh-maj',b).then(function(r){if(!r.ok){msgX='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgX='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerExh();});}
+function saveS(i){var o=all[i];if(!o)return;msgC='Enregistrement…';dessiner();
+  post('/admin/maj',{id:o.id,statut:g('s-st-'+i)||undefined,paiement:g('s-pa-'+i),suivi:g('s-su-'+i)}).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerCmd();});}
+function saveX(i){var o=all[i];if(!o)return;var b={id:o.id,statut:g('x-st-'+i),regle:g('x-re-'+i),delai:g('x-de-'+i),suivi:g('x-su-'+i),mot:g('x-mo-'+i)};msgC='Enregistrement…';dessiner();
+  post('/admin/exh-maj',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerCmd();});}
 /* ---- démarrage ---- */
 code='';
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw-salon.js').catch(function(){});}
