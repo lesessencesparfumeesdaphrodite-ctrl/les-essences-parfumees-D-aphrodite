@@ -154,26 +154,29 @@ ESPACE.bonPour=function(id){
 };
 
 /* =============== TÂCHES =============== */
-var TA=[],taInfo=null,taMsg='';
+var TA=[],taInfo=null,taMsg='',taFin='';
+function jourTa(e){return String(e||'').slice(0,10);}
 ESPACE.taches=function(){
   $('v-taches').innerHTML='<div class="liste" id="ta-zone"></div>';
   lire('taches','/app/taches',function(d,info){taInfo=info;if(d)TA=d.taches||[];dessTa();});
 };
 function dessTa(){
   var z=$('ta-zone');if(!z)return;var auj=new Date().toISOString().slice(0,10);
+  TA.forEach(function(t){t.echeance=jourTa(t.echeance);});
   var en=TA.filter(function(t){return t.etat!=='Terminé'&&t.etat!=='Archivé';}).sort(function(a,b){return (a.echeance||'9999').localeCompare(b.echeance||'9999');});
   var fi=TA.filter(function(t){return t.etat==='Terminé';}).sort(function(a,b){return (b.echeance||'').localeCompare(a.echeance||'');}).slice(0,15);
-  function lg(t){var re=t.echeance&&t.echeance<auj&&t.etat!=='Terminé';
-    return '<div class="tache'+(t.etat==='Terminé'?' fait':'')+'"><button class="coche'+(t.etat==='Terminé'?' on':'')+'" role="checkbox" aria-checked="'+(t.etat==='Terminé')+'" aria-label="Terminer : '+esc(t.nom)+'" onclick="ESPACE.cocherTa(\''+t.id+'\')">'+(t.etat==='Terminé'?'✓':'')+'</button><div><div class="tn">'+esc(t.nom)+'</div><div class="ts'+(re?' retard':'')+'">'+(t.type==='Publication'?'📱 Publication · ':'')+(t.echeance?(re?'⚠️ ':'')+esc(t.echeance.split('-').reverse().join('/')):'sans date')+(t.etat==='En cours'?' · en cours':'')+'</div></div></div>';}
-  z.innerHTML='<h2 class="titre-g">✅ Mes tâches</h2>'+etat(taInfo)
+  function lg(t){var re=t.echeance&&t.echeance<auj&&t.etat!=='Terminé',e=t.etat==='Terminé'?'t':t.etat==='En cours'?'c':'p';
+    return '<div class="tache'+(t.etat==='Terminé'?' fait':'')+'"><select class="etat-sel es-'+e+'" aria-label="État de la tâche : '+esc(t.nom)+'" onchange="ESPACE.etatTa(\''+t.id+'\',this.value)"><option value="Pas commencée"'+(e==='p'?' selected':'')+'>À faire</option><option value="En cours"'+(e==='c'?' selected':'')+'>En cours</option><option value="Terminé"'+(e==='t'?' selected':'')+'>Terminé</option></select><div><div class="tn">'+esc(t.nom)+'</div><div class="ts'+(re?' retard':'')+'">'+(t.type==='Publication'?'📱 Publication · ':'')+(t.echeance?(re?'⚠️ ':'')+esc(t.echeance.split('-').reverse().join('/')):'sans date')+'</div></div></div>';}
+  z.innerHTML='<h2 class="titre-g">✅ Mes tâches</h2>'+etat(taInfo)+(taFin?'<p class="msg" role="status">'+esc(taFin)+'</p>':'')
    +(TA.length?'':'<p class="msg" style="color:#a3301f">Notion n\'a renvoyé aucune tâche (0 reçue). Dis-le moi : la connexion de l\'appli à cette page est à vérifier.</p>')+'<div class="boite"><h3>À faire ('+en.length+')</h3>'+(en.length?en.map(lg).join(''):'<p class="vide">Rien à faire, bravo ! 🌸</p>')+'</div>'
    +'<div class="boite"><h3>➕ Nouvelle tâche</h3><div class="champs"><div style="flex:2;min-width:200px"><label for="ta-n">La tâche</label><input id="ta-n" type="text"></div><div><label for="ta-d">Pour le</label><input id="ta-d" type="date"></div></div><button class="petit" onclick="ESPACE.ajoutTa()">Ajouter</button> '+(taMsg?'<span class="msg" role="status">'+esc(taMsg)+'</span>':'')+'</div>'
    +(fi.length?'<div class="boite"><h3>Terminées récemment</h3>'+fi.map(lg).join('')+'</div>':'');
 }
-ESPACE.cocherTa=function(id){
+ESPACE.etatTa=function(id,v){
   var t=TA.filter(function(x){return x.id===id;})[0];if(!t)return;
-  t.etat=t.etat==='Terminé'?'Pas commencée':'Terminé';cacheSet('taches',{taches:TA});dessTa();
-  ecrire('/app/tache-maj',{id:id,etat:t.etat},function(r){if(!r.ok){taMsg='⚠️ '+(r.j.erreur||'Erreur');dessTa();}});
+  t.etat=v;taMsg='';taFin=v==='Terminé'?'✅ « '+t.nom+' » est terminée : elle est dans « Terminées récemment » (en bas). Pour la remettre, change son état.':'';
+  cacheSet('taches',{taches:TA});dessTa();
+  ecrire('/app/tache-maj',{id:id,etat:v},function(r){if(!r.ok){taMsg='⚠️ '+(r.j.erreur||'Erreur');dessTa();}});
 };
 ESPACE.ajoutTa=function(){
   var n=$('ta-n').value.trim();if(!n){taMsg='Écrivez la tâche.';dessTa();return;}
@@ -217,18 +220,20 @@ ESPACE.copierCa=function(i,b){
 
 /* =============== ANNIVERSAIRES =============== */
 var AN=[],anInfo=null;
+function propre(n){return String(n||'').replace(/^[^A-Za-zÀ-ÿ0-9]+/,'').trim();}
+function chipNom(n){var t=propre(n).split(/\s+/);if(t.length>=2&&t[0]===t[0].toUpperCase())return t[1]+' '+t[0].charAt(0)+'.';return t[0]||'';}
 function cleN(s){return norm(s).split(/\s+/).filter(Boolean).sort().join(' ');}
 function contactAn(a){
   var src=cacheGet(a.qui==='Filleule'?'filleules':'clients'),liste=src&&src.d?(a.qui==='Filleule'?src.d.filleules:src.d.clients)||[]:[],k=cleN(a.nom),mail='',tel=a.tel||'';
-  for(var n=0;n<liste.length;n++){if(cleN(liste[n].nom)===k){mail=liste[n].mail||'';tel=tel||liste[n].tel||'';break;}}
-  if(mail)return{k:'mail',t:'✉️ Mail automatique'};
+  for(var n=0;n<liste.length;n++){if(cleN(liste[n].nom)===k){mail=liste[n].mail||'';tel=liste[n].tel||'';break;}}
+  if(mail)return{k:'mail',t:'✉️ Mail à envoyer',mail:mail};
   if(tel)return{k:'sms',t:'💬 SMS à envoyer',tel:tel};
   return{k:'non',t:'Pas d\'envoi (ni mail ni téléphone)'};
 }
 ESPACE.anniv=function(){
   ANM=null;
   $('v-anniv').innerHTML='<div class="liste" id="an-zone"></div>';
-  lire('anniv','/app/anniv',function(d,info){anInfo=info;if(d)AN=d.anniv||[];dessAn();});
+  lire('anniv','/app/anniv',function(d,info){anInfo=info;if(d)AN=(d.anniv||[]).map(function(a){a.nom=propre(a.nom);return a;});dessAn();});
   lire('clients','/app/clients',function(d){if(d)dessAn();});
   lire('filleules','/app/filleules',function(d){if(d)dessAn();});
 };
@@ -249,12 +254,12 @@ function dessAn(){
   var J=['lun.','mar.','mer.','jeu.','ven.','sam.','dim.'];
   for(var k=0;k<tot;k++){
     var jr=k-dec+1,ok=jr>=1&&jr<=nb,dt=new Date(Y,M,jr),auj=ok&&dt.getTime()===now.getTime(),we=(k%7)>=5;
-    var evs=ok&&jm[jr]?jm[jr].map(function(a){return '<button class="ev '+(a.qui==='Filleule'?'fil':'cli')+'" onclick="ESPACE.ouvrirAn('+a._i+')" aria-label="Ouvrir la fiche de '+esc(a.nom)+'">🎂 '+esc((a.nom||'').split(/\s+/)[0])+'</button>';}).join(''):'';
+    var evs=ok&&jm[jr]?jm[jr].map(function(a){return '<button class="ev '+(a.qui==='Filleule'?'fil':'cli')+'" onclick="ESPACE.ouvrirAn('+a._i+')" aria-label="Ouvrir la fiche de '+esc(a.nom)+'">🎂 '+esc(chipNom(a.nom))+'</button>';}).join(''):'';
     cells+='<div class="cj'+(ok?'':' hors')+(we?' we':'')+'"><span class="nj'+(auj?' auj':'')+'">'+(ok?jr:new Date(Y,M,jr).getDate())+'</span>'+evs+'</div>';
   }
   var L=[];Object.keys(jm).forEach(function(d){jm[d].forEach(function(a){L.push({a:a,j:+d});});});L.sort(function(x,y){return x.j-y.j;});
-  var liste=L.map(function(x){var a=x.a,pr=(a.nom||'').split(/\s+/)[0],c=contactAn(a),dt=new Date(Y,M,x.j),n=Math.round((dt-now)/864e5);
-    var btn=c.k==='sms'?'<a class="mini" href="sms:'+esc(c.tel.replace(/\s/g,''))+'?&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':'';
+  var liste=L.map(function(x){var a=x.a,pr=chipNom(a.nom).split(' ')[0],c=contactAn(a),dt=new Date(Y,M,x.j),n=Math.round((dt-now)/864e5);
+    var btn=c.k==='mail'?'<a class="mini" href="mailto:'+esc(c.mail)+'?subject='+encodeURIComponent('Joyeux anniversaire !')+'&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':c.k==='sms'?'<a class="mini" href="sms:'+esc(c.tel.replace(/\s/g,''))+'?&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':'';
     return '<div class="tache" style="cursor:pointer" onclick="if(!event.target.closest(\'a\'))ESPACE.ouvrirAn('+a._i+')"><div class="jour '+(a.qui==='Filleule'?'fil':'cli')+(n===0?' auj':'')+'">'+(n===0?'🎉':x.j+'<small>'+dt.toLocaleDateString('fr-FR',{month:'short'})+'</small>')+'</div><div style="flex:1"><div class="tn">'+esc(a.nom)+'</div><div class="ts">'+(a.qui==='Filleule'?'Filleul(e)':'Client(e)')+(n>=0?' · '+(n===0?'aujourd\'hui':n===1?'demain':'dans '+n+' jours'):'')+'</div><div class="ts"><span class="stat">'+c.t+'</span></div></div>'+btn+'</div>';}).join('');
   z.innerHTML='<h2 class="titre-g">Anniversaires</h2>'+etat(anInfo)+(AN.length?'':'<p class="msg" style="color:#a3301f">Notion n\'a renvoyé aucun anniversaire (0 reçu). Dis-le moi : la connexion de l\'appli à cette base est à vérifier.</p>')
    +'<div class="cal-nav"><button class="mini" onclick="ESPACE.moisAn(-1)" aria-label="Mois précédent">‹</button><b>'+MOIS[M]+' '+Y+'</b><button class="mini" onclick="ESPACE.moisAn(1)" aria-label="Mois suivant">›</button><button class="mini" onclick="ESPACE.moisAn(0)">Aujourd\'hui</button></div>'
@@ -274,12 +279,13 @@ function dessFi(){
   var z=$('fi-zone');if(!z)return;var q=norm(fiQ);
   var L=FI.filter(function(f){return !q||norm(f.nom+' '+f.ville+' '+f.tel).indexOf(q)>=0;});
   z.innerHTML='<h2 class="titre-g">Mes filleul(e)s</h2>'+etat(fiInfo)+'<input id="fi-q" class="recherche" type="search" placeholder="🔍 Chercher un(e) filleul(e)" aria-label="Chercher un(e) filleul(e)" value="'+esc(fiQ)+'" oninput="ESPACE.rechFi(this.value)">'
-   +'<p class="maj">'+L.length+' filleul(e)'+(L.length>1?'s':'')+'</p>'+L.map(function(f){var id=f.id;return '<div class="boite t-'+(f.sexe==='M'?'homme':'femme')+'" id="fc-'+id+'"><b>'+esc(f.nom)+'</b>'+(f.nomNaiss?' <small>(née '+esc(f.nomNaiss)+')</small>':'')
+   +'<button class="petit" onclick="ESPACE.nouvFi()">➕ Ajouter une filleule</button><div id="fi-add" hidden class="boite" style="margin-top:8px"><div class="champs">'+ch('na-nom','Prénom NOM','')+ch('na-agr','N° d\'agrément','')+ch('na-tel','Téléphone','')+ch('na-mail','Mail','')+ch('na-ent','Date d\'entrée','','date')+'</div><button class="petit" onclick="ESPACE.ajoutFi()">Enregistrer la nouvelle filleule</button> <span id="na-m" class="msg" role="status"></span></div>'
+   +'<p class="maj">'+L.length+' filleul(e)'+(L.length>1?'s':'')+'</p>'+L.map(function(f){var id=f.id;return '<div class="boite t-'+(f.sexe==='M'?'homme':'femme')+'" id="fc-'+id+'"><b>'+esc(f.nom)+'</b>'+(f.agrement?' <span class="stat">N° agrément '+esc(f.agrement)+'</span>':'')+(f.nomNaiss?' <small>(née '+esc(f.nomNaiss)+')</small>':'')
    +'<label class="cn" for="fn-'+id+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 3px">Note</label><textarea id="fn-'+id+'" rows="2" placeholder="Écrire ici…" style="width:100%;padding:8px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font:inherit" onchange="ESPACE.noteFi(\''+id+'\',this)">'+esc(f.notes)+'</textarea><span class="msg" id="fm-'+id+'" role="status"></span>'
    +ligne('📞','Téléphone',f.tel?'<a href="tel:'+esc(f.tel.replace(/\s/g,''))+'">'+esc(f.tel)+'</a>':'')+ligne('✉️','Mail',esc(f.mail))+ligne('🏠','Adresse',esc([f.adresse,f.compl,[f.cp,f.ville].filter(Boolean).join(' '),f.pays].filter(Boolean).join(', ')))
    +ligne('🎂','Naissance',esc(dateFr(f.naiss)))+ligne('📅','Entrée',esc(dateFr(f.entree)))
    +'<button class="petit sec" onclick="ESPACE.editFi(\''+id+'\')">✏️ Modifier la fiche</button>'
-   +'<div id="fe-'+id+'" hidden style="margin-top:8px"><div class="champs">'+ch('fe-nom-'+id,'Prénom NOM',f.nom)+ch('fe-nn-'+id,'Nom de naissance (nom de jeune fille)',f.nomNaiss)+ch('fe-tel-'+id,'Téléphone',f.tel)+ch('fe-mail-'+id,'Mail',f.mail)+ch('fe-adr-'+id,'Adresse',f.adresse)+ch('fe-compl-'+id,'Complément d\'adresse',f.compl)+ch('fe-cp-'+id,'Code postal',f.cp)+ch('fe-ville-'+id,'Ville',f.ville)+ch('fe-pays-'+id,'Pays',f.pays)+ch('fe-naiss-'+id,'Date de naissance',f.naiss,'date')+ch('fe-ent-'+id,'Date d\'entrée',f.entree,'date')
+   +'<div id="fe-'+id+'" hidden style="margin-top:8px"><div class="champs">'+ch('fe-nom-'+id,'Prénom NOM',f.nom)+ch('fe-agr-'+id,'N° d\'agrément',f.agrement)+ch('fe-nn-'+id,'Nom de naissance (nom de jeune fille)',f.nomNaiss)+ch('fe-tel-'+id,'Téléphone',f.tel)+ch('fe-mail-'+id,'Mail',f.mail)+ch('fe-adr-'+id,'Adresse',f.adresse)+ch('fe-compl-'+id,'Complément d\'adresse',f.compl)+ch('fe-cp-'+id,'Code postal',f.cp)+ch('fe-ville-'+id,'Ville',f.ville)+ch('fe-pays-'+id,'Pays',f.pays)+ch('fe-naiss-'+id,'Date de naissance',f.naiss,'date')+ch('fe-ent-'+id,'Date d\'entrée',f.entree,'date')
    +'<div><label for="fe-sexe-'+id+'">Sexe</label><select id="fe-sexe-'+id+'"><option value="F"'+(f.sexe!=='M'?' selected':'')+'>Femme</option><option value="M"'+(f.sexe==='M'?' selected':'')+'>Homme</option></select></div></div>'
    +'<button class="petit" onclick="ESPACE.enregFi(\''+id+'\')">Enregistrer</button><p id="fx-'+id+'" class="msg" role="status"></p></div></div>';}).join('');
 }
@@ -294,8 +300,21 @@ ESPACE.noteFi=function(id,el){var m=$('fm-'+id);m.textContent='Enregistrement…
 ESPACE.editFi=function(id){var b=$('fe-'+id);if(b)b.hidden=!b.hidden;};
 ESPACE.enregFi=function(id){
   var g=function(k){return $('fe-'+k+'-'+id).value.trim();};
-  var c={nom:g('nom'),nomNaiss:g('nn'),tel:g('tel'),mail:g('mail'),adresse:g('adr'),compl:g('compl'),cp:g('cp'),ville:g('ville'),pays:g('pays'),naiss:g('naiss'),entree:g('ent'),sexe:g('sexe')};
+  var c={nom:g('nom'),agrement:g('agr'),nomNaiss:g('nn'),tel:g('tel'),mail:g('mail'),adresse:g('adr'),compl:g('compl'),cp:g('cp'),ville:g('ville'),pays:g('pays'),naiss:g('naiss'),entree:g('ent'),sexe:g('sexe')};
   var m=$('fx-'+id);m.textContent='Enregistrement…';majFi(id,c,function(t){m.textContent=t;});
+};
+ESPACE.nouvFi=function(){var b=$('fi-add');if(b)b.hidden=!b.hidden;};
+ESPACE.ajoutFi=function(){
+  var g=function(k){return $(k).value.trim();},m=$('na-m');
+  if(!g('na-nom')){m.textContent='Écrivez le prénom et le nom.';return;}
+  var c={nom:g('na-nom'),agrement:g('na-agr'),tel:g('na-tel'),mail:g('na-mail'),entree:g('na-ent'),sexe:'F'};
+  m.textContent='Enregistrement…';
+  ecrire('/app/filleule-ajout',{champs:c},function(r){
+    if(!r.ok){m.textContent='⚠️ '+(r.j.erreur||'Erreur');return;}
+    c.id=(r.j&&r.j.id)||'tmp'+Date.now();c.notes='';c.naiss='';c.nomNaiss='';c.adresse='';c.compl='';c.cp='';c.ville='';c.pays='';
+    FI.push(c);FI.sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'');});cacheSet('filleules',{filleules:FI});dessFi();
+    var z=$('fi-add');if(z)z.hidden=true;
+  });
 };
 ESPACE.rechFi=function(v){fiQ=v;dessFi();var i=$('fi-q');if(i){i.focus();try{i.setSelectionRange(v.length,v.length);}catch(e){}}};
 
