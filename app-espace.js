@@ -229,6 +229,7 @@ function cleN(s){return norm(s).split(/\s+/).filter(Boolean).sort().join(' ');}
 function contactAn(a){
   var src=cacheGet(a.qui==='Filleule'?'filleules':'clients'),liste=src&&src.d?(a.qui==='Filleule'?src.d.filleules:src.d.clients)||[]:[],k=cleN(a.nom),mail='',tel=a.tel||'';
   for(var n=0;n<liste.length;n++){if(cleN(liste[n].nom)===k){mail=liste[n].mail||'';tel=liste[n].tel||'';break;}}
+  if(mail&&a.qui!=='Filleule')return{k:'auto',t:'✉️ Mail automatique (part tout seul)'};
   if(mail)return{k:'mail',t:'✉️ Mail à envoyer',mail:mail};
   if(tel)return{k:'sms',t:'💬 SMS à envoyer',tel:tel};
   return{k:'non',t:'Pas d\'envoi (ni mail ni téléphone)'};
