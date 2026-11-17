@@ -1,5 +1,6 @@
 // Garde le bon de commande des salons disponible même sans réseau (uniquement ces fichiers).
-const CACHE = 'bon-salon-v1';
+// Avec du réseau : toujours la dernière version. Sans réseau : la dernière version enregistrée.
+const CACHE = 'bon-salon-v2';
 const FICHIERS = ['/bon-salon.html', '/manifest-salon.json', '/favicon-48.png', '/apple-touch-icon.png'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FICHIERS)).then(() => self.skipWaiting()));
@@ -11,8 +12,14 @@ self.addEventListener('fetch', (e) => {
   const u = new URL(e.request.url);
   if (e.request.method !== 'GET' || u.origin !== location.origin || !FICHIERS.includes(u.pathname)) return;
   e.respondWith(caches.open(CACHE).then(async (c) => {
-    const vieux = await c.match(u.pathname);
-    const reseau = fetch(e.request).then((r) => { if (r && r.ok) c.put(u.pathname, r.clone()); return r; }).catch(() => vieux);
-    return vieux || reseau;
+    try {
+      const r = await fetch(e.request, { cache: 'no-cache' });
+      if (r && r.ok) c.put(u.pathname, r.clone());
+      return r;
+    } catch (err) {
+      const vieux = await c.match(u.pathname);
+      if (vieux) return vieux;
+      throw err;
+    }
   }));
 });
