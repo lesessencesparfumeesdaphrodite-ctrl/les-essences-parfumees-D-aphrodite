@@ -2281,15 +2281,26 @@ function confirmDelete(){
 }
 
 // ===================== LOCK SCREEN =====================
-const OUTIL_MDP = 'aphrodite2026';
-function tryUnlock(){
+const API_RELAIS = 'https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev';
+const CLE_CODE = 'aphrodite-salon-code';
+async function verifierCode(v){
+  // renvoie 'ok', 'non' (code faux) ou 'reseau'
+  try{
+    const r = await fetch(API_RELAIS + '/salon/ping', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({code:v}) });
+    if(r.ok){ try{ localStorage.setItem(CLE_CODE, v); }catch(e){} return 'ok'; }
+    return r.status === 401 ? 'non' : 'reseau';
+  }catch(e){ return 'reseau'; }
+}
+function codeMemorise(){ try{ return localStorage.getItem(CLE_CODE) || ''; }catch(e){ return ''; } }
+async function tryUnlock(){
   const val = document.getElementById('lockPwd').value;
-  if(val === OUTIL_MDP){
+  const res = await verifierCode(val);
+  if(res === 'ok' || (res === 'reseau' && val && val === codeMemorise())){
     document.getElementById('lockScreen').style.display = 'none';
     document.getElementById('app').classList.add('unlocked');
     init();
   } else {
-    document.getElementById('lockError').textContent = 'Mot de passe incorrect.';
+    document.getElementById('lockError').textContent = res === 'reseau' ? 'Pas de réseau : réessayez quand vous avez du réseau.' : 'Mot de passe incorrect.';
     document.getElementById('lockPwd').value = '';
     document.getElementById('lockPwd').focus();
   }

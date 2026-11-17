@@ -124,7 +124,17 @@
 </div>
 
 <script>
-const MDP = 'aphrodite2026';
+const API_RELAIS = 'https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev';
+const CLE_CODE = 'aphrodite-salon-code';
+async function verifierCode(v){
+  // renvoie 'ok', 'non' (code faux) ou 'reseau'
+  try{
+    const r = await fetch(API_RELAIS + '/salon/ping', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({code:v}) });
+    if(r.ok){ try{ localStorage.setItem(CLE_CODE, v); }catch(e){} return 'ok'; }
+    return r.status === 401 ? 'non' : 'reseau';
+  }catch(e){ return 'reseau'; }
+}
+function codeMemorise(){ try{ return localStorage.getItem(CLE_CODE) || ''; }catch(e){ return ''; } }
 const CLE_STOCKAGE = 'carnet_fidelite_zulay';
 const PALIERS = [
   {pts:300, bon:'40€'},
@@ -133,14 +143,18 @@ const PALIERS = [
   {pts:50,  bon:'5€'}
 ];
 
-function connexion(){
+async function connexion(){
   const val = document.getElementById('mdpInput').value;
-  if(val === MDP){
+  const err = document.getElementById('erreurLogin');
+  const res = await verifierCode(val);
+  if(res === 'ok' || (res === 'reseau' && val && val === codeMemorise())){
+    err.style.display = 'none';
     document.getElementById('ecranLogin').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     afficherListe();
   } else {
-    document.getElementById('erreurLogin').style.display = 'block';
+    err.textContent = res === 'reseau' ? 'Pas de réseau : réessayez quand vous avez du réseau.' : 'Mot de passe incorrect.';
+    err.style.display = 'block';
   }
 }
 function deconnexion(){
