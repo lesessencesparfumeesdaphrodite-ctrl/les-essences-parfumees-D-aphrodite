@@ -1,7 +1,7 @@
 // Garde le bon de commande des salons disponible même sans réseau (uniquement ces fichiers).
 // Avec du réseau : toujours la dernière version. Sans réseau : la dernière version enregistrée.
-const CACHE = 'bon-salon-v3';
-const FICHIERS = ['/bon-salon.html', '/manifest-salon.json', '/favicon-48.png', '/apple-touch-icon.png', '/icone-bon-192.png', '/icone-bon-512.png'];
+const CACHE = 'bon-salon-v4';
+const FICHIERS = ['/bon-salon.html', '/manifest-salon.json', '/favicon-48.png', '/apple-touch-icon.png', '/icone-bon-192.png', '/icone-bon-512.png', '/app.html', '/manifest-app.json', '/outil.html', '/carnet-fidelite.html', '/logo.webp', '/favicon-192.png'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FICHIERS)).then(() => self.skipWaiting()));
 });

@@ -157,6 +157,7 @@ async function connexion(){
     err.style.display = 'block';
   }
 }
+window.addEventListener('load', ()=>{ const c = codeMemorise(); if(c && !new URLSearchParams(location.search).has('verrou')){ document.getElementById('mdpInput').value = c; connexion(); } });
 function deconnexion(){
   document.getElementById('app').style.display = 'none';
   document.getElementById('ecranLogin').style.display = 'block';

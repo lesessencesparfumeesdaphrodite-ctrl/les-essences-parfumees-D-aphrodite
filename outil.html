@@ -2305,6 +2305,7 @@ async function tryUnlock(){
     document.getElementById('lockPwd').focus();
   }
 }
+window.addEventListener('load', ()=>{ const c = codeMemorise(); if(c){ document.getElementById('lockPwd').value = c; tryUnlock(); } });
 document.addEventListener('DOMContentLoaded', ()=>{
   const pwd = document.getElementById('lockPwd');
   if(pwd) pwd.focus();

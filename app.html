@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#3D2B2E">
+<title>Mon espace — Les Essences Parfumées d'Aphrodite</title>
+<link rel="manifest" href="manifest-app.json">
+<link rel="icon" href="favicon-48.png">
+<link rel="apple-touch-icon" href="icone-bon-180.png">
+<style>
+:root{--creme:#FFFDF9;--sable:#F5EDE4;--brun:#2C1810;--terra:#9E5238;--or:#C9A96E;--gris:#6B5E55;--bord:#3D2B2E}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--creme);color:var(--brun);font-family:'Lato','Segoe UI',Roboto,Arial,sans-serif}
+body{display:flex;flex-direction:column;min-height:100dvh}
+button{font:inherit;cursor:pointer}
+.barre{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bord);color:#fff;padding-top:max(10px,env(safe-area-inset-top))}
+.barre img{width:34px;height:34px;border-radius:50%;background:#fff}
+.barre h1{font-size:16px;margin:0;flex:1;font-weight:700}
+.barre button{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:20px;padding:6px 14px;font-size:14px}
+main{flex:1;display:flex;flex-direction:column;min-height:0}
+.accueil{padding:18px 14px 30px;max-width:640px;width:100%;margin:0 auto}
+.accueil p.bj{margin:0 0 14px;font-size:15px;color:var(--gris);text-align:center}
+.tuiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tuile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:130px;padding:14px 10px;background:var(--sable);border:1.5px solid rgba(201,169,110,.55);border-radius:22px;color:var(--brun);text-align:center;font-weight:700;font-size:16px}
+.tuile .e{font-size:34px;line-height:1}
+.tuile small{font-weight:400;font-size:12.5px;color:var(--gris)}
+.tuile:active{background:#ecdfd0}
+.tuile:focus-visible,.barre button:focus-visible,.btn:focus-visible{outline:3px solid var(--terra);outline-offset:2px}
+.cadre{flex:1;border:0;width:100%;min-height:0;background:var(--creme)}
+.vue{display:none;flex:1;min-height:0;flex-direction:column}
+.vue.on{display:flex}
+/* verrou */
+#verrou{position:fixed;inset:0;background:var(--creme);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9}
+#verrou.cache{display:none}
+.carte-v{width:100%;max-width:360px;text-align:center}
+.carte-v img{width:120px;height:120px;border-radius:50%}
+.carte-v h2{margin:10px 0 4px;font-size:20px}
+.carte-v input{width:100%;padding:13px;border:1.5px solid rgba(201,169,110,.7);border-radius:14px;font-size:16px;margin:12px 0 8px}
+.btn{background:var(--terra);color:#fff;border:0;border-radius:24px;padding:12px 22px;font-weight:700;font-size:15px}
+.carte-v .btn{width:100%}
+#msgv{min-height:20px;font-size:14px;color:#a3301f;margin:6px 0 0}
+/* commandes */
+.liste{padding:14px;max-width:760px;width:100%;margin:0 auto;overflow:auto}
+.titre-g{text-align:center;font-size:19px;margin:6px 0 12px}
+.boite{background:#fff;border:1.5px solid rgba(201,169,110,.55);border-radius:20px;padding:14px;margin-bottom:16px}
+.boite h3{margin:0 0 6px;font-size:17px}
+.cmd{padding:12px 0;border-top:1px solid rgba(201,169,110,.3)}
+.cmd .t{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cmd .t strong{font-size:14.5px}.cmd .t span{color:var(--terra);font-weight:700}
+.cmd .s{font-size:13px;margin:3px 0}
+.cmd .p{font-size:12.5px;color:var(--gris);white-space:pre-line;line-height:1.55}
+.champs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.champs>div{flex:1;min-width:150px}
+.champs label{display:block;font-size:12.5px;font-weight:700;margin:6px 0 4px}
+.champs input,.champs select{width:100%;padding:11px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font-size:15px;background:#fff}
+.petit{background:var(--terra);color:#fff;border:0;border-radius:20px;padding:9px 20px;font-weight:700;font-size:13.5px;margin-top:10px}
+.sec{background:transparent;color:var(--terra);border:1.5px solid var(--terra)}
+.msg{font-size:13.5px;color:#2a6a5a;margin:6px 0}
+.vide{font-size:13.5px;color:var(--gris)}
+</style>
+</head>
+<body>
+<div id="verrou">
+  <div class="carte-v">
+    <img src="logo.webp" width="120" height="120" alt="Les Essences Parfumées d'Aphrodite">
+    <h2>Mon espace</h2>
+    <label for="mdp" style="font-size:14px;color:var(--gris)">Mot de passe</label>
+    <input id="mdp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')entrer()">
+    <button class="btn" onclick="entrer()">Entrer</button>
+    <p id="msgv" role="status"></p>
+  </div>
+</div>
+
+<header class="barre">
+  <img src="favicon-192.png" width="34" height="34" alt="">
+  <h1 id="titre">Mon espace</h1>
+  <button id="retour" onclick="aller('accueil')" style="display:none" aria-label="Retour à l'accueil">← Accueil</button>
+</header>
+<main>
+  <section class="vue on" id="v-accueil">
+    <div class="accueil">
+      <p class="bj">Bonjour Zulay 🌸 Que voulez-vous faire ?</p>
+      <div class="tuiles">
+        <button class="tuile" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>site, EXHALESSENCE, Marché/Salon</small></button>
+        <button class="tuile" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande<small>marchés et salons</small></button>
+        <button class="tuile" onclick="aller('outil')"><span class="e" aria-hidden="true">🧮</span>Outil<small>calculs et devis</small></button>
+        <button class="tuile" onclick="aller('fidelite')"><span class="e" aria-hidden="true">💳</span>Fidélité<small>carnet des clientes</small></button>
+        <button class="tuile" onclick="aller('admin')" style="grid-column:1/-1;min-height:96px"><span class="e" aria-hidden="true">⚙️</span>Espace administrateur complet<small>le reste de l'administration du site</small></button>
+      </div>
+    </div>
+  </section>
+  <section class="vue" id="v-commandes"><div class="liste" id="liste"></div></section>
+  <section class="vue" id="v-bon"><iframe class="cadre" id="f-bon" title="Bon de commande"></iframe></section>
+  <section class="vue" id="v-outil"><iframe class="cadre" id="f-outil" title="Outil"></iframe></section>
+  <section class="vue" id="v-fidelite"><iframe class="cadre" id="f-fidelite" title="Fidélité"></iframe></section>
+</main>
+
+<script>
+var API='https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev';
+var CLE='aphrodite-salon-code';
+var code='';try{code=localStorage.getItem(CLE)||'';}catch(e){}
+var PAGES={bon:'bon-salon.html',outil:'outil.html',fidelite:'carnet-fidelite.html'};
+var TITRES={accueil:'Mon espace',commandes:'Commandes',bon:'Bon de commande',outil:'Outil',fidelite:'Fidélité'};
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function post(p,b){b=b||{};b.code=code;return fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,st:r.status,j:j};});}).catch(function(){return{ok:false,st:0,j:{erreur:'Pas de réseau.'}};});}
+function memoriser(c){code=c;try{localStorage.setItem(CLE,c);localStorage.setItem('aph_adm_code',c);}catch(e){}}
+function entrer(){
+  var v=document.getElementById('mdp').value;var m=document.getElementById('msgv');
+  if(!v){m.textContent='Entrez votre mot de passe.';return;}
+  m.textContent='Vérification…';code=v;
+  post('/salon/ping').then(function(r){
+    if(r.ok){memoriser(v);m.textContent='';document.getElementById('verrou').classList.add('cache');document.getElementById('mdp').value='';}
+    else if(r.st===401){code='';m.textContent='Mot de passe incorrect.';}
+    else{code='';m.textContent='Pas de réseau : réessayez quand vous avez du réseau.';}
+  });
+}
+function aller(v){
+  if(v==='admin'){window.open('/#page-admin','_blank');return;}
+  document.querySelectorAll('.vue').forEach(function(e){e.classList.remove('on');});
+  document.getElementById('v-'+v).classList.add('on');
+  document.getElementById('titre').textContent=TITRES[v];
+  document.getElementById('retour').style.display=v==='accueil'?'none':'';
+  if(PAGES[v]){var f=document.getElementById('f-'+v);if(!f.getAttribute('src'))f.setAttribute('src',PAGES[v]);}
+  if(v==='commandes'){chargerSite();chargerExh();}
+}
+/* ---- commandes ---- */
+var STAT=['Reçue','En cours de création','En cours de commande','Prête','Expédiée','Terminée'];
+var STX=['Nouvelle','Validée','En cours de commande','Expédiée','À récupérer','Terminée'];
+var REG=['','Virement','Carte bancaire','Espèces','PayPal','Chèque','Wero','Autre'];
+var cmds=[],ex=[],msgS='',msgX='';
+function chargerSite(){msgS='Chargement…';dessiner();post('/admin/commandes').then(function(r){if(!r.ok){msgS=r.j.erreur||'Erreur';cmds=[];}else{cmds=r.j.commandes||[];msgS='';}dessiner();});}
+function chargerExh(){msgX='Chargement…';dessiner();post('/admin/exh-commandes').then(function(r){if(!r.ok){msgX=r.j.erreur||'Erreur';ex=[];}else{ex=r.j.commandes||[];msgX='';}dessiner();});}
+function carteS(o,i){
+  return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
+  +'<div class="s">'+esc(o.nom)+' — '+esc(o.mail)+'</div><div class="p">'+esc(o.produits)+'</div>'
+  +'<div class="p">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>'+(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
+  +'<div class="champs"><div><label for="s-st-'+i+'">Statut</label><select id="s-st-'+i+'">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
+  +'<div><label for="s-pa-'+i+'">Paiement reçu</label><input id="s-pa-'+i+'" type="text" placeholder="Ex : virement, espèces" value="'+esc(o.paiement)+'"></div>'
+  +'<div><label for="s-su-'+i+'">N° de suivi</label><input id="s-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
+  +'<button class="petit" onclick="saveS('+i+')">Enregistrer</button></div>';
+}
+function carteX(o,i){
+  return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
+  +'<div class="s">'+esc(o.nom)+' — '+esc(o.mail)+' — '+esc(o.tel)+'</div><div class="p">'+esc(o.produits)+'</div>'
+  +'<div class="p">🚚 '+esc(o.livraison)+' — '+esc(o.adresse)+'<br>💳 Paiement souhaité : <b>'+esc(o.souhaite)+'</b></div>'+(o.notes?'<div class="p">📝 '+esc(o.notes)+'</div>':'')
+  +'<div class="champs"><div><label for="x-st-'+i+'">Statut</label><select id="x-st-'+i+'">'+STX.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
+  +'<div><label for="x-re-'+i+'">Réglé par</label><select id="x-re-'+i+'">'+REG.map(function(s){return'<option value="'+s+'"'+(s===o.regle?' selected':'')+'>'+(s||'—')+'</option>';}).join('')+'</select></div></div>'
+  +'<div class="champs"><div style="flex:2;min-width:200px"><label for="x-de-'+i+'">Livraison estimée (obligatoire pour valider)</label><input id="x-de-'+i+'" type="text" placeholder="Ex : entre le 24 et le 27 novembre" value="'+esc(o.delai)+'"></div>'
+  +'<div><label for="x-su-'+i+'">N° de suivi Chronopost relais</label><input id="x-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
+  +'<label for="x-mo-'+i+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 4px">Petit mot pour la cliente (facultatif)</label><div class="champs"><div><input id="x-mo-'+i+'" type="text" value="'+esc(o.mot)+'"></div></div>'
+  +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>';
+}
+function dessiner(){
+  var cr='',ma='',nc=0,nm=0;
+  cmds.forEach(function(o,i){if(o.origine==='Salon'){nm++;ma+=carteS(o,i);}else{nc++;cr+=carteS(o,i);}});
+  var ee='';ex.forEach(function(o,i){ee+=carteX(o,i);});
+  var m1=msgS?'<p class="msg" role="status">'+esc(msgS)+'</p>':'',m2=msgX?'<p class="msg" role="status">'+esc(msgX)+'</p>':'';
+  document.getElementById('liste').innerHTML=
+   '<h2 class="titre-g">🛍️ Commandes du site (reçues automatiquement)</h2>'
+  +'<div class="boite"><h3>🎨 Créations plâtre résine</h3>'+m1+(nc||msgS?'':'<p class="vide">Aucune commande pour le moment.</p>')+cr+'</div>'
+  +'<div class="boite"><h3>🌸 EXHALESSENCE</h3>'+m2+(ex.length||msgX?'':'<p class="vide">Aucune commande pour le moment.</p>')+ee+'</div>'
+  +'<div class="boite"><h3>🎪 Commandes Marché/Salon</h3>'+m1+(nm||msgS?'':'<p class="vide">Aucune commande pour le moment.</p>')+ma+'</div>'
+  +'<button class="petit sec" onclick="aller(\'commandes\')">↻ Actualiser</button>';
+}
+function g(id){return document.getElementById(id).value;}
+function saveS(i){var o=cmds[i];if(!o)return;msgS='Enregistrement…';dessiner();
+  post('/admin/maj',{id:o.id,statut:g('s-st-'+i),paiement:g('s-pa-'+i),suivi:g('s-su-'+i)}).then(function(r){if(!r.ok){msgS='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgS='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerSite();});}
+function saveX(i){var o=ex[i];if(!o)return;var b={id:o.id,statut:g('x-st-'+i),regle:g('x-re-'+i),delai:g('x-de-'+i),suivi:g('x-su-'+i),mot:g('x-mo-'+i)};msgX='Enregistrement…';dessiner();
+  post('/admin/exh-maj',b).then(function(r){if(!r.ok){msgX='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgX='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerExh();});}
+/* ---- démarrage ---- */
+if(code){post('/salon/ping').then(function(r){if(r.ok||r.st===0)document.getElementById('verrou').classList.add('cache');else{code='';}});}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw-salon.js').catch(function(){});}
+</script>
+</body>
+</html>
