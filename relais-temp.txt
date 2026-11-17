@@ -1,0 +1,1160 @@
+// Relais "aphrodite-relais" — Les Essences Parfumées d'Aphrodite
+// Cloudflare Worker (gratuit). Secrets à créer : NOTION_TOKEN, BREVO_API_KEY.
+// Le reste est écrit dans ce fichier (rien de secret ici).
+
+const CFG = {
+  SITE: "https://www.lesessencesparfumeesdaphrodite.fr",
+  ORIGINS: ["https://www.lesessencesparfumeesdaphrodite.fr", "https://lesessencesparfumeesdaphrodite.fr"],
+  DS_CLIENTS: "627d0c00-8167-4eb4-90fa-8496f39e308d",
+  DS_TACHES: "4262549c-8541-4fac-84f0-f81e49cc8b4e",
+  DS_ANNIV: "e1d56144-2a40-4ad4-bf9e-c85ebed1665e",
+  PAGE_CALENDRIER: "4135a58f-ebca-811b-9f0c-d07bc322449e",
+  DS_COMMANDES: "eb9981fa-489b-4c11-8ee3-3144274ae52d",
+  DS_BONS: "9069bbad-0dea-4997-a142-a0a040910971",
+  SENDER: { name: "Les Essences Parfumées d'Aphrodite", email: "contact@lesessencesparfumeesdaphrodite.fr" },
+  ZULAY: "les.essences.parfumees.d.aphrodite@gmail.com",
+  TEL: "06 22 41 84 63",
+  AVIS_URL: "https://g.page/r/CcnMG7hOJyrXEBI/review",
+  ANNIV_DEBUT: "2026-11-12",       // aucune carte d'anniversaire avant cette date
+  ANNIV_RATTRAPAGE: 1,             // jours de rattrapage (anniversaire de la veille)
+  DS_FILLEULES: "baa5edce-3771-4921-9a1c-5cd42fd7f6a5",
+  DS_FIN: "41b5a58f-ebca-8163-9a3e-000b2ec495c2",
+  SALON_SEL: "aphro-salon", SALON_HASH: "q8BY3dh1K-HjQCb63Fe66O0-seV3H1dilxyrysuupCk",
+  DS_MESSAGES: "6844ce0c-c73c-403f-b8bf-44da5c94c9b3",
+  DS_EXH_COMMANDES: "e2f9d233-bf2b-46b4-bc2a-52ab7f4e9056",
+  DS_EXH_RESERVATIONS: "2aa7d86b-69f2-45bd-9191-0edaea72ab38",
+  FIDELITE_DEBUT: "2027-01-01",    // relance des bons fidélité à partir de cette date
+  FIDELITE_PAR_JOUR: 12,           // nombre maximum de bons fidélité envoyés par jour
+  HEURE_QUOTIDIENNE: 8,            // heure de Paris pour les tâches du matin
+  PALIERS: [[50, 5, 30], [100, 10, 50], [200, 25, 80], [300, 40, 100]], // points, bon €, achat mini €
+  ANNIV_BON: 5, ANNIV_MINI: 25, ANNIV_JOURS: 31,
+  DS_EQUIPE: "41b5a58f-ebca-81e8-b6eb-000ba3110855",   // tableau « Compte équipe » (page équipe EXHALESSENCE)
+  EQ_ORIGIN: "https://exhalessence-equipe-conseils.github.io",
+  PBKDF2: 30000,
+};
+
+const NV = "2025-09-03";
+const enc = new TextEncoder();
+const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64 = (s) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+const esc = (t) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const eur = (n) => (Math.round(n * 100) / 100).toString().replace(".", ",") + " €";
+const today = (d = new Date()) => new Date(d.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
+const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+const addDays = (s, n) => { const d = new Date(s + "T12:00:00"); d.setDate(d.getDate() + n); return iso(d); };
+
+// ---------- Notion ----------
+async function notion(env, path, method = "GET", body) {
+  for (let i = 0; i < 4; i++) {
+    const r = await fetch("https://api.notion.com/v1" + path, {
+      method, headers: { Authorization: "Bearer " + env.NOTION_TOKEN, "Notion-Version": NV, "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (r.status === 429) { await new Promise((ok) => setTimeout(ok, 1200 * (i + 1))); continue; }
+    const j = await r.json();
+    if (!r.ok) throw new Error("Notion " + r.status + " " + (j.message || ""));
+    return j;
+  }
+  throw new Error("Notion trop sollicité");
+}
+async function query(env, ds, filter, sorts, start) {
+  const out = []; let cursor;
+  do {
+    const j = await notion(env, `/data_sources/${ds}/query`, "POST", { filter, sorts, page_size: 100, start_cursor: cursor });
+    out.push(...j.results); cursor = j.has_more ? j.next_cursor : null;
+    if (start === 1) break;
+  } while (cursor);
+  return out;
+}
+const T = (s) => ({ rich_text: s ? [{ text: { content: String(s).slice(0, 2000) } }] : [] });
+const TT = (s) => ({ title: [{ text: { content: String(s).slice(0, 2000) } }] });
+const txt = (p) => p ? (p.title || p.rich_text || []).map((x) => x.plain_text).join("") : "";
+const num = (p) => (p && typeof p.number === "number" ? p.number : 0);
+const sel = (p) => (p && p.select ? p.select.name : "");
+const chk = (p) => !!(p && p.checkbox);
+const dat = (p) => (p && p.date ? p.date.start : "");
+const rel = (p) => (p && p.relation ? p.relation.map((r) => r.id) : []);
+
+const numCli = (x) => (x && x.unique_id && x.unique_id.number != null) ? ((x.unique_id.prefix ? x.unique_id.prefix + "-" : "") + x.unique_id.number) : "";
+function client(pg) {
+  const p = pg.properties;
+  const nom = txt(p["Client(e)"]);
+  return {
+    id: pg.id, nom, prenom: nom.split(/\s+/)[0] || "", mail: (p["Mail"] || {}).email || "", tel: (p["Téléphone"] || {}).phone_number || "",
+    numClient: numCli(p["N° client"]), points: num(p["Points fidélité"]), mdp: txt(p["Mot de passe chiffré"]), panier: txt(p["Panier en cours"]),
+    accepte: chk(p["Accepte les e-mails"]), desabo: chk(p["Ne plus recevoir d'e-mails"]), newsletter: chk(p["Newsletter"]), naissance: dat(p["Date de naissance"]), lastOrder: dat(p["Dernière commande"]),
+    adresse: txt(p["Adresse"]), cp: txt(p["CP"]), ville: txt(p["Ville"]),
+    relais: txt(p["Point relais favori"]), favoris: txt(p["Favoris site"]), questionnaires: txt(p["Questionnaires site"]),
+  };
+}
+async function clientByMail(env, mail) {
+  const r = await query(env, CFG.DS_CLIENTS, { property: "Mail", email: { equals: mail } }, undefined, 1);
+  return r[0] ? client(r[0]) : null;
+}
+async function clientById(env, id) { return client(await notion(env, "/pages/" + id)); }
+
+// ---------- Sécurité ----------
+async function hmac(env, data) {
+  const k = await crypto.subtle.importKey("raw", enc.encode("aphro|" + env.NOTION_TOKEN), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return b64(await crypto.subtle.sign("HMAC", k, enc.encode(data)));
+}
+async function hashPwd(pwd, salt) {
+  const k = await crypto.subtle.importKey("raw", enc.encode(pwd), "PBKDF2", false, ["deriveBits"]);
+  return b64(await crypto.subtle.deriveBits({ name: "PBKDF2", salt: enc.encode(salt), iterations: CFG.PBKDF2, hash: "SHA-256" }, k, 256));
+}
+const rnd = (n) => b64(crypto.getRandomValues(new Uint8Array(n))).slice(0, n);
+async function makeToken(env, id) { const exp = Date.now() + 30 * 864e5; const body = id + "." + exp; return body + "." + await hmac(env, "t|" + body); }
+async function readToken(env, req) {
+  const m = (req.headers.get("Authorization") || "").match(/^Bearer (.+)$/); if (!m) return null;
+  const [id, exp, sig] = m[1].split("."); if (!id || !exp || !sig) return null;
+  if (sig !== await hmac(env, "t|" + id + "." + exp) || Date.now() > +exp) return null;
+  return id;
+}
+const mdpFort = (m) => /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(String(m || ""));
+const MSG_MDP = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial (par exemple ! ? # @).";
+const validMail = (s) => /^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]{2,}$/.test(s || "");
+// Règle : dès qu'une adresse e-mail valide existe, les cartes partent par Brevo, sauf si la personne a demandé à ne plus en recevoir
+const mailOk = (c) => validMail(c.mail) && !c.desabo;
+
+// ---------- Brevo ----------
+async function brevo(env, to, subject, html, extra = {}) {
+  if (env.MODE_TEST) { (env.OUTBOX = env.OUTBOX || []).push({ to, subject, html }); return; }
+  const r = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST", headers: { "api-key": env.BREVO_API_KEY, "Content-Type": "application/json", accept: "application/json" },
+    body: JSON.stringify({ sender: CFG.SENDER, to: [{ email: to }], subject, htmlContent: html, replyTo: { email: CFG.ZULAY }, ...extra }),
+  });
+  if (!r.ok) throw new Error("Brevo " + r.status + " " + (await r.text()).slice(0, 200));
+}
+
+// ---------- Modèles d'e-mails (couleurs du site) ----------
+const C = { PL: "#9E5238", OR: "#C9A96E", CR: "#FFEDD9", BM: "#6B4226", BD: "#E8D5A8", TX: "#2C1810" };
+const IMG = (f) => CFG.SITE + "/" + f;
+const wrap = (inner) => `<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><body style="margin:0;background:#FDFAF7;padding:18px 8px"><table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:${C.CR};border:1px solid ${C.BD};font-family:Georgia,serif;color:${C.TX}">${inner}</table></body></html>`;
+const logo = () => `<img src="${IMG("logo.png")}" width="104" height="104" alt="Les Essences Parfumées d'Aphrodite" style="display:block;margin:0 auto 2px;border-radius:50%;width:104px;height:104px">`;
+const bouton = (txt, url) => `<tr><td align="center" style="padding:4px 20px 14px"><a href="${esc(url)}" style="background:${C.PL};color:#fff;text-decoration:none;padding:11px 28px;border-radius:26px;font-size:14px;display:inline-block">${esc(txt)}</a></td></tr>`;
+const icones = () => {
+  const ic = [["coeur", "Fait main", "en plâtre résine"], ["etoile", "Personnalisable", "vos couleurs, vos envies"], ["parfum", "Parfums de Grasse", "pour elle et pour lui"], ["lotus", "Soins du visage", "un moment pour vous"]];
+  return `<tr><td><table width="100%" cellpadding="0" cellspacing="0"><tr>` + ic.map(([f, a, b]) => `<td width="25%" align="center" style="padding:12px 2px 10px"><img src="${IMG("mail-icone-" + f + ".png")}" width="44" height="44" alt="" style="display:block;margin:0 auto 5px"><div style="font-size:11px;font-weight:bold;color:${C.PL}">${a.toUpperCase()}</div><div style="font-size:10px;color:${C.BM}">${b}</div></td>`).join("") + `</tr></table></td></tr>`;
+};
+function pied(o = {}) {
+  const m = o.merci ? `<div style="font-size:13px;font-style:italic;color:${C.PL};margin-bottom:10px">${esc(o.merci)}</div>` : "";
+  const d = o.desabo ? `<span style="font-size:10px;color:#8a7a70;display:block;margin-top:8px">Vous recevez ce message car vous avez accepté nos e-mails. <a href="${esc(o.desabo)}" style="color:#8a7a70">Je ne souhaite plus en recevoir</a></span>` : "";
+  return `<tr><td style="border-top:1px solid ${C.BD};padding:14px 16px;text-align:center;font-size:12px;line-height:1.7;color:${C.BM}">${m}<b style="font-size:13px;color:${C.TX};letter-spacing:1px">Les Essences Parfumées d'Aphrodite</b><br>Zulay MARQUES<br>69540 Irigny<br>${CFG.TEL}<br>contact@lesessencesparfumeesdaphrodite.fr${d}</td></tr>`;
+}
+const bande = (lib, montant, mini, code, fin) => `<tr><td style="background:${C.PL};padding:10px 12px;text-align:center;color:#fff"><span style="font-size:12px;letter-spacing:3px">${lib}</span> <span style="font-size:24px;font-weight:bold;margin:0 8px">${montant} €</span> <span style="font-size:12px">dès ${mini} € d'achat · ${fin}</span><br><span style="display:inline-block;margin-top:6px;background:#fff;color:${C.PL};font:bold 14px 'Courier New',monospace;letter-spacing:3px;padding:4px 14px;border-radius:14px">${esc(code)}</span></td></tr>`;
+const haut = (titre, prenom, texte, photo) => `<tr><td style="padding:0"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="50%" valign="middle" align="center" style="padding:16px 10px">${logo()}<img src="${IMG(titre)}" width="250" alt="" style="display:block;margin:0 auto;width:250px;height:auto"><div style="font-size:24px;letter-spacing:4px;color:${C.PL};font-weight:bold;margin:6px 0 2px">${esc(prenom).toUpperCase()}</div><div style="font-size:12px;color:${C.BM};line-height:1.5;margin:6px 14px 0;font-style:italic">${texte}</div></td><td width="50%" valign="top" style="padding:0"><img src="${IMG(photo)}" width="300" alt="" style="display:block;width:100%;height:auto"></td></tr></table></td></tr>`;
+const simple = (titre, corps) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">${titre}</div></td></tr><tr><td style="padding:8px 26px 16px;font-size:14px;line-height:1.7;color:${C.BM}">${corps}</td></tr>`);
+
+const mailAnniv = (prenom, code, fin, desabo) => wrap(haut("mail-titre-anniversaire.png", prenom, "Aujourd'hui, c'est votre jour,<br>et j'avais envie de vous le souhaiter<br>avec un petit cadeau.", "mail-photo-anniversaire.jpg") + bande("VOTRE CADEAU", CFG.ANNIV_BON, CFG.ANNIV_MINI, code, "jusqu'au " + fin) + icones() + bouton("J'en profite sur le site", CFG.SITE) +
+  `<tr><td style="padding:6px 28px 4px;font-size:14px;line-height:1.7;color:${C.BM};text-align:center"><b style="color:${C.PL}">Pour continuer à recevoir votre cadeau d'anniversaire chaque année</b>, créez votre compte client en un instant : il vous permet aussi de cumuler des points fidélité et de retrouver vos bons et vos commandes.</td></tr>` +
+  bouton("Créer mon compte", CFG.SITE + "/#compte") + pied({ desabo }));
+const mailFidelite = (prenom, points, montant, mini, code, desabo) => wrap(haut("mail-titre-fidelite.png", prenom, `Vous avez atteint ${points} points :<br>voici votre bon fidélité,<br>pour continuer à vous faire plaisir.`, "mail-photo-fidelite.jpg") + bande("VOTRE BON FIDÉLITÉ", montant, mini, code, "valable sans limite de date") + `<tr><td style="padding:12px 28px 2px;text-align:center;font-size:13px;line-height:1.7;color:${C.BM}">Vos points se cumulent, et vous n'êtes pas obligée de les utiliser : ils restent valables <b>à vie</b>, tant que vous ne les utilisez pas.<br>1 € dépensé, hors frais de port, = 1 point.</td></tr>` + icones() + bouton("Utiliser mon bon", CFG.SITE) + pied({ merci: "Merci pour votre fidélité et votre confiance.", desabo }));
+
+function lignesCommande(o) {
+  const rows = (o.lignes || []).map((l) => `<tr><td style="padding:5px 0;border-bottom:1px solid ${C.BD}">${esc(l.nom)}${l.finition ? "<br><span style='font-size:12px'>" + esc(l.finition) + "</span>" : ""}</td><td align="right" style="padding:5px 0 5px 10px;border-bottom:1px solid ${C.BD};white-space:nowrap">${l.qte} × ${eur(l.prix)}</td></tr>`).join("");
+  const tot = (a, b, bold) => `<tr><td style="padding:3px 0;${bold ? "font-weight:bold;font-size:16px;color:" + C.PL : ""}">${a}</td><td align="right" style="padding:3px 0;${bold ? "font-weight:bold;font-size:16px;color:" + C.PL : ""}">${b}</td></tr>`;
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;color:${C.TX}">${rows}${tot("Total produits", eur(o.totalProduits))}${o.remise ? tot("Bon utilisé", "− " + eur(o.remise)) : ""}${tot("Frais de port", o.port ? eur(o.port) : "offerts")}${tot("Total", eur(o.total), true)}</table>`;
+}
+function livraisonTexte(o) {
+  if (o.mode === "Main propre") return `Remise en main propre : je vous contacte très vite pour convenir d'un rendez-vous. Vous pouvez aussi m'écrire ou m'appeler au <b>${CFG.TEL}</b>.`;
+  if (o.mode === "Point relais") return `Livraison au point relais : <b>${esc(o.relais || "à préciser")}</b>.`;
+  return `Livraison à domicile par Chronopost : <b>${esc(o.adresse || "")}</b>.`;
+}
+function mailConfirmation(prenom, o, pointsInfo) {
+  return simple("Merci pour votre commande !", `<p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p style="margin:0 0 12px">Merci pour votre commande et votre confiance.</p><p style="margin:0 0 12px">Votre commande <b>${esc(o.numero)}</b> est bien enregistrée.<br>Je la prépare avec soin.</p>${lignesCommande(o)}<p style="margin:14px 0 8px">${livraisonTexte(o)}</p>${pointsInfo || ""}<p style="margin:12px 0 0">Vous serez prévenu(e) de chaque étape.<br>À très bientôt.</p>`) .replace("</table></body>", pied() + "</table></body>");
+}
+const STATUTS = {
+  "Reçue": ["Votre commande est bien reçue", "Merci pour votre commande ! Je l'ai bien reçue et je la prépare avec soin."],
+  "En cours de création": ["Votre commande est en cours de création !", "Votre commande est en cours de création : chaque pièce est faite à la main, avec attention."],
+  "Prête": ["Votre commande est prête !", "Bonne nouvelle, votre commande est prête."],
+  "Expédiée": ["Votre commande est expédiée !", "Votre commande vient de partir. Merci encore pour votre confiance."],
+};
+const lienSuivi = (n) => n ? "https://www.mondialrelay.fr/suivi-de-colis/?numeroExpedition=" + encodeURIComponent(String(n).trim()) : "";
+function mailStatut(prenom, statut, o) {
+  const [titre, txt] = STATUTS[statut]; let plus = "";
+  if (statut === "Prête" && o.mode === "Main propre") plus = `<p>Je vous contacte pour convenir de la remise en main propre. Vous pouvez aussi m'appeler ou m'écrire au <b>${CFG.TEL}</b>.</p>`;
+  if (statut === "Prête" && o.mode !== "Main propre") plus = `<p>Elle va être expédiée très prochainement.</p>`;
+  if (statut === "Expédiée") plus = `<p>${o.mode === "Point relais" ? "Elle sera disponible dans votre point relais : <b>" + esc(o.relais || "") + "</b>." : "Elle vous sera livrée à l'adresse indiquée."}</p>` + (o.suivi ? `<p>Numéro de suivi : <b>${esc(o.suivi)}</b><br><a href="${lienSuivi(o.suivi)}" style="color:#8a5a6a">Suivre mon colis</a></p>` : "");
+  return simple(titre, `<p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p>${txt}</p>${plus}<p style="margin:12px 0 0">Commande <b>${esc(o.numero)}</b>.<br>Avec toute mon attention,<br><b>Zulay</b></p>`).replace("</table></body>", pied() + "</table></body>");
+}
+function mailAvis(prenom, numero, desabo) {
+  return simple("Votre avis compte", `<p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p>J'espère que votre commande <b>${esc(numero)}</b> vous plaît. Si vous avez un petit moment, votre avis m'aiderait beaucoup, et il aidera aussi d'autres clientes.</p>`).replace("</table></body>", bouton("Donner mon avis", CFG.AVIS_URL) + pied({ desabo }) + "</table></body>");
+}
+const smsAnniv = (prenom, code, lien) => `Joyeux anniversaire ${prenom} ! Les Essences Parfumées d'Aphrodite vous offrent un bon de ${CFG.ANNIV_BON} € dès ${CFG.ANNIV_MINI} € d'achat, valable 1 mois : ${code}. Créez votre compte pour recevoir vos prochaines surprises : ${lien} Zulay`;
+const smsFidelite = (prenom, montant, mini, code, lien) => `Bonjour ${prenom}, merci pour votre fidélité ! Voici votre bon de ${montant} € dès ${mini} € d'achat : ${code} (sans limite de date). Créez votre compte pour suivre vos points : ${lien} Zulay, Les Essences Parfumées d'Aphrodite`;
+const lienSms = (tel, texte) => "sms:" + String(tel).replace(/[^\d+]/g, "") + "?body=" + encodeURIComponent(texte);
+
+// ---------- Bons ----------
+const genCode = (pref) => pref + "-" + rnd(6).toUpperCase().replace(/[-_]/g, "7").replace(/[O0I1L]/g, "9");
+async function creerBon(env, { type, montant, mini, clientId, fin, pour, de, message, mailDest, payee }) {
+  const code = genCode(type === "Anniversaire" ? "ANNIV" : type === "Fidélité" ? "FIDEL" : "CADEAU");
+  const props = { Code: TT(code), Type: { select: { name: type } }, Montant: { number: montant }, "Utilisé": { checkbox: false }, "Payée": { checkbox: !!payee } };
+  if (mini) props["Achat minimum"] = { number: mini };
+  if (clientId) props["Cliente"] = { relation: [{ id: clientId }] };
+  if (fin) props["Valable jusqu'au"] = { date: { start: fin } };
+  if (mailDest) props["Destinataire e-mail"] = { email: mailDest };
+  if (pour) props["Pour"] = T(pour);
+  if (de) props["De la part de"] = T(de);
+  if (message) props["Message"] = T(message);
+  const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_BONS }, properties: props });
+  return { id: pg.id, code };
+}
+async function bonParCode(env, code) {
+  const r = await query(env, CFG.DS_BONS, { property: "Code", title: { equals: String(code || "").trim().toUpperCase() } }, undefined, 1);
+  if (!r[0]) return null; const p = r[0].properties;
+  return { id: r[0].id, code: txt(p.Code), type: sel(p.Type), montant: num(p.Montant), mini: num(p["Achat minimum"]), utilise: chk(p["Utilisé"]), payee: chk(p["Payée"]), fin: dat(p["Valable jusqu'au"]), clientIds: rel(p.Cliente), pour: txt(p.Pour), de: txt(p["De la part de"]), message: txt(p.Message), notifie: dat(p["Notifié le"]) };
+}
+const bonValide = (b, clientId, sous, aujourdhui) => {
+  if (!b) return "Code inconnu."; if (b.utilise) return "Ce bon a déjà été utilisé.";
+  if (b.type === "Carte cadeau" && !b.payee) return "Cette carte cadeau n'est pas encore réglée.";
+  if (b.fin && b.fin < aujourdhui) return "Ce bon n'est plus valable.";
+  if (b.type !== "Carte cadeau" && b.clientIds.length && clientId && !b.clientIds.includes(clientId)) return "Ce bon n'est pas lié à votre compte.";
+  if (b.type !== "Carte cadeau" && b.clientIds.length && !clientId) return "Connectez-vous pour utiliser ce bon.";
+  if (b.mini && sous < b.mini) return `Ce bon est valable dès ${eur(b.mini)} d'achat.`;
+  return "";
+};
+async function bonsClient(env, id) {
+  const r = await query(env, CFG.DS_BONS, { property: "Cliente", relation: { contains: id } });
+  return r.map((x) => { const p = x.properties; return { code: txt(p.Code), type: sel(p.Type), montant: num(p.Montant), mini: num(p["Achat minimum"]), utilise: chk(p["Utilisé"]), fin: dat(p["Valable jusqu'au"]), notifie: dat(p["Notifié le"]) }; });
+}
+const coutPoints = (montant) => { const p = CFG.PALIERS.find((x) => x[1] === montant); return p ? p[0] : 0; };
+// Points non réservés par un bon fidélité déjà créé mais pas encore utilisé
+async function pointsLibres(env, c, bons) {
+  bons = bons || await bonsClient(env, c.id);
+  const reserves = bons.filter((b) => b.type === "Fidélité" && !b.utilise).reduce((s, b) => s + coutPoints(b.montant), 0);
+  return c.points - reserves;
+}
+async function creerBonFidelite(env, c, palier) {
+  const b = await creerBon(env, { type: "Fidélité", montant: palier[1], mini: palier[2], clientId: c.id });
+  return { ...b, montant: palier[1], mini: palier[2], pts: palier[0] };
+}
+// Après une commande : si la cliente n'a aucun bon fidélité en attente, on lui crée le plus haut palier atteint
+async function verifierPaliers(env, c, points) {
+  const bons = await bonsClient(env, c.id);
+  if (bons.some((b) => b.type === "Fidélité" && !b.utilise)) return [];
+  const palier = [...CFG.PALIERS].reverse().find(([p]) => points >= p);
+  return palier ? [await creerBonFidelite(env, c, palier)] : [];
+}
+
+// ---------- Commandes ----------
+function commande(pg) {
+  const p = pg.properties;
+  return { id: pg.id, numero: txt(p.Commande), date: dat(p.Date), statut: sel(p.Statut), produits: txt(p.Produits), total: num(p["Total final"]), port: num(p["Frais de port"]), remise: num(p.Remise), totalProduits: num(p["Total produits"]), points: num(p["Points gagnés"]), mode: sel(p["Mode de livraison"]), relais: txt(p["Point relais choisi"]), expedie: dat(p["Date d'expédition"]), origine: sel(p.Origine), clientIds: rel(p.Cliente), notif: txt(p["Statut notifié"]), avis14: chk(p["Avis 14 j"]), avis30: chk(p["Avis 30 j"]), adresse: txt(p["Adresse de livraison"]), mail: (p["E-mail"] || {}).email || "", nomClient: txt(p["Nom client"]), json: txt(p["Détail (JSON)"]), paiement: txt(p.Paiement), suivi: txt(p["N° de suivi"]) };
+}
+async function commandesClient(env, id) {
+  const r = await query(env, CFG.DS_COMMANDES, { property: "Cliente", relation: { contains: id } }, [{ property: "Date", direction: "descending" }]);
+  return r.map(commande).map((o) => ({ numero: o.numero, date: o.date, statut: o.statut, produits: o.produits, total: o.total, mode: o.mode, relais: o.relais, points: o.points, suivi: o.suivi, lienSuivi: lienSuivi(o.suivi), paiement: o.paiement }));
+}
+
+const lireJson = (t, d) => { try { const v = JSON.parse(t || ""); return v == null ? d : v; } catch (e) { return d; } };
+const mdpOk = async (c, mdp) => { const [salt, h] = c.mdp && !c.mdp.startsWith("attente|") ? c.mdp.split("|") : []; return !!salt && h === await hashPwd(String(mdp || ""), salt); };
+const sigReinit = (env, c, exp) => hmac(env, "r|" + c.id + "|" + exp + "|" + c.mdp.slice(-12));
+
+// ---------- Profil renvoyé au site ----------
+async function profil(env, c) {
+  const [bons, cmds] = await Promise.all([bonsClient(env, c.id), commandesClient(env, c.id)]);
+  const auj = iso(today());
+  let panier = []; try { panier = JSON.parse(c.panier || "[]"); } catch (e) { panier = []; }
+  return {
+    prenom: c.prenom, nom: c.nom.split(/\s+/).slice(1).join(" "), mail: c.mail, tel: c.tel, points: c.points, pointsLibres: await pointsLibres(env, c, bons), naissance: c.naissance, accepte: c.accepte, newsletter: c.newsletter, panier,
+    adresse: c.adresse, cp: c.cp, ville: c.ville, relais: c.relais, favoris: lireJson(c.favoris, []), questionnaires: lireJson(c.questionnaires, []),
+    paliers: CFG.PALIERS.map(([p, m, mini]) => ({ points: p, montant: m, mini })),
+    bons: bons.filter((b) => !b.utilise && (!b.fin || b.fin >= auj)).map((b) => ({ code: b.code, type: b.type, montant: b.montant, mini: b.mini, fin: b.fin })),
+    commandes: cmds,
+  };
+}
+
+// ---------- Bon de commande des salons (téléphone de Zulay) ----------
+async function salonOk(env, code) { return !!(CFG.SALON_HASH && code && (await hashPwd(String(code), CFG.SALON_SEL)) === CFG.SALON_HASH); }
+async function tokenCreation(env, id) { const b = id + "." + (Date.now() + 120 * 864e5); return b + "." + await hmac(env, "cr|" + b); }
+async function lireTokenCreation(env, t) { const [id, exp, sig] = String(t || "").split("."); if (!id || !exp || !sig) return null; if (sig !== await hmac(env, "cr|" + id + "." + exp) || Date.now() > +exp) return null; return id; }
+function variantesTel(t) {
+  const d = String(t || "").replace(/\D/g, ""); const v = new Set([String(t || "").trim()]); if (d.length < 9) return [...v].filter(Boolean);
+  v.add(d); if (d.length === 10) { v.add(d.replace(/(\d\d)(?=\d)/g, "$1 ").trim()); v.add("+33" + d.slice(1)); v.add("+33 " + d.slice(1)); }
+  return [...v].filter(Boolean);
+}
+async function trouverCliente(env, mail, tel) {
+  if (validMail(mail)) { const c = await clientByMail(env, mail); if (c) return c; }
+  for (const v of variantesTel(tel)) { const r = await query(env, CFG.DS_CLIENTS, { property: "Téléphone", phone_number: { equals: v } }, undefined, 1); if (r[0]) return client(r[0]); }
+  return null;
+}
+const compteActif = (c) => !!(c.mdp && !c.mdp.startsWith("attente|"));
+
+// ---------- Routes ----------
+const json = (o, status, origin) => new Response(status === 204 ? null : JSON.stringify(o), { status: status || 200, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin || CFG.ORIGINS[0], "Access-Control-Allow-Headers": "Content-Type, Authorization", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", Vary: "Origin" } });
+const page = (titre, msg) => new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(titre)}</title><body style="font-family:Georgia,serif;background:#FFEDD9;color:#2C1810;text-align:center;padding:40px 18px"><h1 style="color:#9E5238">${esc(titre)}</h1><p>${esc(msg)}</p><p><a style="color:#9E5238" href="${CFG.SITE}">Retour au site</a></p></body>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+
+// ---------- Comptes équipe EXHALESSENCE (page équipe, séparée du site Aphrodite) ----------
+const eqNet = (t, n) => String(t || "").replace(/[<>"&]/g, "").trim().slice(0, n);
+const eqParr = (v) => { v = String(v || "").trim().replace(/^https?:\/\/(www\.)?exhalessence\.fr\/?/i, ""); return /^[A-Za-z0-9_\-.?=&%\/]{1,200}$/.test(v) && v.indexOf("//") < 0 && v.indexOf("..") < 0 ? v : ""; };
+function eqDonnees(b) {
+  const tel = String(b.tel || "").replace(/[^0-9+]/g, "").slice(0, 16);
+  return { mail: String(b.mail || "").trim().toLowerCase(), prenom: eqNet(b.prenom, 30), nom: eqNet(b.nom, 30), civ: b.civ === "m" ? "m" : "f", tel, parr: eqParr(b.parr), depuis: eqNet(b.depuis, 30), apropos: String(b.apropos || "").replace(/[<>]/g, "").trim().slice(0, 1000) };
+}
+function eqCompte(pg) {
+  const p = pg.properties;
+  return { id: pg.id, mail: (p["E-mail"] && p["E-mail"].email) || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), civ: sel(p["Civilité"]) === "Monsieur" ? "m" : "f", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", parr: txt(p["Code de parrainage"]), depuis: txt(p["Conseillère depuis"]), apropos: txt(p["Qui suis-je"]), mdp: txt(p["Empreinte mot de passe (ne pas modifier)"]) };
+}
+const eqPublic = (c) => ({ mail: c.mail, prenom: c.prenom, nom: c.nom, civ: c.civ, tel: c.tel, parr: c.parr, depuis: c.depuis, apropos: c.apropos });
+function eqProps(d) {
+  return { "Nom complet": TT(((d.prenom || "") + " " + (d.nom || "")).trim() || d.mail), "Prénom": T(d.prenom), "Nom": T(d.nom), "Civilité": { select: { name: d.civ === "m" ? "Monsieur" : "Madame" } }, "E-mail": { email: d.mail }, "Téléphone": { phone_number: d.tel || null }, "Code de parrainage": T(d.parr), "Conseillère depuis": T(d.depuis), "Qui suis-je": T(d.apropos) };
+}
+async function eqParMail(env, mail) { const r = await query(env, CFG.DS_EQUIPE, { property: "E-mail", email: { equals: mail } }, undefined, 1); return r[0] ? eqCompte(r[0]) : null; }
+async function eqParId(env, id) { return eqCompte(await notion(env, "/pages/" + id)); }
+async function eqJeton(env, id) { const exp = Date.now() + 90 * 864e5; const b = id + "." + exp; return b + "." + await hmac(env, "eq|" + b); }
+async function eqLireJeton(env, t) { const [id, exp, sig] = String(t || "").split("."); if (!id || !exp || !sig || Date.now() > +exp) return null; return sig === await hmac(env, "eq|" + id + "." + exp) ? id : null; }
+const eqSigReinit = (env, c, exp) => hmac(env, "er|" + c.id + "|" + exp + "|" + c.mdp.slice(-12));
+const eqMdpOk = async (c, mdp) => { const [salt, h] = c.mdp ? c.mdp.split("|") : []; return !!salt && h === await hashPwd(String(mdp || ""), salt); };
+function eqLien(base, d) {
+  const n = []; const add = (k, v) => { if (v) n.push(k + "=" + encodeURIComponent(v)); };
+  add("p", d.prenom); add("n", d.nom); add("g", d.civ === "m" ? "m" : "f"); add("c", d.tel); add("e", d.mail); add("d", d.depuis); add("a", d.apropos); add("r", d.parr);
+  return base + (n.length ? "?" + n.join("&") : "");
+}
+const eqBase = (b) => { b = String(b || ""); return b.startsWith(CFG.EQ_ORIGIN + "/") && !/[\s"'<>]/.test(b) ? b.split("?")[0].split("#")[0] : CFG.EQ_ORIGIN + "/exhalessence-conseils/"; };
+const eqMail = (titre, corps, btnTxt, btnUrl) => wrap(`<tr><td align="center" style="padding:24px 18px 6px"><div style="font-size:22px;color:${C.PL};letter-spacing:2px">${titre}</div></td></tr><tr><td style="padding:8px 26px 16px;font-size:14px;line-height:1.7;color:${C.BM}">${corps}</td></tr>` + (btnUrl ? bouton(btnTxt, btnUrl) : "") + `<tr><td style="border-top:1px solid ${C.BD};padding:14px 16px;text-align:center;font-size:12px;line-height:1.7;color:${C.BM}"><b style="font-size:13px;color:${C.TX};letter-spacing:1px">Page équipe EXHALESSENCE</b><br>Conseiller(ère)s indépendant(e)s</td></tr>`);
+const EQ_EXP = { name: "Page équipe EXHALESSENCE", email: CFG.SENDER.email };
+async function eqEnvoyer(env, c, sujet, titre, corps, btnTxt, btnUrl) {
+  try { await brevo(env, c.mail, sujet, eqMail(titre, corps, btnTxt, btnUrl), { sender: EQ_EXP }); } catch (e) { console.log("Equipe mail", e.message); }
+}
+async function eqRoute(env, route, body, J) {
+  const maintenant = new Date().toISOString();
+  if (route === "/equipe/creer") {
+    const d = eqDonnees(body);
+    if (!validMail(d.mail)) return J({ erreur: "Merci d'indiquer une adresse e-mail valide." }, 400);
+    if (!d.prenom || !d.nom) return J({ erreur: "Merci d'indiquer votre prénom et votre nom." }, 400);
+    if (!mdpFort(body.mdp)) return J({ erreur: MSG_MDP }, 400);
+    const ex = await eqParMail(env, d.mail);
+    if (ex && ex.mdp) return J({ erreur: "Un compte existe déjà avec cette adresse e-mail. Connectez-vous, ou utilisez « Mot de passe ou lien oublié »." }, 409);
+    const salt = rnd(16); const mdp = salt + "|" + await hashPwd(String(body.mdp), salt);
+    const props = { ...eqProps(d), "Empreinte mot de passe (ne pas modifier)": T(mdp), "Statut": { select: { name: "Compte créé" } }, "Compte créé le": { date: { start: maintenant } }, "Dernière connexion": { date: { start: maintenant } } };
+    let id;
+    if (ex) { await notion(env, "/pages/" + ex.id, "PATCH", { properties: props }); id = ex.id; }
+    else { const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_EQUIPE }, properties: props }); id = pg.id; }
+    const base = eqBase(body.base);
+    await eqEnvoyer(env, d, "Votre compte est créé", "Votre compte est créé", `<p>Bonjour ${esc(d.prenom)},</p><p>Votre compte sur la page équipe est bien créé. Voici votre lien personnel : gardez ce message, il vous permet de le retrouver à tout moment.</p><p style="word-break:break-all;font-size:12px">${esc(eqLien(base, d))}</p><p style="font-size:12px">Pour des raisons de sécurité, votre mot de passe n'est jamais envoyé ni lisible par quiconque.</p>`, "Ouvrir mon lien", eqLien(base, d));
+    return J({ ok: true, jeton: await eqJeton(env, id), profil: eqPublic({ ...d }) });
+  }
+  if (route === "/equipe/connexion") {
+    const mail = String(body.mail || "").trim().toLowerCase();
+    const c = validMail(mail) ? await eqParMail(env, mail) : null;
+    if (!c || !c.mdp || !(await eqMdpOk(c, body.mdp))) return J({ erreur: "Adresse e-mail ou mot de passe incorrect." }, 401);
+    await notion(env, "/pages/" + c.id, "PATCH", { properties: { "Dernière connexion": { date: { start: maintenant } } } });
+    return J({ ok: true, jeton: await eqJeton(env, c.id), profil: eqPublic(c) });
+  }
+  if (route === "/equipe/moi") {
+    const id = await eqLireJeton(env, body.jeton);
+    if (!id) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
+    const c = await eqParId(env, id);
+    return J({ ok: true, profil: eqPublic(c) });
+  }
+  if (route === "/equipe/profil-maj") {
+    const id = await eqLireJeton(env, body.jeton);
+    if (!id) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
+    const c = await eqParId(env, id);
+    const d = eqDonnees({ ...body, mail: c.mail });
+    if (!d.prenom || !d.nom) return J({ erreur: "Merci d'indiquer votre prénom et votre nom." }, 400);
+    await notion(env, "/pages/" + id, "PATCH", { properties: eqProps(d) });
+    return J({ ok: true, profil: eqPublic(d) });
+  }
+  if (route === "/equipe/oubli") {
+    const mail = String(body.mail || "").trim().toLowerCase();
+    const rep = { ok: true, message: "Si un compte existe avec cette adresse, un e-mail vient de vous être envoyé avec votre lien personnel et un lien pour choisir un nouveau mot de passe. Pensez à regarder dans vos courriers indésirables." };
+    if (!validMail(mail)) return J({ erreur: "Merci d'indiquer une adresse e-mail valide." }, 400);
+    const c = await eqParMail(env, mail);
+    if (c && c.mdp) {
+      const base = eqBase(body.base); const exp = Date.now() + 36e5; const t = c.id + "." + exp + "." + await eqSigReinit(env, c, exp);
+      await eqEnvoyer(env, c, "Votre lien et votre mot de passe", "Retrouvez votre accès", `<p>Bonjour ${esc(c.prenom)},</p><p>Voici votre lien personnel :</p><p style="word-break:break-all;font-size:12px">${esc(eqLien(base, c))}</p><p>Si vous avez aussi oublié votre mot de passe, appuyez sur le bouton ci-dessous pour en choisir un nouveau (le lien est valable 1 heure).</p><p style="font-size:12px">Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet e-mail : votre mot de passe actuel reste valable.</p>`, "Choisir un nouveau mot de passe", base + "#reinit=" + encodeURIComponent(t));
+    }
+    return J(rep);
+  }
+  if (route === "/equipe/reinit") {
+    const [id, exp, sig] = String(body.t || "").split(".");
+    if (!id || !exp || !sig || Date.now() > +exp) return J({ erreur: "Ce lien a expiré. Refaites une demande « Mot de passe ou lien oublié »." }, 400);
+    if (!mdpFort(body.mdp)) return J({ erreur: MSG_MDP }, 400);
+    const c = await eqParId(env, id);
+    if (!c.mdp || sig !== await eqSigReinit(env, c, exp)) return J({ erreur: "Ce lien n'est plus valable (déjà utilisé ou expiré). Refaites une demande." }, 400);
+    const salt = rnd(16);
+    await notion(env, "/pages/" + id, "PATCH", { properties: { "Empreinte mot de passe (ne pas modifier)": T(salt + "|" + await hashPwd(String(body.mdp), salt)) } });
+    return J({ ok: true, message: "Votre mot de passe a été changé. Vous pouvez vous connecter." });
+  }
+  return J({ erreur: "Route inconnue." }, 404);
+}
+
+async function handle(req, env) {
+  const url = new URL(req.url); const route = url.pathname.replace(/\/+$/, "");
+  const eqR = route.startsWith("/equipe/");
+  const origin = eqR ? (req.headers.get("Origin") === CFG.EQ_ORIGIN ? CFG.EQ_ORIGIN : CFG.ORIGINS[0]) : (CFG.ORIGINS.includes(req.headers.get("Origin")) ? req.headers.get("Origin") : CFG.ORIGINS[0]);
+  if (req.method === "OPTIONS") return json({}, 204, origin);
+  const J = (o, s) => json(o, s, origin);
+  const body = req.method === "POST" ? await req.json().catch(() => ({})) : {};
+  const nowD = today(); const auj = iso(nowD);
+  if (eqR) return eqRoute(env, route, body, J);
+
+  if (route === "/ping") return J({ ok: true });
+  if (route === "/etat-filleules") { try { const r = await query(env, CFG.DS_FILLEULES, { property: "Date d'entrée", date: { is_not_empty: true } }); return J({ ok: true, fiches: r.length }); } catch (e) { return J({ ok: false }); } }
+
+  // Désinscription (lien dans les e-mails)
+  if (route === "/desabo") {
+    const id = url.searchParams.get("c"), s = url.searchParams.get("s");
+    if (!id || s !== await hmac(env, "u|" + id)) return page("Lien invalide", "Ce lien n'est pas valide.");
+    await notion(env, "/pages/" + id, "PATCH", { properties: { "Accepte les e-mails": { checkbox: false }, "Ne plus recevoir d'e-mails": { checkbox: true } } });
+    return page("C'est fait", "Vous ne recevrez plus d'e-mails de promotion. Vos e-mails de commande continueront d'arriver.");
+  }
+  // Confirmation d'adresse (lien reçu après inscription)
+  if (route === "/confirmer") {
+    const id = url.searchParams.get("c"), s = url.searchParams.get("s");
+    if (!id || s !== await hmac(env, "v|" + id)) return page("Lien invalide", "Ce lien n'est pas valide.");
+    const c = await clientById(env, id);
+    if (c.mdp.startsWith("attente|")) await notion(env, "/pages/" + id, "PATCH", { properties: { "Mot de passe chiffré": T(c.mdp.slice(8)) } });
+    return page("Compte confirmé", "Votre compte est activé. Vous pouvez maintenant vous connecter sur le site.");
+  }
+
+  if (route === "/inscription") {
+    const mail = String(body.mail || "").trim().toLowerCase();
+    if (!validMail(mail)) return J({ erreur: "Merci d'indiquer une adresse e-mail valide." }, 400);
+    if (!mdpFort(body.mdp)) return J({ erreur: MSG_MDP }, 400);
+    const prenom = String(body.prenom || "").trim().slice(0, 60), nom = String(body.nom || "").trim().slice(0, 60);
+    if (!prenom || !nom) return J({ erreur: "Merci d'indiquer votre prénom et votre nom." }, 400);
+    const tel0 = String(body.tel || "").trim(), adr0 = String(body.adresse || "").trim(), cp0 = String(body.cp || "").trim(), ville0 = String(body.ville || "").trim();
+    if (!tel0 || !adr0 || !cp0 || !ville0 || !/^\d{4}-\d{2}-\d{2}$/.test(body.naissance || "")) return J({ erreur: "Merci de remplir tous les champs obligatoires (téléphone, adresse, date de naissance)." }, 400);
+    if (!body.accepte && !body.newsletter && !body.aucun) return J({ erreur: "Merci de choisir vos préférences d'e-mails." }, 400);
+    const salt = rnd(16), h = salt + "|" + await hashPwd(body.mdp, salt);
+    const idJeton = body.jeton ? await lireTokenCreation(env, body.jeton) : null;
+    let c = idJeton ? await clientById(env, idJeton) : await clientByMail(env, mail);
+    if (c && c.mdp && !c.mdp.startsWith("attente|")) return J({ erreur: "Un compte existe déjà avec cette adresse. Connectez-vous." }, 409);
+    const props = { "Mot de passe chiffré": T("attente|" + h), "Accepte les e-mails": { checkbox: !!body.accepte }, "Ne plus recevoir d'e-mails": { checkbox: !!body.aucun }, Newsletter: { checkbox: !!body.newsletter }, "Compte site créé le": { date: { start: auj } },
+      Adresse: T(adr0.slice(0, 200)), CP: T(cp0.slice(0, 10)), Ville: T(ville0.slice(0, 80)) };
+    if (tel0) props["Téléphone"] = { phone_number: tel0.slice(0, 30) };
+    if (/^\d{4}-\d{2}-\d{2}$/.test(body.naissance || "")) props["Date de naissance"] = { date: { start: body.naissance } };
+    let id;
+    if (c) { id = c.id; if (c.mail !== mail) props.Mail = { email: mail }; await notion(env, "/pages/" + id, "PATCH", { properties: props }); }
+    else { const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_CLIENTS }, properties: { ...props, "Client(e)": TT(prenom + " " + nom.toUpperCase()), Mail: { email: mail }, "Points fidélité": { number: 0 } } }); id = pg.id; }
+    const lien = `${url.origin}/confirmer?c=${id}&s=${encodeURIComponent(await hmac(env, "v|" + id))}`;
+    await brevo(env, mail, "Confirmez votre compte", simple("Bienvenue !", `<p>Bonjour ${esc(prenom)},</p><p>Merci d'avoir créé votre compte. Pour l'activer, appuyez sur le bouton ci-dessous.</p>`).replace("</table></body>", bouton("Confirmer mon compte", lien) + pied() + "</table></body>"));
+    return J({ ok: true, message: "Un e-mail de confirmation vient de vous être envoyé. Appuyez sur le lien qu'il contient, puis connectez-vous." });
+  }
+
+  if (route === "/connexion") {
+    const mail = String(body.mail || "").trim().toLowerCase(); const c = mail ? await clientByMail(env, mail) : null;
+    const [salt, h] = c && c.mdp && !c.mdp.startsWith("attente|") ? c.mdp.split("|") : [];
+    if (!c || !salt || (h !== await hashPwd(String(body.mdp || ""), salt) && h !== await hashPwd(String(body.mdp || "").trim(), salt))) {
+      if (c && c.mdp.startsWith("attente|")) return J({ erreur: "Confirmez d'abord votre adresse avec le lien reçu par e-mail." }, 401);
+      return J({ erreur: "Adresse ou mot de passe incorrect." }, 401);
+    }
+    return J({ token: await makeToken(env, c.id), profil: await profil(env, c) });
+  }
+
+  // Mot de passe oublié : envoi d'un lien valable 1 heure
+  if (route === "/mot-de-passe-oublie") {
+    const mail = String(body.mail || "").trim().toLowerCase();
+    const rep = { ok: true, message: "Si un compte existe avec cette adresse, un e-mail vient de vous être envoyé avec un lien pour choisir un nouveau mot de passe. Pensez à regarder dans vos courriers indésirables." };
+    if (!validMail(mail)) return J({ erreur: "Merci d'indiquer une adresse e-mail valide." }, 400);
+    const c = await clientByMail(env, mail);
+    if (c && c.mdp && !c.mdp.startsWith("attente|")) {
+      const exp = Date.now() + 36e5; const t = c.id + "." + exp + "." + await sigReinit(env, c, exp);
+      const lien = CFG.SITE + "/#reinit=" + encodeURIComponent(t);
+      await brevo(env, mail, "Réinitialisez votre mot de passe", simple("Nouveau mot de passe", `<p>Bonjour ${esc(c.prenom)},</p><p>Vous avez demandé à changer votre mot de passe. Appuyez sur le bouton ci-dessous pour en choisir un nouveau (le lien est valable 1 heure).</p><p style="font-size:12px">Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet e-mail : votre mot de passe actuel reste valable.</p>`).replace("</table></body>", bouton("Choisir un nouveau mot de passe", lien) + pied() + "</table></body>"));
+    }
+    return J(rep);
+  }
+  if (route === "/reinitialiser") {
+    const [id, exp, sig] = String(body.t || "").split(".");
+    if (!id || !exp || !sig || Date.now() > +exp) return J({ erreur: "Ce lien a expiré. Refaites une demande de mot de passe oublié." }, 400);
+    if (!mdpFort(body.mdp)) return J({ erreur: MSG_MDP }, 400);
+    const c = await clientById(env, id);
+    if (!c.mdp || c.mdp.startsWith("attente|") || sig !== await sigReinit(env, c, exp)) return J({ erreur: "Ce lien n'est plus valable (déjà utilisé ou expiré). Refaites une demande." }, 400);
+    const salt = rnd(16);
+    await notion(env, "/pages/" + id, "PATCH", { properties: { "Mot de passe chiffré": T(salt + "|" + await hashPwd(body.mdp, salt)) } });
+    return J({ ok: true, message: "Votre mot de passe a été changé. Vous pouvez vous connecter." });
+  }
+
+  // Meilleures ventes (commandes passées sur le site) : nombre d'exemplaires par nom de produit
+  if (route === "/meilleures-ventes") {
+    const cmds = await query(env, CFG.DS_COMMANDES, { property: "Origine", select: { equals: "Site" } });
+    const noms = {};
+    for (const pg of cmds) for (const l of txt(pg.properties.Produits).split("\n")) {
+      const m = l.match(/^(\d+) × (.+?)(?: \(.*\))? — /); if (m) noms[m[2].trim()] = (noms[m[2].trim()] || 0) + (+m[1]);
+    }
+    return J({ noms });
+  }
+
+  // --- Routes protégées ---
+  const authId = await readToken(env, req);
+  if (route === "/moi") { if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401); return J({ profil: await profil(env, await clientById(env, authId)) }); }
+  if (route === "/panier") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const s = JSON.stringify(Array.isArray(body.panier) ? body.panier.slice(0, 60) : []);
+    if (s.length > 1990) return J({ erreur: "Panier trop volumineux." }, 400);
+    await notion(env, "/pages/" + authId, "PATCH", { properties: { "Panier en cours": T(s) } }); return J({ ok: true });
+  }
+  if (route === "/preferences") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    await notion(env, "/pages/" + authId, "PATCH", { properties: { "Accepte les e-mails": { checkbox: !!body.accepte }, Newsletter: { checkbox: !!body.newsletter }, "Ne plus recevoir d'e-mails": { checkbox: !body.accepte && !body.newsletter } } }); return J({ ok: true });
+  }
+  if (route === "/supprimer-compte") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const c = await clientById(env, authId); const [salt, h] = c.mdp.split("|");
+    if (h !== await hashPwd(String(body.mdp || ""), salt)) return J({ erreur: "Mot de passe incorrect." }, 401);
+    await notion(env, "/pages/" + authId, "PATCH", { properties: { "Mot de passe chiffré": T(""), "Panier en cours": T(""), "Accepte les e-mails": { checkbox: false }, "Compte site créé le": { date: null } } });
+    return J({ ok: true });
+  }
+  if (route === "/changer-mdp") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const c = await clientById(env, authId);
+    if (!await mdpOk(c, body.ancien)) return J({ erreur: "Votre mot de passe actuel est incorrect." }, 401);
+    if (!mdpFort(body.nouveau)) return J({ erreur: MSG_MDP }, 400);
+    const salt = rnd(16);
+    await notion(env, "/pages/" + authId, "PATCH", { properties: { "Mot de passe chiffré": T(salt + "|" + await hashPwd(body.nouveau, salt)) } });
+    return J({ ok: true });
+  }
+  if (route === "/changer-mail") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const c = await clientById(env, authId); const mail = String(body.mail || "").trim().toLowerCase();
+    if (!validMail(mail)) return J({ erreur: "Merci d'indiquer une adresse e-mail valide." }, 400);
+    if (!await mdpOk(c, body.mdp)) return J({ erreur: "Mot de passe incorrect." }, 401);
+    const autre = await clientByMail(env, mail);
+    if (autre && autre.id !== authId) return J({ erreur: "Cette adresse est déjà utilisée par un autre compte." }, 409);
+    await notion(env, "/pages/" + authId, "PATCH", { properties: { Mail: { email: mail } } });
+    return J({ ok: true, profil: await profil(env, await clientById(env, authId)) });
+  }
+  if (route === "/modifier-profil") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const props = {};
+    if (body.prenom !== undefined || body.nom !== undefined) {
+      const pr = String(body.prenom || "").trim().slice(0, 60), no = String(body.nom || "").trim().slice(0, 60);
+      if (!pr || !no) return J({ erreur: "Le prénom et le nom ne peuvent pas être vides." }, 400);
+      props["Client(e)"] = TT(pr + " " + no.toUpperCase());
+    }
+    if (body.tel !== undefined) props["Téléphone"] = { phone_number: String(body.tel).trim().slice(0, 30) || null };
+    if (body.adresse !== undefined) props["Adresse"] = T(String(body.adresse).trim().slice(0, 200));
+    if (body.cp !== undefined) props["CP"] = T(String(body.cp).trim().slice(0, 10));
+    if (body.ville !== undefined) props["Ville"] = T(String(body.ville).trim().slice(0, 80));
+    if (body.relais !== undefined) props["Point relais favori"] = T(String(body.relais).trim().slice(0, 300));
+    await notion(env, "/pages/" + authId, "PATCH", { properties: props });
+    return J({ ok: true, profil: await profil(env, await clientById(env, authId)) });
+  }
+  if (route === "/favoris") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const l = (Array.isArray(body.liste) ? body.liste : []).map((x) => String(x).slice(0, 80)).slice(0, 40);
+    let sj = JSON.stringify(l); while (sj.length > 1900) { l.pop(); sj = JSON.stringify(l); }
+    await notion(env, "/pages/" + authId, "PATCH", { properties: { "Favoris site": T(sj) } }); return J({ ok: true });
+  }
+  if (route === "/contact") {
+    const nom = String(body.nom || "").trim().slice(0, 100), sujet = String(body.sujet || "Autre").trim().slice(0, 80) || "Autre", msg = String(body.message || "").trim().slice(0, 1900);
+    let mail = String(body.email || "").trim().toLowerCase().slice(0, 150), cid = "";
+    if (authId) { try { const c = await clientById(env, authId); cid = c.id; if (c.mail) mail = c.mail; } catch (e) {} }
+    if (!nom || msg.length < 3) return J({ erreur: "Merci de remplir votre nom et votre message." }, 400);
+    if (!validMail(mail)) return J({ erreur: "Merci de vérifier votre adresse e-mail." }, 400);
+    const depuis = new Date(Date.now() - 36e5).toISOString();
+    const recents = await query(env, CFG.DS_MESSAGES, { and: [{ property: "Mail", email: { equals: mail } }, { timestamp: "created_time", created_time: { on_or_after: depuis } }] });
+    if (recents.length >= 3) return J({ erreur: "Vous avez déjà envoyé plusieurs messages. Je vous réponds très vite, merci de patienter." }, 429);
+    const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_MESSAGES }, properties: { Sujet: TT(sujet), Nom: T(nom), Mail: { email: mail }, Message: T(msg), Statut: { select: { name: "Nouveau" } }, "Client ID": T(cid), "Compte client": { checkbox: !!cid } } });
+    try {
+      await brevo(env, CFG.ZULAY, "💌 Nouveau message du site : " + sujet, mailMessage(nom, mail, sujet, msg, pg.url, !!cid), { replyTo: { email: mail, name: nom } });
+    } catch (e) { console.log("Mail message", e.message); }
+    return J({ ok: true });
+  }
+  if (route === "/mes-messages") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const rows = await query(env, CFG.DS_MESSAGES, { property: "Client ID", rich_text: { equals: authId } }, [{ timestamp: "created_time", direction: "descending" }]);
+    return J({ messages: rows.slice(0, 30).map((pg) => { const p = pg.properties, rep = sel(p["Statut"]) === "Envoyée"; return { sujet: txt(p["Sujet"]), message: txt(p["Message"]), date: (pg.created_time || "").slice(0, 10), reponse: rep ? txt(p["Réponse"]) : "", dateReponse: rep ? dat(p["Réponse envoyée le"]) : "" }; }) });
+  }
+  if (route === "/salon/ping") return (await salonOk(env, body.code)) ? J({ ok: true }) : J({ erreur: "Code incorrect." }, 401);
+  // --- Espace administrateur (protégé par le code du bon de commande) ---
+  if (route === "/admin/commandes") {
+    if (!(await salonOk(env, body.code))) return J({ erreur: "Code incorrect." }, 401);
+    const r = await query(env, CFG.DS_COMMANDES, { or: [{ property: "Origine", select: { equals: "Site" } }, { property: "Origine", select: { equals: "Salon" } }] }, [{ property: "Date", direction: "descending" }]);
+    return J({ commandes: r.slice(0, 100).map((pg) => { const o = commande(pg); return { origine: o.origine, id: o.id, numero: o.numero, date: o.date, statut: o.statut, produits: o.produits, total: o.total, mode: o.mode, relais: o.relais, adresse: o.adresse, mail: o.mail, nom: o.nomClient, paiement: o.paiement, suivi: o.suivi, note: txt(pg.properties.Note) }; }) });
+  }
+  if (route === "/admin/maj") {
+    if (!(await salonOk(env, body.code))) return J({ erreur: "Code incorrect." }, 401);
+    if (!/^[\w-]{3,40}$/.test(String(body.id || ""))) return J({ erreur: "Commande inconnue." }, 400);
+    const props = {};
+    if (body.statut !== undefined) { if (!["Reçue", "En cours de création", "En cours de commande", "Prête", "Expédiée", "Terminée"].includes(body.statut)) return J({ erreur: "Statut inconnu." }, 400); props.Statut = { select: { name: body.statut } }; }
+    if (body.paiement !== undefined) props.Paiement = T(String(body.paiement).slice(0, 300));
+    if (body.suivi !== undefined) props["N° de suivi"] = T(String(body.suivi).trim().slice(0, 60));
+    await notion(env, "/pages/" + body.id, "PATCH", { properties: props });
+    let n = 0; try { n = await tacheStatuts(env); } catch (e) { console.log("maj", e.message); }
+    return J({ ok: true, mailsEnvoyes: n });
+  }
+  if (route === "/admin/exh-commandes") {
+    if (!(await salonOk(env, body.code))) return J({ erreur: "Code incorrect." }, 401);
+    const r = await query(env, CFG.DS_EXH_COMMANDES, undefined, [{ timestamp: "created_time", direction: "descending" }]);
+    return J({ commandes: r.slice(0, 60).map((pg) => { const p = pg.properties; return { id: pg.id, numero: txt(p.Commande), date: (pg.created_time || "").slice(0, 10), statut: sel(p.Statut), produits: txt(p.Produits), total: num(p.Total), livraison: txt(p.Livraison), nom: (txt(p["Prénom"]) + " " + txt(p.Nom)).trim(), mail: (p.Mail || {}).email || "", tel: (p["Téléphone"] || {}).phone_number || "", adresse: txt(p.Adresse), souhaite: txt(p["Paiement souhaité"]), regle: sel(p["Réglé par"]), delai: txt(p["Délai estimé"]), suivi: txt(p["N° de suivi"]), mot: txt(p["Mot pour la cliente"]), notes: txt(p["Précisions de la cliente"]) }; }) });
+  }
+  if (route === "/admin/exh-maj") {
+    if (!(await salonOk(env, body.code))) return J({ erreur: "Code incorrect." }, 401);
+    if (!/^[\w-]{3,40}$/.test(String(body.id || ""))) return J({ erreur: "Commande inconnue." }, 400);
+    const props = {};
+    if (body.statut !== undefined) { if (!["Nouvelle", "Validée", "En cours de commande", "À récupérer", "Expédiée", "Terminée"].includes(body.statut)) return J({ erreur: "Statut inconnu." }, 400); props.Statut = { select: { name: body.statut } }; }
+    if (body.regle !== undefined) props["Réglé par"] = body.regle ? { select: { name: String(body.regle).slice(0, 40) } } : { select: null };
+    if (body.delai !== undefined) props["Délai estimé"] = T(String(body.delai).slice(0, 200));
+    if (body.suivi !== undefined) props["N° de suivi"] = T(String(body.suivi).trim().slice(0, 60));
+    if (body.mot !== undefined) props["Mot pour la cliente"] = T(String(body.mot).slice(0, 500));
+    if (body.statut === "Validée" && !String(body.delai || "").trim()) return J({ erreur: "Pour valider, indiquez le délai estimé (ex : livraison entre le 24 et le 26 novembre)." }, 400);
+    if (body.statut === "Expédiée" && !String(body.suivi || "").trim()) return J({ erreur: "Pour passer sur Expédiée, indiquez le numéro de suivi." }, 400);
+    await notion(env, "/pages/" + body.id, "PATCH", { properties: props });
+    let n = 0; try { n = await tacheExh(env); } catch (e) { console.log("exh-maj", e.message); }
+    return J({ ok: true, mailsEnvoyes: n });
+  }
+  // --- Mon espace (app) : lecture / mise à jour Notion, protégé par le code ---
+  if (route.startsWith("/app/")) {
+    if (!(await salonOk(env, body.code))) return J({ erreur: "Code incorrect." }, 401);
+    if (route === "/app/clients") {
+      const [cl, cm, bn] = await Promise.all([
+        query(env, CFG.DS_CLIENTS, undefined, [{ property: "Client(e)", direction: "ascending" }]),
+        query(env, CFG.DS_COMMANDES, undefined, [{ property: "Date", direction: "descending" }]),
+        query(env, CFG.DS_BONS),
+      ]);
+      const parCli = {}; cm.forEach((pg) => { const o = commande(pg); o.clientIds.forEach((id) => (parCli[id] = parCli[id] || []).push({ numero: o.numero, date: o.date, statut: o.statut, produits: o.produits, total: o.total, origine: o.origine })); });
+      const bonsCli = {}; bn.forEach((pg) => { const p = pg.properties; rel(p.Cliente).forEach((id) => (bonsCli[id] = bonsCli[id] || []).push({ code: txt(p.Code), type: sel(p.Type), montant: num(p.Montant), mini: num(p["Achat minimum"]), fin: dat(p["Valable jusqu'au"]), utilise: chk(p["Utilisé"]), payee: chk(p["Payée"]) })); });
+      return J({ clients: cl.map((pg) => { const p = pg.properties, c = client(pg); return { id: c.id, nom: c.nom, num: c.numClient, type: sel(p["Type de fiche"]), famille: txt(p["Famille"]), sexe: sel(p.Sexe), univers: sel(p.Univers), carte: sel(p["Carte de fidélité"]), lieu: sel(p["Lieu de rencontre"]), naiss: c.naissance, tel: c.tel, mail: c.mail, adresse: c.adresse, compl: txt(p["Complément"]), cp: c.cp, ville: c.ville, points: c.points, compte: compteActif(c), compteLe: dat(p["Compte site créé le"]), derniere: c.lastOrder, remarque: txt(p.Remarque), diag: txt(p["Diagnostic peau"]), box: txt(p["BOX testée"]), cadeau: txt(p.Cadeau), nomNaiss: txt(p["Nom de naissance"]), cmds: parCli[c.id] || [], bons: bonsCli[c.id] || [] }; }), maj: new Date().toISOString() });
+    }
+    if (route === "/app/client-maj") {
+      if (!/^[\w-]{10,40}$/.test(String(body.id || ""))) return J({ erreur: "Fiche inconnue." }, 400);
+      const f = body.champs || {}, props = {};
+      if (f.tel !== undefined) props["Téléphone"] = { phone_number: String(f.tel).slice(0, 30) || null };
+      if (f.mail !== undefined) { const m = String(f.mail).trim().toLowerCase(); if (m && !validMail(m)) return J({ erreur: "E-mail invalide." }, 400); props.Mail = { email: m || null }; }
+      if (f.adresse !== undefined) props.Adresse = T(String(f.adresse).slice(0, 200));
+      if (f.cp !== undefined) props.CP = T(String(f.cp).slice(0, 10));
+      if (f.ville !== undefined) props.Ville = T(String(f.ville).slice(0, 80));
+      if (f.remarque !== undefined) props.Remarque = T(String(f.remarque).slice(0, 1900));
+      if (f.naiss !== undefined) props["Date de naissance"] = /^\d{4}-\d{2}-\d{2}$/.test(f.naiss) ? { date: { start: f.naiss } } : { date: null };
+      if (f.sexe !== undefined && ["F", "M"].includes(f.sexe)) props.Sexe = { select: { name: f.sexe } };
+      if (f.type !== undefined) props["Type de fiche"] = ["Femme", "Homme", "Société", "Famille"].includes(f.type) ? { select: { name: f.type } } : { select: null };
+      if (f.famille !== undefined) props.Famille = T(String(f.famille).slice(0, 100));
+      if (f.nom !== undefined && String(f.nom).trim()) props["Client(e)"] = TT(String(f.nom).trim().slice(0, 120));
+      if (f.nomNaiss !== undefined) props["Nom de naissance"] = T(String(f.nomNaiss).slice(0, 100));
+      if (f.compl !== undefined) props["Complément"] = T(String(f.compl).slice(0, 200));
+      await notion(env, "/pages/" + body.id, "PATCH", { properties: props });
+      return J({ ok: true });
+    }
+    if (route === "/app/taches") {
+      const r = await query(env, CFG.DS_TACHES, undefined, [{ property: "Échéance", direction: "ascending" }]);
+      return J({ taches: r.map((pg) => { const p = pg.properties; return { id: pg.id, nom: txt(p["Nom de la tâche"]), etat: (p["État"] && p["État"].status ? p["État"].status.name : ""), echeance: dat(p["Échéance"]), type: sel(p.Type) }; }) });
+    }
+    if (route === "/app/tache-maj") {
+      if (!/^[\w-]{10,40}$/.test(String(body.id || ""))) return J({ erreur: "Tâche inconnue." }, 400);
+      if (!["Pas commencée", "En cours", "Terminé"].includes(body.etat)) return J({ erreur: "État inconnu." }, 400);
+      await notion(env, "/pages/" + body.id, "PATCH", { properties: { "État": { status: { name: body.etat } } } });
+      return J({ ok: true });
+    }
+    if (route === "/app/tache-ajout") {
+      const nom = String(body.nom || "").trim().slice(0, 200); if (!nom) return J({ erreur: "Écrivez la tâche." }, 400);
+      const props = { "Nom de la tâche": TT(nom), Type: { select: { name: body.type === "Publication" ? "Publication" : "Tâche" } } };
+      if (/^\d{4}-\d{2}-\d{2}$/.test(body.echeance || "")) props["Échéance"] = { date: { start: body.echeance } };
+      const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_TACHES }, properties: props });
+      return J({ ok: true, id: pg.id });
+    }
+    if (route === "/app/calendrier") {
+      const out = []; let cursor, sect = "";
+      do {
+        const j = await notion(env, `/blocks/${CFG.PAGE_CALENDRIER}/children?page_size=100${cursor ? "&start_cursor=" + cursor : ""}`);
+        for (const b of j.results) {
+          const t = b.type, rt = (b[t] && b[t].rich_text) || [], texte = rt.map((x) => x.plain_text).join("");
+          if (t === "heading_2" || t === "heading_3") sect = texte;
+          else if (t === "to_do") out.push({ id: b.id, texte, fait: !!b.to_do.checked, cours: !b.to_do.checked && rt.some((x) => x.annotations && x.annotations.color === "blue"), section: sect });
+        }
+        cursor = j.has_more ? j.next_cursor : null;
+      } while (cursor);
+      return J({ items: out });
+    }
+    if (route === "/app/calendrier-coche") {
+      if (!/^[\w-]{10,40}$/.test(String(body.id || ""))) return J({ erreur: "Ligne inconnue." }, 400);
+      if (["À faire", "En cours", "Terminé"].includes(body.etat)) {
+        const fait = body.etat === "Terminé", upd = { checked: fait };
+        const bl = await notion(env, "/blocks/" + body.id), rt = (bl && bl.to_do && bl.to_do.rich_text) || [];
+        if (rt.length && rt.every((x) => x.type === "text")) upd.rich_text = rt.map((x) => ({ type: "text", text: { content: x.text.content, link: x.text.link || null }, annotations: { ...(x.annotations || {}), color: body.etat === "En cours" ? "blue" : "default" } }));
+        await notion(env, "/blocks/" + body.id, "PATCH", { to_do: upd });
+        return J({ ok: true });
+      }
+      await notion(env, "/blocks/" + body.id, "PATCH", { to_do: { checked: body.fait === true } });
+      return J({ ok: true });
+    }
+    if (route === "/app/anniv") {
+      const r = await query(env, CFG.DS_ANNIV);
+      return J({ anniv: r.map((pg) => { const p = pg.properties; return { nom: txt(p.Nom), date: dat(p.Anniversaire), qui: sel(p.Qui), tel: (p["Téléphone"] || {}).phone_number || "", age: num(p["Âge"]) }; }).filter((x) => x.date) });
+    }
+    if (route === "/app/filleules") {
+      const r = await query(env, CFG.DS_FILLEULES, undefined, [{ property: "Nom", direction: "ascending" }]);
+      return J({ filleules: r.map((pg) => { const p = pg.properties; return { id: pg.id, nom: txt(p.Nom), nomNaiss: txt(p["Nom de naissance"]), sexe: sel(p.Sexe), naiss: dat(p["Date de naissance"]), entree: dat(p["Date d'entrée"]), tel: (p["Téléphone"] || {}).phone_number || "", mail: (p.Mail || {}).email || "", adresse: txt(p.Adresse), compl: txt(p["Complément"]), ville: txt(p.Ville), cp: txt(p.CP), pays: txt(p.Pays), agrement: txt(p["N° agrément"]), notes: txt(p.Notes) }; }) });
+    }
+    if (route === "/app/filleule-maj") {
+      if (!/^[\w-]{10,40}$/.test(String(body.id || ""))) return J({ erreur: "Fiche inconnue." }, 400);
+      const f = body.champs || {}, props = {};
+      if (f.nom !== undefined && String(f.nom).trim()) props.Nom = TT(String(f.nom).trim().slice(0, 120));
+      if (f.nomNaiss !== undefined) props["Nom de naissance"] = T(String(f.nomNaiss).slice(0, 100));
+      if (f.agrement !== undefined) props["N° agrément"] = T(String(f.agrement).trim().slice(0, 30));
+      if (f.tel !== undefined) props["Téléphone"] = { phone_number: String(f.tel).slice(0, 30) || null };
+      if (f.mail !== undefined) { const m = String(f.mail).trim().toLowerCase(); if (m && !validMail(m)) return J({ erreur: "E-mail invalide." }, 400); props.Mail = { email: m || null }; }
+      if (f.adresse !== undefined) props.Adresse = T(String(f.adresse).slice(0, 200));
+      if (f.compl !== undefined) props["Complément"] = T(String(f.compl).slice(0, 200));
+      if (f.cp !== undefined) props.CP = T(String(f.cp).slice(0, 10));
+      if (f.ville !== undefined) props.Ville = T(String(f.ville).slice(0, 80));
+      if (f.pays !== undefined) props.Pays = T(String(f.pays).slice(0, 60));
+      if (f.notes !== undefined) props.Notes = T(String(f.notes).slice(0, 1900));
+      if (f.naiss !== undefined) props["Date de naissance"] = /^\d{4}-\d{2}-\d{2}$/.test(f.naiss) ? { date: { start: f.naiss } } : { date: null };
+      if (f.entree !== undefined) props["Date d'entrée"] = /^\d{4}-\d{2}-\d{2}$/.test(f.entree) ? { date: { start: f.entree } } : { date: null };
+      if (f.sexe !== undefined && ["F", "M"].includes(f.sexe)) props.Sexe = { select: { name: f.sexe } };
+      await notion(env, "/pages/" + body.id, "PATCH", { properties: props });
+      return J({ ok: true });
+    }
+    if (route === "/app/filleule-ajout") {
+      const f = body.champs || {}, nom = String(f.nom || "").trim().slice(0, 120);
+      if (!nom) return J({ erreur: "Écrivez le prénom et le nom." }, 400);
+      const props = { Nom: TT(nom) };
+      if (f.agrement) props["N° agrément"] = T(String(f.agrement).trim().slice(0, 30));
+      if (f.tel) props["Téléphone"] = { phone_number: String(f.tel).slice(0, 30) };
+      if (f.mail) { const m = String(f.mail).trim().toLowerCase(); if (!validMail(m)) return J({ erreur: "E-mail invalide." }, 400); props.Mail = { email: m }; }
+      if (/^\d{4}-\d{2}-\d{2}$/.test(f.entree || "")) props["Date d'entrée"] = { date: { start: f.entree } };
+      props.Sexe = { select: { name: f.sexe === "M" ? "M" : "F" } };
+      const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_FILLEULES }, properties: props });
+      return J({ ok: true, id: pg.id });
+    }
+    if (route === "/app/commandes") {
+      const [r, x] = await Promise.all([
+        query(env, CFG.DS_COMMANDES, undefined, [{ property: "Date", direction: "descending" }]),
+        query(env, CFG.DS_EXH_COMMANDES, undefined, [{ timestamp: "created_time", direction: "descending" }]),
+      ]);
+      const A = r.slice(0, 700).map((pg) => { const o = commande(pg); return { src: "N", id: o.id, numero: o.numero, date: o.date, cree: pg.created_time || "", statut: o.statut, produits: o.produits, total: o.total, mode: o.mode, relais: o.relais, adresse: o.adresse, mail: o.mail, nom: o.nomClient, paiement: o.paiement, suivi: o.suivi, origine: o.origine, note: txt(pg.properties.Note) }; });
+      const B = x.slice(0, 200).map((pg) => { const p = pg.properties; return { src: "X", id: pg.id, numero: txt(p.Commande), date: (pg.created_time || "").slice(0, 10), cree: pg.created_time || "", statut: sel(p.Statut), produits: txt(p.Produits), total: num(p.Total), livraison: txt(p.Livraison), nom: (txt(p["Prénom"]) + " " + txt(p.Nom)).trim(), mail: (p.Mail || {}).email || "", tel: (p["Téléphone"] || {}).phone_number || "", adresse: txt(p.Adresse), souhaite: txt(p["Paiement souhaité"]), regle: sel(p["Réglé par"]), delai: txt(p["Délai estimé"]), suivi: txt(p["N° de suivi"]), mot: txt(p["Mot pour la cliente"]), notes: txt(p["Précisions de la cliente"]), origine: "EXHALESSENCE" }; });
+      return J({ commandes: A.concat(B) });
+    }
+    if (route === "/app/fin") {
+      const r = await query(env, CFG.DS_FIN);
+      return J({ lignes: r.map((pg) => { const p = pg.properties; return { id: pg.id, type: sel(p.Type), annee: num(p["Année"]), mois: num(p.Mois), ventes: p.Ventes && p.Ventes.number != null ? p.Ventes.number : null, achats: p.Achats && p.Achats.number != null ? p.Achats.number : null, commission: p.Commission && p.Commission.number != null ? p.Commission.number : null, perso: p["Points perso"] && p["Points perso"].number != null ? p["Points perso"].number : null, reseau: p["Points réseau"] && p["Points réseau"].number != null ? p["Points réseau"].number : null, total: p["Total points"] && p["Total points"].number != null ? p["Total points"].number : null, paypal: p.PayPal && p.PayPal.number != null ? p.PayPal.number : null, declaration: p["Déclaration"] && p["Déclaration"].number != null ? p["Déclaration"].number : null, paiement: p.Paiement && p.Paiement.number != null ? p.Paiement.number : null }; }) });
+    }
+    if (route === "/app/fin-maj") {
+      const type = String(body.type || ""), an = Math.round(+body.annee), mo = Math.round(+body.mois), v = body.vals || {};
+      if (!["Marge EXHA", "Points EXHA", "URSSAF créations"].includes(type) || !(an >= 2015 && an <= 2100) || !(mo >= 1 && mo <= 12)) return J({ erreur: "Ligne inconnue." }, 400);
+      const map = { ventes: "Ventes", achats: "Achats", commission: "Commission", perso: "Points perso", reseau: "Points réseau", total: "Total points", paypal: "PayPal", declaration: "Déclaration", paiement: "Paiement" };
+      const props = {};
+      Object.keys(map).forEach((k) => { if (v[k] !== undefined) { const n = v[k] === null || v[k] === "" ? null : +String(v[k]).replace(",", "."); props[map[k]] = { number: n === null || isNaN(n) ? null : n }; } });
+      const ex = await query(env, CFG.DS_FIN, { and: [{ property: "Type", select: { equals: type } }, { property: "Année", number: { equals: an } }, { property: "Mois", number: { equals: mo } }] }, undefined, 1);
+      if (ex[0]) { await notion(env, "/pages/" + ex[0].id, "PATCH", { properties: props }); return J({ ok: true }); }
+      props.Nom = TT(type + " " + an + "-" + String(mo).padStart(2, "0")); props.Type = { select: { name: type } }; props["Année"] = { number: an }; props.Mois = { number: mo };
+      await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_FIN }, properties: props });
+      return J({ ok: true });
+    }
+    return J({ erreur: "Route inconnue." }, 404);
+  }
+  if (route === "/salon/client") {
+    if (!(await salonOk(env, body.code))) return J({ erreur: "Code incorrect." }, 401);
+    const mail = String(body.mail || "").trim().toLowerCase(), tel = String(body.tel || "").trim();
+    const c = (validMail(mail) || tel) ? await trouverCliente(env, mail, tel) : null;
+    if (!c) return J({ trouve: false });
+    const bons = (await bonsClient(env, c.id)).filter((b) => !b.utilise && b.type !== "Carte cadeau" && (!b.fin || b.fin >= auj));
+    let habituel = [], nbCmd = 0;
+    try { const cm = await commandesClient(env, c.id); nbCmd = cm.length; const m = {}; cm.forEach((o) => String(o.produits || "").split("\n").forEach((l) => { const r = /^\s*(\d+)\s*[×x]\s*(.+?)\s+[—-]\s+/.exec(l) || /^\s*(\d+)\s*[×x]\s*(.+?)\s*$/.exec(l); if (r) m[r[2].trim()] = (m[r[2].trim()] || 0) + (+r[1]); })); habituel = Object.keys(m).map((k) => [k, m[k]]).sort((a, b) => b[1] - a[1]).slice(0, 8); } catch (e) { console.log("habituel", e.message); }
+    return J({ trouve: true, habituel, nbCmd, numClient: c.numClient, prenom: c.prenom, nom: c.nom.split(/\s+/).slice(1).join(" "), mail: c.mail, tel: c.tel, adresse: c.adresse, cp: c.cp, ville: c.ville, naissance: c.naissance || "", points: c.points, compte: compteActif(c), bons: bons.map((b) => ({ code: b.code, montant: b.montant, mini: b.mini, type: b.type })) });
+  }
+  if (route === "/salon/enregistrer") {
+    if (!(await salonOk(env, body.code))) return J({ erreur: "Code incorrect." }, 401);
+    const b = body.bon || {}; const idBon = String(b.id || "").slice(0, 60);
+    const prenom = String(b.prenom || "").trim().slice(0, 60), nom = String(b.nom || "").trim().slice(0, 60), mail = String(b.mail || "").trim().toLowerCase(), tel = String(b.tel || "").trim().slice(0, 30);
+    if (!idBon || !prenom || !nom) return J({ erreur: "Prénom, nom et identifiant du bon obligatoires." }, 400);
+    if (!validMail(mail) && !tel) return J({ erreur: "Il faut un e-mail ou un téléphone." }, 400);
+    const lignes = (Array.isArray(b.lines) ? b.lines : []).slice(0, 60).map((l) => ({ prod: String(l.prod || "").slice(0, 120), pu: Math.max(0, +l.pu || 0), qte: Math.max(0, +l.qte || 0), cmd: l.acommander === true })).filter((l) => l.prod || l.pu);
+    if (!lignes.length) return J({ erreur: "Aucun produit." }, 400);
+    const dateCmd = /^\d{4}-\d{2}-\d{2}$/.test(b.dateCommande || "") ? b.dateCommande : auj;
+    const numero = "SAL-" + dateCmd.replace(/-/g, "") + "-" + (await hmac(env, "sal|" + idBon)).replace(/[-_]/g, "7").slice(0, 5).toUpperCase();
+    const dejaCmd = await query(env, CFG.DS_COMMANDES, { property: "Commande", title: { equals: numero } }, undefined, 1);
+    let c = await trouverCliente(env, validMail(mail) ? mail : "", tel);
+    if (dejaCmd[0]) {
+      const cid = rel(dejaCmd[0].properties.Cliente)[0]; c = cid ? await clientById(env, cid) : c;
+      return J({ ok: true, deja: true, numero, numClient: c ? c.numClient : "", points: num(dejaCmd[0].properties["Points gagnés"]), solde: c ? c.points : 0, compte: c ? compteActif(c) : false, lien: c && !compteActif(c) ? CFG.SITE + "/#creer=" + await tokenCreation(env, c.id) : "" });
+    }
+    const sous = Math.round(lignes.reduce((s, l) => s + l.pu * l.qte, 0) * 100) / 100;
+    const promo = Math.max(0, Math.min(sous, +b.promoDiscount || 0)), remise = Math.max(0, +b.remise || 0), port = Math.max(0, +b.port || 0);
+    const apresRemises = Math.max(0, Math.round((sous - promo - remise) * 100) / 100), total = Math.round((apresRemises + port) * 100) / 100, pts = Math.floor(apresRemises);
+    const adr = [String(b.adresse || "").trim(), String(b.complement || "").trim()].filter(Boolean).join(" ").slice(0, 200), cp = String(b.cp || "").trim().slice(0, 10), ville = String(b.ville || "").trim().slice(0, 80), naiss = /^\d{4}-\d{2}-\d{2}$/.test(b.naissance || "") ? b.naissance : "";
+    if (!c) {
+      const props = { "Client(e)": TT(prenom + " " + nom.toUpperCase()), "Points fidélité": { number: 0 } };
+      if (validMail(mail)) props.Mail = { email: mail }; if (tel) props["Téléphone"] = { phone_number: tel };
+      if (adr) props.Adresse = T(adr); if (cp) props.CP = T(cp); if (ville) props.Ville = T(ville); if (naiss) props["Date de naissance"] = { date: { start: naiss } };
+      const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_CLIENTS }, properties: props }); c = await clientById(env, pg.id);
+    } else {
+      const maj = {};
+      if (!c.mail && validMail(mail)) maj.Mail = { email: mail }; if (!c.tel && tel) maj["Téléphone"] = { phone_number: tel };
+      if (!c.adresse && adr) maj.Adresse = T(adr); if (!c.cp && cp) maj.CP = T(cp); if (!c.ville && ville) maj.Ville = T(ville); if (!c.naissance && naiss) maj["Date de naissance"] = { date: { start: naiss } };
+      if (Object.keys(maj).length) await notion(env, "/pages/" + c.id, "PATCH", { properties: maj });
+    }
+    let cout = 0, bonUtilise = null;
+    if (b.bonCode) {
+      const bon = await bonParCode(env, b.bonCode); const err = bonValide(bon, c.id, Math.max(0, sous - promo), auj);
+      if (err) return J({ erreur: err }, 400);
+      await notion(env, "/pages/" + bon.id, "PATCH", { properties: { "Utilisé": { checkbox: true } } }); bonUtilise = bon.code; cout = bon.type === "Fidélité" ? coutPoints(bon.montant) : 0;
+    }
+    const nbCmd = lignes.filter((l) => l.cmd).length;
+    const event = String(b.event || "").trim().slice(0, 100), paiement = String(b.paiement || "").slice(0, 40);
+    const liv = ["marche", "main", "expedier"].includes(b.livraison) ? b.livraison : "marche", domicile = b.livMode === "domicile", relaisTxt = liv === "expedier" && !domicile ? String(b.relais || "").trim().slice(0, 200) : "";
+    const modeLiv = liv === "marche" ? "Remis sur le marché" : liv === "main" ? "Main propre" : domicile ? "Chronopost" : "Point relais", statutCmd = liv === "marche" && !nbCmd ? "Terminée" : "Reçue";
+    const notes = ["Marché/Salon : " + (event || "non précisé"), paiement ? "Règlement : " + paiement : "", nbCmd ? nbCmd + " article(s) à commander, le reste remis" : liv === "marche" ? "Remis sur le marché (rien à commander)" : liv === "main" ? "À remettre en main propre plus tard" : "À expédier" + (domicile ? " à domicile" : " en point relais"), b.note ? String(b.note).slice(0, 800) : "", bonUtilise ? "Bon utilisé : " + bonUtilise : ""].filter(Boolean).join(" · ");
+    await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_COMMANDES }, properties: {
+      Commande: TT(numero), Date: { date: { start: dateCmd } }, Statut: { select: { name: statutCmd } }, Origine: { select: { name: "Salon" } }, Cliente: { relation: [{ id: c.id }] },
+      "Nom client": T(c.nom), Produits: T(lignes.map((l) => `${l.qte} × ${l.prod} — ${eur(l.pu)} — ${l.cmd ? "⏳ À COMMANDER" : "✔ Remis"}`).join("\n")), "Qté": { number: lignes.reduce((s, l) => s + l.qte, 0) },
+      "Total produits": { number: sous }, Remise: { number: Math.round((promo + remise) * 100) / 100 }, "Frais de port": { number: port }, "Total final": { number: total }, "Points gagnés": { number: pts },
+      "Mode de livraison": { select: { name: modeLiv } }, ...(relaisTxt ? { "Point relais choisi": T(relaisTxt) } : {}), "Statut notifié": T(statutCmd), Note: T(notes), ...(c.mail ? { "E-mail": { email: c.mail } } : {}) } });
+    const nouveaux = Math.max(0, c.points - cout) + pts;
+    await notion(env, "/pages/" + c.id, "PATCH", { properties: { "Points fidélité": { number: nouveaux }, "Dernière commande": { date: { start: dateCmd } } } });
+    const crees = await verifierPaliers(env, c, nouveaux);
+    return J({ ok: true, numero, numClient: c.numClient, points: pts, solde: nouveaux, compte: compteActif(c), lien: compteActif(c) ? "" : CFG.SITE + "/#creer=" + await tokenCreation(env, c.id), bonsCrees: crees.map((x) => ({ code: x.code, montant: x.montant, mini: x.mini })) });
+  }
+  if (route === "/creer/lire") {
+    const id = await lireTokenCreation(env, body.jeton); if (!id) return J({ erreur: "Ce lien n'est plus valable." }, 404);
+    const c = await clientById(env, id);
+    if (compteActif(c)) return J({ dejaCompte: true });
+    return J({ prenom: c.prenom, nom: c.nom.split(/\s+/).slice(1).join(" "), mail: c.mail, tel: c.tel, adresse: c.adresse, cp: c.cp, ville: c.ville, naissance: c.naissance || "" });
+  }
+  if (route === "/exh-commande") {
+    const prenom = String(body.prenom || "").trim().slice(0, 60), nom = String(body.nom || "").trim().slice(0, 60), mail = String(body.mail || "").trim().toLowerCase().slice(0, 150);
+    const tel = String(body.tel || "").trim().slice(0, 30), adresse = String(body.adresse || "").trim().slice(0, 200), cp = String(body.cp || "").trim().slice(0, 10), ville = String(body.ville || "").trim().slice(0, 80);
+    const lignes = (Array.isArray(body.lignes) ? body.lignes : []).slice(0, 40).map((l) => ({ nom: String(l.nom || "").trim().slice(0, 140), prix: Math.max(0, Math.round((+l.prix || 0) * 100) / 100) })).filter((l) => l.nom);
+    const paiement = String(body.paiement || "").trim().slice(0, 60), notes = String(body.notes || "").trim().slice(0, 1000), relaisMode = body.livraison === "Point relais";
+    if (!prenom || !nom) return J({ erreur: "Veuillez indiquer votre nom et prénom." }, 400);
+    if (!validMail(mail)) return J({ erreur: "Veuillez entrer un e-mail valide." }, 400);
+    if (tel.replace(/\D/g, "").length < 6) return J({ erreur: "Veuillez indiquer votre numéro de téléphone." }, 400);
+    if (!adresse || !cp || !ville) return J({ erreur: "Veuillez compléter votre adresse." }, 400);
+    if (!lignes.length) return J({ erreur: "Merci d'ajouter au moins un produit à votre commande." }, 400);
+    if (!paiement) return J({ erreur: "Merci de choisir un mode de paiement." }, 400);
+    const depuis = new Date(Date.now() - 36e5).toISOString();
+    if ((await query(env, CFG.DS_EXH_COMMANDES, { and: [{ property: "Mail", email: { equals: mail } }, { timestamp: "created_time", created_time: { on_or_after: depuis } }] })).length >= 3) return J({ erreur: "Vous avez déjà envoyé plusieurs commandes. Je vous contacte très vite, merci de patienter." }, 429);
+    const totalProduits = Math.round(lignes.reduce((x, l) => x + l.prix, 0) * 100) / 100, port = relaisMode ? 6 : 0, total = Math.round((totalProduits + port) * 100) / 100;
+    const numero = "EXH-" + auj.replace(/-/g, "") + "-" + rnd(4).toUpperCase().replace(/[-_]/g, "7");
+    const livraison = relaisMode ? "Point relais Mondial Relay" + (body.relais ? " : " + String(body.relais).slice(0, 200) : "") : "Remise en main propre";
+    const produits = lignes.map((l) => "• " + l.nom + " — " + eur(l.prix)).join("\n");
+    const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_EXH_COMMANDES }, properties: { Commande: TT(numero), Statut: { select: { name: "Nouvelle" } }, "Prénom": T(prenom), Nom: T(nom), Mail: { email: mail }, "Téléphone": { phone_number: tel }, Adresse: T(adresse + ", " + cp + " " + ville), Livraison: T(livraison), Produits: T(produits), "Total produits": { number: totalProduits }, "Frais de port": { number: port }, Total: { number: total }, "Paiement souhaité": T(paiement), "Précisions de la cliente": T(notes) } });
+    try {
+      await brevo(env, CFG.ZULAY, "🛍️ Nouvelle commande EXHALESSENCE : " + prenom + " " + nom + " (" + eur(total) + ")", mailDetailZulay("Nouvelle commande EXHALESSENCE", "Une cliente vient de passer commande sur le site. Elle n'a pas encore payé : appelez-la pour valider.",
+        [["Commande", esc(numero)], ["Nom", esc(prenom + " " + nom)], ["Téléphone", `<a href="tel:${esc(tel.replace(/[^\d+]/g, ""))}" style="color:${C.TX}">${esc(tel)}</a>`], ["E-mail", `<a href="mailto:${esc(mail)}" style="color:${C.TX}">${esc(mail)}</a>`], ["Adresse", esc(adresse + ", " + cp + " " + ville)], ["Livraison", esc(livraison)], ["Paiement souhaité", esc(paiement)]].concat(body.naissance ? [["Naissance", esc(body.naissance)]] : []),
+        `<div style="margin:12px 0 4px;padding:12px 14px;background:#fff;border:1px solid ${C.BD};border-radius:10px;color:${C.TX};font-size:13px">${nl2br(produits)}<br><br>Produits : ${eur(totalProduits)} · Frais de port : ${eur(port)} · <b>Total : ${eur(total)}</b></div>` + (notes ? `<p style="font-size:13px"><b>Précisions :</b> ${nl2br(notes)}</p>` : ""),
+        pg.url, "Quand elle a payé : remplissez « Réglé par » et « Délai estimé », puis passez le Statut sur <b>« Validée »</b>. La cliente reçoit alors son récapitulatif, le délai et ses points. Quand le colis part : « N° de suivi » puis Statut <b>« Expédiée »</b>."), { replyTo: { email: mail, name: prenom + " " + nom } });
+    } catch (e) { console.log("Mail commande EXH", e.message); }
+    return J({ ok: true, numero });
+  }
+  if (route === "/exh-reservation") {
+    const prenom = String(body.prenom || "").trim().slice(0, 60), nom = String(body.nom || "").trim().slice(0, 60), mail = String(body.mail || "").trim().toLowerCase().slice(0, 150);
+    const tel = String(body.tel || "").trim().slice(0, 30), prestation = String(body.prestation || "").trim().slice(0, 120), dateSouhaitee = String(body.date || "").trim().slice(0, 60), commentaire = String(body.commentaire || "").trim().slice(0, 1000);
+    if (!prenom || !nom) return J({ erreur: "Veuillez indiquer votre nom et prénom." }, 400);
+    if (!validMail(mail)) return J({ erreur: "Veuillez entrer un e-mail valide." }, 400);
+    if (tel.replace(/\D/g, "").length < 6) return J({ erreur: "Veuillez indiquer votre numéro de téléphone." }, 400);
+    if (!prestation) return J({ erreur: "Veuillez choisir une prestation." }, 400);
+    const depuis = new Date(Date.now() - 36e5).toISOString();
+    if ((await query(env, CFG.DS_EXH_RESERVATIONS, { and: [{ property: "Mail", email: { equals: mail } }, { timestamp: "created_time", created_time: { on_or_after: depuis } }] })).length >= 3) return J({ erreur: "Vous avez déjà envoyé plusieurs demandes. Je vous contacte très vite, merci de patienter." }, 429);
+    const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_EXH_RESERVATIONS }, properties: { Prestation: TT(prestation), Statut: { select: { name: "Nouvelle" } }, "Prénom": T(prenom), Nom: T(nom), Mail: { email: mail }, "Téléphone": { phone_number: tel }, "Date souhaitée": T(dateSouhaitee), "Commentaire de la cliente": T(commentaire) } });
+    try {
+      await brevo(env, CFG.ZULAY, "💐 Nouvelle demande de réservation : " + prestation, mailDetailZulay("Nouvelle réservation", "Une cliente demande à réserver. Contactez-la pour confirmer le jour et l'heure.",
+        [["Prestation", esc(prestation)], ["Nom", esc(prenom + " " + nom)], ["Téléphone", `<a href="tel:${esc(tel.replace(/[^\d+]/g, ""))}" style="color:${C.TX}">${esc(tel)}</a>`], ["E-mail", `<a href="mailto:${esc(mail)}" style="color:${C.TX}">${esc(mail)}</a>`], ["Date souhaitée", esc(dateSouhaitee || "Non précisée")]],
+        commentaire ? `<div style="margin:12px 0 4px;padding:12px 14px;background:#fff;border:1px solid ${C.BD};border-radius:10px;color:${C.TX};font-size:13px">${nl2br(commentaire)}</div>` : "",
+        pg.url, "Pour confirmer : écrivez le jour et l'heure dans « Mot pour la cliente », puis passez le Statut sur <b>« Validée »</b>. La cliente reçoit alors sa confirmation."), { replyTo: { email: mail, name: prenom + " " + nom } });
+    } catch (e) { console.log("Mail réservation EXH", e.message); }
+    return J({ ok: true });
+  }
+  if (route === "/questionnaires") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    let l = (Array.isArray(body.liste) ? body.liste : []).slice(0, 12).map((q) => ({ id: String(q.id || "").slice(0, 20), titre: String(q.titre || "").slice(0, 60), date: String(q.date || "").slice(0, 10), rep: String(q.rep || "").slice(0, 120), prod: (Array.isArray(q.prod) ? q.prod : []).slice(0, 8).map((x) => String(x).slice(0, 50)) }));
+    let sj = JSON.stringify(l); while (sj.length > 1900 && l.length) { l.pop(); sj = JSON.stringify(l); }
+    await notion(env, "/pages/" + authId, "PATCH", { properties: { "Questionnaires site": T(sj) } }); return J({ ok: true });
+  }
+  if (route === "/points/echanger") {
+    if (!authId) return J({ erreur: "Veuillez vous reconnecter." }, 401);
+    const c = await clientById(env, authId); const palier = CFG.PALIERS.find((x) => x[0] === +body.palier);
+    if (!palier) return J({ erreur: "Palier inconnu." }, 400);
+    if ((await pointsLibres(env, c)) < palier[0]) return J({ erreur: "Vous n'avez pas assez de points disponibles pour ce bon." }, 400);
+    const b = await creerBonFidelite(env, c, palier); return J({ ok: true, code: b.code, montant: b.montant, mini: b.mini });
+  }
+  if (route === "/bon/verifier") {
+    const b = await bonParCode(env, body.code); const err = bonValide(b, authId, +body.sousTotal || 0, auj);
+    return err ? J({ erreur: err }, 400) : J({ montant: b.montant, type: b.type, mini: b.mini });
+  }
+
+  if (route === "/commande") {
+    const mail = String(body.mail || "").trim().toLowerCase(); if (!validMail(mail)) return J({ erreur: "L'adresse e-mail est obligatoire." }, 400);
+    const lignes = (Array.isArray(body.lignes) ? body.lignes : []).slice(0, 60).map((l) => ({ nom: String(l.nom || "").slice(0, 120), finition: String(l.finition || "").slice(0, 80), qte: Math.max(1, Math.min(99, +l.qte || 1)), prix: Math.max(0, +l.prix || 0) }));
+    if (!lignes.length) return J({ erreur: "Panier vide." }, 400);
+    const mode = ["Main propre", "Chronopost", "Point relais"].includes(body.mode) ? body.mode : "Main propre";
+    const totalProduits = Math.round(lignes.reduce((s, l) => s + l.qte * l.prix, 0) * 100) / 100;
+    const port = Math.max(0, +body.port || 0);
+    let c = authId ? await clientById(env, authId) : await clientByMail(env, mail);
+    let remise = 0, bon = null;
+    if (body.bon) {
+      bon = await bonParCode(env, body.bon); const err = bonValide(bon, c && c.id, totalProduits, auj);
+      if (err) return J({ erreur: err }, 400);
+      remise = Math.min(bon.montant, totalProduits);
+    }
+    const total = Math.round((totalProduits - remise + port) * 100) / 100;
+    const pts = Math.floor(totalProduits - remise);
+    if (!c) { const nom = String(body.nom || "Client").trim(); const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_CLIENTS }, properties: { "Client(e)": TT(nom), Mail: { email: mail }, "Points fidélité": { number: 0 } } }); c = await clientById(env, pg.id); }
+    const numero = "CMD-" + auj.replace(/-/g, "") + "-" + rnd(4).toUpperCase().replace(/[-_]/g, "7");
+    const props = {
+      Commande: TT(numero), Date: { date: { start: auj } }, Statut: { select: { name: "Reçue" } }, Origine: { select: { name: "Site" } }, Cliente: { relation: [{ id: c.id }] },
+      "Nom client": T(c.nom), Produits: T(lignes.map((l) => `${l.qte} × ${l.nom}${l.finition ? " (" + l.finition + ")" : ""} — ${eur(l.prix)}`).join("\n")), "Qté": { number: lignes.reduce((s, l) => s + l.qte, 0) },
+      "Total produits": { number: totalProduits }, Remise: { number: remise }, "Frais de port": { number: port }, "Total final": { number: total }, "Points gagnés": { number: pts },
+      "Mode de livraison": { select: { name: mode } }, "Point relais choisi": T(String(body.relais || "").slice(0, 300)), "Adresse de livraison": T(String(body.adresse || "").slice(0, 300)),
+      "E-mail": { email: mail }, "Statut notifié": T("Reçue"), Note: T(String(body.note || "").slice(0, 1000)),
+    };
+    await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_COMMANDES }, properties: props });
+    if (bon) await notion(env, "/pages/" + bon.id, "PATCH", { properties: { "Utilisé": { checkbox: true } } });
+    const cout = bon && bon.type === "Fidélité" ? coutPoints(bon.montant) : 0;
+    const nouveaux = Math.max(0, c.points - cout) + pts;
+    await notion(env, "/pages/" + c.id, "PATCH", { properties: { "Points fidélité": { number: nouveaux }, "Dernière commande": { date: { start: auj } } } });
+    const crees = await verifierPaliers(env, c, nouveaux);
+    const o = { numero, lignes, totalProduits, remise, port, total, mode, relais: body.relais, adresse: body.adresse };
+    const info = `<p style="margin:12px 0 0;font-size:13px">Vous avez gagné <b>${pts} point${pts > 1 ? "s" : ""}</b> de fidélité${cout ? " (" + cout + " points utilisés pour votre bon)" : ""}.<br>Solde de vos points de fidélité : <b>${nouveaux} point${nouveaux > 1 ? "s" : ""}</b>.${crees.length ? "<br>Un nouveau bon fidélité vous attend dans votre compte : " + crees.map((x) => "<b>" + x.montant + " €</b> (code " + esc(x.code) + ")").join(", ") + "." : ""}</p>`;
+    await brevo(env, mail, "Votre commande " + numero, mailConfirmation(c.prenom || "", o, info));
+    await brevo(env, CFG.ZULAY, "Nouvelle commande " + numero, simple("Nouvelle commande", `<p><b>${esc(c.nom)}</b> — ${esc(mail)} ${esc(c.tel || "")}</p>${lignesCommande(o)}<p>${livraisonTexte(o)}</p>${body.note ? "<p>Note : " + esc(body.note) + "</p>" : ""}`));
+    return J({ ok: true, numero, points: pts, total: nouveaux, bonsCrees: crees.map((x) => x.code) });
+  }
+
+  // --- Carte cadeau (achat sur le site, PDF téléchargé par l'acheteur) ---
+  if (route === "/carte-cadeau/creer") {
+    const montant = Math.round(+body.montant || 0); if (montant < 5 || montant > 500) return J({ erreur: "Montant entre 5 € et 500 €." }, 400);
+    const mail = String(body.mail || "").trim().toLowerCase(); if (!validMail(mail)) return J({ erreur: "Merci d'indiquer votre adresse e-mail." }, 400);
+    const fin = (() => { const d = new Date(auj + "T12:00:00"); d.setFullYear(d.getFullYear() + 1); return iso(d); })();
+    const b = await creerBon(env, { type: "Carte cadeau", montant, fin, pour: String(body.pour || "").slice(0, 60), de: String(body.de || "").slice(0, 60), message: String(body.message || "").slice(0, 160), mailDest: mail, payee: false });
+    await brevo(env, CFG.ZULAY, "Carte cadeau à régler : " + b.code, simple("Nouvelle carte cadeau", `<p>Code <b>${b.code}</b> — ${montant} € pour <b>${esc(body.pour)}</b>, de la part de ${esc(body.de)}. Acheteur : ${esc(mail)}.</p><p>Quand le paiement est reçu, coche « Payée » dans Notion (Bons et cartes cadeaux).</p>`));
+    return J({ ok: true, code: b.code });
+  }
+  if (route === "/carte-cadeau/lire") {
+    const b = await bonParCode(env, body.code); const mail = String(body.mail || "").trim().toLowerCase();
+    if (!b || b.type !== "Carte cadeau") return J({ erreur: "Code inconnu." }, 404);
+    const p = await notion(env, "/pages/" + b.id); const dest = ((p.properties["Destinataire e-mail"] || {}).email || "").toLowerCase();
+    if (dest !== mail) return J({ erreur: "Cette adresse ne correspond pas à l'achat." }, 403);
+    if (!b.payee) return J({ attente: true, message: "Votre carte cadeau sera disponible dès réception du paiement." });
+    return J({ carte: { code: b.code, montant: b.montant, pour: b.pour, de: b.de, message: b.message, fin: b.fin, utilise: b.utilise } });
+  }
+  return J({ erreur: "Introuvable" }, 404);
+}
+
+// ---------- Tâches automatiques (toutes les 15 minutes) ----------
+async function tacheStatuts(env) {
+  const r = await query(env, CFG.DS_COMMANDES, { property: "Origine", select: { equals: "Site" } }, [{ property: "Date", direction: "descending" }]);
+  let n = 0;
+  for (const pg of r.slice(0, 100)) {
+    const o = commande(pg); if (!o.statut || o.statut === o.notif || !STATUTS[o.statut]) continue;
+    const props = { "Statut notifié": T(o.statut) };
+    if (o.statut === "Expédiée" && !o.expedie) props["Date d'expédition"] = { date: { start: iso(today()) } };
+    if (o.mail) { const c = o.clientIds[0] ? await clientById(env, o.clientIds[0]) : { prenom: "" }; await brevo(env, o.mail, STATUTS[o.statut][0], mailStatut(c.prenom || "", o.statut, o)); n++; }
+    await notion(env, "/pages/" + o.id, "PATCH", { properties: props });
+  }
+  return n;
+}
+async function tacheAvis(env, base) {
+  const r = await query(env, CFG.DS_COMMANDES, { and: [{ property: "Statut", select: { equals: "Expédiée" } }, { property: "Origine", select: { equals: "Site" } }] });
+  const auj = iso(today()); let n = 0;
+  for (const pg of r) {
+    const o = commande(pg); if (!o.expedie || !o.mail) continue;
+    const jours = Math.round((new Date(auj) - new Date(o.expedie)) / 864e5);
+    const champ = jours >= 30 && !o.avis30 ? "Avis 30 j" : jours >= 14 && !o.avis14 && jours < 30 ? "Avis 14 j" : null; if (!champ) continue;
+    const c = o.clientIds[0] ? await clientById(env, o.clientIds[0]) : null; if (!c) { await notion(env, "/pages/" + o.id, "PATCH", { properties: { [champ]: { checkbox: true } } }); continue; }
+    const des = `${base}/desabo?c=${c.id}&s=${encodeURIComponent(await hmac(env, "u|" + c.id))}`;
+    await brevo(env, o.mail, "Votre avis compte", mailAvis(c.prenom, o.numero, des), { headers: { "List-Unsubscribe": `<${des}>` } });
+    await notion(env, "/pages/" + o.id, "PATCH", { properties: { [champ]: { checkbox: true } } }); n++;
+  }
+  return n;
+}
+async function tacheAnniversaires(env, base) {
+  const d = today(); const auj = iso(d); if (auj < CFG.ANNIV_DEBUT) return { mails: 0, sms: [] };
+  const jours = new Set(); for (let k = 0; k <= CFG.ANNIV_RATTRAPAGE; k++) { const j = addDays(auj, -k); if (j >= CFG.ANNIV_DEBUT) jours.add(j.slice(5)); }
+  const tous = (await query(env, CFG.DS_CLIENTS, { property: "Date de naissance", date: { is_not_empty: true } })).map(client);
+  const fin = addDays(auj, CFG.ANNIV_JOURS); const sms = []; let mails = 0;
+  const envoyer = async (c, code, finBon) => {
+    const des = `${base}/desabo?c=${c.id}&s=${encodeURIComponent(await hmac(env, "u|" + c.id))}`;
+    await brevo(env, c.mail, "Joyeux anniversaire " + c.prenom + " !", mailAnniv(c.prenom, code, finBon.split("-").reverse().join("/"), des), { headers: { "List-Unsubscribe": `<${des}>` } });
+  };
+  for (const c of tous) {
+    if (!c.naissance || !jours.has(c.naissance.slice(5))) continue;
+    const deja = (await bonsClient(env, c.id)).some((b) => b.type === "Anniversaire" && b.fin && b.fin >= auj);
+    if (deja) continue;
+    const b = await creerBon(env, { type: "Anniversaire", montant: CFG.ANNIV_BON, mini: CFG.ANNIV_MINI, clientId: c.id, fin });
+    if (mailOk(c)) {
+      try { await envoyer(c, b.code, fin); await notion(env, "/pages/" + b.id, "PATCH", { properties: { "Notifié le": { date: { start: auj } } } }); mails++; }
+      catch (e) { console.log("Anniversaire mail", e.message); if (c.tel) sms.push({ nom: c.nom, tel: c.tel, texte: smsAnniv(c.prenom, b.code, CFG.SITE + "/#compte"), objet: "Anniversaire (l'e-mail n'est pas parti)" }); }
+    } else if (c.tel) {
+      sms.push({ nom: c.nom, tel: c.tel, texte: smsAnniv(c.prenom, b.code, CFG.SITE + "/#compte"), objet: "Anniversaire" });
+    }
+  }
+  // Rattrapage : cartes déjà créées mais jamais envoyées par e-mail (adresse corrigée, case non cochée…)
+  try {
+    const bons = await query(env, CFG.DS_BONS, { and: [{ property: "Type", select: { equals: "Anniversaire" } }, { property: "Notifié le", date: { is_empty: true } }] });
+    for (const pg of bons) {
+      const p = pg.properties; if (chk(p["Utilisé"]) || dat(p["Notifié le"])) continue;
+      const f = dat(p["Valable jusqu'au"]); if (!f || f < auj) continue;
+      const cid = rel(p.Cliente)[0]; if (!cid) continue;
+      const c = await clientById(env, cid); if (!mailOk(c)) continue;
+      try { await envoyer(c, txt(p.Code), f); await notion(env, "/pages/" + pg.id, "PATCH", { properties: { "Notifié le": { date: { start: auj } } } }); mails++; }
+      catch (e) { console.log("Anniversaire rattrapage", e.message); }
+    }
+  } catch (e) { console.log("Rattrapage anniversaires", e.message); }
+  return { mails, sms };
+}
+async function tacheFidelite(env, base) {
+  const auj = iso(today()); if (auj < CFG.FIDELITE_DEBUT) return { mails: 0, sms: [] };
+  const clients = (await query(env, CFG.DS_CLIENTS, { property: "Points fidélité", number: { greater_than_or_equal_to: CFG.PALIERS[0][0] } })).map(client);
+  let compte = 0; const sms = []; let mails = 0;
+  for (const c of clients) {
+    if (compte >= CFG.FIDELITE_PAR_JOUR) break;
+    const bons = await bonsClient(env, c.id);
+    const trouve = [...CFG.PALIERS].reverse().find(([p]) => c.points >= p); if (!trouve) continue;
+    const palier = [...trouve];
+    let bon = bons.find((b) => b.type === "Fidélité" && !b.utilise);
+    if (!bon) { const nb = await creerBonFidelite(env, c, palier); bon = { code: nb.code, montant: nb.montant, mini: nb.mini }; }
+    palier[1] = bon.montant; palier[2] = bon.mini;
+    const pg = await bonParCode(env, bon.code); if (pg && pg.notifie) continue;
+    if (mailOk(c)) {
+      const des = `${base}/desabo?c=${c.id}&s=${encodeURIComponent(await hmac(env, "u|" + c.id))}`;
+      await brevo(env, c.mail, "Votre bon fidélité", mailFidelite(c.prenom, c.points, palier[1], palier[2], bon.code, des), { headers: { "List-Unsubscribe": `<${des}>` } }); mails++;
+    } else if (c.tel) sms.push({ nom: c.nom, tel: c.tel, texte: smsFidelite(c.prenom, palier[1], palier[2], bon.code, CFG.SITE + "/#compte"), objet: "Fidélité" });
+    else continue;
+    await notion(env, "/pages/" + pg.id, "PATCH", { properties: { "Notifié le": { date: { start: auj } } } }); compte++;
+  }
+  return { mails, sms };
+}
+async function resumeMatin(env, sms) {
+  if (!sms.length) return;
+  const li = sms.map((s) => `<tr><td style="padding:8px 0;border-bottom:1px solid ${C.BD}"><b>${esc(s.nom)}</b> — ${esc(s.objet)}<br>${s.tel ? `<a href="${esc(lienSms(s.tel, s.texte))}" style="color:${C.PL}">Envoyer le SMS à ${esc(s.tel)}</a>` : "<i>Pas d'e-mail ni de téléphone enregistrés : à souhaiter de vive voix.</i>"}</td></tr>`).join("");
+  await brevo(env, CFG.ZULAY, `À souhaiter aujourd'hui (${sms.length})`, simple("À souhaiter aujourd'hui", `<p>Ces personnes n'ont pas pu recevoir leur carte par e-mail. Appuyez sur un lien depuis votre téléphone : le SMS s'ouvre déjà écrit, il ne reste qu'à appuyer sur « Envoyer ».</p><table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px">${li}</table>`));
+}
+
+// ---------- Anniversaire d'activité des filleules EXHALESSENCE ----------
+function filleule(pg) {
+  const p = pg.properties, nom = txt(p["Nom"]).trim();
+  const mots = nom.split(/\s+/); let i = 0; while (i < mots.length && mots[i] === mots[i].toUpperCase() && /[A-ZÀ-Ý]/.test(mots[i])) i++;
+  const prenom = mots.slice(i).join(" ").replace(/\s*\(.*?\)\s*/g, " ").trim() || mots[0] || "";
+  const nomFam = mots.slice(0, i).join(" ");
+  return { id: pg.id, nom, prenom, nomFam, mail: ((p["Mail"] || {}).email || "").trim().toLowerCase(), tel: ((p["Téléphone"] || {}).phone_number || "").trim(), entree: dat(p["Date d'entrée"]) };
+}
+const mailFilleule = (prenom, n) => wrap(
+  `<tr><td style="padding:0"><img src="${IMG("carte-filleule-" + Math.min(n, 15) + ".jpg")}" width="600" alt="Joyeux anniversaire, ${n} ${n > 1 ? "ans" : "an"} chez EXHALESSENCE" style="display:block;width:100%;height:auto;border:0"></td></tr>` +
+  `<tr><td style="padding:22px 28px 6px;font-size:15px;line-height:1.8;color:${C.BM}"><p style="margin:0 0 12px">Bonjour ${esc(prenom)},</p>` +
+  `<p style="margin:0 0 12px">Il y a ${n} ${n > 1 ? "ans" : "an"}, jour pour jour, tu choisissais de rejoindre l'aventure EXHALESSENCE. Je voulais marquer cette date avec toi.</p>` +
+  `<p style="margin:0 0 12px">Merci pour ta confiance et pour ta place dans l'équipe. Je suis fière de t'accompagner en tant que marraine, et je te souhaite encore de très belles rencontres, de beaux moments et de belles réussites pour les années à venir.</p>` +
+  `<p style="margin:0 0 6px">Je pense à toi aujourd'hui. 🌸</p></td></tr>` +
+  `<tr><td style="padding:10px 28px 22px"><table cellpadding="0" cellspacing="0"><tr><td valign="middle" style="padding-right:14px"><img src="${IMG("mail-photo-marraine.png")}" width="84" height="84" alt="Zulay MARQUES" style="display:block;width:84px;height:84px;border-radius:50%;border:2px solid ${C.OR}"></td>` +
+  `<td valign="middle" style="font-size:13px;line-height:1.6;color:${C.BM}"><b style="font-size:16px;color:${C.PL};letter-spacing:1px">Zulay MARQUES</b><br><i>Marraine</i></td></tr></table></td></tr>`);
+async function tacheFilleules(env) {
+  const auj = iso(today()), mmjj = auj.slice(5), an = +auj.slice(0, 4);
+  let rows;
+  try { rows = (await query(env, CFG.DS_FILLEULES, { property: "Date d'entrée", date: { is_not_empty: true } })).map(filleule); }
+  catch (e) {
+    console.log("Filleules", e.message);
+    return { envoyes: 0, erreur: true, restes: [] };
+  }
+  const du = [], restes = []; let envoyes = 0;
+  for (const f of rows) {
+    if (!f.entree || f.entree.slice(5) !== mmjj) continue;
+    if (!f.mail && !f.tel) continue;
+    const n = an - +f.entree.slice(0, 4); if (n < 1) continue;
+    let etat = "pas d'e-mail enregistré";
+    if (f.mail && /^[^@\s,]+@[^@\s,]+\.[^@\s,]+$/.test(f.mail)) {
+      try { await brevo(env, f.mail, `🌸 ${n} ${n > 1 ? "ans" : "an"} chez EXHALESSENCE : joyeux anniversaire ${f.prenom} !`, mailFilleule(f.prenom, n)); etat = "carte envoyée par e-mail ✓"; envoyes++; }
+      catch (e) { etat = "⚠️ l'e-mail n'est pas parti"; }
+    }
+    du.push({ nom: f.prenom + " " + f.nomFam, n, etat });
+    if (!etat.includes("✓")) restes.push({ nom: (f.prenom + " " + f.nomFam).trim(), tel: f.tel, objet: `Anniversaire d'entrée chez EXHALESSENCE (${n} an${n > 1 ? "s" : ""}) : ${etat}`, texte: `Joyeux anniversaire ${f.prenom} ! Déjà ${n} an${n > 1 ? "s" : ""} chez EXHALESSENCE : bravo et merci pour ce beau parcours ! Zulay, ta marraine` });
+  }
+  return { envoyes, du: du.length, restes };
+}
+// ---------- Messages du formulaire Contact ----------
+const nl2br = (t) => esc(t).replace(/\n/g, "<br>");
+const ligneM = (a, b) => `<tr><td style="padding:6px 0;border-bottom:1px solid ${C.BD}" width="90"><b style="color:${C.PL}">${a}</b></td><td style="padding:6px 0;border-bottom:1px solid ${C.BD}">${b}</td></tr>`;
+const mailMessage = (nom, mail, sujet, msg, lien, connecte) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">Nouveau message</div></td></tr><tr><td style="padding:8px 26px 8px;font-size:14px;line-height:1.7;color:${C.BM}"><p style="margin:0 0 10px">Vous avez reçu un message depuis le site.</p><table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:${C.TX}">${ligneM("Nom", esc(nom) + (connecte ? ` <i style="color:${C.PL}">(cliente connectée)</i>` : ""))}${ligneM("E-mail", `<a href="mailto:${esc(mail)}" style="color:${C.TX}">${esc(mail)}</a>`)}${ligneM("Sujet", esc(sujet))}</table><div style="margin:14px 0 6px;padding:12px 14px;background:#fff;border:1px solid ${C.BD};border-radius:10px;color:${C.TX}">${nl2br(msg)}</div></td></tr>` + bouton("Répondre depuis Notion", lien) + `<tr><td style="padding:0 26px 16px;font-size:12px;line-height:1.6;color:${C.BM};text-align:center">Écrivez votre réponse dans la case « Réponse », puis passez le statut sur <b>« À envoyer »</b>. ${connecte ? "Elle la retrouvera dans son compte, sans e-mail." : "Elle la recevra par e-mail."}</td></tr>`);
+const mailReponse = (prenom, sujet, msg, reponse) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">Ma réponse</div></td></tr><tr><td style="padding:8px 26px 10px;font-size:15px;line-height:1.8;color:${C.BM}"><p style="margin:0 0 12px">Bonjour ${esc(prenom)},</p><p style="margin:0 0 12px">${nl2br(reponse)}</p></td></tr><tr><td style="padding:4px 26px 18px"><div style="font-size:12px;color:#8a7a70;border-left:3px solid ${C.OR};padding:4px 0 4px 12px"><b>Votre message (${esc(sujet)})</b><br>${nl2br(msg)}</div></td></tr>` + bouton("Visiter le site", CFG.SITE) + pied({ merci: "À très bientôt," }));
+async function tacheMessages(env) {
+  const rows = await query(env, CFG.DS_MESSAGES, { property: "Statut", select: { equals: "À envoyer" } });
+  let envoyes = 0;
+  for (const pg of rows) {
+    const p = pg.properties, rep = txt(p["Réponse"]).trim(); if (!rep) continue;
+    const connecte = chk(p["Compte client"]), mail = (p["Mail"] || {}).email || "";
+    if (!connecte) {
+      if (!validMail(mail)) continue;
+      try { await brevo(env, mail, "Réponse de Les Essences Parfumées d'Aphrodite : " + txt(p["Sujet"]), mailReponse((txt(p["Nom"]).split(/\s+/)[0]) || "", txt(p["Sujet"]), txt(p["Message"]), rep)); }
+      catch (e) { console.log("Réponse message", e.message); continue; }
+    }
+    await notion(env, "/pages/" + pg.id, "PATCH", { properties: { Statut: { select: { name: "Envoyée" } }, "Réponse envoyée le": { date: { start: iso(today()) } } } });
+    envoyes++;
+  }
+  return envoyes;
+}
+// ---------- Commandes et réservations EXHALESSENCE ----------
+const mailDetailZulay = (titre, intro, rows, bloc, lien, aide) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">${titre}</div></td></tr><tr><td style="padding:8px 26px 8px;font-size:14px;line-height:1.7;color:${C.BM}"><p style="margin:0 0 10px">${intro}</p><table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:${C.TX}">${rows.map(([a, b]) => ligneM(a, b)).join("")}</table>${bloc}</td></tr>` + bouton("Ouvrir dans Notion", lien) + `<tr><td style="padding:0 26px 16px;font-size:12px;line-height:1.6;color:${C.BM};text-align:center">${aide}</td></tr>`);
+const motZulay = (mot) => mot ? `<div style="margin:12px 0;padding:10px 14px;background:#fff;border-left:3px solid ${C.OR};border-radius:6px;color:${C.TX};font-size:14px">${nl2br(mot)}</div>` : "";
+function mailExhValidee(prenom, numero, produits, o, regle, mot, info, delai) {
+  return wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">Merci pour votre commande !</div></td></tr><tr><td style="padding:8px 26px 12px;font-size:14px;line-height:1.7;color:${C.BM}"><p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p style="margin:0 0 12px">Merci de tout cœur pour votre confiance. Votre commande <b>${esc(numero)}</b> est validée${regle ? ", réglée par <b>" + esc(regle.toLowerCase()) + "</b>" : ""}.</p>` +
+    `<div style="padding:12px 14px;background:#fff;border:1px solid ${C.BD};border-radius:10px;color:${C.TX};font-size:13px">${nl2br(produits)}<br><br>Produits : ${eur(o.totalProduits)}<br>Frais de port : ${o.port ? eur(o.port) : "offerts"}<br><b style="color:${C.PL};font-size:15px">Total : ${eur(o.total)}</b></div>` +
+    `<p style="margin:12px 0 4px;font-size:13px">${esc(o.livraison)}</p>${delai ? `<div style="margin:12px 0 4px;padding:12px 14px;background:#fff;border:1px solid ${C.BD};border-left:3px solid ${C.PL};border-radius:10px;color:${C.TX};font-size:13px"><b>Délai de réception estimé :</b><br>${nl2br(delai)}<br><span style="color:${C.BM};font-size:12px">${EXPL_EXH}</span></div>` : ""}${motZulay(mot)}${info || ""}<p style="margin:12px 0 0">Avec toute ma gratitude,<br><b>Zulay</b></p></td></tr>` + bouton("Visiter le site", CFG.SITE) + pied());
+}
+const mailExhExpediee = (prenom, numero, suivi, lien, livraison, mot) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">Votre colis est expédié !</div></td></tr><tr><td style="padding:8px 26px 12px;font-size:14px;line-height:1.7;color:${C.BM}"><p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p style="margin:0 0 12px">Votre commande <b>${esc(numero)}</b> est en route.</p>${suivi ? `<p style="margin:0 0 6px"><b>Numéro de suivi Chronopost :</b> ${esc(suivi)}</p>` : ""}<p style="margin:0 0 12px;font-size:13px">${esc(livraison)}</p>${lien ? `<p style="margin:0 0 6px"><a href="${esc(lien)}" style="color:${C.PL}"><b>Suivre mon colis</b></a></p>` : ""}${motZulay(mot)}<p style="margin:12px 0 0">Avec toute ma gratitude,<br><b>Zulay</b></p></td></tr>` + pied());
+const EXPL_EXH = "Votre commande part directement du siège de la société EXHALESSENCE, à Meung-sur-Loire (45). La société est fermée le samedi et le dimanche : une commande passée le week-end est prise en compte le lundi, puis expédiée le lundi ou le mardi. En période de fêtes, les délais peuvent être plus longs. Cette date est une estimation. Je vous préviens par e-mail dès l'expédition, avec votre numéro de suivi Chronopost.";
+const lienChrono = (n) => n ? "https://www.chronopost.fr/tracking-no-cms/suivi-page?listeNumerosLT=" + encodeURIComponent(String(n).trim()) : "";
+const mailExhEnCours = (prenom, numero, delai, mot) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">Votre commande est en cours</div></td></tr><tr><td style="padding:8px 26px 12px;font-size:14px;line-height:1.7;color:${C.BM}"><p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p style="margin:0 0 12px">Bonne nouvelle : j'ai passé votre commande <b>${esc(numero)}</b> auprès d'EXHALESSENCE.</p>${delai ? `<div style="margin:12px 0 4px;padding:12px 14px;background:#fff;border:1px solid ${C.BD};border-left:3px solid ${C.PL};border-radius:10px;color:${C.TX};font-size:13px"><b>Livraison estimée :</b><br>${nl2br(delai)}</div>` : ""}<p style="margin:10px 0 0;font-size:12px">${EXPL_EXH}</p>${motZulay(mot)}<p style="margin:12px 0 0">Avec toute ma gratitude,<br><b>Zulay</b></p></td></tr>` + pied());
+const mailExhRecuperer = (prenom, numero, mot) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">Votre commande est prête !</div></td></tr><tr><td style="padding:8px 26px 12px;font-size:14px;line-height:1.7;color:${C.BM}"><p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p style="margin:0 0 12px">Bonne nouvelle : votre commande <b>${esc(numero)}</b> est prête. Vous pouvez venir la récupérer.</p>${motZulay(mot)}<p style="margin:10px 0 0">Pour convenir d'un rendez-vous, appelez-moi ou écrivez-moi au <b>${CFG.TEL}</b>.</p><p style="margin:12px 0 0">À très vite,<br><b>Zulay</b></p></td></tr>` + pied());
+const mailExhReservation = (prenom, prestation, mot) => wrap(`<tr><td align="center" style="padding:20px 18px 6px">${logo()}<div style="font-size:22px;color:${C.PL};letter-spacing:2px;margin-top:8px">Votre réservation est validée</div></td></tr><tr><td style="padding:8px 26px 12px;font-size:14px;line-height:1.7;color:${C.BM}"><p style="margin:0 0 10px">Bonjour ${esc(prenom)},</p><p style="margin:0 0 12px">Votre réservation pour <b>${esc(prestation)}</b> est validée.</p>${motZulay(mot)}<p style="margin:10px 0 0">Si vous avez une question, appelez-moi ou écrivez-moi au <b>${CFG.TEL}</b>.</p><p style="margin:12px 0 0">J'ai hâte de vous retrouver,<br><b>Zulay</b></p></td></tr>` + pied());
+async function tacheExh(env) {
+  let envoyes = 0;
+  const cmds = await query(env, CFG.DS_EXH_COMMANDES, { or: [{ property: "Statut", select: { equals: "Validée" } }, { property: "Statut", select: { equals: "En cours de commande" } }, { property: "Statut", select: { equals: "À récupérer" } }, { property: "Statut", select: { equals: "Expédiée" } }] });
+  for (const pg of cmds) {
+    const p = pg.properties, statut = sel(p["Statut"]); if (!statut || txt(p["Statut notifié"]) === statut) continue;
+    const mail = (p["Mail"] || {}).email || "", numero = txt(p["Commande"]), prenom = txt(p["Prénom"]), mot = txt(p["Mot pour la cliente"]);
+    if (!validMail(mail)) continue;
+    try {
+      if (statut === "Validée") {
+        const delai = txt(p["Délai estimé"]); if (!delai) continue;
+        const totalProduits = num(p["Total produits"]), port = num(p["Frais de port"]); let info = "";
+        let pts = (p["Points gagnés"] || {}).number;
+        const c = await clientByMail(env, mail);
+        if (typeof pts !== "number") {
+          pts = Math.floor(totalProduits);
+          if (c) { const nouveaux = c.points + pts; await notion(env, "/pages/" + c.id, "PATCH", { properties: { "Points fidélité": { number: nouveaux }, "Dernière commande": { date: { start: iso(today()) } } } }); c.points = nouveaux; await verifierPaliers(env, c, nouveaux); }
+          await notion(env, "/pages/" + pg.id, "PATCH", { properties: { "Points gagnés": { number: pts } } });
+        }
+        if (c) info = `<p style="margin:12px 0 0;font-size:13px">Vous gagnez <b>${pts} point${pts > 1 ? "s" : ""}</b> de fidélité : il vous en reste <b>${c.points}</b>. 1 € dépensé, hors frais de port, = 1 point, et vos points sont gardés à vie tant que vous ne les utilisez pas.</p>`;
+        else info = `<p style="margin:12px 0 0;font-size:13px">Créez votre compte pour cumuler vos points fidélité : 1 € dépensé, hors frais de port, = 1 point, gardé à vie tant que vous ne l'utilisez pas.</p>` + `<p style="margin:8px 0 0"><a href="${esc(CFG.SITE + "/#compte")}" style="color:${C.PL}">Créer mon compte</a></p>`;
+        await brevo(env, mail, "Merci pour votre commande " + numero, mailExhValidee(prenom, numero, txt(p["Produits"]), { totalProduits, port, total: num(p["Total"]), livraison: txt(p["Livraison"]) }, sel(p["Réglé par"]), mot, info, delai));
+      } else if (statut === "En cours de commande") {
+        await brevo(env, mail, "Votre commande " + numero + " est en cours", mailExhEnCours(prenom, numero, txt(p["Délai estimé"]), mot));
+      } else if (statut === "Expédiée") {
+        const suivi = txt(p["N° de suivi"]), lien0 = (p["Lien de suivi"] || {}).url || ""; if (!suivi && !lien0) continue;
+        const lien = lien0 || lienChrono(suivi);
+        await brevo(env, mail, "Votre commande " + numero + " est expédiée", mailExhExpediee(prenom, numero, suivi, lien, txt(p["Livraison"]), mot));
+      } else await brevo(env, mail, "Votre commande EXHALESSENCE est prête", mailExhRecuperer(prenom, numero, mot));
+    } catch (e) { console.log("Commande EXH", e.message); continue; }
+    await notion(env, "/pages/" + pg.id, "PATCH", { properties: { "Statut notifié": T(statut) } }); envoyes++;
+  }
+  const res = await query(env, CFG.DS_EXH_RESERVATIONS, { property: "Statut", select: { equals: "Validée" } });
+  for (const pg of res) {
+    const p = pg.properties; if (txt(p["Statut notifié"]) === "Validée") continue;
+    const mail = (p["Mail"] || {}).email || ""; if (!validMail(mail)) continue;
+    try { await brevo(env, mail, "Votre réservation est validée : " + txt(p["Prestation"]), mailExhReservation(txt(p["Prénom"]), txt(p["Prestation"]), txt(p["Mot pour la cliente"]))); }
+    catch (e) { console.log("Réservation EXH", e.message); continue; }
+    await notion(env, "/pages/" + pg.id, "PATCH", { properties: { "Statut notifié": T("Validée") } }); envoyes++;
+  }
+  return envoyes;
+}
+async function quotidien(env, base) {
+  const a = await tacheAnniversaires(env, base), f = await tacheFidelite(env, base), v = await tacheAvis(env, base);
+  let fl = { envoyes: 0, restes: [] }; try { fl = await tacheFilleules(env); } catch (e) { console.log("Filleules", e.message); }
+  await resumeMatin(env, [...a.sms, ...f.sms, ...(fl.restes || [])]); return { anniv: a.mails, fidelite: f.mails, avis: v, filleules: fl.envoyes, sms: a.sms.length + f.sms.length };
+}
+
+export default {
+  async fetch(req, env) {
+    try { return await handle(req, env); }
+    catch (e) {
+      console.log("Erreur", e.message);
+      const o = req.headers.get("Origin"), origin = (CFG.ORIGINS.includes(o) || (o === CFG.EQ_ORIGIN && new URL(req.url).pathname.startsWith("/equipe/"))) ? o : CFG.ORIGINS[0];
+      const app = new URL(req.url).pathname.startsWith("/app/");
+      return json({ erreur: app ? "Notion : " + String(e.message).slice(0, 220) : "Un souci est survenu. Réessayez dans un instant." }, app ? 502 : 500, origin);
+    }
+  },
+  async scheduled(evt, env, ctx) {
+    const base = env.BASE_URL || "https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev";
+    ctx.waitUntil((async () => {
+      await tacheStatuts(env);
+      try { await tacheMessages(env); } catch (e) { console.log("Messages", e.message); }
+      try { await tacheExh(env); } catch (e) { console.log("Exh", e.message); }
+      const h = today(); if (h.getHours() === CFG.HEURE_QUOTIDIENNE && h.getMinutes() < 15) await quotidien(env, base);
+    })());
+  },
+  _t: { eqRoute, handle, tacheMessages, tacheExh, tacheStatuts, tacheFilleules, filleule, quotidien, tacheAnniversaires, tacheFidelite, tacheAvis, CFG, hashPwd, makeToken },
+};
