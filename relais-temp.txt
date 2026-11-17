@@ -28,6 +28,8 @@ const CFG = {
   HEURE_QUOTIDIENNE: 8,            // heure de Paris pour les tâches du matin
   PALIERS: [[50, 5, 30], [100, 10, 50], [200, 25, 80], [300, 40, 100]], // points, bon €, achat mini €
   ANNIV_BON: 5, ANNIV_MINI: 25, ANNIV_JOURS: 31,
+  PAGE_GUIDE: "41c5a58f-ebca-814f-ae90-f726acc78e79",   // copie privée du guide olfactif (lue par l'application)
+  PAGE_OFFRES_EXH: "41c5a58f-ebca-81a4-89c6-ff3076eb19a8",   // page Notion où Zulay écrit les offres EXHALESSENCE (page équipe)
   DS_EQUIPE: "41b5a58f-ebca-81e8-b6eb-000ba3110855",   // tableau « Compte équipe » (page équipe EXHALESSENCE)
   EQ_ORIGIN: "https://exhalessence-equipe-conseils.github.io",
   PBKDF2: 30000,
@@ -287,27 +289,50 @@ const page = (titre, msg) => new Response(`<!doctype html><meta charset="utf-8">
 // ---------- Comptes équipe EXHALESSENCE (page équipe, séparée du site Aphrodite) ----------
 const eqNet = (t, n) => String(t || "").replace(/[<>"&]/g, "").trim().slice(0, n);
 const eqParr = (v) => { v = String(v || "").trim().replace(/^https?:\/\/(www\.)?exhalessence\.fr\/?/i, ""); return /^[A-Za-z0-9_\-.?=&%\/]{1,200}$/.test(v) && v.indexOf("//") < 0 && v.indexOf("..") < 0 ? v : ""; };
+const eqImg = (v) => { v = String(v || ""); return /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/]+=*$/.test(v) && v.length <= 46000 ? v : ""; };
+const TL = (s) => { s = String(s || ""); const a = []; for (let i = 0; i < s.length && a.length < 24; i += 2000) a.push({ text: { content: s.slice(i, i + 2000) } }); return { rich_text: a }; };
+const EQ_RES = ["instagram", "tiktok", "facebook-page", "facebook-groupe", "telegram", "whatsapp", "pinterest", "linkedin", "youtube", "autre"];
+function eqReseaux(a) {
+  const out = [];
+  for (const r of (Array.isArray(a) ? a : [])) {
+    if (out.length >= 12 || !r) break;
+    const t = EQ_RES.includes(r.t) ? r.t : ""; let u = String(r.u || "").trim();
+    if (u && !/^https?:\/\//i.test(u)) { if (/^[a-z][a-z0-9+.\-]*:/i.test(u)) continue; u = "https://" + u; }
+    u = u.replace(/^http:\/\//i, "https://");
+    if (t && /^https:\/\/[^\s"'<>]{4,200}$/.test(u)) out.push({ t, u });
+  }
+  return out;
+}
+const eqTexte = (v, n) => String(v || "").replace(/[<>]/g, "").trim().slice(0, n);
+const EQ_EXTRAS = ["societe", "logo", "photo", "reseaux", "offres", "photoOffre", "fidelite"];
+function eqExtras(b) {
+  return { societe: eqTexte(b.societe, 60).replace(/"/g, ""), logo: eqImg(b.logo), photo: eqImg(b.photo), reseaux: eqReseaux(b.reseaux), offres: eqTexte(b.offres, 600), photoOffre: eqImg(b.photoOffre), fidelite: eqTexte(b.fidelite, 300) };
+}
+function eqExtrasProps(x, cles) {
+  const m = { societe: ["Société", T(x.societe)], logo: ["Logo", TL(x.logo)], photo: ["Photo", TL(x.photo)], reseaux: ["Réseaux sociaux", TL(x.reseaux && x.reseaux.length ? JSON.stringify(x.reseaux) : "")], offres: ["Mes offres", T(x.offres)], photoOffre: ["Photo de l'offre", TL(x.photoOffre)], fidelite: ["Carte de fidélité", T(x.fidelite)] };
+  const o = {}; for (const k of cles) o[m[k][0]] = m[k][1]; return o;
+}
 function eqDonnees(b) {
   const tel = String(b.tel || "").replace(/[^0-9+]/g, "").slice(0, 16);
   return { mail: String(b.mail || "").trim().toLowerCase(), prenom: eqNet(b.prenom, 30), nom: eqNet(b.nom, 30), civ: b.civ === "m" ? "m" : "f", tel, parr: eqParr(b.parr), depuis: eqNet(b.depuis, 30), apropos: String(b.apropos || "").replace(/[<>]/g, "").trim().slice(0, 1000) };
 }
 function eqCompte(pg) {
   const p = pg.properties;
-  return { id: pg.id, mail: (p["E-mail"] && p["E-mail"].email) || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), civ: sel(p["Civilité"]) === "Monsieur" ? "m" : "f", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", parr: txt(p["Code de parrainage"]), depuis: txt(p["Conseillère depuis"]), apropos: txt(p["Qui suis-je"]), mdp: txt(p["Empreinte mot de passe (ne pas modifier)"]) };
+  return { id: pg.id, mail: (p["E-mail"] && p["E-mail"].email) || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), civ: sel(p["Civilité"]) === "Monsieur" ? "m" : "f", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", parr: txt(p["Code de parrainage"]), depuis: txt(p["Conseillère depuis"]), apropos: txt(p["Qui suis-je"]), societe: txt(p["Société"]), logo: txt(p["Logo"]), photo: txt(p["Photo"]), reseaux: (() => { try { return eqReseaux(JSON.parse(txt(p["Réseaux sociaux"]) || "[]")); } catch (e) { return []; } })(), offres: txt(p["Mes offres"]), photoOffre: txt(p["Photo de l'offre"]), archive: false, fidelite: txt(p["Carte de fidélité"]), mdp: txt(p["Empreinte mot de passe (ne pas modifier)"]) };
 }
-const eqPublic = (c) => ({ mail: c.mail, prenom: c.prenom, nom: c.nom, civ: c.civ, tel: c.tel, parr: c.parr, depuis: c.depuis, apropos: c.apropos });
+const eqPublic = (c) => ({ id: c.id, societe: c.societe || "", logo: c.logo || "", photo: c.photo || "", reseaux: c.reseaux || [], offres: c.offres || "", photoOffre: c.photoOffre || "", fidelite: c.fidelite || "", mail: c.mail, prenom: c.prenom, nom: c.nom, civ: c.civ, tel: c.tel, parr: c.parr, depuis: c.depuis, apropos: c.apropos });
 function eqProps(d) {
   return { "Nom complet": TT(((d.prenom || "") + " " + (d.nom || "")).trim() || d.mail), "Prénom": T(d.prenom), "Nom": T(d.nom), "Civilité": { select: { name: d.civ === "m" ? "Monsieur" : "Madame" } }, "E-mail": { email: d.mail }, "Téléphone": { phone_number: d.tel || null }, "Code de parrainage": T(d.parr), "Conseillère depuis": T(d.depuis), "Qui suis-je": T(d.apropos) };
 }
 async function eqParMail(env, mail) { const r = await query(env, CFG.DS_EQUIPE, { property: "E-mail", email: { equals: mail } }, undefined, 1); return r[0] ? eqCompte(r[0]) : null; }
-async function eqParId(env, id) { return eqCompte(await notion(env, "/pages/" + id)); }
+async function eqParId(env, id) { const pg = await notion(env, "/pages/" + id); const c = eqCompte(pg); c.archive = !!(pg.archived || pg.in_trash); return c; }
 async function eqJeton(env, id) { const exp = Date.now() + 90 * 864e5; const b = id + "." + exp; return b + "." + await hmac(env, "eq|" + b); }
 async function eqLireJeton(env, t) { const [id, exp, sig] = String(t || "").split("."); if (!id || !exp || !sig || Date.now() > +exp) return null; return sig === await hmac(env, "eq|" + id + "." + exp) ? id : null; }
 const eqSigReinit = (env, c, exp) => hmac(env, "er|" + c.id + "|" + exp + "|" + c.mdp.slice(-12));
 const eqMdpOk = async (c, mdp) => { const [salt, h] = c.mdp ? c.mdp.split("|") : []; return !!salt && h === await hashPwd(String(mdp || ""), salt); };
 function eqLien(base, d) {
   const n = []; const add = (k, v) => { if (v) n.push(k + "=" + encodeURIComponent(v)); };
-  add("p", d.prenom); add("n", d.nom); add("g", d.civ === "m" ? "m" : "f"); add("c", d.tel); add("e", d.mail); add("d", d.depuis); add("a", d.apropos); add("r", d.parr);
+  add("p", d.prenom); add("n", d.nom); add("g", d.civ === "m" ? "m" : "f"); add("c", d.tel); add("e", d.mail); add("d", d.depuis); add("a", d.apropos); add("r", d.parr); add("i", d.id);
   return base + (n.length ? "?" + n.join("&") : "");
 }
 const eqBase = (b) => { b = String(b || ""); return b.startsWith(CFG.EQ_ORIGIN + "/") && !/[\s"'<>]/.test(b) ? b.split("?")[0].split("#")[0] : CFG.EQ_ORIGIN + "/exhalessence-conseils/"; };
@@ -331,8 +356,8 @@ async function eqRoute(env, route, body, J) {
     if (ex) { await notion(env, "/pages/" + ex.id, "PATCH", { properties: props }); id = ex.id; }
     else { const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_EQUIPE }, properties: props }); id = pg.id; }
     const base = eqBase(body.base);
-    await eqEnvoyer(env, d, "Votre compte est créé", "Votre compte est créé", `<p>Bonjour ${esc(d.prenom)},</p><p>Votre compte sur la page équipe est bien créé. Voici votre lien personnel : gardez ce message, il vous permet de le retrouver à tout moment.</p><p style="word-break:break-all;font-size:12px">${esc(eqLien(base, d))}</p><p style="font-size:12px">Pour des raisons de sécurité, votre mot de passe n'est jamais envoyé ni lisible par quiconque.</p>`, "Ouvrir mon lien", eqLien(base, d));
-    return J({ ok: true, jeton: await eqJeton(env, id), profil: eqPublic({ ...d }) });
+    await eqEnvoyer(env, d, "Votre compte est créé", "Votre compte est créé", `<p>Bonjour ${esc(d.prenom)},</p><p>Votre compte sur la page équipe est bien créé. Voici votre lien personnel : gardez ce message, il vous permet de le retrouver à tout moment.</p><p style="word-break:break-all;font-size:12px">${esc(eqLien(base, { ...d, id }))}</p><p style="font-size:12px">Pour des raisons de sécurité, votre mot de passe n'est jamais envoyé ni lisible par quiconque.</p>`, "Ouvrir mon lien", eqLien(base, d));
+    return J({ ok: true, jeton: await eqJeton(env, id), profil: eqPublic({ ...d, id }) });
   }
   if (route === "/equipe/connexion") {
     const mail = String(body.mail || "").trim().toLowerCase();
@@ -345,16 +370,55 @@ async function eqRoute(env, route, body, J) {
     const id = await eqLireJeton(env, body.jeton);
     if (!id) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
     const c = await eqParId(env, id);
+    if (c.archive) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
     return J({ ok: true, profil: eqPublic(c) });
   }
   if (route === "/equipe/profil-maj") {
     const id = await eqLireJeton(env, body.jeton);
     if (!id) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
     const c = await eqParId(env, id);
-    const d = eqDonnees({ ...body, mail: c.mail });
+    if (c.archive) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
+    let mail = c.mail; const nm = String(body.mail || "").trim().toLowerCase();
+    if (nm && nm !== c.mail) {
+      if (!validMail(nm)) return J({ erreur: "Merci d'indiquer une adresse e-mail valide." }, 400);
+      if (!(await eqMdpOk(c, body.mdp))) return J({ erreur: "Pour changer votre adresse e-mail, écrivez votre mot de passe actuel." }, 403);
+      const autre = await eqParMail(env, nm);
+      if (autre && autre.id !== id) return J({ erreur: "Cette adresse e-mail est déjà utilisée par un autre compte." }, 409);
+      mail = nm;
+    }
+    const d = eqDonnees({ ...body, mail });
     if (!d.prenom || !d.nom) return J({ erreur: "Merci d'indiquer votre prénom et votre nom." }, 400);
-    await notion(env, "/pages/" + id, "PATCH", { properties: eqProps(d) });
-    return J({ ok: true, profil: eqPublic(d) });
+    const cles = EQ_EXTRAS.filter((k) => k in body), x = eqExtras(body);
+    for (const k of ["logo", "photo", "photoOffre"]) if (k in body && body[k] && !x[k]) return J({ erreur: "Cette image est trop lourde ou n'est pas reconnue. Essayez-en une autre." }, 400);
+    await notion(env, "/pages/" + id, "PATCH", { properties: { ...eqProps(d), ...eqExtrasProps(x, cles) } });
+    const apres = await eqParId(env, id);
+    return J({ ok: true, profil: eqPublic(apres) });
+  }
+  if (route === "/equipe/page") {
+    const i = String(body.i || "");
+    if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(i)) return J({ ok: true, vide: true });
+    let pg; try { pg = await notion(env, "/pages/" + i); } catch (e) { return J({ ok: true, vide: true }); }
+    const ds = pg && pg.parent && (pg.parent.data_source_id || pg.parent.database_id || "");
+    if (String(ds).replace(/-/g, "") !== CFG.DS_EQUIPE.replace(/-/g, "")) return J({ ok: true, vide: true });
+    if (pg.archived || pg.in_trash) return J({ ok: true, vide: true });
+    const c = eqCompte(pg);
+    return J({ ok: true, societe: c.societe, logo: c.logo, photo: c.photo, reseaux: c.reseaux, offres: c.offres, photoOffre: c.photoOffre, fidelite: c.fidelite });
+  }
+  if (route === "/equipe/offres") {
+    let lignes = [], cursor, apres = false, vu = false;
+    try {
+      do {
+        const j = await notion(env, `/blocks/${CFG.PAGE_OFFRES_EXH}/children?page_size=100${cursor ? "&start_cursor=" + cursor : ""}`);
+        for (const b of j.results) {
+          if (b.type === "divider") { apres = true; vu = true; lignes = []; continue; }
+          const rt = (b[b.type] && b[b.type].rich_text) || []; const t = rt.map((x) => x.plain_text).join("").trim();
+          if (t && ["paragraph", "bulleted_list_item", "numbered_list_item", "heading_1", "heading_2", "heading_3"].includes(b.type) && apres) lignes.push((b.type === "bulleted_list_item" ? "• " : "") + t);
+        }
+        cursor = j.has_more ? j.next_cursor : null;
+      } while (cursor);
+    } catch (e) { return J({ ok: true, vide: true }); }
+    const texte = lignes.join("\n").replace(/[<>]/g, "").slice(0, 1500);
+    return texte ? J({ ok: true, texte }) : J({ ok: true, vide: true });
   }
   if (route === "/equipe/oubli") {
     const mail = String(body.mail || "").trim().toLowerCase();
@@ -645,6 +709,17 @@ async function handle(req, env) {
       if (/^\d{4}-\d{2}-\d{2}$/.test(body.echeance || "")) props["Échéance"] = { date: { start: body.echeance } };
       const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_TACHES }, properties: props });
       return J({ ok: true, id: pg.id });
+    }
+    if (route === "/app/guide") {
+      let txt = "", cursor;
+      do {
+        const j = await notion(env, `/blocks/${CFG.PAGE_GUIDE}/children?page_size=100${cursor ? "&start_cursor=" + cursor : ""}`);
+        for (const b of j.results) if (b.type === "code") txt += (b.code.rich_text || []).map((x) => x.plain_text).join("") + "\n";
+        cursor = j.has_more ? j.next_cursor : null;
+      } while (cursor);
+      const eq = [];
+      for (const l of txt.split("\n")) { const t = l.trim(); if (!t) continue; try { eq.push(JSON.parse(t)); } catch (e) {} }
+      return J({ eq });
     }
     if (route === "/app/calendrier") {
       const out = []; let cursor, sect = "";
