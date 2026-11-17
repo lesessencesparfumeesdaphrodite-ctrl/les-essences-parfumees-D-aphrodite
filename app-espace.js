@@ -55,7 +55,7 @@ var TYPES={femme:'Femme',homme:'Homme',societe:'Société',famille:'Famille'};
 function typeCli(c){
   var t=norm(c.type);if(TYPES[t])return t;
   if(c.lieu==='FAMILLE'||c.famille)return 'famille';
-  if(/\b(sarl|sas|sasu|eurl|sci|association|mairie|entreprise|societe|boutique|salon de|institut)\b/i.test(norm(c.nom)))return 'societe';
+  if(/\b(sarl|sas|sasu|eurl|sci|association|mairie|entreprise|societe|boutique|institut|renovation|cabinet|garage|pharmacie|boulangerie|restaurant|ecole|menuiserie|plomberie|electricite|immobilier|agence|clinique|cse|batiment|construction|traiteur|pressing|coiffure|salon)\b/i.test(norm(c.nom)))return 'societe';
   return c.sexe==='M'?'homme':'femme';
 }
 function prodsHabituels(cs){
@@ -215,17 +215,27 @@ ESPACE.copierCa=function(i,b){
 
 /* =============== ANNIVERSAIRES =============== */
 var AN=[],anInfo=null;
+function cleN(s){return norm(s).split(/\s+/).filter(Boolean).sort().join(' ');}
+function contactAn(a){
+  var src=cacheGet(a.qui==='Filleule'?'filleules':'clients'),liste=src&&src.d?(a.qui==='Filleule'?src.d.filleules:src.d.clients)||[]:[],k=cleN(a.nom),mail='',tel=a.tel||'';
+  for(var n=0;n<liste.length;n++){if(cleN(liste[n].nom)===k){mail=liste[n].mail||'';tel=tel||liste[n].tel||'';break;}}
+  if(mail)return{k:'mail',t:'✉️ Mail automatique'};
+  if(tel)return{k:'sms',t:'💬 SMS à envoyer',tel:tel};
+  return{k:'non',t:'Pas d\'envoi (ni mail ni téléphone)'};
+}
 ESPACE.anniv=function(){
   $('v-anniv').innerHTML='<div class="liste" id="an-zone"></div>';
   lire('anniv','/app/anniv',function(d,info){anInfo=info;if(d)AN=d.anniv||[];dessAn();});
+  lire('clients','/app/clients',function(d){if(d)dessAn();});
+  lire('filleules','/app/filleules',function(d){if(d)dessAn();});
 };
 function dessAn(){
   var z=$('an-zone');if(!z)return;var now=new Date();now.setHours(0,0,0,0);
   var L=AN.map(function(a){var p=a.date.split('-'),m=+p[1]-1,j=+p[2],d=new Date(now.getFullYear(),m,j);if(d<now)d=new Date(now.getFullYear()+1,m,j);return{a:a,d:d,n:Math.round((d-now)/864e5)};}).sort(function(x,y){return x.n-y.n;});
-  var h=L.slice(0,80).map(function(x){var a=x.a,pr=(a.nom||'').split(/\s+/)[0];
-    var sms=a.tel?'<a class="mini" href="sms:'+esc(a.tel.replace(/\s/g,''))+'?&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! 🎂 Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">💬 SMS</a>':'';
-    return '<div class="tache"><div class="jour'+(x.n===0?' auj':'')+'">'+(x.n===0?'🎉':x.d.getDate()+'<small>'+x.d.toLocaleDateString('fr-FR',{month:'short'})+'</small>')+'</div><div style="flex:1"><div class="tn">'+esc(a.nom)+'</div><div class="ts">'+(a.qui==='Filleule'?'🌸 Filleule':'👩 Cliente')+' · '+(x.n===0?'aujourd\'hui !':x.n===1?'demain':'dans '+x.n+' jours')+'</div></div>'+sms+'</div>';}).join('');
-  z.innerHTML='<h2 class="titre-g">🎂 Anniversaires</h2>'+etat(anInfo)+'<div class="boite">'+(h||'<p class="vide">Aucun anniversaire.</p>')+'</div>';
+  var h=L.slice(0,120).map(function(x){var a=x.a,pr=(a.nom||'').split(/\s+/)[0],c=contactAn(a);
+    var btn=c.k==='sms'?'<a class="mini" href="sms:'+esc(c.tel.replace(/\s/g,''))+'?&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':'';
+    return '<div class="tache"><div class="jour '+(a.qui==='Filleule'?'fil':'cli')+(x.n===0?' auj':'')+'">'+(x.n===0?'🎉':x.d.getDate()+'<small>'+x.d.toLocaleDateString('fr-FR',{month:'short'})+'</small>')+'</div><div style="flex:1"><div class="tn">'+esc(a.nom)+'</div><div class="ts">'+(a.qui==='Filleule'?'Filleule':'Cliente')+' · '+(x.n===0?'aujourd\'hui':x.n===1?'demain':'dans '+x.n+' jours')+'</div><div class="ts"><span class="stat">'+c.t+'</span></div></div>'+btn+'</div>';}).join('');
+  z.innerHTML='<h2 class="titre-g">Anniversaires</h2>'+etat(anInfo)+'<div class="chips"><span class="chip" style="background:#FBE3EA">Clientes</span><span class="chip" style="background:#FFE9A8">Filleules</span></div><div class="boite">'+(h||'<p class="vide">Aucun anniversaire.</p>')+'</div>';
 }
 
 /* =============== FILLEULES =============== */
@@ -245,15 +255,14 @@ function dessFi(){
 ESPACE.rechFi=function(v){fiQ=v;dessFi();var i=$('fi-q');if(i){i.focus();try{i.setSelectionRange(v.length,v.length);}catch(e){}}};
 
 /* =============== FINANCES EXHALESSENCE (données gardées dans l'app) =============== */
-var FIN_TAB='prix',FIN_AN=2026,PQ='';
+var FIN_TAB=null,FIN_AN=2025,PQ='';
 var MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-ESPACE.finances=function(){
-  $('v-finances').innerHTML='<div class="liste" id="fin-zone"></div>';dessFin();
-};
+ESPACE.finances=function(){FIN_TAB=null;$('v-finances').innerHTML='<div class="liste" id="fin-zone"></div>';dessFin();};
 function dessFin(){
   var D=window.DONNEES_EXH,z=$('fin-zone');if(!z||!D)return;
-  var tabs=[['prix','🔢 Prix et points'],['comm','⭐ Points et commissions'],['marge','📊 Déclaration de marge']];
-  var h='<h2 class="titre-g">💶 Suivi financier EXHALESSENCE</h2><div class="chips">'+tabs.map(function(t){return '<button class="chip'+(FIN_TAB===t[0]?' on':'')+'" onclick="ESPACE.tabFin(\''+t[0]+'\')">'+t[1]+'</button>';}).join('')+'</div>';
+  var h='<h2 class="titre-g">Suivi financier EXHALESSENCE</h2>';
+  if(!FIN_TAB){z.innerHTML=h+'<div class="hubf"><button class="nv" onclick="ESPACE.tabFin(\'marge\')"><span>Déclaration de marge</span></button><button class="nv" onclick="ESPACE.tabFin(\'comm\')"><span>Points et commissions</span></button><button class="nv" onclick="ESPACE.tabFin(\'prix\')"><span>Points et prix par produit</span></button></div>';return;}
+  h+='<h3 class="sect" style="text-align:center">'+({prix:'Points et prix par produit',comm:'Points et commissions',marge:'Déclaration de marge'})[FIN_TAB]+'</h3>';
   if(FIN_TAB==='prix'){
     var q=norm(PQ);
     h+='<input id="pq" class="recherche" type="search" placeholder="🔍 Chercher un produit" aria-label="Chercher un produit" value="'+esc(PQ)+'" oninput="ESPACE.rechP(this.value)"><p class="vide">Prix conseillère : −50 % sur parfums et beauté, −30 % sur Home. Cases « — » : points à compléter.</p>';
@@ -285,6 +294,23 @@ ESPACE.anFin=function(a){FIN_AN=a;dessFin();};
 ESPACE.rechP=function(v){PQ=v;dessFin();var i=$('pq');if(i){i.focus();try{i.setSelectionRange(v.length,v.length);}catch(e){}}};
 
 /* =============== PAGES D'ACTIVITÉ =============== */
-ESPACE.creations=function(){};
-ESPACE.exha=function(){};
+ESPACE.retourInterne=function(v){
+  if(v==='clients'&&clOuvert){clOuvert=null;dessCl();return true;}
+  if(v==='finances'&&FIN_TAB){FIN_TAB=null;dessFin();return true;}
+  return false;
+};
+ESPACE.tarifs=function(){
+  var D=window.DONNEES_CREA,z=$('v-tarifs');
+  z.innerHTML='<div class="liste"><h2 class="titre-g">Tarifs finitions et suppléments</h2><p class="vide" style="text-align:center">Ces suppléments s\'ajoutent au prix de vente brut.</p>'
+   +'<div class="boite"><h3>Finition (type de plâtre)</h3>'+D.finitions.map(function(f){return '<div class="hab"><span>'+esc(f[0])+'</span><b>'+eur(f[1])+'</b></div>';}).join('')+'</div>'
+   +'<div class="boite"><h3>Suppléments de personnalisation (prix unitaire)</h3>'+D.supplements.map(function(f){return '<div class="hab"><span>'+esc(f[0])+'</span><b>'+eur(f[1])+'</b></div>';}).join('')+'</div>'
+   +'<div class="boite"><h3>Comment le prix est calculé</h3>'+D.formules.map(function(f){return '<p class="vide" style="margin:6px 0">'+esc(f)+'</p>';}).join('')+'</div></div>';
+};
+ESPACE.urssaf=function(){
+  var D=window.DONNEES_CREA,z=$('v-urssaf'),rows=D.urssaf['2026'],t=[0,0,0,0,0];
+  function c(v){return v==null?'—':eur(v);}
+  z.innerHTML='<div class="liste"><h2 class="titre-g">Ventes et URSSAF (créations)</h2><p class="vide" style="text-align:center">Uniquement tes créations. Pour la déclaration URSSAF et les impôts. Année 2026.</p><div class="boite"><div class="tab"><div class="th c6"><span>Mois</span><span>Ventes</span><span>Achats</span><span>PayPal</span><span>Déclar.</span><span>Payé</span></div>'
+   +rows.map(function(r,i){for(var k=0;k<5;k++)t[k]+=r[k]||0;return '<div class="tr c6"><span>'+MOIS[i]+'</span>'+r.map(function(v){return '<span>'+c(v)+'</span>';}).join('')+'</div>';}).join('')
+   +'<div class="tr c6 tot"><span>Total</span>'+t.map(function(v){return '<span>'+eur(v)+'</span>';}).join('')+'</div></div></div><p class="vide">Ventes = payé par les clients · Achats = pour tes créations · PayPal = reçu après frais · Déclar. = chiffre déclaré à l\'URSSAF · Payé = versé à l\'URSSAF. Les données se complètent dans Notion.</p></div>';
+};
 })();

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#3D2B2E">
-<title>Mon espace — Les Essences Parfumées d'Aphrodite</title>
+<title>Espace administrateur — Les Essences Parfumées d'Aphrodite</title>
 <link rel="manifest" href="manifest-app.json">
 <link rel="icon" href="favicon-48.png">
 <link rel="apple-touch-icon" href="icone-bon-180.png">
@@ -114,17 +114,39 @@ body{background:linear-gradient(180deg,#FFEDD9 0%,#FFFDF9 38%)}
 .jour{flex:none;width:48px;height:48px;border-radius:14px;background:var(--sable);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:17px}
 .jour small{font-size:10px;font-weight:400;text-transform:uppercase}.jour.auj{background:#FFF1CC;font-size:26px}
 .tab .th,.tab .tr{display:grid;grid-template-columns:3fr 1fr 1.3fr 1.3fr;gap:6px;padding:6px 0;border-top:1px solid rgba(201,169,110,.25);font-size:13px}
-.tab .c5{grid-template-columns:1.6fr 1fr 1fr 1fr 1.3fr}
+.tab .c6{grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 1fr;font-size:11.5px}.tab .c5{grid-template-columns:1.6fr 1fr 1fr 1fr 1.3fr}
 .tab .th{font-weight:700;color:var(--terra);border-top:0}.tab .tr span+span,.tab .th span+span{text-align:right}.tab .tot{font-weight:700;background:var(--sable)}
 .hub{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;max-width:640px;margin:0 auto;width:100%}
 .hub .tuile{min-height:120px;font-size:15px}
+
+/* ---- v2 sobre ---- */
+body{background:#FFFDF9}
+.hdr{text-align:center;margin:4px 0 14px}.hdate{margin:0;font-family:Georgia,serif;font-size:19px;color:var(--bord);text-transform:capitalize}.hmeteo{margin:4px 0 0;font-size:13.5px;color:var(--gris)}
+.nvs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nv{display:flex;align-items:center;gap:12px;text-align:left;padding:14px 14px;background:#fff;border:1px solid rgba(201,169,110,.7);border-left:4px solid var(--terra);border-radius:12px;color:var(--brun);font-weight:700;font-size:14.5px;min-height:64px}
+.nv svg{flex:none;color:var(--terra)}.nv:active{background:var(--sable)}
+.activites{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.act{border:0;border-radius:12px;padding:18px 14px;text-align:left;color:#fff;min-height:92px}
+.act b{display:block;font-family:Georgia,serif;font-size:17px;margin-bottom:4px}.act small{font-size:12.5px;opacity:.9}
+.a1{background:linear-gradient(135deg,#3D2B2E,#7a4a3a)}.a2{background:linear-gradient(135deg,#3D2B2E,#6b3a52)}
+.hub{grid-template-columns:1fr;max-width:520px}
+@media(max-width:380px){.nvs,.activites{grid-template-columns:1fr}}
+/* commandes en lignes */
+.cmd2{border-top:1px solid rgba(201,169,110,.35)}
+.lg{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;background:transparent;border:0;padding:12px 2px;text-align:left;color:var(--brun);font-size:14px}
+.lg .lt b{font-size:14.5px}.lg .lt small{display:block;color:var(--gris);font-size:12.5px;margin-top:2px}
+.lg .fl2{color:var(--terra);font-size:13px;flex:none}
+.corps[hidden]{display:none}.corps{padding-bottom:10px}
+.jour.fil{background:#FFE9A8}.jour.cli{background:#FBE3EA}
+.stat{display:inline-block;font-size:11.5px;border-radius:10px;padding:1px 8px;background:var(--sable);margin-left:4px}
+.hubf{display:grid;gap:10px;margin:12px 0}
 </style>
 </head>
 <body>
 <div id="verrou">
   <div class="carte-v">
     <img src="logo.webp" width="120" height="120" alt="Les Essences Parfumées d'Aphrodite">
-    <h2>Mon espace</h2>
+    <h2>Espace administrateur</h2>
     <p class="slogan">BEAUTÉ · PARFUM · FAIT MAIN</p>
     <label for="mdp" style="font-size:14px;color:var(--gris)">Mot de passe</label>
     <input id="mdp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')entrer()">
@@ -135,46 +157,35 @@ body{background:linear-gradient(180deg,#FFEDD9 0%,#FFFDF9 38%)}
 
 <header class="barre">
   <img src="favicon-192.png" width="34" height="34" alt="">
-  <h1 id="titre">Mon espace</h1>
-  <button id="retour" onclick="aller('accueil')" style="display:none" aria-label="Retour à l'accueil">← Accueil</button>
+  <h1 id="titre">Espace administrateur</h1>
+  <button id="retour" onclick="retour()" style="display:none" aria-label="Retour">← Retour</button>
 </header>
 <main>
   <section class="vue on" id="v-accueil">
     <div class="accueil">
-      <p class="bj2" id="bj2">Bonjour Zulay 🌸</p>
-      <p class="bj" id="bjdate">Que voulez-vous faire ?</p>
-      <div class="grandes">
-        <button class="grande g1" onclick="aller('creations')"><span class="e" aria-hidden="true">🏺</span><span><b>Créations plâtre résine</b><small>commandes, calcul, tâches</small></span></button>
-        <button class="grande g2" onclick="aller('exha')"><span class="e" aria-hidden="true">🌸</span><span><b>EXHALESSENCE</b><small>commandes, prix et points, finances</small></span></button>
+      <div class="hdr"><p class="hdate" id="hdate"></p><p class="hmeteo" id="hmeteo"></p></div>
+      <div class="nvs">
+        <button class="nv" onclick="aller('clients')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Clientes</span></button>
+        <button class="nv" onclick="aller('bon')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span>Bon de commande</span></button>
+        <button class="nv" onclick="aller('taches')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Mes tâches</span></button>
+        <button class="nv" onclick="aller('calendrier')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Calendrier éditorial</span></button>
+        <button class="nv" onclick="aller('anniv')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>Anniversaires</span></button>
+        <button class="nv" onclick="aller('commandes')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span>Commandes</span></button>
       </div>
-      <div class="tuiles">
-        <button class="tuile k1" onclick="aller('clients')"><span class="e" aria-hidden="true">👩</span>Clientes<small>fiches A–Z</small></button>
-        <button class="tuile k2" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande<small>partout, même sans réseau</small></button>
-        <button class="tuile k3" onclick="aller('taches')"><span class="e" aria-hidden="true">✅</span>Mes tâches<small>à cocher</small></button>
-        <button class="tuile k4" onclick="aller('calendrier')"><span class="e" aria-hidden="true">📅</span>Calendrier éditorial<small>publications</small></button>
-        <button class="tuile k5" onclick="aller('anniv')"><span class="e" aria-hidden="true">🎂</span>Anniversaires<small>clientes et filleules</small></button>
-        <button class="tuile k1" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>site, EXHA, marchés</small></button>
-        <button class="tuile k2" onclick="aller('fidelite')"><span class="e" aria-hidden="true">💳</span>Fidélité<small>carnet</small></button>
-        <button class="tuile k3" onclick="aller('outil')"><span class="e" aria-hidden="true">🧮</span>Outil<small>calculs et devis</small></button>
-        <button class="tuile k4" onclick="aller('admin')"><span class="e" aria-hidden="true">⚙️</span>Administration du site<small>le reste</small></button>
+      <div class="activites">
+        <button class="act a1" onclick="aller('creations')"><b>Créations plâtre résine</b><small>Calcul, tarifs, URSSAF</small></button>
+        <button class="act a2" onclick="aller('exha')"><b>EXHALESSENCE</b><small>Filleules, suivi financier</small></button>
       </div>
     </div>
   </section>
   <section class="vue" id="v-creations"><div class="hub">
-    <button class="tuile k1" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>site et marchés</small></button>
-    <button class="tuile k2" onclick="aller('outil')"><span class="e" aria-hidden="true">🧮</span>Calcul rapide<small>prix et devis</small></button>
-    <button class="tuile k3" onclick="aller('clients')"><span class="e" aria-hidden="true">👩</span>Clientes</button>
-    <button class="tuile k5" onclick="aller('taches')"><span class="e" aria-hidden="true">✅</span>Mes tâches</button>
-    <button class="tuile k4" onclick="aller('calendrier')"><span class="e" aria-hidden="true">📅</span>Calendrier éditorial</button>
-    <button class="tuile k2" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande</button>
+    <button class="nv" onclick="aller('outil')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span>Calcul rapide et catalogue</span></button>
+    <button class="nv" onclick="aller('tarifs')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span>Tarifs finitions et suppléments</span></button>
+    <button class="nv" onclick="aller('urssaf')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Ventes et URSSAF (créations)</span></button>
   </div></section>
   <section class="vue" id="v-exha"><div class="hub">
-    <button class="tuile k1" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>EXHALESSENCE</small></button>
-    <button class="tuile k2" onclick="aller('finances')"><span class="e" aria-hidden="true">💶</span>Suivi financier<small>prix, points, marges</small></button>
-    <button class="tuile k3" onclick="aller('filleules')"><span class="e" aria-hidden="true">🌸</span>Filleules</button>
-    <button class="tuile k4" onclick="aller('clients')"><span class="e" aria-hidden="true">👩</span>Clientes</button>
-    <button class="tuile k5" onclick="aller('anniv')"><span class="e" aria-hidden="true">🎂</span>Anniversaires</button>
-    <button class="tuile k2" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande</button>
+    <button class="nv" onclick="aller('filleules')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Filleules</span></button>
+    <button class="nv" onclick="aller('finances')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Suivi financier</span></button>
   </div></section>
   <section class="vue" id="v-clients"></section>
   <section class="vue" id="v-taches"></section>
@@ -182,6 +193,8 @@ body{background:linear-gradient(180deg,#FFEDD9 0%,#FFFDF9 38%)}
   <section class="vue" id="v-anniv"></section>
   <section class="vue" id="v-filleules"></section>
   <section class="vue" id="v-finances"></section>
+  <section class="vue" id="v-tarifs"></section>
+  <section class="vue" id="v-urssaf"></section>
   <section class="vue" id="v-commandes"><div class="liste" id="liste"></div></section>
   <section class="vue" id="v-bon"><iframe class="cadre" id="f-bon" title="Bon de commande"></iframe></section>
   <section class="vue" id="v-outil"><iframe class="cadre" id="f-outil" title="Outil"></iframe></section>
@@ -193,22 +206,32 @@ var API='https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev
 var CLE='aphrodite-salon-code';
 var code='';try{code=localStorage.getItem(CLE)||'';}catch(e){}
 var PAGES={bon:'bon-salon.html',outil:'outil.html',fidelite:'carnet-fidelite.html'};
-var TITRES={accueil:'Mon espace',commandes:'Commandes',bon:'Bon de commande',outil:'Outil',fidelite:'Fidélité',creations:'Créations plâtre résine',exha:'EXHALESSENCE',clients:'Clientes',taches:'Mes tâches',calendrier:'Calendrier éditorial',anniv:'Anniversaires',filleules:'Filleules',finances:'Suivi financier'};
+var PARENT={commandes:'accueil',bon:'accueil',clients:'accueil',taches:'accueil',calendrier:'accueil',anniv:'accueil',creations:'accueil',exha:'accueil',fidelite:'accueil',outil:'creations',tarifs:'creations',urssaf:'creations',filleules:'exha',finances:'exha'};
+var cur='accueil';
+var TITRES={tarifs:'Tarifs finitions et suppléments',urssaf:'Ventes et URSSAF',accueil:'Espace administrateur',commandes:'Commandes',bon:'Bon de commande',outil:'Calcul rapide et catalogue',fidelite:'Fidélité',creations:'Créations plâtre résine',exha:'EXHALESSENCE',clients:'Clientes',taches:'Mes tâches',calendrier:'Calendrier éditorial',anniv:'Anniversaires',filleules:'Filleules',finances:'Suivi financier'};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function post(p,b){b=b||{};b.code=code;return fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,st:r.status,j:j};});}).catch(function(){return{ok:false,st:0,j:{erreur:'Pas de réseau.'}};});}
 function memoriser(c){code=c;try{localStorage.setItem(CLE,c);localStorage.setItem('aph_adm_code',c);}catch(e){}}
+var HK='aph-h';
+function sha(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode('aph|'+t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2);}).join('');});}
+function deverrouiller(v){memoriser(v);if(window.viderFile)viderFile();document.getElementById('msgv').textContent='';document.getElementById('verrou').classList.add('cache');document.getElementById('mdp').value='';aller('accueil',true);if(window.demarrerAccueil)demarrerAccueil();}
+function verrouiller(){code='';document.getElementById('verrou').classList.remove('cache');document.getElementById('mdp').value='';aller('accueil',true);}
 function entrer(){
   var v=document.getElementById('mdp').value;var m=document.getElementById('msgv');
   if(!v){m.textContent='Entrez votre mot de passe.';return;}
   m.textContent='Vérification…';code=v;
   post('/salon/ping').then(function(r){
-    if(r.ok){memoriser(v);if(window.viderFile)viderFile();m.textContent='';document.getElementById('verrou').classList.add('cache');document.getElementById('mdp').value='';}
+    if(r.ok){sha(v).then(function(h){try{localStorage.setItem(HK,h);}catch(e){}deverrouiller(v);});}
     else if(r.st===401){code='';m.textContent='Mot de passe incorrect.';}
-    else{code='';m.textContent='Pas de réseau : réessayez quand vous avez du réseau.';}
+    else{sha(v).then(function(h){var s='';try{s=localStorage.getItem(HK)||'';}catch(e){}if(s&&s===h)deverrouiller(v);else{code='';m.textContent=s?'Mot de passe incorrect.':'Pas de réseau : la première connexion demande du réseau.';}});}
   });
 }
-function aller(v){
-  if(v==='admin'){window.open('/#page-admin','_blank');return;}
+var absent=0;
+document.addEventListener('visibilitychange',function(){if(document.hidden)absent=Date.now();else if(absent&&Date.now()-absent>10*60*1000&&code){verrouiller();}});
+function retour(np){if(window.ESPACE&&ESPACE.retourInterne&&ESPACE.retourInterne(cur))return;aller(PARENT[cur]||'accueil',true);}
+window.addEventListener('popstate',function(){if(cur!=='accueil')retour(true);});
+function aller(v,np){
+  cur=v;if(!np&&v!=='accueil'){try{history.pushState({v:v},'');}catch(e){}}
   document.querySelectorAll('.vue').forEach(function(e){e.classList.remove('on');});
   document.getElementById('v-'+v).classList.add('on');
   document.getElementById('titre').textContent=TITRES[v];
@@ -225,17 +248,20 @@ var REG=['','Virement','Carte bancaire','Espèces','PayPal','Chèque','Wero','Au
 var cmds=[],ex=[],msgS='',msgX='';
 function chargerSite(){msgS='Chargement…';dessiner();post('/admin/commandes').then(function(r){if(!r.ok){msgS=r.j.erreur||'Erreur';cmds=[];}else{cmds=r.j.commandes||[];msgS='';}dessiner();});}
 function chargerExh(){msgX='Chargement…';dessiner();post('/admin/exh-commandes').then(function(r){if(!r.ok){msgX=r.j.erreur||'Erreur';ex=[];}else{ex=r.j.commandes||[];msgX='';}dessiner();});}
+function repli(id,tete,corps){var o=OUV[id];return '<div class="cmd2"><button class="lg" aria-expanded="'+(!!o)+'" onclick="basc(this,\''+id+'\')"><span class="lt">'+tete+'</span><span class="fl2">'+(o?'▲':'▼')+'</span></button><div class="corps"'+(o?'':' hidden')+'>'+corps+'</div></div>';}
+var OUV={};
+function basc(b,id){var c=b.nextElementSibling;var h=!c.hidden;c.hidden=h;OUV[id]=!h;b.setAttribute('aria-expanded',String(!h));b.lastChild.textContent=h?'▼':'▲';}
 function carteS(o,i){
-  return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
+  return repli('s'+o.id,'<b>'+esc(o.nom||o.mail)+'</b><small>'+esc(o.numero)+' · '+esc(o.date)+' · '+esc(String(o.total).replace('.',','))+' € · '+esc(o.statut)+'</small>','<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
   +'<div class="s">'+esc(o.nom)+' — '+esc(o.mail)+'</div><div class="p">'+esc(o.produits)+'</div>'
   +'<div class="p">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>'+(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
   +'<div class="champs"><div><label for="s-st-'+i+'">Statut</label><select id="s-st-'+i+'">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
   +'<div><label for="s-pa-'+i+'">Paiement reçu</label><input id="s-pa-'+i+'" type="text" placeholder="Ex : virement, espèces" value="'+esc(o.paiement)+'"></div>'
   +'<div><label for="s-su-'+i+'">N° de suivi</label><input id="s-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
-  +'<button class="petit" onclick="saveS('+i+')">Enregistrer</button></div>';
+  +'<button class="petit" onclick="saveS('+i+')">Enregistrer</button></div>');
 }
 function carteX(o,i){
-  return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
+  return repli('x'+o.id,'<b>'+esc(o.nom||o.mail)+'</b><small>'+esc(o.numero)+' · '+esc(o.date)+' · '+esc(String(o.total).replace('.',','))+' € · '+esc(o.statut)+'</small>','<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(o.date)+'</strong><span>'+esc(String(o.total).replace('.',','))+' €</span></div>'
   +'<div class="s">'+esc(o.nom)+' — '+esc(o.mail)+' — '+esc(o.tel)+'</div><div class="p">'+esc(o.produits)+'</div>'
   +'<div class="p">🚚 '+esc(o.livraison)+' — '+esc(o.adresse)+'<br>💳 Paiement souhaité : <b>'+esc(o.souhaite)+'</b></div>'+(o.notes?'<div class="p">📝 '+esc(o.notes)+'</div>':'')
   +'<div class="champs"><div><label for="x-st-'+i+'">Statut</label><select id="x-st-'+i+'">'+STX.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'
@@ -243,7 +269,7 @@ function carteX(o,i){
   +'<div class="champs"><div style="flex:2;min-width:200px"><label for="x-de-'+i+'">Livraison estimée (obligatoire pour valider)</label><input id="x-de-'+i+'" type="text" placeholder="Ex : entre le 24 et le 27 novembre" value="'+esc(o.delai)+'"></div>'
   +'<div><label for="x-su-'+i+'">N° de suivi Chronopost relais</label><input id="x-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
   +'<label for="x-mo-'+i+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 4px">Petit mot pour la cliente (facultatif)</label><div class="champs"><div><input id="x-mo-'+i+'" type="text" value="'+esc(o.mot)+'"></div></div>'
-  +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>';
+  +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>');
 }
 function dessiner(){
   var cr='',ma='',nc=0,nm=0;
@@ -251,7 +277,7 @@ function dessiner(){
   var ee='';ex.forEach(function(o,i){ee+=carteX(o,i);});
   var m1=msgS?'<p class="msg" role="status">'+esc(msgS)+'</p>':'',m2=msgX?'<p class="msg" role="status">'+esc(msgX)+'</p>':'';
   document.getElementById('liste').innerHTML=
-   '<h2 class="titre-g">🛍️ Commandes du site (reçues automatiquement)</h2>'
+   '<h2 class="titre-g">Commandes</h2>'
   +'<div class="boite"><h3>🎨 Créations plâtre résine</h3>'+m1+(nc||msgS?'':'<p class="vide">Aucune commande pour le moment.</p>')+cr+'</div>'
   +'<div class="boite"><h3>🌸 EXHALESSENCE</h3>'+m2+(ex.length||msgX?'':'<p class="vide">Aucune commande pour le moment.</p>')+ee+'</div>'
   +'<div class="boite"><h3>🎪 Commandes Marché/Salon</h3>'+m1+(nm||msgS?'':'<p class="vide">Aucune commande pour le moment.</p>')+ma+'</div>'
@@ -263,14 +289,30 @@ function saveS(i){var o=cmds[i];if(!o)return;msgS='Enregistrement…';dessiner()
 function saveX(i){var o=ex[i];if(!o)return;var b={id:o.id,statut:g('x-st-'+i),regle:g('x-re-'+i),delai:g('x-de-'+i),suivi:g('x-su-'+i),mot:g('x-mo-'+i)};msgX='Enregistrement…';dessiner();
   post('/admin/exh-maj',b).then(function(r){if(!r.ok){msgX='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgX='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerExh();});}
 /* ---- démarrage ---- */
-if(code){post('/salon/ping').then(function(r){if(r.ok||r.st===0)document.getElementById('verrou').classList.add('cache');else{code='';}});}
+code='';
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw-salon.js').catch(function(){});}
 </script>
 <script src="donnees-exh.js"></script>
 <script src="app-espace.js"></script>
 <script>
-(function(){var d=new Date();document.getElementById('bjdate').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+' · Que voulez-vous faire ?';
-if(code)setTimeout(function(){if(window.viderFile)viderFile();},1500);})();
+(function(){
+function hor(){var d=new Date();var e=document.getElementById('hdate');if(e)e.textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
+hor();setInterval(hor,20000);
+var MET=function(c){return c===0?['☀️','ciel dégagé']:c<=2?['🌤️','peu nuageux']:c===3?['☁️','nuageux']:c<=48?['🌫️','brouillard']:c<=57?['🌦️','bruine']:c<=67?['🌧️','pluie']:c<=77?['❄️','neige']:c<=82?['🌧️','averses']:['⛈️','orage'];};
+function aff(t){var e=document.getElementById('hmeteo');if(e)e.textContent=t;}
+window.demarrerAccueil=function(){
+  try{var c=JSON.parse(localStorage.getItem('aph-meteo')||'null');if(c)aff(c.t+' (dernière mesure)');}catch(e){}
+  if(!navigator.geolocation||!navigator.onLine)return;
+  navigator.geolocation.getCurrentPosition(function(p){
+    var la=p.coords.latitude,lo=p.coords.longitude;
+    Promise.all([fetch('https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&current=temperature_2m,weather_code&timezone=auto').then(function(r){return r.json();}),
+      fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+la+'&longitude='+lo+'&localityLanguage=fr').then(function(r){return r.json();}).catch(function(){return{};})]).then(function(x){
+      var cu=x[0].current,m=MET(cu.weather_code),v=x[1].city||x[1].locality||'';
+      var t=m[0]+' '+Math.round(cu.temperature_2m)+'° · '+m[1]+(v?' · '+v:'');aff(t);try{localStorage.setItem('aph-meteo',JSON.stringify({t:t}));}catch(e){}
+    }).catch(function(){});
+  },function(){},{timeout:8000,maximumAge:3600000});
+};
+})();
 </script>
 </body>
 </html>
