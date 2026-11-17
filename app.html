@@ -281,7 +281,7 @@ function bodyX(o,i){
   +'<div><label for="x-re-'+i+'">Réglé par</label><select id="x-re-'+i+'">'+REG.map(function(s){return'<option value="'+s+'"'+(s===o.regle?' selected':'')+'>'+(s||'—')+'</option>';}).join('')+'</select></div></div>'
   +'<div class="champs"><div style="flex:2;min-width:200px"><label for="x-de-'+i+'">Livraison estimée (obligatoire pour valider)</label><input id="x-de-'+i+'" type="text" placeholder="Ex : entre le 24 et le 27 novembre" value="'+esc(o.delai)+'"></div>'
   +'<div><label for="x-su-'+i+'">N° de suivi Chronopost relais</label><input id="x-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
-  +'<label for="x-mo-'+i+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 4px">Petit mot pour la cliente (facultatif)</label><div class="champs"><div><input id="x-mo-'+i+'" type="text" value="'+esc(o.mot)+'"></div></div>'
+  +'<label for="x-mo-'+i+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 4px">Petit mot pour le/la client(e) (facultatif)</label><div class="champs"><div><input id="x-mo-'+i+'" type="text" value="'+esc(o.mot)+'"></div></div>'
   +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>';
 }
 var MM=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -299,9 +299,9 @@ function dessiner(){
 }
 function g(id){return document.getElementById(id).value;}
 function saveS(i){var o=all[i];if(!o)return;msgC='Enregistrement…';dessiner();
-  post('/admin/maj',{id:o.id,statut:g('s-st-'+i)||undefined,paiement:g('s-pa-'+i),suivi:g('s-su-'+i)}).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerCmd();});}
+  post('/admin/maj',{id:o.id,statut:g('s-st-'+i)||undefined,paiement:g('s-pa-'+i),suivi:g('s-su-'+i)}).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti au/à la client(e).':'');chargerCmd();});}
 function saveX(i){var o=all[i];if(!o)return;var b={id:o.id,statut:g('x-st-'+i),regle:g('x-re-'+i),delai:g('x-de-'+i),suivi:g('x-su-'+i),mot:g('x-mo-'+i)};msgC='Enregistrement…';dessiner();
-  post('/admin/exh-maj',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti à la cliente.':'');chargerCmd();});}
+  post('/admin/exh-maj',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Enregistré.'+(r.j.mailsEnvoyes?' Le mail est parti au/à la client(e).':'');chargerCmd();});}
 /* ---- démarrage ---- */
 code='';
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw-salon.js').catch(function(){});}

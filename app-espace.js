@@ -279,7 +279,7 @@ function dessFi(){
   var z=$('fi-zone');if(!z)return;var q=norm(fiQ);
   var L=FI.filter(function(f){return !q||norm(f.nom+' '+f.ville+' '+f.tel).indexOf(q)>=0;});
   z.innerHTML='<h2 class="titre-g">Mes filleul(e)s</h2>'+etat(fiInfo)+'<input id="fi-q" class="recherche" type="search" placeholder="🔍 Chercher un(e) filleul(e)" aria-label="Chercher un(e) filleul(e)" value="'+esc(fiQ)+'" oninput="ESPACE.rechFi(this.value)">'
-   +'<button class="petit" onclick="ESPACE.nouvFi()">➕ Ajouter une filleule</button><div id="fi-add" hidden class="boite" style="margin-top:8px"><div class="champs">'+ch('na-nom','Prénom NOM','')+ch('na-agr','N° d\'agrément','')+ch('na-tel','Téléphone','')+ch('na-mail','Mail','')+ch('na-ent','Date d\'entrée','','date')+'</div><button class="petit" onclick="ESPACE.ajoutFi()">Enregistrer la nouvelle filleule</button> <span id="na-m" class="msg" role="status"></span></div>'
+   +'<button class="petit" onclick="ESPACE.nouvFi()">➕ Ajouter un(e) filleul(e)</button><div id="fi-add" hidden class="boite" style="margin-top:8px"><div class="champs">'+ch('na-nom','Prénom NOM','')+ch('na-agr','N° d\'agrément','')+ch('na-tel','Téléphone','')+ch('na-mail','Mail','')+ch('na-ent','Date d\'entrée','','date')+'<div><label for="na-sexe">Sexe</label><select id="na-sexe"><option value="F">Femme</option><option value="M">Homme</option></select></div></div><button class="petit" onclick="ESPACE.ajoutFi()">Enregistrer ce(tte) filleul(e)</button> <span id="na-m" class="msg" role="status"></span></div>'
    +'<p class="maj">'+L.length+' filleul(e)'+(L.length>1?'s':'')+'</p>'+L.map(function(f){var id=f.id;return '<div class="boite t-'+(f.sexe==='M'?'homme':'femme')+'" id="fc-'+id+'"><b>'+esc(f.nom)+'</b>'+(f.agrement?' <span class="stat">N° agrément '+esc(f.agrement)+'</span>':'')+(f.nomNaiss?' <small>(née '+esc(f.nomNaiss)+')</small>':'')
    +'<label class="cn" for="fn-'+id+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 3px">Note</label><textarea id="fn-'+id+'" rows="2" placeholder="Écrire ici…" style="width:100%;padding:8px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font:inherit" onchange="ESPACE.noteFi(\''+id+'\',this)">'+esc(f.notes)+'</textarea><span class="msg" id="fm-'+id+'" role="status"></span>'
    +ligne('📞','Téléphone',f.tel?'<a href="tel:'+esc(f.tel.replace(/\s/g,''))+'">'+esc(f.tel)+'</a>':'')+ligne('✉️','Mail',esc(f.mail))+ligne('🏠','Adresse',esc([f.adresse,f.compl,[f.cp,f.ville].filter(Boolean).join(' '),f.pays].filter(Boolean).join(', ')))
@@ -307,7 +307,7 @@ ESPACE.nouvFi=function(){var b=$('fi-add');if(b)b.hidden=!b.hidden;};
 ESPACE.ajoutFi=function(){
   var g=function(k){return $(k).value.trim();},m=$('na-m');
   if(!g('na-nom')){m.textContent='Écrivez le prénom et le nom.';return;}
-  var c={nom:g('na-nom'),agrement:g('na-agr'),tel:g('na-tel'),mail:g('na-mail'),entree:g('na-ent'),sexe:'F'};
+  var c={nom:g('na-nom'),agrement:g('na-agr'),tel:g('na-tel'),mail:g('na-mail'),entree:g('na-ent'),sexe:g('na-sexe')||'F'};
   m.textContent='Enregistrement…';
   ecrire('/app/filleule-ajout',{champs:c},function(r){
     if(!r.ok){m.textContent='⚠️ '+(r.j.erreur||'Erreur');return;}
