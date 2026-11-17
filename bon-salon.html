@@ -583,7 +583,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   </div>
 
   <div class="event-bar">
-    <span class="lbl">📍 Lieu du Marché/Salon :</span>
+    <span class="lbl">📍 Lieu (marché, salon, atelier chez une cliente…) :</span>
     <input type="text" id="eventName" placeholder="Ex : Marché de Noël Simandres" oninput="saveEvent()">
   </div>
   <div class="event-bar">
@@ -1712,7 +1712,12 @@ async function chercherClienteVrai(){
   if(!c.trouve){ box.innerHTML = 'Nouvelle cliente : elle aura ses points dès ce bon.'; return; }
   const fill = (id, v)=>{ const el = document.getElementById(id); if(el && !el.value.trim() && v) el.value = v; };
   fill('f-prenom', c.prenom); fill('f-nom', c.nom); fill('f-adresse', c.adresse); fill('f-cp', c.cp); fill('f-ville', c.ville); fill('f-naissance', c.naissance); fill('f-email', c.mail); fill('f-tel', c.tel);
-  box.innerHTML = `<b>${c.prenom}</b> a <b>${c.points} point${c.points>1?'s':''}</b>. Compte sur le site : ${c.compte ? 'oui' : 'pas encore'}.` + ((c.bons||[]).length ? '<br>Bons disponibles (touchez pour l\'utiliser) :' : '');
+  const dig = (t)=>String(t||'').replace(/\D/g,'');
+  let alerte = '';
+  if(mailOk && c.mail && c.mail.toLowerCase() !== mail.toLowerCase()) alerte += `<br>⚠️ Vérifiez avec elle : l'e-mail enregistré est <b>${c.mail}</b>.`;
+  if(telOk && c.tel && dig(c.tel).slice(-9) !== dig(tel).slice(-9)) alerte += `<br>⚠️ Vérifiez avec elle : le téléphone enregistré est <b>${c.tel}</b>.`;
+  const hab = (c.habituel||[]).length ? '<br>🛍️ Elle commande souvent : ' + c.habituel.map(h=>`${h[0]} (×${h[1]})`).join(', ') + '.' : '';
+  box.innerHTML = `<b>${c.prenom}</b> a <b>${c.points} point${c.points>1?'s':''}</b>. Compte sur le site : ${c.compte ? 'oui' : 'pas encore'}.` + alerte + hab + ((c.bons||[]).length ? '<br>Bons disponibles (touchez pour l\'utiliser) :' : '');
   (c.bons||[]).forEach(b=>{
     const el = document.createElement('span'); el.className = 'bon-chip';
     el.textContent = `${b.type==='Anniversaire'?'🎂':'🎁'} ${b.montant} € (dès ${b.mini||0} €)`;
@@ -1758,6 +1763,8 @@ addLine();
 loadEvent();
 loadOrders().then(updateSyncChip);
 checkAccess();
+/* arrivée depuis une fiche cliente de Mon espace */
+(function(){try{const q=new URLSearchParams(location.search);const m={prenom:'f-prenom',nom:'f-nom',mail:'f-email',tel:'f-tel'};let any=false;for(const k in m){const v=q.get(k);if(v){const el=document.getElementById(m[k]);if(el){el.value=v;any=true;}}}if(any)setTimeout(chercherClienteVrai,600);}catch(e){}})();
 window.addEventListener('online', syncPending);
 setInterval(syncPending, 30000);
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw-salon.js').catch(()=>{}); }

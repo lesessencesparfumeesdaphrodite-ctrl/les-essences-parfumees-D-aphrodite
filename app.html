@@ -59,6 +59,65 @@ main{flex:1;display:flex;flex-direction:column;min-height:0}
 .sec{background:transparent;color:var(--terra);border:1.5px solid var(--terra)}
 .msg{font-size:13.5px;color:#2a6a5a;margin:6px 0}
 .vide{font-size:13.5px;color:var(--gris)}
+
+/* ---- nouveau décor ---- */
+body{background:linear-gradient(180deg,#FFEDD9 0%,#FFFDF9 38%)}
+#verrou{background:radial-gradient(circle at 20% 15%,#f6d9c3 0,transparent 45%),radial-gradient(circle at 85% 80%,#ecd3a8 0,transparent 42%),linear-gradient(160deg,#FFEDD9,#FFFDF9)}
+.carte-v{background:rgba(255,255,255,.75);border:1.5px solid rgba(201,169,110,.6);border-radius:28px;padding:26px 22px;box-shadow:0 10px 30px rgba(158,82,56,.15)}
+.carte-v img{border:3px solid var(--or);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.carte-v h2{font-family:Georgia,'Times New Roman',serif;font-size:26px;color:var(--terra);letter-spacing:.5px}
+.carte-v .slogan{font-size:13px;color:var(--gris);margin:0 0 6px;letter-spacing:1.5px}
+.bj2{font-family:Georgia,serif;font-size:22px;text-align:center;color:var(--terra);margin:2px 0 2px}
+.accueil{max-width:720px}
+.grandes{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px}
+.grande{display:flex;align-items:center;gap:14px;text-align:left;padding:18px;border:0;border-radius:24px;color:#fff;box-shadow:0 6px 16px rgba(61,43,46,.2)}
+.grande .e{font-size:40px}
+.grande b{display:block;font-size:19px;font-family:Georgia,serif}
+.grande small{font-size:13px;opacity:.92}
+.g1{background:linear-gradient(135deg,#9E5238,#c98467)}
+.g2{background:linear-gradient(135deg,#6b3a52,#b97a95)}
+.tuiles{grid-template-columns:repeat(3,1fr);gap:10px}
+.tuile{min-height:104px;border-radius:20px;font-size:13.5px;padding:10px 6px;text-align:center}
+.tuile .e{font-size:28px}
+.tuile small{font-size:11px;line-height:1.25}
+.tuile.k1{background:#FBE3EA;border-color:#e9a9bd}.tuile.k2{background:#E3EEFB;border-color:#a9c6e9}.tuile.k3{background:#E4F3DF;border-color:#a8d29b}.tuile.k4{background:#F1E6FA;border-color:#c5a8e0}.tuile.k5{background:#FFF1CC;border-color:#e6cd7e}
+@media(min-width:560px){.grandes{grid-template-columns:1fr 1fr}}
+/* ---- listes ---- */
+.recherche{width:100%;padding:13px;border:1.5px solid rgba(201,169,110,.7);border-radius:14px;font-size:16px;margin:4px 0 8px;background:#fff}
+.maj{font-size:12px;color:var(--gris);text-align:center;margin:4px 0}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0;justify-content:center}
+.chip{border:1.5px solid rgba(201,169,110,.7);background:#fff;border-radius:18px;padding:6px 12px;font-size:13px;color:var(--brun)}
+.chip.on{background:var(--terra);color:#fff;border-color:var(--terra)}
+.lettre{position:sticky;top:0;background:var(--sable);font-weight:700;color:var(--terra);padding:3px 10px;border-radius:8px;margin:10px 0 4px;font-size:14px;z-index:1}
+.rang{display:flex;flex-direction:column;align-items:flex-start;width:100%;text-align:left;padding:10px 12px;margin:4px 0;border:1px solid rgba(0,0,0,.08);border-left:6px solid #ccc;border-radius:12px;background:#fff}
+.rn{font-weight:700;font-size:15px;color:var(--brun)}.rs{font-size:12.5px;color:var(--gris)}
+.t-femme{--tc:#D98BA7;--tb:#FCEBF1}.t-homme{--tc:#7FA6D9;--tb:#E9F1FB}.t-societe{--tc:#7FB070;--tb:#E9F5E5}.t-famille{--tc:#A98BD6;--tb:#F1EAFA}
+.rang[class*="t-"]{border-left-color:var(--tc);background:var(--tb)}
+.chip[class*="t-"]{border-color:var(--tc)}.chip[class*="t-"].on{background:var(--tc);border-color:var(--tc)}
+.fiche{border-radius:20px;padding:14px;margin:10px 0;background:var(--tb);border:1.5px solid var(--tc)}
+.fh h2{margin:4px 0 0;font-size:21px;font-family:Georgia,serif}.fh small{color:var(--gris)}
+.tag{display:inline-block;background:var(--tc);color:#fff;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700}
+.fl{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid rgba(0,0,0,.07);font-size:14px}.fl span{color:var(--gris)}.fl b{font-weight:600;text-align:right;word-break:break-word}
+.rem{margin-top:8px;font-size:13.5px;white-space:pre-line;background:#fff;border-radius:10px;padding:8px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.btn-l{background:#fff;border:1.5px solid var(--terra);color:var(--terra);border-radius:20px;padding:8px 14px;font-weight:700;font-size:13.5px;text-decoration:none}
+.bon{padding:6px 0;font-size:13.5px;border-top:1px solid rgba(201,169,110,.3)}
+.hab{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-top:1px solid rgba(201,169,110,.25);font-size:14px}
+.boite.t-famille{background:var(--tb)}
+.tache{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid rgba(201,169,110,.3)}
+.tache.fait .tn{text-decoration:line-through;color:var(--gris)}
+.tn{font-size:14.5px}.ts{font-size:12.5px;color:var(--gris)}.ts.retard{color:#a3301f;font-weight:700}
+.coche{flex:none;width:34px;height:34px;border-radius:50%;border:2px solid var(--terra);background:#fff;color:#fff;font-size:18px;font-weight:700}
+.coche.on{background:var(--terra)}
+.mini{flex:none;border:1.5px solid var(--terra);background:#fff;color:var(--terra);border-radius:14px;padding:6px 10px;font-size:12.5px;font-weight:700;text-decoration:none}
+.sect{font-size:15px;color:var(--terra);margin:14px 0 2px;font-family:Georgia,serif}
+.jour{flex:none;width:48px;height:48px;border-radius:14px;background:var(--sable);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.jour small{font-size:10px;font-weight:400;text-transform:uppercase}.jour.auj{background:#FFF1CC;font-size:26px}
+.tab .th,.tab .tr{display:grid;grid-template-columns:3fr 1fr 1.3fr 1.3fr;gap:6px;padding:6px 0;border-top:1px solid rgba(201,169,110,.25);font-size:13px}
+.tab .c5{grid-template-columns:1.6fr 1fr 1fr 1fr 1.3fr}
+.tab .th{font-weight:700;color:var(--terra);border-top:0}.tab .tr span+span,.tab .th span+span{text-align:right}.tab .tot{font-weight:700;background:var(--sable)}
+.hub{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;max-width:640px;margin:0 auto;width:100%}
+.hub .tuile{min-height:120px;font-size:15px}
 </style>
 </head>
 <body>
@@ -66,6 +125,7 @@ main{flex:1;display:flex;flex-direction:column;min-height:0}
   <div class="carte-v">
     <img src="logo.webp" width="120" height="120" alt="Les Essences Parfumées d'Aphrodite">
     <h2>Mon espace</h2>
+    <p class="slogan">BEAUTÉ · PARFUM · FAIT MAIN</p>
     <label for="mdp" style="font-size:14px;color:var(--gris)">Mot de passe</label>
     <input id="mdp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')entrer()">
     <button class="btn" onclick="entrer()">Entrer</button>
@@ -81,16 +141,47 @@ main{flex:1;display:flex;flex-direction:column;min-height:0}
 <main>
   <section class="vue on" id="v-accueil">
     <div class="accueil">
-      <p class="bj">Bonjour Zulay 🌸 Que voulez-vous faire ?</p>
+      <p class="bj2" id="bj2">Bonjour Zulay 🌸</p>
+      <p class="bj" id="bjdate">Que voulez-vous faire ?</p>
+      <div class="grandes">
+        <button class="grande g1" onclick="aller('creations')"><span class="e" aria-hidden="true">🏺</span><span><b>Créations plâtre résine</b><small>commandes, calcul, tâches</small></span></button>
+        <button class="grande g2" onclick="aller('exha')"><span class="e" aria-hidden="true">🌸</span><span><b>EXHALESSENCE</b><small>commandes, prix et points, finances</small></span></button>
+      </div>
       <div class="tuiles">
-        <button class="tuile" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>site, EXHALESSENCE, Marché/Salon</small></button>
-        <button class="tuile" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande<small>marchés et salons</small></button>
-        <button class="tuile" onclick="aller('outil')"><span class="e" aria-hidden="true">🧮</span>Outil<small>calculs et devis</small></button>
-        <button class="tuile" onclick="aller('fidelite')"><span class="e" aria-hidden="true">💳</span>Fidélité<small>carnet des clientes</small></button>
-        <button class="tuile" onclick="aller('admin')" style="grid-column:1/-1;min-height:96px"><span class="e" aria-hidden="true">⚙️</span>Espace administrateur complet<small>le reste de l'administration du site</small></button>
+        <button class="tuile k1" onclick="aller('clients')"><span class="e" aria-hidden="true">👩</span>Clientes<small>fiches A–Z</small></button>
+        <button class="tuile k2" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande<small>partout, même sans réseau</small></button>
+        <button class="tuile k3" onclick="aller('taches')"><span class="e" aria-hidden="true">✅</span>Mes tâches<small>à cocher</small></button>
+        <button class="tuile k4" onclick="aller('calendrier')"><span class="e" aria-hidden="true">📅</span>Calendrier éditorial<small>publications</small></button>
+        <button class="tuile k5" onclick="aller('anniv')"><span class="e" aria-hidden="true">🎂</span>Anniversaires<small>clientes et filleules</small></button>
+        <button class="tuile k1" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>site, EXHA, marchés</small></button>
+        <button class="tuile k2" onclick="aller('fidelite')"><span class="e" aria-hidden="true">💳</span>Fidélité<small>carnet</small></button>
+        <button class="tuile k3" onclick="aller('outil')"><span class="e" aria-hidden="true">🧮</span>Outil<small>calculs et devis</small></button>
+        <button class="tuile k4" onclick="aller('admin')"><span class="e" aria-hidden="true">⚙️</span>Administration du site<small>le reste</small></button>
       </div>
     </div>
   </section>
+  <section class="vue" id="v-creations"><div class="hub">
+    <button class="tuile k1" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>site et marchés</small></button>
+    <button class="tuile k2" onclick="aller('outil')"><span class="e" aria-hidden="true">🧮</span>Calcul rapide<small>prix et devis</small></button>
+    <button class="tuile k3" onclick="aller('clients')"><span class="e" aria-hidden="true">👩</span>Clientes</button>
+    <button class="tuile k5" onclick="aller('taches')"><span class="e" aria-hidden="true">✅</span>Mes tâches</button>
+    <button class="tuile k4" onclick="aller('calendrier')"><span class="e" aria-hidden="true">📅</span>Calendrier éditorial</button>
+    <button class="tuile k2" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande</button>
+  </div></section>
+  <section class="vue" id="v-exha"><div class="hub">
+    <button class="tuile k1" onclick="aller('commandes')"><span class="e" aria-hidden="true">📦</span>Commandes<small>EXHALESSENCE</small></button>
+    <button class="tuile k2" onclick="aller('finances')"><span class="e" aria-hidden="true">💶</span>Suivi financier<small>prix, points, marges</small></button>
+    <button class="tuile k3" onclick="aller('filleules')"><span class="e" aria-hidden="true">🌸</span>Filleules</button>
+    <button class="tuile k4" onclick="aller('clients')"><span class="e" aria-hidden="true">👩</span>Clientes</button>
+    <button class="tuile k5" onclick="aller('anniv')"><span class="e" aria-hidden="true">🎂</span>Anniversaires</button>
+    <button class="tuile k2" onclick="aller('bon')"><span class="e" aria-hidden="true">📝</span>Bon de commande</button>
+  </div></section>
+  <section class="vue" id="v-clients"></section>
+  <section class="vue" id="v-taches"></section>
+  <section class="vue" id="v-calendrier"></section>
+  <section class="vue" id="v-anniv"></section>
+  <section class="vue" id="v-filleules"></section>
+  <section class="vue" id="v-finances"></section>
   <section class="vue" id="v-commandes"><div class="liste" id="liste"></div></section>
   <section class="vue" id="v-bon"><iframe class="cadre" id="f-bon" title="Bon de commande"></iframe></section>
   <section class="vue" id="v-outil"><iframe class="cadre" id="f-outil" title="Outil"></iframe></section>
@@ -102,7 +193,7 @@ var API='https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev
 var CLE='aphrodite-salon-code';
 var code='';try{code=localStorage.getItem(CLE)||'';}catch(e){}
 var PAGES={bon:'bon-salon.html',outil:'outil.html',fidelite:'carnet-fidelite.html'};
-var TITRES={accueil:'Mon espace',commandes:'Commandes',bon:'Bon de commande',outil:'Outil',fidelite:'Fidélité'};
+var TITRES={accueil:'Mon espace',commandes:'Commandes',bon:'Bon de commande',outil:'Outil',fidelite:'Fidélité',creations:'Créations plâtre résine',exha:'EXHALESSENCE',clients:'Clientes',taches:'Mes tâches',calendrier:'Calendrier éditorial',anniv:'Anniversaires',filleules:'Filleules',finances:'Suivi financier'};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function post(p,b){b=b||{};b.code=code;return fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,st:r.status,j:j};});}).catch(function(){return{ok:false,st:0,j:{erreur:'Pas de réseau.'}};});}
 function memoriser(c){code=c;try{localStorage.setItem(CLE,c);localStorage.setItem('aph_adm_code',c);}catch(e){}}
@@ -111,7 +202,7 @@ function entrer(){
   if(!v){m.textContent='Entrez votre mot de passe.';return;}
   m.textContent='Vérification…';code=v;
   post('/salon/ping').then(function(r){
-    if(r.ok){memoriser(v);m.textContent='';document.getElementById('verrou').classList.add('cache');document.getElementById('mdp').value='';}
+    if(r.ok){memoriser(v);if(window.viderFile)viderFile();m.textContent='';document.getElementById('verrou').classList.add('cache');document.getElementById('mdp').value='';}
     else if(r.st===401){code='';m.textContent='Mot de passe incorrect.';}
     else{code='';m.textContent='Pas de réseau : réessayez quand vous avez du réseau.';}
   });
@@ -122,8 +213,10 @@ function aller(v){
   document.getElementById('v-'+v).classList.add('on');
   document.getElementById('titre').textContent=TITRES[v];
   document.getElementById('retour').style.display=v==='accueil'?'none':'';
-  if(PAGES[v]){var f=document.getElementById('f-'+v);if(!f.getAttribute('src'))f.setAttribute('src',PAGES[v]);}
+  if(PAGES[v]){var f=document.getElementById('f-'+v);if(!f.getAttribute('src')||(v==='bon'&&!window._bonPref&&f.getAttribute('src').indexOf('?')>0))f.setAttribute('src',PAGES[v]);if(v==='bon')window._bonPref=false;}
   if(v==='commandes'){chargerSite();chargerExh();}
+  if(window.ESPACE&&ESPACE[v])ESPACE[v]();
+  window.scrollTo(0,0);
 }
 /* ---- commandes ---- */
 var STAT=['Reçue','En cours de création','En cours de commande','Prête','Expédiée','Terminée'];
@@ -172,6 +265,12 @@ function saveX(i){var o=ex[i];if(!o)return;var b={id:o.id,statut:g('x-st-'+i),re
 /* ---- démarrage ---- */
 if(code){post('/salon/ping').then(function(r){if(r.ok||r.st===0)document.getElementById('verrou').classList.add('cache');else{code='';}});}
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw-salon.js').catch(function(){});}
+</script>
+<script src="donnees-exh.js"></script>
+<script src="app-espace.js"></script>
+<script>
+(function(){var d=new Date();document.getElementById('bjdate').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+' · Que voulez-vous faire ?';
+if(code)setTimeout(function(){if(window.viderFile)viderFile();},1500);})();
 </script>
 </body>
 </html>
