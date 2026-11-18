@@ -406,4 +406,40 @@ function dessUr(){var z=$('v-urssaf');if(!z)return;
   z.innerHTML='<div class="liste"><h2 class="titre-g">Ventes et URSSAF (créations)</h2><p class="vide" style="text-align:center">Uniquement tes créations plâtre résine.</p>'+tabEdit('urssaf',UR_AN,'ESPACE.anUr')+'<p class="vide">Ventes = payé par les clients · Achats = pour tes créations · PayPal = reçu après frais · Déclar. = chiffre déclaré à l\'URSSAF · Payé = versé à l\'URSSAF.</p></div>';}
 ESPACE.anUr=function(a){UR_AN=a;FINMSG='';dessUr();};
 ESPACE.urssaf=function(){FINMSG='';dessUr();lire('fin','/app/fin',function(d){if(d){FINN=d.lignes||[];dessUr();}});};
+
+/* =============== GUIDE OLFACTIF (même fichier protégé que la page équipe : lu à chaque ouverture, jamais recopié ici) =============== */
+var GD_URL='https://exhalessence-equipe-conseils.github.io/exhalessence-conseils/guide.enc.json',GD=null,GD_Q='',GD_MSG='';
+function gdNorm(e){return String(e||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim().replace(/\b1 million\b/g,'one million');}
+function gdMatch(e,t){return t.split(' ').every(function(x){return /^\d+$/.test(x)?new RegExp('(^| )'+x+'( |$)').test(e):e.indexOf(x)>=0;});}
+function gdB64(e){var t=atob(e),n=new Uint8Array(t.length);for(var r=0;r<t.length;r++)n[r]=t.charCodeAt(r);return n;}
+function gdDecrypt(n,code){return crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']).then(function(k){return crypto.subtle.deriveKey({name:'PBKDF2',salt:gdB64(n.salt),iterations:n.iter,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']);}).then(function(k){return crypto.subtle.decrypt({name:'AES-GCM',iv:gdB64(n.iv)},k,gdB64(n.data));}).then(function(b){return JSON.parse(new TextDecoder().decode(b));});}
+function gdCharger(code,cb){
+  var fin=function(n){gdDecrypt(n,code).then(function(d){GD=(d.eq||[]).map(function(e){e.txt=gdNorm('ref '+e.ref+' '+e.eq.join(' ')+' '+(e.fam||'')+' '+(e.g||''));return e;});try{localStorage.setItem('aph-gd-enc',JSON.stringify(n));localStorage.setItem('aph-gd-code',code);}catch(x){}cb(true);}).catch(function(){cb(false,'Code incorrect.');});};
+  fetch(GD_URL,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(fin).catch(function(){var n=null;try{n=JSON.parse(localStorage.getItem('aph-gd-enc')||'null');}catch(x){}if(n)fin(n);else cb(false,'Pas de réseau : la première ouverture du guide demande du réseau.');});
+}
+function gdMsg(t){var m=$('gd-m');if(m)m.textContent=t||'';}
+function dessGd(){var z=$('v-guide');if(!z)return;
+  var h='<div class="liste"><h2 class="titre-g">Guide olfactif</h2>';
+  if(!GD){
+    h+='<p class="vide" style="text-align:center">Réservé à toi et à ton équipe : ne pas montrer les correspondances de marques aux client(e)s.</p><div class="boite"><label for="gd-code" style="font-weight:700;display:block;margin-bottom:6px">Code d\'accès de l\'équipe</label><input id="gd-code" class="recherche" type="password" autocomplete="off" aria-label="Code d\'accès de l\'équipe"><button class="siteweb" type="button" onclick="ESPACE.gdOuvrir()">Ouvrir le guide</button><p class="msg" id="gd-m" role="status">'+esc(GD_MSG)+'</p></div>';
+  }else{
+    h+='<input id="gd-q" class="recherche" type="search" placeholder="🔍 Un parfum ou une référence (ex. 100)" aria-label="Rechercher une référence ou un parfum" value="'+esc(GD_Q)+'" oninput="ESPACE.gdRech(this.value)"><p class="vide" id="gd-n" role="status"></p><div id="gd-res"></div>';
+  }
+  z.innerHTML=h+'</div>';if(GD)gdResultats();
+}
+function gdResultats(){var e=gdNorm(GD_Q),n=$('gd-n'),t=$('gd-res');if(!n||!t)return;
+  if(e.length<2){n.textContent='Tape au moins 2 lettres, ou une référence (ex. 100).';t.innerHTML='';return;}
+  var a=GD.filter(function(x){return gdMatch(x.txt,e);});
+  n.textContent=a.length?a.length+' référence'+(a.length>1?'s':''):'Aucun résultat.';
+  t.innerHTML=a.slice(0,80).map(function(x){return '<div class="boite"><b style="font-size:18px">Réf. '+esc(x.ref)+'</b><br><small>'+esc([x.g,x.fam,x.note].filter(Boolean).join(' · '))+'</small><ul style="margin:6px 0 0;padding-left:18px;line-height:1.7">'+x.eq.map(function(q){return '<li>'+esc(q)+'</li>';}).join('')+'</ul></div>';}).join('');
+}
+ESPACE.gdRech=function(v){GD_Q=v;gdResultats();};
+ESPACE.gdOuvrir=function(){var c=($('gd-code')||{}).value;if(!c){gdMsg('Écris le code de l\'équipe.');return;}
+  gdMsg('Vérification…');gdCharger(c,function(ok,m){if(ok){GD_MSG='';dessGd();var q=$('gd-q');if(q)q.focus();}else gdMsg(m);});};
+ESPACE.guide=function(){
+  if(GD){dessGd();return;}
+  var c='';try{c=localStorage.getItem('aph-gd-code')||'';}catch(x){}
+  GD_MSG=c?'Ouverture…':'';dessGd();
+  if(c)gdCharger(c,function(ok,m){if(ok){dessGd();}else{if(/^Code/.test(m)){try{localStorage.removeItem('aph-gd-code');}catch(x){}}GD_MSG=m||'';dessGd();}});
+};
 })();

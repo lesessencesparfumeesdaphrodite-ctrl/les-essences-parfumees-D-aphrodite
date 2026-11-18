@@ -142,6 +142,7 @@ body{background:#FFFDF9}
 .hubf{display:grid;gap:10px;margin:12px 0}
 .annee{font-family:Georgia,serif;font-size:24px;color:#4a2f2b;margin:18px 4px 2px;border-bottom:2px solid #c9a96e}.mois{font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#8a5a44;margin:14px 6px 4px}.mois span{font-weight:400;color:#9a8a7a}.cel{width:100%;min-width:0;padding:6px 4px;border:1px solid #d9c9a8;border-radius:8px;font:inherit;font-size:12.5px;text-align:right;background:#fff}.hubf{display:grid;gap:10px;margin-top:10px}
 .siteweb{display:block;margin:14px 0 6px;padding:14px;text-align:center;border:1.5px solid #c9a96e;border-radius:14px;background:#fff;color:#4a2f2b;font-weight:700;text-decoration:none}
+button.siteweb{width:100%;font:inherit;font-weight:700;cursor:pointer}
 .cal-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0}.cal-nav b{min-width:140px;text-align:center;font-family:Georgia,serif;font-size:18px;color:#4a2f2b}.cal{background:#fff;border:1px solid #e3d6bd;border-radius:12px;overflow:hidden;margin-bottom:12px}.cal-h{display:grid;grid-template-columns:repeat(7,1fr);font-size:10.5px;color:#9a8a7a;text-align:center;padding:5px 0;border-bottom:1px solid #eee3cf}.cal-g{display:grid;grid-template-columns:repeat(7,1fr)}.cj{min-height:66px;border-right:1px solid #f0e6d3;border-bottom:1px solid #f0e6d3;padding:2px;display:flex;flex-direction:column;gap:2px;min-width:0}.cj:nth-child(7n){border-right:0}.cj.we{background:#f9f7f3}.cj.hors .nj{color:#c8bda9}.nj{align-self:flex-end;font-size:11px;color:#6b5b4b;min-width:18px;height:18px;line-height:18px;text-align:center}.nj.auj{background:#e0584b;color:#fff;border-radius:50%}.ev{display:block;font-size:9.5px;font-weight:700;border-radius:5px;padding:1px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#3a2a22}.ev.fil{background:#FFE08A}.ev.cli{background:#BFE3DC}.jour.cli{background:#BFE3DC!important}.jour.fil{background:#FFE08A!important}
 .etat-sel{flex:none;border-radius:12px;border:1.5px solid #bbb;padding:6px 8px;font:inherit;font-size:13px;font-weight:700;min-height:40px}.etat-sel.es-p{background:#eceae6;color:#555}.etat-sel.es-c{background:#d6e6fb;color:#1c4f8c;border-color:#7fb0ea}.etat-sel.es-t{background:#d5efdc;color:#1d6a35;border-color:#7cc790}.cj .ev{white-space:normal;word-break:break-word;line-height:1.15}
 button.ev{border:0;width:100%;text-align:left;font-family:inherit;cursor:pointer}
@@ -182,6 +183,7 @@ button.ev{border:0;width:100%;text-align:left;font-family:inherit;cursor:pointer
         <button class="act a2" onclick="aller('exha')"><b>EXHALESSENCE</b><small>Filleul(e)s, suivi financier</small></button>
       </div>
       <a class="siteweb" href="https://www.lesessencesparfumeesdaphrodite.fr/" target="_blank" rel="noopener">Site internet</a>
+      <button class="siteweb" type="button" onclick="aller('guide')">Guide olfactif</button>
     </div>
   </section>
   <section class="vue" id="v-creations"><div class="hub">
@@ -198,6 +200,7 @@ button.ev{border:0;width:100%;text-align:left;font-family:inherit;cursor:pointer
   <section class="vue" id="v-calendrier"></section>
   <section class="vue" id="v-anniv"></section>
   <section class="vue" id="v-filleules"></section>
+  <section class="vue" id="v-guide"></section>
   <section class="vue" id="v-finances"></section>
   <section class="vue" id="v-tarifs"></section>
   <section class="vue" id="v-urssaf"></section>
@@ -212,9 +215,9 @@ var API='https://aphrodite-relais.les-essences-parfumees-d-aphrodite.workers.dev
 var CLE='aphrodite-salon-code';
 var code='';try{code=localStorage.getItem(CLE)||'';}catch(e){}
 var PAGES={bon:'bon-salon.html',outil:'outil.html',fidelite:'carnet-fidelite.html'};
-var PARENT={commandes:'accueil',bon:'accueil',clients:'accueil',taches:'accueil',calendrier:'accueil',anniv:'accueil',creations:'accueil',exha:'accueil',fidelite:'accueil',outil:'creations',tarifs:'creations',urssaf:'creations',filleules:'exha',finances:'exha'};
+var PARENT={guide:'accueil',commandes:'accueil',bon:'accueil',clients:'accueil',taches:'accueil',calendrier:'accueil',anniv:'accueil',creations:'accueil',exha:'accueil',fidelite:'accueil',outil:'creations',tarifs:'creations',urssaf:'creations',filleules:'exha',finances:'exha'};
 var cur='accueil';
-var TITRES={tarifs:'Tarifs finitions et suppléments',urssaf:'Ventes et URSSAF',accueil:'Espace administrateur',commandes:'Commandes',bon:'Bon de commande',outil:'Calcul rapide et catalogue',fidelite:'Fidélité',creations:'Créations plâtre résine',exha:'EXHALESSENCE',clients:"Client(e)s",taches:'Mes tâches',calendrier:'Calendrier éditorial',anniv:'Anniversaires',filleules:"Filleul(e)s",finances:'Suivi financier'};
+var TITRES={guide:'Guide olfactif',tarifs:'Tarifs finitions et suppléments',urssaf:'Ventes et URSSAF',accueil:'Espace administrateur',commandes:'Commandes',bon:'Bon de commande',outil:'Calcul rapide et catalogue',fidelite:'Fidélité',creations:'Créations plâtre résine',exha:'EXHALESSENCE',clients:"Client(e)s",taches:'Mes tâches',calendrier:'Calendrier éditorial',anniv:'Anniversaires',filleules:"Filleul(e)s",finances:'Suivi financier'};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function post(p,b){b=b||{};b.code=code;return fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,st:r.status,j:j};});}).catch(function(){return{ok:false,st:0,j:{erreur:'Pas de réseau.'}};});}
 function memoriser(c){code=c;try{localStorage.setItem(CLE,c);localStorage.setItem('aph_adm_code',c);}catch(e){}}
