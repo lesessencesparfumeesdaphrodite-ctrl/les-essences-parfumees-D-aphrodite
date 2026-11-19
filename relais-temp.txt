@@ -328,7 +328,7 @@ function eqProps(d) {
 }
 async function eqParMail(env, mail) { const r = await query(env, CFG.DS_EQUIPE, { property: "E-mail", email: { equals: mail } }, undefined, 1); return r[0] ? eqCompte(r[0]) : null; }
 async function eqParId(env, id) { const pg = await notion(env, "/pages/" + id); const c = eqCompte(pg); c.archive = !!(pg.archived || pg.in_trash); return c; }
-async function eqJeton(env, id) { const exp = Date.now() + 90 * 864e5; const b = id + "." + exp; return b + "." + await hmac(env, "eq|" + b); }
+async function eqJeton(env, id) { const exp = Date.now() + 60 * 60 * 1000; const b = id + "." + exp; return b + "." + await hmac(env, "eq|" + b); }
 async function eqLireJeton(env, t) { const [id, exp, sig] = String(t || "").split("."); if (!id || !exp || !sig || Date.now() > +exp) return null; return sig === await hmac(env, "eq|" + id + "." + exp) ? id : null; }
 const eqSigReinit = (env, c, exp) => hmac(env, "er|" + c.id + "|" + exp + "|" + c.mdp.slice(-12));
 const eqMdpOk = async (c, mdp) => { const [salt, h] = c.mdp ? c.mdp.split("|") : []; return !!salt && h === await hashPwd(String(mdp || ""), salt); };
