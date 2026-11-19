@@ -30,7 +30,8 @@ const CFG = {
   ANNIV_BON: 5, ANNIV_MINI: 25, ANNIV_JOURS: 31,
   PAGE_GUIDE: "41c5a58f-ebca-814f-ae90-f726acc78e79",   // copie privée du guide olfactif (lue par l'application)
   PAGE_OFFRES_EXH: "41c5a58f-ebca-81a4-89c6-ff3076eb19a8",   // page Notion où Zulay écrit les offres EXHALESSENCE (page équipe)
-  DS_EQUIPE: "41b5a58f-ebca-81e8-b6eb-000ba3110855",   // tableau « Compte équipe » (page équipe EXHALESSENCE)
+  DS_EQUIPE: "41b5a58f-ebca-81e8-b6eb-000ba3110855",
+  DS_VENTES_EQ: "41c5a58f-ebca-816a-9fe7-000bbeba5964",   // tableau « Ventes équipe » (bon de commande des conseillères)   // tableau « Compte équipe » (page équipe EXHALESSENCE)
   EQ_ORIGIN: "https://exhalessence-equipe-conseils.github.io",
   PBKDF2: 30000,
 };
@@ -341,6 +342,10 @@ const EQ_EXP = { name: "Page équipe EXHALESSENCE", email: CFG.SENDER.email };
 async function eqEnvoyer(env, c, sujet, titre, corps, btnTxt, btnUrl) {
   try { await brevo(env, c.mail, sujet, eqMail(titre, corps, btnTxt, btnUrl), { sender: EQ_EXP }); } catch (e) { console.log("Equipe mail", e.message); }
 }
+function eqVenteLue(pg) {
+  const p = pg.properties;
+  return { id: pg.id, date: dat(p["Date et heure"]) || pg.created_time || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), naissance: txt(p["Date de naissance"]), mail: (p["E-mail"] && p["E-mail"].email) || "", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", articles: txt(p["Articles"]), total: num(p["Total"]), reglement: sel(p["Règlement"]), livraison: sel(p["Livraison"]), note: txt(p["Note"]) };
+}
 async function eqRoute(env, route, body, J) {
   const maintenant = new Date().toISOString();
   if (route === "/equipe/creer") {
@@ -356,7 +361,7 @@ async function eqRoute(env, route, body, J) {
     if (ex) { await notion(env, "/pages/" + ex.id, "PATCH", { properties: props }); id = ex.id; }
     else { const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_EQUIPE }, properties: props }); id = pg.id; }
     const base = eqBase(body.base);
-    await eqEnvoyer(env, d, "Votre compte est créé", "Votre compte est créé", `<p>Bonjour ${esc(d.prenom)},</p><p>Votre compte sur la page équipe est bien créé. Voici votre lien personnel : gardez ce message, il vous permet de le retrouver à tout moment.</p><p style="word-break:break-all;font-size:12px">${esc(eqLien(base, { ...d, id }))}</p><p style="font-size:12px">Pour des raisons de sécurité, votre mot de passe n'est jamais envoyé ni lisible par quiconque.</p>`, "Ouvrir mon lien", eqLien(base, d));
+    await eqEnvoyer(env, d, "Votre compte est créé", "Votre compte est créé", `<p>Bonjour ${esc(d.prenom)},</p><p>Votre compte est créé. Appuyez sur le bouton pour retrouver votre page et vous identifier avec votre adresse e-mail et votre mot de passe.</p>`, "Ouvrir mon lien", eqLien(base, { ...d, id }));
     return J({ ok: true, jeton: await eqJeton(env, id), profil: eqPublic({ ...d, id }) });
   }
   if (route === "/equipe/connexion") {
@@ -440,6 +445,37 @@ async function eqRoute(env, route, body, J) {
     const salt = rnd(16);
     await notion(env, "/pages/" + id, "PATCH", { properties: { "Empreinte mot de passe (ne pas modifier)": T(salt + "|" + await hashPwd(String(body.mdp), salt)) } });
     return J({ ok: true, message: "Votre mot de passe a été changé. Vous pouvez vous connecter." });
+  }
+  if (route === "/equipe/vente-ajout" || route === "/equipe/ventes") {
+    const id = await eqLireJeton(env, body.jeton);
+    if (!id) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
+    const c = await eqParId(env, id);
+    if (c.archive || !c.mdp) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
+    if (route === "/equipe/ventes") {
+      const lignes = await query(env, CFG.DS_VENTES_EQ, { property: "Identifiant conseillère (ne pas modifier)", rich_text: { equals: id } }, [{ property: "Date et heure", direction: "descending" }]);
+      return J({ ok: true, ventes: lignes.slice(0, 300).map(eqVenteLue) });
+    }
+    const prenom = eqNet(body.prenom, 40), nom = eqNet(body.nom, 40);
+    if (!prenom || !nom) return J({ erreur: "Merci d'écrire le prénom et le nom de la cliente." }, 400);
+    const mail = String(body.mail || "").trim().toLowerCase(), tel = String(body.tel || "").replace(/[^0-9+]/g, "").slice(0, 16);
+    if (mail && !validMail(mail)) return J({ erreur: "L'adresse e-mail de la cliente ne semble pas valide." }, 400);
+    if (!mail && tel.replace(/\D/g, "").length < 9) return J({ erreur: "Merci d'écrire l'e-mail ou le téléphone de la cliente." }, 400);
+    if (body.accord !== true) return J({ erreur: "Merci de cocher que la cliente accepte l'enregistrement de ses coordonnées." }, 400);
+    const naiss = eqNet(body.naissance, 12);
+    if (naiss && !/^\d{1,2}[\/\-. ]\d{1,2}[\/\-. ]\d{4}$/.test(naiss)) return J({ erreur: "La date de naissance doit s'écrire ainsi : 05/03/1980." }, 400);
+    const arts = []; let total = 0;
+    for (const l of (Array.isArray(body.lignes) ? body.lignes.slice(0, 30) : [])) {
+      const a = eqTexte(l && l.a, 90); if (!a) continue;
+      const q = Math.max(1, Math.min(99, Math.round(Number(l.q) || 1))), pu = Math.max(0, Math.min(9999, Number(String(l.p).replace(",", ".")) || 0));
+      total += q * pu; arts.push(q + " × " + a + " — " + eur(pu));
+    }
+    if (!arts.length) return J({ erreur: "Merci d'ajouter au moins un article." }, 400);
+    total = Math.round(total * 100) / 100;
+    const reg = ["Espèces", "Carte bancaire", "Wero", "PayPal", "Virement", "Autre"].includes(body.reglement) ? body.reglement : "Autre";
+    const liv = body.livraison === "À commander" ? "À commander" : "Remis sur place";
+    const props = { "Client(e)": TT(prenom + " " + nom), "Conseillère": T((c.prenom + " " + c.nom).trim()), "Identifiant conseillère (ne pas modifier)": T(id), "Date et heure": { date: { start: new Date().toISOString() } }, "Prénom": T(prenom), "Nom": T(nom), "Date de naissance": T(naiss), "E-mail": { email: mail || null }, "Téléphone": { phone_number: tel || null }, "Articles": T(arts.join("\n")), "Total": { number: total }, "Règlement": { select: { name: reg } }, "Livraison": { select: { name: liv } }, "Données clientes acceptées": { checkbox: true }, "Note": T(eqTexte(body.note, 300)) };
+    const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_VENTES_EQ }, properties: props });
+    return J({ ok: true, vente: eqVenteLue(pg) });
   }
   return J({ erreur: "Route inconnue." }, 404);
 }
