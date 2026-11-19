@@ -345,11 +345,11 @@ async function eqEnvoyer(env, c, sujet, titre, corps, btnTxt, btnUrl) {
 }
 function eqVenteLue(pg) {
   const p = pg.properties;
-  return { id: pg.id, date: dat(p["Date et heure"]) || pg.created_time || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), naissance: txt(p["Date de naissance"]), mail: (p["E-mail"] && p["E-mail"].email) || "", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", articles: txt(p["Articles"]), total: num(p["Total"]), reglement: sel(p["Règlement"]), livraison: sel(p["Livraison"]), relais: txt(p["Point relais"]), offre: sel(p["Offre appliquée"]) || "Aucune", reduction: num(p["Réduction"]), reductionSaisie: txt(p["Réduction saisie"]), points: num(p["Points de fidélité"]), statut: sel(p["Statut"]) || "Enregistrée", note: txt(p["Note"]) };
+  return { id: pg.id, date: dat(p["Date et heure"]) || pg.created_time || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), naissance: txt(p["Date de naissance"]), mail: (p["E-mail"] && p["E-mail"].email) || "", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", articles: txt(p["Articles"]), total: num(p["Total"]), reglement: sel(p["Règlement"]), livraison: sel(p["Livraison"]), relais: txt(p["Point relais"]), lieu: txt(p["Lieu"]), adresse: txt(p["Adresse"]), complement: txt(p["Complément d'adresse"]), cp: txt(p["Code postal"]), ville: txt(p["Ville"]), offre: sel(p["Offre appliquée"]) || "Aucune", reduction: num(p["Réduction"]), reductionSaisie: txt(p["Réduction saisie"]), points: num(p["Points de fidélité"]), statut: sel(p["Statut"]) || "Enregistrée", note: txt(p["Note"]) };
 }
 // Date de la vente : « 19/11/2026 » ou « 19/11/2026 14:30 » (vide = maintenant)
 function eqVenteDate(v) {
-  v = String(v || "").trim(); if (!v) return { start: new Date().toISOString() };
+  v = String(v || "").trim(); if (!v) return null;
   const m = v.replace(/[\.\-]/g, "/").match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2})[:h](\d{2}))?$/);
   if (!m) return null; const j = +m[1], mo = +m[2], an = +m[3], h = m[4] === undefined ? 12 : +m[4], mi = m[5] === undefined ? 0 : +m[5];
   if (j < 1 || j > 31 || mo < 1 || mo > 12 || h > 23 || mi > 59 || an < 2020 || an > 2100) return null;
@@ -359,13 +359,13 @@ function eqVenteDate(v) {
 // Vérifie et prépare les champs d'une vente (ajout ou modification)
 function eqVenteProps(body) {
   const prenom = eqNet(body.prenom, 40), nom = eqNet(body.nom, 40);
-  if (!prenom || !nom) return { erreur: "Merci d'écrire le prénom et le nom de la cliente." };
+  if (!prenom || !nom) return { erreur: "Merci d'écrire le prénom et le nom du client(e)." };
   const mail = String(body.mail || "").trim().toLowerCase(), tel = String(body.tel || "").replace(/[^0-9+]/g, "").slice(0, 16);
-  if (mail && !validMail(mail)) return { erreur: "L'adresse e-mail de la cliente ne semble pas valide." };
-  if (!mail && tel.replace(/\D/g, "").length < 9) return { erreur: "Merci d'écrire l'e-mail ou le téléphone de la cliente." };
+  if (mail && !validMail(mail)) return { erreur: "L'adresse e-mail du client(e) ne semble pas valide." };
+  if (!mail && tel.replace(/\D/g, "").length < 9) return { erreur: "Merci d'écrire l'e-mail ou le téléphone du client(e)." };
   const naiss = eqNet(body.naissance, 12);
   if (naiss && !/^\d{1,2}[\/\-. ]\d{1,2}[\/\-. ]\d{4}$/.test(naiss)) return { erreur: "La date de naissance doit s'écrire ainsi : 05/03/1980." };
-  const date = eqVenteDate(body.date); if (!date) return { erreur: "La date de la vente doit s'écrire ainsi : 19/11/2026 (ou 19/11/2026 14:30)." };
+  const date = eqVenteDate(body.date); if (!date) return { erreur: String(body.date || "").trim() ? "La date de la vente doit s'écrire ainsi : 19/11/2026 (ou 19/11/2026 14:30)." : "Merci d'écrire la date de la vente (la date seule suffit)." };
   const arts = []; let sous = 0;
   for (const l of (Array.isArray(body.lignes) ? body.lignes.slice(0, 30) : [])) {
     const a = eqTexte(l && l.a, 90); if (!a) continue;
@@ -374,7 +374,7 @@ function eqVenteProps(body) {
   }
   if (!arts.length) return { erreur: "Merci d'ajouter au moins un article." };
   sous = Math.round(sous * 100) / 100;
-  const offre = ["Offre EXHALESSENCE", "Mes offres"].includes(body.offre) ? body.offre : "Aucune";
+  const offre = ["Offre EXHALESSENCE", "Mes offres", "Remise personnelle"].includes(body.offre) ? body.offre : "Aucune";
   let red = 0, redTxt = "";
   if (offre !== "Aucune") {
     const rt = body.redType === "€" ? "€" : "%", rv = Math.max(0, Math.min(rt === "%" ? 100 : 9999, Number(String(body.redVal).replace(",", ".")) || 0));
@@ -384,7 +384,7 @@ function eqVenteProps(body) {
   const pts = Math.max(0, Math.min(99999, Math.round(Number(body.points) || 0)));
   const reg = ["Espèces", "Carte bancaire", "Wero", "PayPal", "Virement", "Autre"].includes(body.reglement) ? body.reglement : "Autre";
   const liv = ["Remis sur place", "Chronopost relais", "À commander"].includes(body.livraison) ? body.livraison : "Remis sur place";
-  return { props: { "Client(e)": TT(prenom + " " + nom), "Date et heure": { date }, "Prénom": T(prenom), "Nom": T(nom), "Date de naissance": T(naiss), "E-mail": { email: mail || null }, "Téléphone": { phone_number: tel || null }, "Articles": T(arts.join("\n")), "Total": { number: total }, "Règlement": { select: { name: reg } }, "Livraison": { select: { name: liv } }, "Point relais": T(liv === "Chronopost relais" ? eqTexte(body.relais, 150) : ""), "Offre appliquée": { select: { name: offre } }, "Réduction": { number: red }, "Réduction saisie": T(redTxt), "Points de fidélité": { number: pts }, "Note": T(eqTexte(body.note, 300)) } };
+  return { props: { "Client(e)": TT(prenom + " " + nom), "Date et heure": { date }, "Prénom": T(prenom), "Nom": T(nom), "Date de naissance": T(naiss), "E-mail": { email: mail || null }, "Téléphone": { phone_number: tel || null }, "Articles": T(arts.join("\n")), "Total": { number: total }, "Règlement": { select: { name: reg } }, "Livraison": { select: { name: liv } }, "Point relais": T(liv === "Chronopost relais" ? eqTexte(body.relais, 150) : ""), "Lieu": T(eqTexte(body.lieu, 100)), "Adresse": T(eqTexte(body.adresse, 120)), "Complément d'adresse": T(eqTexte(body.complement, 120)), "Code postal": T(eqNet(body.cp, 10)), "Ville": T(eqNet(body.ville, 60)), "Offre appliquée": { select: { name: offre } }, "Réduction": { number: red }, "Réduction saisie": T(redTxt), "Points de fidélité": { number: pts }, "Note": T(eqTexte(body.note, 300)) } };
 }
 async function eqRoute(env, route, body, J) {
   const maintenant = new Date().toISOString();
