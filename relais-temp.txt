@@ -305,12 +305,13 @@ function eqReseaux(a) {
   return out;
 }
 const eqTexte = (v, n) => String(v || "").replace(/[<>]/g, "").trim().slice(0, n);
-const EQ_EXTRAS = ["societe", "logo", "photo", "reseaux", "offres", "photoOffre", "fidelite"];
+const EQ_EXTRAS = ["societe", "logo", "photo", "reseaux", "offres", "photoOffre", "fidelite", "offreDu", "offreAu"];
+const eqDate = (v) => { v = String(v || "").trim().replace(/[\.\- ]/g, "/"); const m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if (!m) return ""; const j = +m[1], mo = +m[2]; if (j < 1 || j > 31 || mo < 1 || mo > 12) return ""; return String(j).padStart(2, "0") + "/" + String(mo).padStart(2, "0") + "/" + m[3]; };
 function eqExtras(b) {
-  return { societe: eqTexte(b.societe, 60).replace(/"/g, ""), logo: eqImg(b.logo), photo: eqImg(b.photo), reseaux: eqReseaux(b.reseaux), offres: eqTexte(b.offres, 600), photoOffre: eqImg(b.photoOffre), fidelite: eqTexte(b.fidelite, 300) };
+  return { societe: eqTexte(b.societe, 60).replace(/"/g, ""), logo: eqImg(b.logo), photo: eqImg(b.photo), reseaux: eqReseaux(b.reseaux), offres: eqTexte(b.offres, 600), photoOffre: eqImg(b.photoOffre), fidelite: eqTexte(b.fidelite, 300), offreDu: eqDate(b.offreDu), offreAu: eqDate(b.offreAu) };
 }
 function eqExtrasProps(x, cles) {
-  const m = { societe: ["Société", T(x.societe)], logo: ["Logo", TL(x.logo)], photo: ["Photo", TL(x.photo)], reseaux: ["Réseaux sociaux", TL(x.reseaux && x.reseaux.length ? JSON.stringify(x.reseaux) : "")], offres: ["Mes offres", T(x.offres)], photoOffre: ["Photo de l'offre", TL(x.photoOffre)], fidelite: ["Carte de fidélité", T(x.fidelite)] };
+  const m = { societe: ["Société", T(x.societe)], logo: ["Logo", TL(x.logo)], photo: ["Photo", TL(x.photo)], reseaux: ["Réseaux sociaux", TL(x.reseaux && x.reseaux.length ? JSON.stringify(x.reseaux) : "")], offres: ["Mes offres", T(x.offres)], photoOffre: ["Photo de l'offre", TL(x.photoOffre)], fidelite: ["Carte de fidélité", T(x.fidelite)], offreDu: ["Offre du", T(x.offreDu)], offreAu: ["Offre au", T(x.offreAu)] };
   const o = {}; for (const k of cles) o[m[k][0]] = m[k][1]; return o;
 }
 function eqDonnees(b) {
@@ -319,9 +320,9 @@ function eqDonnees(b) {
 }
 function eqCompte(pg) {
   const p = pg.properties;
-  return { id: pg.id, mail: (p["E-mail"] && p["E-mail"].email) || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), civ: sel(p["Civilité"]) === "Monsieur" ? "m" : "f", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", parr: txt(p["Code de parrainage"]), depuis: txt(p["Conseillère depuis"]), apropos: txt(p["Qui suis-je"]), societe: txt(p["Société"]), logo: txt(p["Logo"]), photo: txt(p["Photo"]), reseaux: (() => { try { return eqReseaux(JSON.parse(txt(p["Réseaux sociaux"]) || "[]")); } catch (e) { return []; } })(), offres: txt(p["Mes offres"]), photoOffre: txt(p["Photo de l'offre"]), archive: false, fidelite: txt(p["Carte de fidélité"]), mdp: txt(p["Empreinte mot de passe (ne pas modifier)"]) };
+  return { id: pg.id, mail: (p["E-mail"] && p["E-mail"].email) || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), civ: sel(p["Civilité"]) === "Monsieur" ? "m" : "f", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", parr: txt(p["Code de parrainage"]), depuis: txt(p["Conseillère depuis"]), apropos: txt(p["Qui suis-je"]), societe: txt(p["Société"]), logo: txt(p["Logo"]), photo: txt(p["Photo"]), reseaux: (() => { try { return eqReseaux(JSON.parse(txt(p["Réseaux sociaux"]) || "[]")); } catch (e) { return []; } })(), offres: txt(p["Mes offres"]), photoOffre: txt(p["Photo de l'offre"]), archive: false, fidelite: txt(p["Carte de fidélité"]), offreDu: txt(p["Offre du"]), offreAu: txt(p["Offre au"]), mdp: txt(p["Empreinte mot de passe (ne pas modifier)"]) };
 }
-const eqPublic = (c) => ({ id: c.id, societe: c.societe || "", logo: c.logo || "", photo: c.photo || "", reseaux: c.reseaux || [], offres: c.offres || "", photoOffre: c.photoOffre || "", fidelite: c.fidelite || "", mail: c.mail, prenom: c.prenom, nom: c.nom, civ: c.civ, tel: c.tel, parr: c.parr, depuis: c.depuis, apropos: c.apropos });
+const eqPublic = (c) => ({ id: c.id, societe: c.societe || "", logo: c.logo || "", photo: c.photo || "", reseaux: c.reseaux || [], offres: c.offres || "", photoOffre: c.photoOffre || "", fidelite: c.fidelite || "", offreDu: c.offreDu || "", offreAu: c.offreAu || "", mail: c.mail, prenom: c.prenom, nom: c.nom, civ: c.civ, tel: c.tel, parr: c.parr, depuis: c.depuis, apropos: c.apropos });
 function eqProps(d) {
   return { "Nom complet": TT(((d.prenom || "") + " " + (d.nom || "")).trim() || d.mail), "Prénom": T(d.prenom), "Nom": T(d.nom), "Civilité": { select: { name: d.civ === "m" ? "Monsieur" : "Madame" } }, "E-mail": { email: d.mail }, "Téléphone": { phone_number: d.tel || null }, "Code de parrainage": T(d.parr), "Conseillère depuis": T(d.depuis), "Qui suis-je": T(d.apropos) };
 }
@@ -344,7 +345,46 @@ async function eqEnvoyer(env, c, sujet, titre, corps, btnTxt, btnUrl) {
 }
 function eqVenteLue(pg) {
   const p = pg.properties;
-  return { id: pg.id, date: dat(p["Date et heure"]) || pg.created_time || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), naissance: txt(p["Date de naissance"]), mail: (p["E-mail"] && p["E-mail"].email) || "", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", articles: txt(p["Articles"]), total: num(p["Total"]), reglement: sel(p["Règlement"]), livraison: sel(p["Livraison"]), note: txt(p["Note"]) };
+  return { id: pg.id, date: dat(p["Date et heure"]) || pg.created_time || "", prenom: txt(p["Prénom"]), nom: txt(p["Nom"]), naissance: txt(p["Date de naissance"]), mail: (p["E-mail"] && p["E-mail"].email) || "", tel: (p["Téléphone"] && p["Téléphone"].phone_number) || "", articles: txt(p["Articles"]), total: num(p["Total"]), reglement: sel(p["Règlement"]), livraison: sel(p["Livraison"]), relais: txt(p["Point relais"]), offre: sel(p["Offre appliquée"]) || "Aucune", reduction: num(p["Réduction"]), reductionSaisie: txt(p["Réduction saisie"]), points: num(p["Points de fidélité"]), statut: sel(p["Statut"]) || "Enregistrée", note: txt(p["Note"]) };
+}
+// Date de la vente : « 19/11/2026 » ou « 19/11/2026 14:30 » (vide = maintenant)
+function eqVenteDate(v) {
+  v = String(v || "").trim(); if (!v) return { start: new Date().toISOString() };
+  const m = v.replace(/[\.\-]/g, "/").match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2})[:h](\d{2}))?$/);
+  if (!m) return null; const j = +m[1], mo = +m[2], an = +m[3], h = m[4] === undefined ? 12 : +m[4], mi = m[5] === undefined ? 0 : +m[5];
+  if (j < 1 || j > 31 || mo < 1 || mo > 12 || h > 23 || mi > 59 || an < 2020 || an > 2100) return null;
+  const z = (n) => String(n).padStart(2, "0");
+  return { start: an + "-" + z(mo) + "-" + z(j) + "T" + z(h) + ":" + z(mi) + ":00", time_zone: "Europe/Paris" };
+}
+// Vérifie et prépare les champs d'une vente (ajout ou modification)
+function eqVenteProps(body) {
+  const prenom = eqNet(body.prenom, 40), nom = eqNet(body.nom, 40);
+  if (!prenom || !nom) return { erreur: "Merci d'écrire le prénom et le nom de la cliente." };
+  const mail = String(body.mail || "").trim().toLowerCase(), tel = String(body.tel || "").replace(/[^0-9+]/g, "").slice(0, 16);
+  if (mail && !validMail(mail)) return { erreur: "L'adresse e-mail de la cliente ne semble pas valide." };
+  if (!mail && tel.replace(/\D/g, "").length < 9) return { erreur: "Merci d'écrire l'e-mail ou le téléphone de la cliente." };
+  const naiss = eqNet(body.naissance, 12);
+  if (naiss && !/^\d{1,2}[\/\-. ]\d{1,2}[\/\-. ]\d{4}$/.test(naiss)) return { erreur: "La date de naissance doit s'écrire ainsi : 05/03/1980." };
+  const date = eqVenteDate(body.date); if (!date) return { erreur: "La date de la vente doit s'écrire ainsi : 19/11/2026 (ou 19/11/2026 14:30)." };
+  const arts = []; let sous = 0;
+  for (const l of (Array.isArray(body.lignes) ? body.lignes.slice(0, 30) : [])) {
+    const a = eqTexte(l && l.a, 90); if (!a) continue;
+    const q = Math.max(1, Math.min(99, Math.round(Number(l.q) || 1))), pu = Math.max(0, Math.min(9999, Number(String(l.p).replace(",", ".")) || 0));
+    sous += q * pu; arts.push(q + " × " + a + " — " + eur(pu));
+  }
+  if (!arts.length) return { erreur: "Merci d'ajouter au moins un article." };
+  sous = Math.round(sous * 100) / 100;
+  const offre = ["Offre EXHALESSENCE", "Mes offres"].includes(body.offre) ? body.offre : "Aucune";
+  let red = 0, redTxt = "";
+  if (offre !== "Aucune") {
+    const rt = body.redType === "€" ? "€" : "%", rv = Math.max(0, Math.min(rt === "%" ? 100 : 9999, Number(String(body.redVal).replace(",", ".")) || 0));
+    red = rt === "%" ? sous * rv / 100 : Math.min(rv, sous); red = Math.round(red * 100) / 100; redTxt = rv ? (String(rv).replace(".", ",") + " " + rt) : "";
+  }
+  const total = Math.max(0, Math.round((sous - red) * 100) / 100);
+  const pts = Math.max(0, Math.min(99999, Math.round(Number(body.points) || 0)));
+  const reg = ["Espèces", "Carte bancaire", "Wero", "PayPal", "Virement", "Autre"].includes(body.reglement) ? body.reglement : "Autre";
+  const liv = ["Remis sur place", "Chronopost relais", "À commander"].includes(body.livraison) ? body.livraison : "Remis sur place";
+  return { props: { "Client(e)": TT(prenom + " " + nom), "Date et heure": { date }, "Prénom": T(prenom), "Nom": T(nom), "Date de naissance": T(naiss), "E-mail": { email: mail || null }, "Téléphone": { phone_number: tel || null }, "Articles": T(arts.join("\n")), "Total": { number: total }, "Règlement": { select: { name: reg } }, "Livraison": { select: { name: liv } }, "Point relais": T(liv === "Chronopost relais" ? eqTexte(body.relais, 150) : ""), "Offre appliquée": { select: { name: offre } }, "Réduction": { number: red }, "Réduction saisie": T(redTxt), "Points de fidélité": { number: pts }, "Note": T(eqTexte(body.note, 300)) } };
 }
 async function eqRoute(env, route, body, J) {
   const maintenant = new Date().toISOString();
@@ -393,6 +433,7 @@ async function eqRoute(env, route, body, J) {
     }
     const d = eqDonnees({ ...body, mail });
     if (!d.prenom || !d.nom) return J({ erreur: "Merci d'indiquer votre prénom et votre nom." }, 400);
+    for (const k of ["offreDu", "offreAu"]) if (k in body && String(body[k] || "").trim() && !eqDate(body[k])) return J({ erreur: "Écrivez les dates de l'offre ainsi : 01/01/2026." }, 400);
     const cles = EQ_EXTRAS.filter((k) => k in body), x = eqExtras(body);
     for (const k of ["logo", "photo", "photoOffre"]) if (k in body && body[k] && !x[k]) return J({ erreur: "Cette image est trop lourde ou n'est pas reconnue. Essayez-en une autre." }, 400);
     await notion(env, "/pages/" + id, "PATCH", { properties: { ...eqProps(d), ...eqExtrasProps(x, cles) } });
@@ -407,7 +448,7 @@ async function eqRoute(env, route, body, J) {
     if (String(ds).replace(/-/g, "") !== CFG.DS_EQUIPE.replace(/-/g, "")) return J({ ok: true, vide: true });
     if (pg.archived || pg.in_trash) return J({ ok: true, vide: true });
     const c = eqCompte(pg);
-    return J({ ok: true, societe: c.societe, logo: c.logo, photo: c.photo, reseaux: c.reseaux, offres: c.offres, photoOffre: c.photoOffre, fidelite: c.fidelite });
+    return J({ ok: true, societe: c.societe, logo: c.logo, photo: c.photo, reseaux: c.reseaux, offres: c.offres, photoOffre: c.photoOffre, fidelite: c.fidelite, offreDu: c.offreDu, offreAu: c.offreAu });
   }
   if (route === "/equipe/offres") {
     let lignes = [], cursor, apres = false, vu = false;
@@ -446,7 +487,7 @@ async function eqRoute(env, route, body, J) {
     await notion(env, "/pages/" + id, "PATCH", { properties: { "Empreinte mot de passe (ne pas modifier)": T(salt + "|" + await hashPwd(String(body.mdp), salt)) } });
     return J({ ok: true, message: "Votre mot de passe a été changé. Vous pouvez vous connecter." });
   }
-  if (route === "/equipe/vente-ajout" || route === "/equipe/ventes") {
+  if (route === "/equipe/vente-ajout" || route === "/equipe/ventes" || route === "/equipe/vente-maj") {
     const id = await eqLireJeton(env, body.jeton);
     if (!id) return J({ erreur: "Session expirée : reconnectez-vous." }, 401);
     const c = await eqParId(env, id);
@@ -455,27 +496,20 @@ async function eqRoute(env, route, body, J) {
       const lignes = await query(env, CFG.DS_VENTES_EQ, { property: "Identifiant conseillère (ne pas modifier)", rich_text: { equals: id } }, [{ property: "Date et heure", direction: "descending" }]);
       return J({ ok: true, ventes: lignes.slice(0, 300).map(eqVenteLue) });
     }
-    const prenom = eqNet(body.prenom, 40), nom = eqNet(body.nom, 40);
-    if (!prenom || !nom) return J({ erreur: "Merci d'écrire le prénom et le nom de la cliente." }, 400);
-    const mail = String(body.mail || "").trim().toLowerCase(), tel = String(body.tel || "").replace(/[^0-9+]/g, "").slice(0, 16);
-    if (mail && !validMail(mail)) return J({ erreur: "L'adresse e-mail de la cliente ne semble pas valide." }, 400);
-    if (!mail && tel.replace(/\D/g, "").length < 9) return J({ erreur: "Merci d'écrire l'e-mail ou le téléphone de la cliente." }, 400);
-    if (body.accord !== true) return J({ erreur: "Merci de cocher que la cliente accepte l'enregistrement de ses coordonnées." }, 400);
-    const naiss = eqNet(body.naissance, 12);
-    if (naiss && !/^\d{1,2}[\/\-. ]\d{1,2}[\/\-. ]\d{4}$/.test(naiss)) return J({ erreur: "La date de naissance doit s'écrire ainsi : 05/03/1980." }, 400);
-    const arts = []; let total = 0;
-    for (const l of (Array.isArray(body.lignes) ? body.lignes.slice(0, 30) : [])) {
-      const a = eqTexte(l && l.a, 90); if (!a) continue;
-      const q = Math.max(1, Math.min(99, Math.round(Number(l.q) || 1))), pu = Math.max(0, Math.min(9999, Number(String(l.p).replace(",", ".")) || 0));
-      total += q * pu; arts.push(q + " × " + a + " — " + eur(pu));
+    const r = eqVenteProps(body);
+    if (r.erreur) return J({ erreur: r.erreur }, 400);
+    if (route === "/equipe/vente-ajout") {
+      const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_VENTES_EQ }, properties: { ...r.props, "Conseillère": T((c.prenom + " " + c.nom).trim()), "Identifiant conseillère (ne pas modifier)": T(id), "Statut": { select: { name: "Enregistrée" } } } });
+      return J({ ok: true, vente: eqVenteLue(pg) });
     }
-    if (!arts.length) return J({ erreur: "Merci d'ajouter au moins un article." }, 400);
-    total = Math.round(total * 100) / 100;
-    const reg = ["Espèces", "Carte bancaire", "Wero", "PayPal", "Virement", "Autre"].includes(body.reglement) ? body.reglement : "Autre";
-    const liv = body.livraison === "À commander" ? "À commander" : "Remis sur place";
-    const props = { "Client(e)": TT(prenom + " " + nom), "Conseillère": T((c.prenom + " " + c.nom).trim()), "Identifiant conseillère (ne pas modifier)": T(id), "Date et heure": { date: { start: new Date().toISOString() } }, "Prénom": T(prenom), "Nom": T(nom), "Date de naissance": T(naiss), "E-mail": { email: mail || null }, "Téléphone": { phone_number: tel || null }, "Articles": T(arts.join("\n")), "Total": { number: total }, "Règlement": { select: { name: reg } }, "Livraison": { select: { name: liv } }, "Données clientes acceptées": { checkbox: true }, "Note": T(eqTexte(body.note, 300)) };
-    const pg = await notion(env, "/pages", "POST", { parent: { type: "data_source_id", data_source_id: CFG.DS_VENTES_EQ }, properties: props });
-    return J({ ok: true, vente: eqVenteLue(pg) });
+    const vid = String(body.id || "");
+    if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(vid)) return J({ erreur: "Vente introuvable." }, 400);
+    let v; try { v = await notion(env, "/pages/" + vid); } catch (e) { return J({ erreur: "Vente introuvable." }, 404); }
+    const ds = v.parent && (v.parent.data_source_id || v.parent.database_id || "");
+    if (String(ds).replace(/-/g, "") !== CFG.DS_VENTES_EQ.replace(/-/g, "") || txt(v.properties["Identifiant conseillère (ne pas modifier)"]) !== id) return J({ erreur: "Vente introuvable." }, 404);
+    const statut = body.statut === "Annulée" ? "Annulée" : "Enregistrée";
+    const maj = await notion(env, "/pages/" + vid, "PATCH", { properties: { ...r.props, "Statut": { select: { name: statut } } } });
+    return J({ ok: true, vente: eqVenteLue(maj) });
   }
   return J({ erreur: "Route inconnue." }, 404);
 }
