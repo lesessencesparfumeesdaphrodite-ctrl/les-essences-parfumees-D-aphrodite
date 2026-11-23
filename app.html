@@ -165,6 +165,20 @@ a.nv{text-decoration:none}
 .nv.large .tx{display:flex;flex-direction:column;text-align:left}
 .nv.large small{font-weight:400;font-size:12.5px;color:var(--gris)}
 @media(max-width:380px){.nvs2{grid-template-columns:1fr}}
+
+/* ---- v4 : ventes regroupées par marché ---- */
+.vente{border:1.5px solid rgba(201,169,110,.6);border-radius:16px;overflow:hidden;margin:14px 0;background:#fff}
+.vh{background:linear-gradient(135deg,#8A432C 0%,#9E5238 45%,#C27B5B 100%);color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.vh b{font-family:Georgia,serif;font-size:16px}.vh small{font-size:12.5px;opacity:.95}
+.vr{padding:0 10px}
+.vpay{padding:10px 12px 12px;display:flex;flex-wrap:wrap;gap:8px;background:var(--sable)}
+.vpay .pc{background:#fff;border:1.5px solid rgba(201,169,110,.7);border-radius:14px;padding:7px 12px;font-size:13px;color:var(--brun);line-height:1.3}
+.vpay .pc b{color:var(--terra)}.vpay .pc small{display:block;color:var(--gris);font-size:11.5px}
+.champs textarea{width:100%;padding:11px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font-size:15px;background:#fff;font-family:inherit;min-height:84px}
+a.petit{display:inline-block;text-decoration:none;margin-right:6px}
+.petit.sec2{background:#fff;color:var(--terra);border:1.5px solid var(--terra)}
+.envoi{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(201,169,110,.6)}
+.envoi p{margin:0 0 4px;font-size:12.5px;color:var(--gris)}
 </style>
 </head>
 <body>
@@ -290,6 +304,7 @@ function repli(id,tete,fn){FN[id]=fn;var o=OUV[id];return '<div class="cmd2"><bu
 function basc(b,id){var c=b.nextElementSibling;var h=!c.hidden;if(!h&&!c.innerHTML)c.innerHTML=FN[id]();c.hidden=h;OUV[id]=!h;b.setAttribute('aria-expanded',String(!h));b.lastChild.textContent=h?'▼':'▲';}
 function eu(n){return esc(String(n).replace('.',','))+' €';}
 function bodyS(o,i){
+  if(o.origine==='Salon')return bodySalon(o,i);
   return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(dfr(o.date))+'</strong><span>'+eu(o.total)+'</span></div>'
   +'<div class="s">'+esc(o.nom)+(o.mail?' — '+esc(o.mail):'')+'</div><div class="p">'+esc(o.produits)+'</div>'
   +((o.mode||o.relais||o.adresse)?'<div class="p">🚚 '+esc(o.mode)+(o.relais?' : '+esc(o.relais):'')+(o.adresse?' — '+esc(o.adresse):'')+'</div>':'')+(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
@@ -309,16 +324,60 @@ function bodyX(o,i){
   +'<label for="x-mo-'+i+'" style="display:block;font-size:12.5px;font-weight:700;margin:8px 0 4px">Petit mot pour le/la client(e) (facultatif)</label><div class="champs"><div><input id="x-mo-'+i+'" type="text" value="'+esc(o.mot)+'"></div></div>'
   +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>';
 }
+
+var PAYS=['CB','Espèces','PayPal','Virement','Wero'];
+function lieuDe(o){var m=/Marché\/Salon : ([^·]+)/.exec(o.note||'');var v=m?m[1].trim():'';return /^non précisé$/i.test(v)?'':v;}
+function payDe(o){if(o.paiement)return String(o.paiement).trim();var m=/Règlement : ([^·]+)/.exec(o.note||'');return m?m[1].trim():'';}
+function scinder(n){n=String(n||'').trim();if(!n||/^Client\(e\) de passage$/i.test(n))return['',''];var t=n.split(/\s+/),k=-1;for(var j=1;j<t.length;j++){if(t[j].length>1&&t[j]===t[j].toUpperCase()&&/[A-ZÀ-Ý]/.test(t[j])){k=j;break;}}if(k<0)return[t[0],t.slice(1).join(' ')];return[t.slice(0,k).join(' '),t.slice(k).join(' ')];}
+function recap(o){
+  var pn=scinder(o.nom)[0],l=lieuDe(o),pr=String(o.produits||'').split('\n').map(function(x){return x.replace(/\s—\s✔ Remis\s*$/,'').replace(/\s—\s⏳ À COMMANDER\s*$/,' (à commander)').trim();}).filter(Boolean).join('\n');
+  return 'Bonjour'+(pn?' '+pn:'')+',\n\nMerci pour votre commande'+(l?' à l\'occasion du « '+l+' »':' lors du marché')+' le '+dfr(o.date)+' chez Les Essences Parfumées d\'Aphrodite.\n\n'+pr+'\n\nTotal : '+String(o.total).replace('.',',')+' €'+(payDe(o)?' ('+payDe(o)+')':'')+'\n\nMerci pour votre confiance, à très vite ! 🤍';
+}
+function copRec(i,b){var t=recap(all[i]);function ok(){b.textContent='Copié ✓';}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){});}else{var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok();}catch(e){}document.body.removeChild(a);}}
+function bodySalon(o,i){
+  var pn=scinder(o.nom),mail=o.mail||o.mailC||'',tel=o.tel||'',pay=payDe(o),opts=PAYS.slice();if(pay&&opts.indexOf(pay)<0)opts.push(pay);
+  var msg=recap(o),sms=tel?'sms:'+encodeURIComponent(tel.replace(/\s/g,''))+'?body='+encodeURIComponent(msg):'',ml=mail?'mailto:'+encodeURIComponent(mail)+'?subject='+encodeURIComponent('Votre commande - Les Essences Parfumées d\'Aphrodite')+'&body='+encodeURIComponent(msg):'';
+  return '<div class="cmd"><div class="t"><strong>'+esc(o.numero)+' · '+esc(dfr(o.date))+'</strong><span>'+eu(o.total)+'</span></div>'
+  +'<div class="champs"><div><label for="v-pr-'+i+'">Prénom</label><input id="v-pr-'+i+'" type="text" value="'+esc(pn[0])+'"></div><div><label for="v-no-'+i+'">Nom</label><input id="v-no-'+i+'" type="text" value="'+esc(pn[1])+'"></div></div>'
+  +'<div class="champs"><div><label for="v-ma-'+i+'">E-mail</label><input id="v-ma-'+i+'" type="email" value="'+esc(mail)+'"></div><div><label for="v-te-'+i+'">Téléphone</label><input id="v-te-'+i+'" type="tel" value="'+esc(tel)+'"></div></div>'
+  +'<div class="champs"><div><label for="v-da-'+i+'">Date</label><input id="v-da-'+i+'" type="date" value="'+esc(o.date)+'"></div><div><label for="v-li-'+i+'">Lieu</label><input id="v-li-'+i+'" type="text" value="'+esc(lieuDe(o))+'" placeholder="Ex : Marché de Noël"></div></div>'
+  +'<div class="champs"><div><label for="v-to-'+i+'">Montant total (€)</label><input id="v-to-'+i+'" type="text" inputmode="decimal" value="'+esc(String(o.total).replace('.',','))+'"></div><div><label for="v-pa-'+i+'">Paiement</label><select id="v-pa-'+i+'"><option value="">—</option>'+opts.map(function(p){return'<option'+(p===pay?' selected':'')+'>'+esc(p)+'</option>';}).join('')+'</select></div></div>'
+  +'<div class="champs"><div style="flex:1 1 100%"><label for="v-pd-'+i+'">Ce qui a été commandé</label><textarea id="v-pd-'+i+'">'+esc(o.produits)+'</textarea></div></div>'
+  +'<div class="champs"><div><label for="v-st-'+i+'">Statut</label><select id="v-st-'+i+'">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div><div><label for="v-su-'+i+'">N° de suivi</label><input id="v-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
+  +(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
+  +'<button class="petit" onclick="saveV('+i+')">Enregistrer les corrections</button>'
+  +'<div class="envoi"><p>Envoyer le récapitulatif de la commande (enregistrez d\'abord vos corrections) :</p>'
+  +(sms?'<a class="petit sec2" href="'+esc(sms)+'">SMS</a>':'')+(ml?'<a class="petit sec2" href="'+esc(ml)+'">E-mail</a>':'')+'<button class="petit sec2" type="button" onclick="copRec('+i+',this)">Copier le message</button>'
+  +(sms||ml?'':'<p>Pas de téléphone ni d\'e-mail : ajoutez-les ci-dessus pour envoyer directement.</p>')+'</div></div>';
+}
+function saveV(i){var o=all[i];if(!o)return;var b={id:o.id,prenom:g('v-pr-'+i),nom:g('v-no-'+i),mail:g('v-ma-'+i),tel:g('v-te-'+i),date:g('v-da-'+i),lieu:g('v-li-'+i),total:g('v-to-'+i),paiement:g('v-pa-'+i),produits:g('v-pd-'+i),statut:g('v-st-'+i),suivi:g('v-su-'+i)};
+  msgC='Enregistrement…';dessiner();
+  post('/app/vente-maj',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Corrections enregistrées.'+(r.j.mailsEnvoyes?' Le mail est parti au/à la client(e).':'');chargerCmd();});}
 var MM=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 function dessiner(){
-  var h='',an='',mo='',n={};
-  all.forEach(function(o){var k=(o.date||'0000-00').slice(0,7);n[k]=(n[k]||0)+1;});
+  var h='',an='',mo='',n={},items=[],grp={};
   all.forEach(function(o,i){
-    var d=o.date||'',y=d.slice(0,4)||'?',m=d.slice(0,7);
+    var d=o.date||'';
+    if(o.origine==='Salon'){var l=lieuDe(o),k=(l?l.toLowerCase().replace(/\s+/g,' '):'~'+d)+'|'+d.slice(0,4),G=grp[k];
+      if(!G){G=grp[k]={g:1,lieu:l,date:d,min:d,max:d,rows:[]};items.push(G);}
+      G.rows.push(i);if(d>G.max)G.max=d;if(d&&(!G.min||d<G.min))G.min=d;}
+    else items.push({i:i,date:d});
+  });
+  items.forEach(function(it){var k=(it.date||'0000-00').slice(0,7);n[k]=(n[k]||0)+(it.g?it.rows.length:1);});
+  function ligne(o,i){var tete='<b>'+esc(nomAff(o.nom||o.mail))+'</b> <span class="stat">'+esc(typeCmd(o))+'</span><small>'+esc(dfr(o.date||''))+' · '+eu(o.total)+' · '+esc(o.statut||'—')+'</small>';
+    return repli(o.src+o.id,tete,function(){return o.src==='X'?bodyX(o,i):bodyS(o,i);});}
+  items.forEach(function(it){
+    var d=it.date||'',y=d.slice(0,4)||'?',m=d.slice(0,7);
     if(y!==an){an=y;mo='';h+='<h2 class="annee">'+esc(y)+'</h2>';}
     if(m!==mo){mo=m;h+='<h3 class="mois">'+esc(MM[(+d.slice(5,7)||1)-1])+' <span>('+n[m]+')</span></h3>';}
-    var tete='<b>'+esc(nomAff(o.nom||o.mail))+'</b> <span class="stat">'+esc(typeCmd(o))+'</span><small>'+esc(dfr(d))+' · '+eu(o.total)+' · '+esc(o.statut||'—')+'</small>';
-    h+=repli(o.src+o.id,tete,function(){return o.src==='X'?bodyX(o,i):bodyS(o,i);});
+    if(!it.g){h+=ligne(all[it.i],it.i);return;}
+    var tot=0,pay={};
+    it.rows.forEach(function(i){var o=all[i],t=+o.total||0,p=payDe(o)||'Non précisé';tot+=t;(pay[p]=pay[p]||{n:0,t:0});pay[p].n++;pay[p].t+=t;});
+    var dates=it.min&&it.min!==it.max?dfr(it.min)+' → '+dfr(it.max):dfr(it.max);
+    var chips=Object.keys(pay).sort(function(a,b){return a.localeCompare(b,'fr');}).map(function(p){return '<div class="pc"><b>'+esc(p)+'</b> '+eu(Math.round(pay[p].t*100)/100)+'<small>'+pay[p].n+' vente'+(pay[p].n>1?'s':'')+'</small></div>';}).join('');
+    h+='<div class="vente"><div class="vh"><b>Vente — '+esc(it.lieu||'Marché / salon')+'</b><small>'+esc(dates)+' · '+it.rows.length+' vente'+(it.rows.length>1?'s':'')+'</small></div>'
+      +'<div class="vr">'+it.rows.map(function(i){return ligne(all[i],i);}).join('')+'</div>'
+      +'<div class="vh"><b>Total</b><b>'+eu(Math.round(tot*100)/100)+'</b></div><div class="vpay">'+chips+'</div></div>';
   });
   document.getElementById('liste').innerHTML='<h2 class="titre-g">Commandes</h2>'+(msgC?'<p class="msg" role="status">'+esc(msgC)+'</p>':'')+(all.length||msgC?'':'<p class="vide">Aucune commande pour le moment.</p>')+'<div class="boite" style="padding:6px 8px">'+h+'</div><button class="petit sec" onclick="aller(\'commandes\')">↻ Actualiser</button>';
 }

@@ -433,6 +433,12 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;
   }
   .event-bar .lbl{color:var(--text-soft);white-space:nowrap}
+  .event-row{display:flex;gap:8px;margin-bottom:16px;align-items:stretch}
+  .ev-f{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0}
+  .ev-f label{display:block;font-size:12.5px;color:var(--text-soft);margin-bottom:4px}
+  .ev-f input{width:100%;border:1.5px solid var(--gold-light);border-radius:10px;background:#fff;font-size:16px;font-family:inherit;color:var(--dark);padding:8px 10px;min-height:42px;outline:none}
+  .ev-f input:focus{border-color:var(--gold)}
+  .ev-date{flex:0 0 158px}.ev-lieu{flex:1}
   .event-bar input{border:none;background:transparent;font-size:13px;font-family:inherit;flex:1;outline:none;color:var(--dark);font-weight:500}
 
   .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 20px;box-shadow:0 10px 30px -18px rgba(61,43,46,.35);margin-bottom:14px;}
@@ -582,13 +588,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     <div class="divider"></div>
   </div>
 
-  <div class="event-bar">
-    <span class="lbl">📍 Lieu (marché, salon, atelier chez une cliente…) :</span>
-    <input type="text" id="eventName" placeholder="Ex : Marché de Noël Simandres" oninput="saveEvent()">
-  </div>
-  <div class="event-bar">
-    <label class="lbl" for="f-date">📅 Date de la commande :</label>
-    <input type="date" id="f-date" onchange="calcTotals()">
+  <div class="event-row">
+    <div class="ev-f ev-date"><label for="f-date">📅 Date</label><input type="date" id="f-date" onchange="calcTotals()"></div>
+    <div class="ev-f ev-lieu"><label for="eventName">📍 Lieu</label><input type="text" id="eventName" placeholder="Ex : Marché de Noël, salon…" maxlength="100" autocomplete="off" oninput="saveEvent()"></div>
   </div>
 
   <div id="formCard">
@@ -600,8 +602,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <label class="civ-opt"><input type="radio" name="civ" value="Mme" checked> Mme</label>
       </div>
       <div class="row2">
-        <div class="field"><label>Prénom<span class="req">*</span></label><input type="text" id="f-prenom"></div>
-        <div class="field"><label>Nom<span class="req">*</span></label><input type="text" id="f-nom"></div>
+        <div class="field"><label>Prénom <small style="font-weight:400">(facultatif)</small></label><input type="text" id="f-prenom"></div>
+        <div class="field"><label>Nom <small style="font-weight:400">(facultatif)</small></label><input type="text" id="f-nom"></div>
       </div>
       <div class="field"><label>Société (le cas échéant)</label><input type="text" id="f-societe"></div>
       <div class="field"><label>Adresse</label><input type="text" id="f-adresse" placeholder="N°, rue"></div>
@@ -941,19 +943,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
 function markInvalid(id, invalid){ document.getElementById(id).classList.toggle('invalid', invalid); }
 
 function validate(){
-  const prenom = document.getElementById('f-prenom').value.trim();
-  const nom = document.getElementById('f-nom').value.trim();
-  const tel = document.getElementById('f-tel').value.trim();
+  /* Rien n'est obligatoire : une vente sans nom ni contact est acceptée. On vérifie seulement qu'une adresse e-mail saisie est valide. */
   const mail = document.getElementById('f-email').value.trim();
-  const mailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail);
-  let ok = true;
-  markInvalid('f-prenom', !prenom); if(!prenom) ok=false;
-  markInvalid('f-nom', !nom); if(!nom) ok=false;
-  const contactOk = mailOk || tel.replace(/\D/g,'').length >= 6;
-  markInvalid('f-tel', !contactOk && !mail); markInvalid('f-email', !contactOk);
-  if(!contactOk) ok = false;
-  if(mail && !mailOk){ markInvalid('f-email', true); ok = false; }
-  return ok;
+  const mailOk = !mail || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail);
+  markInvalid('f-prenom', false); markInvalid('f-nom', false); markInvalid('f-tel', false);
+  markInvalid('f-email', !mailOk);
+  return mailOk;
 }
 
 function getLines(){
@@ -972,7 +967,7 @@ function getLines(){
 }
 
 async function submitForm(){
-  if(!validate()){ const m=[]; if(!document.getElementById('f-prenom').value.trim()) m.push('le prénom'); if(!document.getElementById('f-nom').value.trim()) m.push('le nom'); if(document.querySelector('.invalid#f-tel, .invalid#f-email, #f-tel.invalid, #f-email.invalid')) m.push('un téléphone ou un e-mail valide'); showToast(m.length ? ('Il manque : ' + m.join(', ') + '.') : 'Merci de remplir les champs obligatoires *'); return; }
+  if(!validate()){ showToast("Vérifiez l'adresse e-mail (ou laissez la case vide)."); return; }
   const lines = getLines();
   if(lines.length === 0){ showToast('Ajoutez au moins un produit à la commande'); return; }
 
@@ -1033,7 +1028,7 @@ async function submitForm(){
 function buildRecap(o, canal){
   /* Même texte pour le SMS et le mail : court, aéré, sans signature (la signature/carte est ajoutée par la messagerie). */
   const ou = (o.event && o.event.trim()) ? ('à l\'occasion du « ' + o.event.trim() + ' »') : 'lors du marché';
-  let t = `Bonjour ${o.prenom},\n\n`;
+  let t = `Bonjour${o.prenom ? ' ' + o.prenom : ''},\n\n`;
   t += `Merci pour votre commande ${ou} le ${formatDateFR(o.dateCommande)} chez Les Essences Parfumées d'Aphrodite.\n\n`;
   t += `Vous trouverez en pièce jointe votre facture.\n\n`;
   if(o.sync === true && o.lienCompte){
@@ -1253,7 +1248,7 @@ function downloadPDF(entry){
   if(!entry){ showToast('Aucune commande sélectionnée'); return; }
   if(!(window.jspdf && window.jspdf.jsPDF)){ showToast('Le générateur de PDF ne s\'est pas chargé — vérifiez la connexion internet'); return; }
   const doc = generateOrderPDF(entry);
-  doc.save(`Facture_${entry.prenom}_${entry.nom}_${entry.dateCommande}.pdf`);
+  doc.save(`Facture_${((entry.prenom||'')+'_'+(entry.nom||'')).replace(/^_+|_+$/g,'') || 'vente'}_${entry.dateCommande}.pdf`);
   showToast('PDF téléchargé ✓ Joignez-le à votre SMS ou mail');
 }
 
@@ -1432,7 +1427,7 @@ async function downloadJPEG(entry){
   const dataUrl = await generateOrderImageDataURL(entry);
   const a = document.createElement('a');
   a.href = dataUrl;
-  a.download = `Facture_${entry.prenom}_${entry.nom}_${entry.dateCommande}.jpg`;
+  a.download = `Facture_${((entry.prenom||'')+'_'+(entry.nom||'')).replace(/^_+|_+$/g,'') || 'vente'}_${entry.dateCommande}.jpg`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   showToast('Image téléchargée ✓ Joignez-la à votre SMS ou mail');
 }
@@ -1478,7 +1473,7 @@ function showConfirmation(entry){
   document.getElementById('formCard').style.display = 'none';
   document.getElementById('confirmCard').style.display = 'block';
 
-  let html = `<div class="rline"><b>${entry.prenom} ${entry.nom}</b><span>${formatDateFR(entry.dateCommande)}</span></div><hr>`;
+  let html = `<div class="rline"><b>${nomAff(entry)}</b><span>${formatDateFR(entry.dateCommande)}</span></div><hr>`;
   entry.lines.forEach(l=>{ html += `<div class="rline"><span>${l.prod} ×${l.qte}</span><span>${eur(l.total)}</span></div>`; });
   html += `<hr>`;
   html += `<div class="rline"><span>Sous-total</span><span>${eur(entry.total)}</span></div>`;
@@ -1561,6 +1556,7 @@ function resetForm(){
 }
 
 function setToday(){ document.getElementById('f-date').value = new Date().toISOString().slice(0,10); }
+function nomAff(o){ return ((o.prenom||'') + ' ' + (o.nom||'')).trim() || 'Client(e) de passage'; }
 function formatDateFR(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
 
 /* ---- Admin ---- */
@@ -1648,7 +1644,7 @@ function renderList(){
     <div class="order-row">
       <button class="del" onclick="deleteOrder('${o.id}')">Suppr.</button>
       <div class="oamount">${eur(o.montantTotal)}</div>
-      <div class="oname">${o.prenom} ${o.nom}</div>
+      <div class="oname">${nomAff(o)}</div>
       <div class="ometa">
         📞 ${o.tel}${o.email ? ' · ✉️ ' + o.email : ''}<br>
         ${o.lines.map(l=>`${l.prod} ×${l.qte}`).join(', ')}<br>
@@ -1675,7 +1671,7 @@ function exportCSV(){
   if(filtered.length === 0){ showToast('Aucune commande à exporter'); return; }
   const headers = ['Nom Client','Sté / Lieu de rencontre','Sexe','Date de naissance','Adresse','Complément','CP','VILLE','Téléphone','Mail','Carte de Fidélité','Date de commande','Produits commandés','Total commande','Remise promo (3/6)','Remise fidélité','Frais de port','Montant total','Règlement','Envoi souhaité','Notes'];
   const rows = filtered.slice().sort((a,b)=> new Date(a.dateCommande)-new Date(b.dateCommande)).map(o => [
-    `${o.nom.toUpperCase()} ${o.prenom}`,
+    (`${(o.nom||'').toUpperCase()} ${o.prenom||''}`.trim() || 'Client(e) de passage'),
     o.event || o.societe,
     o.civ === 'M' ? 'M' : 'F',
     o.naissance ? formatDateFR(o.naissance) : '',
