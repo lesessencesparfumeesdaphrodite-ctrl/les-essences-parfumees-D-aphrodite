@@ -292,6 +292,7 @@ var STX=['Nouvelle','Validée','En cours de commande','Expédiée','À récupér
 var REG=['','Virement','Carte bancaire','Espèces','PayPal','Chèque','Wero','Autre'];
 var all=[],msgC='',OUV={},FN={};
 function typeCmd(o){
+  if(o.origine==='Salon'){var mt=/Type : ([^·]+)/.exec(o.note||'');return mt?mt[1].trim():'Type à préciser';}
   if(o.src==='X'||o.origine==='EXHALESSENCE')return 'EXHALESSENCE';
   var L=String(o.produits||'').split('\n').map(function(x){return x.trim();}).filter(Boolean),e=0,c=0;
   L.forEach(function(l){var cr=/\([^)]*,[^)]*\)/.test(l)||/\b(pot|vase|bougeoir|porte[- ]bougie|plateau|vide[- ]poche|bo[iî]te|coupelle|organisateur|cr[ée]ation|hybride|sillon)\b/i.test(l);if(cr&&!/\b(P|R[ée]f\.?)\s?\d{2,3}[A-Z]?\b|\bml\b/i.test(l))c++;else e++;});
@@ -325,6 +326,7 @@ function bodyX(o,i){
   +'<button class="petit" onclick="saveX('+i+')">Enregistrer</button></div>';
 }
 
+var TYPES=['EXHALESSENCE','Création','Autre','Mixte'];
 var PAYS=['CB','Espèces','PayPal','Virement','Wero'];
 function lieuDe(o){var m=/Marché\/Salon : ([^·]+)/.exec(o.note||'');var v=m?m[1].trim():'';return /^non précisé$/i.test(v)?'':v;}
 function payDe(o){if(o.paiement)return String(o.paiement).trim();var m=/Règlement : ([^·]+)/.exec(o.note||'');return m?m[1].trim():'';}
@@ -343,6 +345,7 @@ function bodySalon(o,i){
   +'<div class="champs"><div><label for="v-da-'+i+'">Date</label><input id="v-da-'+i+'" type="date" value="'+esc(o.date)+'"></div><div><label for="v-li-'+i+'">Lieu</label><input id="v-li-'+i+'" type="text" value="'+esc(lieuDe(o))+'" placeholder="Ex : Marché de Noël"></div></div>'
   +'<div class="champs"><div><label for="v-to-'+i+'">Montant total (€)</label><input id="v-to-'+i+'" type="text" inputmode="decimal" value="'+esc(String(o.total).replace('.',','))+'"></div><div><label for="v-pa-'+i+'">Paiement</label><select id="v-pa-'+i+'"><option value="">—</option>'+opts.map(function(p){return'<option'+(p===pay?' selected':'')+'>'+esc(p)+'</option>';}).join('')+'</select></div></div>'
   +'<div class="champs"><div style="flex:1 1 100%"><label for="v-pd-'+i+'">Ce qui a été commandé</label><textarea id="v-pd-'+i+'">'+esc(o.produits)+'</textarea></div></div>'
+  +'<div class="champs"><div><label for="v-ty-'+i+'">Type de vente</label><select id="v-ty-'+i+'"><option value="">À préciser</option>'+TYPES.map(function(t){return'<option'+(t===typeCmd(o)?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div></div>'
   +'<div class="champs"><div><label for="v-st-'+i+'">Statut</label><select id="v-st-'+i+'">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div><div><label for="v-su-'+i+'">N° de suivi</label><input id="v-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
   +(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
   +'<button class="petit" onclick="saveV('+i+')">Enregistrer les corrections</button>'
@@ -350,16 +353,38 @@ function bodySalon(o,i){
   +(sms?'<a class="petit sec2" href="'+esc(sms)+'">SMS</a>':'')+(ml?'<a class="petit sec2" href="'+esc(ml)+'">E-mail</a>':'')+'<button class="petit sec2" type="button" onclick="copRec('+i+',this)">Copier le message</button>'
   +(sms||ml?'':'<p>Pas de téléphone ni d\'e-mail : ajoutez-les ci-dessus pour envoyer directement.</p>')+'</div></div>';
 }
-function saveV(i){var o=all[i];if(!o)return;var b={id:o.id,prenom:g('v-pr-'+i),nom:g('v-no-'+i),mail:g('v-ma-'+i),tel:g('v-te-'+i),date:g('v-da-'+i),lieu:g('v-li-'+i),total:g('v-to-'+i),paiement:g('v-pa-'+i),produits:g('v-pd-'+i),statut:g('v-st-'+i),suivi:g('v-su-'+i)};
+function saveV(i){var o=all[i];if(!o)return;var b={id:o.id,prenom:g('v-pr-'+i),nom:g('v-no-'+i),mail:g('v-ma-'+i),tel:g('v-te-'+i),date:g('v-da-'+i),lieu:g('v-li-'+i),total:g('v-to-'+i),paiement:g('v-pa-'+i),type:g('v-ty-'+i),produits:g('v-pd-'+i),statut:g('v-st-'+i),suivi:g('v-su-'+i)};
   msgC='Enregistrement…';dessiner();
   post('/app/vente-maj',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Corrections enregistrées.'+(r.j.mailsEnvoyes?' Le mail est parti au/à la client(e).':'');chargerCmd();});}
+var ajout=null;
+function ouvrirAjout(lieu,date){ajout={lieu:lieu||'',date:date||new Date().toISOString().slice(0,10)};dessiner();setTimeout(function(){var e=document.getElementById('aj-pr');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});}},50);}
+function fermerAjout(){ajout=null;dessiner();}
+function formAjout(){
+  if(!ajout)return'';
+  var lieux=[],vu={};all.forEach(function(o){if(o.origine==='Salon'){var l=lieuDe(o);if(l&&!vu[l.toLowerCase()]){vu[l.toLowerCase()]=1;lieux.push(l);}}});
+  return '<div class="vente"><div class="vh"><b>Ajouter une vente</b><small>Rien n\'est obligatoire</small></div><div class="champs" style="padding:10px">'
+  +'<div><label for="aj-li">Marché / lieu</label><input id="aj-li" type="text" list="aj-lx" value="'+esc(ajout.lieu)+'" placeholder="Ex : Marché de Noël Chasse-sur-Rhône"><datalist id="aj-lx">'+lieux.map(function(l){return'<option value="'+esc(l)+'">';}).join('')+'</datalist></div>'
+  +'<div><label for="aj-da">Date</label><input id="aj-da" type="date" value="'+esc(ajout.date)+'"></div>'
+  +'<div><label for="aj-pr">Prénom</label><input id="aj-pr" type="text"></div><div><label for="aj-no">Nom</label><input id="aj-no" type="text"></div>'
+  +'<div><label for="aj-ma">E-mail</label><input id="aj-ma" type="email"></div><div><label for="aj-te">Téléphone</label><input id="aj-te" type="tel"></div>'
+  +'<div><label for="aj-to">Montant total (€)</label><input id="aj-to" type="text" inputmode="decimal"></div>'
+  +'<div><label for="aj-pa">Paiement</label><select id="aj-pa"><option value="">—</option>'+PAYS.map(function(p){return'<option>'+p+'</option>';}).join('')+'</select></div>'
+  +'<div><label for="aj-ty">Type de vente</label><select id="aj-ty"><option value="">À préciser</option>'+TYPES.map(function(t){return'<option>'+t+'</option>';}).join('')+'</select></div>'
+  +'<div style="flex:1 1 100%"><label for="aj-pd">Ce qui a été vendu</label><textarea id="aj-pd" placeholder="Ex : 2 petits parfums"></textarea></div></div>'
+  +'<div style="padding:0 10px 12px"><button class="petit" onclick="saveAjout()">Ajouter cette vente</button> <button class="petit sec2" type="button" onclick="fermerAjout()">Annuler</button></div></div>';
+}
+function saveAjout(){var b={lieu:g('aj-li'),date:g('aj-da'),prenom:g('aj-pr'),nom:g('aj-no'),mail:g('aj-ma'),tel:g('aj-te'),total:g('aj-to'),paiement:g('aj-pa'),type:g('aj-ty'),produits:g('aj-pd')};
+  msgC='Ajout en cours…';post('/app/vente-ajout',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}ajout=null;msgC='✅ Vente ajoutée.';chargerCmd();});}
+function renommer(k){var G=GR[k];if(!G)return;var v=g('rn-'+k).trim();if(!v)return;msgC='Changement du nom du marché…';dessiner();var n=0,bad=0;
+  G.rows.reduce(function(p,i){return p.then(function(){return post('/app/vente-maj',{id:all[i].id,lieu:v}).then(function(r){if(r.ok)n++;else bad++;});});},Promise.resolve()).then(function(){msgC=bad?'⚠️ '+n+' vente(s) changée(s), '+bad+' erreur(s).':'✅ Marché renommé ('+n+' vente'+(n>1?'s':'')+').';chargerCmd();});}
+var GR={};
 var MM=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 function dessiner(){
-  var h='',an='',mo='',n={},items=[],grp={};
+  var h='',an='',mo='',n={},items=[],grp={};GR={};
   all.forEach(function(o,i){
     var d=o.date||'';
     if(o.origine==='Salon'){var l=lieuDe(o),k=(l?l.toLowerCase().replace(/\s+/g,' '):'~'+d)+'|'+d.slice(0,4),G=grp[k];
-      if(!G){G=grp[k]={g:1,lieu:l,date:d,min:d,max:d,rows:[]};items.push(G);}
+      if(!G){G=grp[k]=GR['g'+items.length]={g:1,key:'g'+items.length,lieu:l,date:d,min:d,max:d,rows:[]};items.push(G);}
       G.rows.push(i);if(d>G.max)G.max=d;if(d&&(!G.min||d<G.min))G.min=d;}
     else items.push({i:i,date:d});
   });
@@ -377,9 +402,10 @@ function dessiner(){
     var chips=Object.keys(pay).sort(function(a,b){return a.localeCompare(b,'fr');}).map(function(p){return '<div class="pc"><b>'+esc(p)+'</b> '+eu(Math.round(pay[p].t*100)/100)+'<small>'+pay[p].n+' vente'+(pay[p].n>1?'s':'')+'</small></div>';}).join('');
     h+='<div class="vente"><div class="vh"><b>Vente — '+esc(it.lieu||'Marché / salon')+'</b><small>'+esc(dates)+' · '+it.rows.length+' vente'+(it.rows.length>1?'s':'')+'</small></div>'
       +'<div class="vr">'+it.rows.map(function(i){return ligne(all[i],i);}).join('')+'</div>'
+      +'<div class="envoi" style="padding:8px 12px;margin:0"><label for="rn-'+it.key+'" style="font-size:12.5px">Changer le nom du marché (pour toutes ces ventes)</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><input id="rn-'+it.key+'" type="text" value="'+esc(it.lieu)+'" style="flex:1 1 180px;padding:9px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font-size:15px"><button class="petit" onclick="renommer(\''+it.key+'\')">Renommer</button></div><button class="petit sec2" style="margin-top:8px" onclick="ouvrirAjout(GR[\''+it.key+'\'].lieu,GR[\''+it.key+'\'].max)">➕ Ajouter une vente à ce marché</button></div>'
       +'<div class="vh"><b>Total</b><b>'+eu(Math.round(tot*100)/100)+'</b></div><div class="vpay">'+chips+'</div></div>';
   });
-  document.getElementById('liste').innerHTML='<h2 class="titre-g">Commandes</h2>'+(msgC?'<p class="msg" role="status">'+esc(msgC)+'</p>':'')+(all.length||msgC?'':'<p class="vide">Aucune commande pour le moment.</p>')+'<div class="boite" style="padding:6px 8px">'+h+'</div><button class="petit sec" onclick="aller(\'commandes\')">↻ Actualiser</button>';
+  document.getElementById('liste').innerHTML='<h2 class="titre-g">Commandes</h2><button class="petit" onclick="ouvrirAjout()">➕ Ajouter une vente</button>'+formAjout()+(msgC?'<p class="msg" role="status">'+esc(msgC)+'</p>':'')+(all.length||msgC?'':'<p class="vide">Aucune commande pour le moment.</p>')+'<div class="boite" style="padding:6px 8px">'+h+'</div><button class="petit sec" onclick="aller(\'commandes\')">↻ Actualiser</button>';
 }
 function g(id){return document.getElementById(id).value;}
 function saveS(i){var o=all[i];if(!o)return;msgC='Enregistrement…';dessiner();
