@@ -348,7 +348,7 @@ function bodySalon(o,i){
   +'<div class="champs"><div><label for="v-ty-'+i+'">Type de vente</label><select id="v-ty-'+i+'"><option value="">À préciser</option>'+TYPES.map(function(t){return'<option'+(t===typeCmd(o)?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div></div>'
   +'<div class="champs"><div><label for="v-st-'+i+'">Statut</label><select id="v-st-'+i+'">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div><div><label for="v-su-'+i+'">N° de suivi</label><input id="v-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
   +(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
-  +'<button class="petit" onclick="saveV('+i+')">Enregistrer les corrections</button>'
+  +'<button class="petit" onclick="saveV('+i+')">Enregistrer les corrections</button> <button class="petit sec2" type="button" onclick="imprimerBon('+i+')">🖨️ Imprimer ce bon / PDF</button>'
   +'<div class="envoi"><p>Envoyer le récapitulatif de la commande (enregistrez d\'abord vos corrections) :</p>'
   +(sms?'<a class="petit sec2" href="'+esc(sms)+'">SMS</a>':'')+(ml?'<a class="petit sec2" href="'+esc(ml)+'">E-mail</a>':'')+'<button class="petit sec2" type="button" onclick="copRec('+i+',this)">Copier le message</button>'
   +(sms||ml?'':'<p>Pas de téléphone ni d\'e-mail : ajoutez-les ci-dessus pour envoyer directement.</p>')+'</div></div>';
@@ -356,6 +356,35 @@ function bodySalon(o,i){
 function saveV(i){var o=all[i];if(!o)return;var b={id:o.id,prenom:g('v-pr-'+i),nom:g('v-no-'+i),mail:g('v-ma-'+i),tel:g('v-te-'+i),date:g('v-da-'+i),lieu:g('v-li-'+i),total:g('v-to-'+i),paiement:g('v-pa-'+i),type:g('v-ty-'+i),produits:g('v-pd-'+i),statut:g('v-st-'+i),suivi:g('v-su-'+i)};
   msgC='Enregistrement…';dessiner();
   post('/app/vente-maj',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Corrections enregistrées.'+(r.j.mailsEnvoyes?' Le mail est parti au/à la client(e).':'');chargerCmd();});}
+
+/* ---- impression / PDF : justificatifs ---- */
+function lignesProd(o){return String(o.produits||'').split('\n').map(function(x){return x.replace(/\s—\s✔ Remis\s*$/,'').replace(/\s—\s⏳ À COMMANDER\s*$/,' (à commander)').trim();}).filter(Boolean);}
+function nomComplet(o){var p=scinder(o.nom);var n=((p[0]||'')+' '+(p[1]||'')).trim();return n||'Client(e) de passage';}
+function docRecap(titre,sous,idx,total){
+  var tot=0,pay={};
+  var tr=idx.map(function(i){var o=all[i],t=+o.total||0,p=payDe(o)||'Non précisé';tot+=t;pay[p]=(pay[p]||0)+t;
+    return '<tr><td>'+esc(dfr(o.date))+'<br><small>'+esc(o.numero||'')+'</small></td><td><b>'+esc(nomComplet(o))+'</b></td><td>'+lignesProd(o).map(esc).join('<br>')+'</td><td>'+esc(p)+'</td><td class="r">'+eu(t)+'</td></tr>';}).join('');
+  var pl=Object.keys(pay).sort(function(a,b){return a.localeCompare(b,'fr');}).map(function(p){return esc(p)+' : <b>'+eu(Math.round(pay[p]*100)/100)+'</b>';}).join(' &nbsp;·&nbsp; ');
+  return '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>'+esc(titre)+'</title><style>'
+  +'body{font-family:Arial,Helvetica,sans-serif;color:#2b2118;margin:24px;font-size:13px}h1{font-size:20px;margin:0 0 2px;color:#8A432C}h2{font-size:15px;margin:0 0 10px;font-weight:normal}'
+  +'.ent{border-bottom:2px solid #C9A96E;padding-bottom:8px;margin-bottom:14px;font-size:12px;color:#5a4a3c}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cdbfa8;padding:6px 8px;vertical-align:top;text-align:left}th{background:#f3eadb}.r{text-align:right;white-space:nowrap}small{color:#7a6a5c}'
+  +'.tot{margin-top:14px;font-size:14px}.pay{margin-top:6px;font-size:13px}.pied{margin-top:22px;font-size:11px;color:#7a6a5c}@media print{body{margin:10mm}tr{page-break-inside:avoid}}</style></head><body>'
+  +'<div class="ent"><b>Les Essences Parfumées d\'Aphrodite</b> · 69540 Irigny · SIRET 890 868 656 00012<br>06 22 41 84 63 · les.essences.parfumees.d.aphrodite@gmail.com</div>'
+  +'<h1>'+esc(titre)+'</h1><h2>'+esc(sous)+'</h2>'
+  +'<table><thead><tr><th>Date / N°</th><th>Client(e)</th><th>Ce qui a été commandé</th><th>Paiement</th><th class="r">Total</th></tr></thead><tbody>'+tr+'</tbody></table>'
+  +'<div class="tot">Nombre de ventes : <b>'+idx.length+'</b> &nbsp;·&nbsp; <b>Total : '+eu(Math.round(tot*100)/100)+'</b></div><div class="pay">Par moyen de paiement : '+pl+'</div>'
+  +'<div class="pied">Document édité le '+esc(dfr(new Date().toISOString().slice(0,10)))+' depuis l\'espace de gestion — récapitulatif des ventes enregistrées.</div></body></html>';
+}
+function lancerImpression(html){
+  var w=window.open('','_blank');
+  if(!w){msgC='⚠️ Votre navigateur a bloqué la fenêtre. Autorisez les fenêtres pour ce site, puis recommencez.';dessiner();return;}
+  w.document.open();w.document.write(html);w.document.close();w.focus();
+  setTimeout(function(){try{w.print();}catch(e){}},500);
+}
+function imprimerMarche(k){var G=GR[k];if(!G)return;var idx=G.rows.slice().sort(function(a,b){return (all[a].date||'').localeCompare(all[b].date||'')||String(all[a].numero).localeCompare(String(all[b].numero));});
+  var d=G.min&&G.min!==G.max?dfr(G.min)+' au '+dfr(G.max):dfr(G.max);
+  lancerImpression(docRecap('Récapitulatif des ventes — '+(G.lieu||'Marché / salon'),'Lieu : '+(G.lieu||'non précisé')+' · Date : '+d,idx));}
+function imprimerBon(i){var o=all[i];if(!o)return;lancerImpression(docRecap('Bon de commande '+(o.numero||''),'Lieu : '+(lieuDe(o)||'non précisé')+' · Date : '+dfr(o.date),[i]));}
 var ajout=null;
 function ouvrirAjout(lieu,date){ajout={lieu:lieu||'',date:date||new Date().toISOString().slice(0,10)};dessiner();setTimeout(function(){var e=document.getElementById('aj-pr');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});}},50);}
 function fermerAjout(){ajout=null;dessiner();}
@@ -402,7 +431,7 @@ function dessiner(){
     var chips=Object.keys(pay).sort(function(a,b){return a.localeCompare(b,'fr');}).map(function(p){return '<div class="pc"><b>'+esc(p)+'</b> '+eu(Math.round(pay[p].t*100)/100)+'<small>'+pay[p].n+' vente'+(pay[p].n>1?'s':'')+'</small></div>';}).join('');
     h+='<div class="vente"><div class="vh"><b>Vente — '+esc(it.lieu||'Marché / salon')+'</b><small>'+esc(dates)+' · '+it.rows.length+' vente'+(it.rows.length>1?'s':'')+'</small></div>'
       +'<div class="vr">'+it.rows.map(function(i){return ligne(all[i],i);}).join('')+'</div>'
-      +'<div class="envoi" style="padding:8px 12px;margin:0"><label for="rn-'+it.key+'" style="font-size:12.5px">Changer le nom du marché (pour toutes ces ventes)</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><input id="rn-'+it.key+'" type="text" value="'+esc(it.lieu)+'" style="flex:1 1 180px;padding:9px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font-size:15px"><button class="petit" onclick="renommer(\''+it.key+'\')">Renommer</button></div><button class="petit sec2" style="margin-top:8px" onclick="ouvrirAjout(GR[\''+it.key+'\'].lieu,GR[\''+it.key+'\'].max)">➕ Ajouter une vente à ce marché</button></div>'
+      +'<div class="envoi" style="padding:8px 12px;margin:0"><label for="rn-'+it.key+'" style="font-size:12.5px">Changer le nom du marché (pour toutes ces ventes)</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><input id="rn-'+it.key+'" type="text" value="'+esc(it.lieu)+'" style="flex:1 1 180px;padding:9px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font-size:15px"><button class="petit" onclick="renommer(\''+it.key+'\')">Renommer</button></div><button class="petit" style="margin-top:8px" onclick="imprimerMarche(\''+it.key+'\')">🖨️ Récapitulatif du marché (imprimer / PDF)</button> <button class="petit sec2" style="margin-top:8px" onclick="ouvrirAjout(GR[\''+it.key+'\'].lieu,GR[\''+it.key+'\'].max)">➕ Ajouter une vente à ce marché</button></div>'
       +'<div class="vh"><b>Total</b><b>'+eu(Math.round(tot*100)/100)+'</b></div><div class="vpay">'+chips+'</div></div>';
   });
   document.getElementById('liste').innerHTML='<h2 class="titre-g">Commandes</h2><button class="petit" onclick="ouvrirAjout()">➕ Ajouter une vente</button>'+formAjout()+(msgC?'<p class="msg" role="status">'+esc(msgC)+'</p>':'')+(all.length||msgC?'':'<p class="vide">Aucune commande pour le moment.</p>')+'<div class="boite" style="padding:6px 8px">'+h+'</div><button class="petit sec" onclick="aller(\'commandes\')">↻ Actualiser</button>';
