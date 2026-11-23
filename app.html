@@ -330,7 +330,7 @@ var TYPES=['EXHALESSENCE','Création','Autre','Mixte'];
 var PAYS=['CB','Espèces','PayPal','Virement','Wero'];
 function lieuDe(o){var m=/Marché\/Salon : ([^·]+)/.exec(o.note||'');var v=m?m[1].trim():'';return /^non précisé$/i.test(v)?'':v;}
 function payDe(o){if(o.paiement)return String(o.paiement).trim();var m=/Règlement : ([^·]+)/.exec(o.note||'');return m?m[1].trim():'';}
-function scinder(n){n=String(n||'').trim();if(!n||/^Client\(e\) de passage$/i.test(n))return['',''];var t=n.split(/\s+/),k=-1;for(var j=1;j<t.length;j++){if(t[j].length>1&&t[j]===t[j].toUpperCase()&&/[A-ZÀ-Ý]/.test(t[j])){k=j;break;}}if(k<0)return[t[0],t.slice(1).join(' ')];return[t.slice(0,k).join(' '),t.slice(k).join(' ')];}
+function scinder(n){n=String(n||'').trim();if(!n||/^Client\(e\) de passage$/i.test(n))return['',''];var t=n.split(/\s+/),k=-1;var MJ=function(x){return x.length>1&&x===x.toUpperCase()&&/[A-ZÀ-Ý]/.test(x);};if(t.length>1&&MJ(t[0])&&!t.slice(1).some(MJ))return[t.slice(1).join(' '),t[0]];for(var j=1;j<t.length;j++){if(t[j].length>1&&t[j]===t[j].toUpperCase()&&/[A-ZÀ-Ý]/.test(t[j])){k=j;break;}}if(k<0)return[t[0],t.slice(1).join(' ')];return[t.slice(0,k).join(' '),t.slice(k).join(' ')];}
 function recap(o){
   var pn=scinder(o.nom)[0],l=lieuDe(o),pr=String(o.produits||'').split('\n').map(function(x){return x.replace(/\s—\s✔ Remis\s*$/,'').replace(/\s—\s⏳ À COMMANDER\s*$/,' (à commander)').trim();}).filter(Boolean).join('\n');
   return 'Bonjour'+(pn?' '+pn:'')+',\n\nMerci pour votre commande'+(l?' à l\'occasion du « '+l+' »':' lors du marché')+' le '+dfr(o.date)+' chez Les Essences Parfumées d\'Aphrodite.\n\n'+pr+'\n\nTotal : '+String(o.total).replace('.',',')+' €'+(payDe(o)?' ('+payDe(o)+')':'')+'\n\nMerci pour votre confiance, à très vite ! 🤍';
