@@ -602,9 +602,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <label class="civ-opt"><input type="radio" name="civ" value="Mme" checked> Mme</label>
       </div>
       <div class="row2">
-        <div class="field"><label>Prénom <small style="font-weight:400">(facultatif)</small></label><input type="text" id="f-prenom"></div>
-        <div class="field"><label>Nom <small style="font-weight:400">(facultatif)</small></label><input type="text" id="f-nom"></div>
+        <div class="field"><label>Prénom <small style="font-weight:400">(facultatif)</small></label><input type="text" id="f-prenom" autocomplete="off"></div>
+        <div class="field"><label>Nom <small style="font-weight:400">(facultatif)</small></label><input type="text" id="f-nom" autocomplete="off"></div>
       </div>
+      <div id="sugNom" role="listbox" aria-label="Clientes déjà connues" style="display:none;margin:0 0 10px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;background:#fff;overflow:hidden"></div>
       <div class="field"><label>Société (le cas échéant)</label><input type="text" id="f-societe"></div>
       <div class="field"><label>Adresse</label><input type="text" id="f-adresse" placeholder="N°, rue"></div>
       <div class="field"><label>Complément</label><input type="text" id="f-complement" placeholder="Bât, appt, étage…"></div>
@@ -629,7 +630,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 
     <div class="card">
       <p class="section-label">Fidélité (1 € dépensé, hors port = 1 point)</p>
-      <div class="pts-box" id="ptsBox">Saisissez l'e-mail ou le téléphone : les points de la cliente s'affichent ici.</div>
+            <div class="pts-box" id="ptsBox">Saisissez l'e-mail ou le téléphone : les points de la cliente s'affichent ici.</div>
       <div id="bonChips"></div>
       <div style="display:none"><select id="f-fidelite" onchange="onFideliteChange()"><option value="Points" data-pct="0">Points</option></select><div id="fidelitePct"></div></div>
     </div>
@@ -1727,6 +1728,41 @@ async function chercherClienteVrai(){
     chips.appendChild(el);
   });
 }
+
+
+/* ---- retrouver une cliente en tapant son nom ---- */
+let sugTimer = null, sugN = 0;
+function chercherParNom(){ clearTimeout(sugTimer); sugTimer = setTimeout(chercherParNomVrai, 350); }
+async function chercherParNomVrai(){
+  const box = document.getElementById('sugNom');
+  const q = (document.getElementById('f-nom').value.trim() || document.getElementById('f-prenom').value.trim());
+  if(q.length < 2 || !getCode()){ box.style.display = 'none'; return; }
+  const n = ++sugN;
+  const r = await relais('/salon/clients-nom', { q });
+  if(n !== sugN) return;
+  const L = (r.ok && r.j && r.j.clients) || [];
+  const pr = document.getElementById('f-prenom').value.trim().toLowerCase(), nm = document.getElementById('f-nom').value.trim().toLowerCase();
+  const F = L.filter(c => (!pr || c.prenom.toLowerCase().includes(pr)) && (!nm || c.nom.toLowerCase().includes(nm) || c.prenom.toLowerCase().includes(nm)));
+  box.innerHTML = '';
+  if(!F.length){ box.style.display = 'none'; return; }
+  const t = document.createElement('div'); t.textContent = 'Clientes déjà connues : touchez pour la choisir'; t.style.cssText = 'padding:6px 12px;font-size:12px;color:#7a6a5c;background:#faf5ee'; box.appendChild(t);
+  F.forEach(c => {
+    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role','option');
+    b.style.cssText = 'display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-top:1px solid #eee;background:#fff;font-size:15px;cursor:pointer';
+    b.textContent = (c.prenom + ' ' + c.nom).trim() + (c.ville ? ' · ' + c.ville : '') + (c.tel ? ' · ' + c.tel : '');
+    b.onclick = () => {
+      const set = (id, v) => { const el = document.getElementById(id); if(el) el.value = v || ''; };
+      set('f-prenom', c.prenom); set('f-nom', c.nom); set('f-email', c.mail); set('f-tel', c.tel); set('f-adresse', c.adresse); set('f-cp', c.cp); set('f-ville', c.ville); set('f-naissance', c.naissance);
+      box.style.display = 'none';
+      showToast('Cliente retrouvée : vérifiez ses coordonnées avec elle ✓');
+      chercherClienteVrai();
+    };
+    box.appendChild(b);
+  });
+  box.style.display = 'block';
+}
+document.getElementById('f-nom').addEventListener('input', chercherParNom);
+document.getElementById('f-prenom').addEventListener('input', chercherParNom);
 
 /* ---- envoi vers Notion (avec reprise s'il n'y a pas de réseau) ---- */
 let syncEnCours = false;
