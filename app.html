@@ -146,6 +146,25 @@ button.siteweb{width:100%;font:inherit;font-weight:700;cursor:pointer}
 .cal-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0}.cal-nav b{min-width:140px;text-align:center;font-family:Georgia,serif;font-size:18px;color:#4a2f2b}.cal{background:#fff;border:1px solid #e3d6bd;border-radius:12px;overflow:hidden;margin-bottom:12px}.cal-h{display:grid;grid-template-columns:repeat(7,1fr);font-size:10.5px;color:#9a8a7a;text-align:center;padding:5px 0;border-bottom:1px solid #eee3cf}.cal-g{display:grid;grid-template-columns:repeat(7,1fr)}.cj{min-height:66px;border-right:1px solid #f0e6d3;border-bottom:1px solid #f0e6d3;padding:2px;display:flex;flex-direction:column;gap:2px;min-width:0}.cj:nth-child(7n){border-right:0}.cj.we{background:#f9f7f3}.cj.hors .nj{color:#c8bda9}.nj{align-self:flex-end;font-size:11px;color:#6b5b4b;min-width:18px;height:18px;line-height:18px;text-align:center}.nj.auj{background:#e0584b;color:#fff;border-radius:50%}.ev{display:block;font-size:9.5px;font-weight:700;border-radius:5px;padding:1px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#3a2a22}.ev.fil{background:#FFE08A}.ev.cli{background:#BFE3DC}.jour.cli{background:#BFE3DC!important}.jour.fil{background:#FFE08A!important}
 .etat-sel{flex:none;border-radius:12px;border:1.5px solid #bbb;padding:6px 8px;font:inherit;font-size:13px;font-weight:700;min-height:40px}.etat-sel.es-p{background:#eceae6;color:#555}.etat-sel.es-c{background:#d6e6fb;color:#1c4f8c;border-color:#7fb0ea}.etat-sel.es-t{background:#d5efdc;color:#1d6a35;border-color:#7cc790}.cj .ev{white-space:normal;word-break:break-word;line-height:1.15}
 button.ev{border:0;width:100%;text-align:left;font-family:inherit;cursor:pointer}
+/* ---- v3 : couleurs du site, accueil plus clair ---- */
+.barre{background:#FDFAF7;color:var(--brun);border-bottom:1px solid rgba(201,169,110,.55);box-shadow:0 2px 14px rgba(44,24,16,.05)}
+.barre img{border:1.5px solid var(--or)}
+.barre h1{font-family:Georgia,'Times New Roman',serif;color:var(--terra);font-weight:700}
+.barre button{border:1.5px solid var(--terra);color:var(--terra);background:#fff}
+.hdr{margin:0 0 14px}
+.hdr .logo{display:block;width:92px;height:92px;margin:0 auto 12px;border-radius:50%;border:2.5px solid var(--or);box-shadow:0 4px 14px rgba(44,24,16,.12);background:#fff}
+.infos{background:var(--sable);border:1.5px solid rgba(201,169,110,.6);border-radius:18px;padding:12px 14px;text-align:center}
+.hdate{font-size:16px;color:var(--brun);text-transform:none}.hdate b{font-weight:700}
+.hmeteo{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:6px 0 0;font-size:14.5px;color:var(--gris)}
+.hmeteo svg{width:22px;height:22px;flex:none;color:var(--terra)}.hmeteo .sep{opacity:.6}
+.a1{background:linear-gradient(135deg,#8A432C 0%,#9E5238 45%,#C27B5B 100%)}.a2{background:linear-gradient(135deg,#A9633F 0%,#BE7A57 45%,#DDA283 100%)}.act b,.act small{text-shadow:0 1px 2px rgba(60,25,10,.35)}
+a.nv{text-decoration:none}
+.nvs2{margin-top:12px}
+.nv.large{grid-column:1/-1;justify-content:center;min-height:68px}
+.nv.large img{width:44px;height:44px;flex:none;object-fit:contain}
+.nv.large .tx{display:flex;flex-direction:column;text-align:left}
+.nv.large small{font-weight:400;font-size:12.5px;color:var(--gris)}
+@media(max-width:380px){.nvs2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -169,7 +188,7 @@ button.ev{border:0;width:100%;text-align:left;font-family:inherit;cursor:pointer
 <main>
   <section class="vue on" id="v-accueil">
     <div class="accueil">
-      <div class="hdr"><p class="hdate" id="hdate"></p><p class="hmeteo" id="hmeteo"></p></div>
+      <div class="hdr"><img class="logo" src="logo.webp" width="92" height="92" alt="Les Essences Parfumées d'Aphrodite"><div class="infos"><p class="hdate" id="hdate"></p><p class="hmeteo" id="hmeteo"></p></div></div>
       <div class="nvs">
         <button class="nv" onclick="aller('clients')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Client(e)s</span></button>
         <button class="nv" onclick="aller('bon')"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span>Bon de commande</span></button>
@@ -182,9 +201,11 @@ button.ev{border:0;width:100%;text-align:left;font-family:inherit;cursor:pointer
         <button class="act a1" onclick="aller('creations')"><b>Créations plâtre résine</b><small>Calcul, tarifs, URSSAF</small></button>
         <button class="act a2" onclick="aller('exha')"><b>EXHALESSENCE</b><small>Filleul(e)s, suivi financier</small></button>
       </div>
-      <a class="siteweb" href="https://www.lesessencesparfumeesdaphrodite.fr/" target="_blank" rel="noopener">Site internet</a>
-      <button class="siteweb" type="button" onclick="aller('guide')">Guide olfactif</button>
-      <a class="siteweb" href="https://www.exhalessence.fr/" target="_blank" rel="noopener">Site EXHALESSENCE</a>
+      <div class="nvs nvs2">
+        <button class="nv" type="button" onclick="aller('guide')"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v3h-4zM8.5 6h7v2.5l1.5 2V20a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-9.5l1.5-2z"/><path d="M7 13h10"/></svg><span>Guide olfactif</span></button>
+        <a class="nv" href="https://www.lesessencesparfumeesdaphrodite.fr/" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span>Site internet</span></a>
+        <a class="nv large" href="https://www.exhalessence.fr/" target="_blank" rel="noopener"><img alt="" src="data:image/png;base64,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"><span class="tx"><span>Site EXHALESSENCE</span><small>Votre espace distributeur</small></span></a>
+      </div>
     </div>
   </section>
   <section class="vue" id="v-creations"><div class="hub">
@@ -314,19 +335,25 @@ if('serviceWorker' in navigator){navigator.serviceWorker.register('sw-salon.js')
 <script src="app-espace.js"></script>
 <script>
 (function(){
-function hor(){var d=new Date();var e=document.getElementById('hdate');if(e)e.textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
+function hor(){var d=new Date();var e=document.getElementById('hdate');if(e){var t=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});e.innerHTML='';e.appendChild(document.createTextNode(t.charAt(0).toUpperCase()+t.slice(1)+' · '));var b=document.createElement('b');b.textContent=d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});e.appendChild(b);}}
 hor();setInterval(hor,20000);
-var MET=function(c){return c===0?['☀️','ciel dégagé']:c<=2?['🌤️','peu nuageux']:c===3?['☁️','nuageux']:c<=48?['🌫️','brouillard']:c<=57?['🌦️','bruine']:c<=67?['🌧️','pluie']:c<=77?['❄️','neige']:c<=82?['🌧️','averses']:['⛈️','orage'];};
-function aff(t){var e=document.getElementById('hmeteo');if(e)e.textContent=t;}
+var WI={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>',cloud:'<path d="M7 18a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 8.5 4.8 4.8 0 0 1 17 18z"/>',csun:'<circle cx="8" cy="8" r="2.8"/><path d="M8 2.5v1.2M2.5 8h1.2M4 4l.9.9M12 4l-.9.9"/><path d="M9 20a3.5 3.5 0 0 1-.4-7A4.8 4.8 0 0 1 18 12a4 4 0 0 1-.5 8z"/>',fog:'<path d="M4 9h16M3 13h18M6 17h12"/>',rain:'<path d="M7 15a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 5.5 4.8 4.8 0 0 1 17 15z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>',snow:'<path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/>',storm:'<path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 4.5 4.8 4.8 0 0 1 17 14z"/><path d="M12.5 14l-2.5 4h3l-2 4"/>'};
+function sv(p){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
+var PIN='<path d="M12 22.2C9 18.6 4.8 13.8 4.8 9.4a7.2 7.2 0 0 1 14.4 0c0 4.4-4.2 9.2-7.2 12.8z"/><circle cx="12" cy="9.4" r="2.9"/>';
+var MET=function(c){return c===0?['sun','ciel dégagé']:c<=2?['csun','peu nuageux']:c===3?['cloud','nuageux']:c<=48?['fog','brouillard']:c<=57?['rain','bruine']:c<=67?['rain','pluie']:c<=77?['snow','neige']:c<=82?['rain','averses']:['storm','orage'];};
+function aff(o,vieux){var e=document.getElementById('hmeteo');if(!e||!o)return;e.innerHTML='';
+  function sp(c,t){var x=document.createElement('span');if(c)x.className=c;x.textContent=t;return x;}
+  if(o.v){var p=document.createElement('span');p.innerHTML=sv(PIN);e.appendChild(p.firstChild);e.appendChild(sp('',o.v));e.appendChild(sp('sep','·'));}
+  var w=document.createElement('span');w.innerHTML=sv(WI[o.k]||WI.cloud);e.appendChild(w.firstChild);e.appendChild(sp('',o.t+'°C · '+o.m+(vieux?' (dernière mesure)':'')));}
 window.demarrerAccueil=function(){
-  try{var c=JSON.parse(localStorage.getItem('aph-meteo')||'null');if(c)aff(c.t+' (dernière mesure)');}catch(e){}
+  try{var c=JSON.parse(localStorage.getItem('aph-meteo')||'null');if(c&&c.k)aff(c,true);}catch(e){}
   if(!navigator.geolocation||!navigator.onLine)return;
   navigator.geolocation.getCurrentPosition(function(p){
     var la=p.coords.latitude,lo=p.coords.longitude;
     Promise.all([fetch('https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&current=temperature_2m,weather_code&timezone=auto').then(function(r){return r.json();}),
       fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+la+'&longitude='+lo+'&localityLanguage=fr').then(function(r){return r.json();}).catch(function(){return{};})]).then(function(x){
       var cu=x[0].current,m=MET(cu.weather_code),v=x[1].city||x[1].locality||'';
-      var t=m[0]+' '+Math.round(cu.temperature_2m)+'° · '+m[1]+(v?' · '+v:'');aff(t);try{localStorage.setItem('aph-meteo',JSON.stringify({t:t}));}catch(e){}
+      var o={v:v,k:m[0],t:Math.round(cu.temperature_2m),m:m[1]};aff(o,false);try{localStorage.setItem('aph-meteo',JSON.stringify(o));}catch(e){}
     }).catch(function(){});
   },function(){},{timeout:8000,maximumAge:3600000});
 };
