@@ -349,10 +349,15 @@ function bodySalon(o,i){
   +'<div class="champs"><div><label for="v-st-'+i+'">Statut</label><select id="v-st-'+i+'">'+STAT.map(function(s){return'<option'+(s===o.statut?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div><div><label for="v-su-'+i+'">N° de suivi</label><input id="v-su-'+i+'" type="text" value="'+esc(o.suivi)+'"></div></div>'
   +(o.note?'<div class="p">📝 '+esc(o.note)+'</div>':'')
   +'<button class="petit" onclick="saveV('+i+')">Enregistrer les corrections</button> <button class="petit sec2" type="button" onclick="imprimerBon('+i+')">🖨️ Imprimer ce bon / PDF</button>'
+  +' <button class="petit sec2" type="button" id="ann-'+i+'" onclick="annulerV('+i+')">🗑️ Annuler cette vente</button>'
   +'<div class="envoi"><p>Envoyer le récapitulatif de la commande (enregistrez d\'abord vos corrections) :</p>'
   +(sms?'<a class="petit sec2" href="'+esc(sms)+'">SMS</a>':'')+(ml?'<a class="petit sec2" href="'+esc(ml)+'">E-mail</a>':'')+'<button class="petit sec2" type="button" onclick="copRec('+i+',this)">Copier le message</button>'
   +(sms||ml?'':'<p>Pas de téléphone ni d\'e-mail : ajoutez-les ci-dessus pour envoyer directement.</p>')+'</div></div>';
 }
+function annulerV(i){var o=all[i];if(!o)return;var b=document.getElementById('ann-'+i);if(!b)return;
+  if(b.getAttribute('data-ok')!=='1'){b.setAttribute('data-ok','1');b.textContent='⚠️ Confirmer : supprimer cette vente';setTimeout(function(){if(b){b.removeAttribute('data-ok');b.textContent='🗑️ Annuler cette vente';}},7000);return;}
+  msgC='Annulation en cours…';dessiner();
+  post('/app/vente-annuler',{id:o.id}).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Vente annulée et retirée de Notion.'+(r.j.pointsRetires?' '+r.j.pointsRetires+' point(s) de fidélité retiré(s).':'');chargerCmd();});}
 function saveV(i){var o=all[i];if(!o)return;var b={id:o.id,prenom:g('v-pr-'+i),nom:g('v-no-'+i),mail:g('v-ma-'+i),tel:g('v-te-'+i),date:g('v-da-'+i),lieu:g('v-li-'+i),total:g('v-to-'+i),paiement:g('v-pa-'+i),type:g('v-ty-'+i),produits:g('v-pd-'+i),statut:g('v-st-'+i),suivi:g('v-su-'+i)};
   msgC='Enregistrement…';dessiner();
   post('/app/vente-maj',b).then(function(r){if(!r.ok){msgC='⚠️ '+(r.j.erreur||'Erreur');dessiner();return;}msgC='✅ Corrections enregistrées.'+(r.j.mailsEnvoyes?' Le mail est parti au/à la client(e).':'');chargerCmd();});}

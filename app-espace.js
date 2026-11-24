@@ -118,6 +118,7 @@ function ficheCl(c){
    +ligne('⭐','Points fidélité','<b>'+c.points+' pts</b>')
    +ligne('📍','Rencontrée','<span>'+esc(c.lieu)+'</span>')+ligne('🌸','Univers',esc(c.univers==='CREA'?'Créations':c.univers==='EXHA'?'EXHALESSENCE':''))
    +ligne('💻','Compte sur le site',c.compte?'✅ créé'+(c.compteLe?' le '+esc(new Date(c.compteLe+'T12:00:00').toLocaleDateString('fr-FR')):''):'❌ pas encore')
+   +(c.compte?'':'<div class="fl" style="display:block"><button class="btn-l" type="button" onclick="ESPACE.lienCompte(\''+c.id+'\')">🔗 Lien pour créer son compte</button><div id="lc-box"></div></div>')
    +ligne('🧴','Diagnostic peau',esc(c.diag))+ligne('📦','BOX testée',esc(c.box))+ligne('🎁','Cadeau',esc(c.cadeau));
   if(c.remarque)h+='<div class="rem">📝 '+esc(c.remarque)+'</div>';
   h+='</div>';
@@ -145,6 +146,23 @@ ESPACE.enregCl=function(id){
     $('e-msg').textContent=r.differe?'📴 Gardé sur le téléphone, envoyé à Notion dès que le réseau revient.':'✅ Enregistré dans Notion.';
   });
 };
+ESPACE.lienCompte=function(id){
+  var c=CL.filter(function(x){return x.id===id;})[0];if(!c)return;var bx=$('lc-box');if(!bx)return;
+  bx.innerHTML='<p class="msg">Création du lien…</p>';
+  post('/app/lien-compte',{id:id}).then(function(r){
+    if(!r.ok){bx.innerHTML='<p class="msg">⚠️ '+esc(r.j.erreur||(r.st===0?'Pas de réseau : réessayez quand la connexion revient.':'Erreur'))+'</p>';return;}
+    if(r.j.dejaCompte){bx.innerHTML='<p class="msg">✅ Son compte est déjà créé.</p>';return;}
+    var mots=String(c.nom||'').split(/\s+/).filter(Boolean),pre=mots.filter(function(w){return w!==w.toUpperCase();})[0]||mots[1]||'';
+    var txt='Bonjour'+(pre?' '+pre:'')+',\n\nVoici votre lien pour finir de créer votre compte et choisir votre mot de passe (vos informations sont déjà préremplies, et vous gardez vos points de fidélité) :\n'+r.j.lien+'\n\nÀ très bientôt !\nZulay';
+    bx.innerHTML='<label for="lc-txt" style="display:block;font-size:12.5px;font-weight:700;margin:10px 0 4px">Message à envoyer (vous pouvez le modifier)</label><textarea id="lc-txt" rows="9" style="width:100%;padding:10px;border:1.5px solid rgba(201,169,110,.7);border-radius:12px;font:inherit">'+esc(txt)+'</textarea>'
+      +'<div class="envoi">'+(c.tel?'<button class="petit sec2" type="button" onclick="ESPACE.lcSms(\''+id+'\')">SMS</button>':'')+(c.mail?'<button class="petit sec2" type="button" onclick="ESPACE.lcMail(\''+id+'\')">E-mail</button>':'')+'<button class="petit sec2" type="button" onclick="ESPACE.lcCopie(this)">Copier le message</button></div>'
+      +'<p class="vide">Ce lien reste valable 120 jours.</p>';
+  });
+};
+ESPACE.lcSms=function(id){var c=CL.filter(function(x){return x.id===id;})[0];var t=$('lc-txt');if(!c||!t)return;location.href='sms:'+encodeURIComponent(String(c.tel).replace(/\s/g,''))+'?body='+encodeURIComponent(t.value);};
+ESPACE.lcMail=function(id){var c=CL.filter(function(x){return x.id===id;})[0];var t=$('lc-txt');if(!c||!t)return;location.href='mailto:'+encodeURIComponent(c.mail)+'?subject='+encodeURIComponent('Votre compte - Les Essences Parfumées d\'Aphrodite')+'&body='+encodeURIComponent(t.value);};
+ESPACE.lcCopie=function(b){var t=$('lc-txt');if(!t)return;t.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value).then(function(){b.textContent='✅ Copié';},function(){b.textContent=ok?'✅ Copié':'Sélectionné : copiez à la main';});}else{b.textContent=ok?'✅ Copié':'Sélectionné : copiez à la main';}};
 ESPACE.editBox=function(){var b=$('edit-box');if(!b)return;b.hidden=!b.hidden;if(!b.hidden)b.scrollIntoView({behavior:'smooth',block:'start'});};
 ESPACE.bonPour=function(id){
   var c=CL.filter(function(x){return x.id===id;})[0];if(!c)return;
