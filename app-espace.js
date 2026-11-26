@@ -383,7 +383,8 @@ function tabEdit(type,an,fnAn){
   if(type==='comm')cls='c5';if(type==='marge')cls='c5';if(type==='urssaf')cls='c6';
   h+='<div class="boite"><h3>Année '+an+'</h3><p class="vide">Touche une case pour écrire ou corriger : c\'est enregistré tout de suite dans Notion.</p><div class="tab"><div class="th '+cls+'"><span>Mois</span>'+labs[type].map(function(l){return '<span>'+l+'</span>';}).join('')+'</div>';
   var T=[0,0,0,0,0,0];
-  for(m=0;m<12;m++){
+  for(var mi=0;mi<12;mi++){
+    m=type==='comm'?11-mi:mi;
     r=fv(type,an,m);var cells='';
     if(type==='marge'){T[0]+=r[0]||0;T[1]+=r[1]||0;T[2]+=r[2]||0;cells=cel(type,an,m,0,r[0],'Ventes')+cel(type,an,m,1,r[1],'Achats')+'<span>'+eur((r[0]||0)-(r[1]||0))+'</span>'+cel(type,an,m,2,r[2],'Commission');}
     else{r.forEach(function(v,i){T[i]+=v||0;cells+=cel(type,an,m,i,v,labs[type][i]);});}
