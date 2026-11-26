@@ -2623,6 +2623,142 @@ window.rafraichirListeCommande = function(){
   } else tot.style.display = 'none';
 };
 
+/* ===== Offres du bon de commande : choix de l'offre + calcul automatique (une seule offre à la fois, jamais cumulées) ===== */
+/* Pour ajouter une offre plus tard : ajouter un bloc dans OFFRES (dates debut/fin au format AAAA-MM-JJTHH, heure de Paris, fin comprise). */
+var CATALOGUE_BF = [
+  {nom:'Secret Box spéciale make-up — 49€', prix:49, type:'unique'},
+  {nom:'Secret Box n°3 : soins — 29€', prix:29, type:'unique'},
+  {nom:'Trousse capillaire Rituel — 39€', prix:39, type:'unique'}
+];
+GAMMES.push(['bfexh','Offre Black Friday EXHALESSENCE','Offre Black Friday',function(){ return CATALOGUE_BF; }]);
+var BF_REFS = ['127','131','133','136','137','138','141','144','147','153','155','156A','160A','167','171','178','221','226','232','234','239'];
+function parisCle(){
+  var d = window.__BF_NOW ? new Date(window.__BF_NOW) : new Date(), o = {};
+  new Intl.DateTimeFormat('fr-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(d).forEach(function(x){ o[x.type] = x.value; });
+  return o.year + '-' + o.month + '-' + o.day + 'T' + o.hour;
+}
+function tagsLigne(l){
+  var gg = GAMMES.filter(function(x){ return x[0] === l.gk; })[0], p = gg ? gg[3]()[l.pi] : null, n = p ? base(p.nom) : '';
+  var m = /^(\d+[A-Z]?)\s*-/.exec(l.ref || '');
+  return {
+    fixe: l.gk === 'bfexh',
+    home: l.gk === 'maison',
+    gel: n === 'Gel Douche (200ml)',
+    coffret: l.gk === 'maison' && n === 'Coffret Home miniature',
+    classique: (n === 'Eau de Parfum Rechargeable (75ml)' || n === 'Recharge Eau de Parfum (125ml)') && !!m && BF_REFS.indexOf(m[1]) > -1
+  };
+}
+function unites(){
+  var u = [];
+  cart.forEach(function(l, i){ var t = tagsLigne(l); for(var k = 0; k < l.qte; k++) u.push({i:i, prix:l.prix, t:t, rem:0}); });
+  return u;
+}
+function arr(x){ return Math.round(x * 100) / 100; }
+function parRang(liste, rang){ /* liste triée du plus cher au moins cher ; rang(pos) donne le taux de remise du produit à cette place (1 = premier) */
+  liste.slice().sort(function(a, b){ return b.prix - a.prix; }).forEach(function(x, k){ x.rem = arr(x.prix * (rang(k + 1) || 0)); });
+}
+var OFFRES = [
+  {id:'exh-bf', titre:'Black Friday EXHALESSENCE', debut:'2026-11-27T06', fin:'2026-11-29T23',
+   regle:'Gels douche 200 ml et coffrets Home : −20 % pour 2, −30 % à partir de 3. Eaux de parfum Classique en promotion : −25 %.',
+   calc:function(u){
+     var gels = u.filter(function(x){ return x.t.gel; }), cof = u.filter(function(x){ return x.t.coffret; });
+     [gels, cof].forEach(function(g){ var r = g.length >= 3 ? 0.3 : g.length >= 2 ? 0.2 : 0; g.forEach(function(x){ x.rem = arr(x.prix * r); }); });
+     u.filter(function(x){ return x.t.classique; }).forEach(function(x){ x.rem = arr(x.prix * 0.25); });
+   }},
+  {id:'bf-zulay', titre:'Black Friday : le 2ème à −50 %', debut:'2026-11-27T06', fin:'2026-11-27T23',
+   regle:'1 produit acheté, le 2ème à −50 % (gamme Home : le 2ème à −20 %).',
+   calc:function(u){
+     var ok = u.filter(function(x){ return !x.t.fixe; });
+     parRang(ok.filter(function(x){ return !x.t.home; }), function(k){ return k % 2 === 0 ? 0.5 : 0; });
+     parRang(ok.filter(function(x){ return x.t.home; }), function(k){ return k % 2 === 0 ? 0.2 : 0; });
+   }},
+  {id:'noel', titre:'Offre de Noël', debut:'2026-11-15T00', fin:'2026-12-31T23',
+   regle:'2 produits achetés, le 3ème à −50 % ou 5 achetés, le 6ème offert (le plus avantageux est appliqué) ; gamme Home : le 3ème à −25 %.',
+   calc:function(u){
+     var ok = u.filter(function(x){ return !x.t.fixe; }), nh = ok.filter(function(x){ return !x.t.home; });
+     parRang(nh, function(k){ return k % 3 === 0 ? 0.5 : 0; });
+     var a = nh.reduce(function(s, x){ return s + x.rem; }, 0);
+     parRang(nh, function(k){ return k % 6 === 0 ? 1 : 0; });
+     var b = nh.reduce(function(s, x){ return s + x.rem; }, 0);
+     if(a >= b) parRang(nh, function(k){ return k % 3 === 0 ? 0.5 : 0; });
+     parRang(ok.filter(function(x){ return x.t.home; }), function(k){ return k % 3 === 0 ? 0.25 : 0; });
+   }}
+];
+var offreChoix = 'auto', offreSel = null, offreSig = '';
+function offresActives(){ var c = parisCle(); return OFFRES.filter(function(o){ return o.debut <= c && c <= o.fin; }); }
+function evaluer(o){
+  var u = unites(); u.forEach(function(x){ x.rem = 0; }); o.calc(u);
+  return {o:o, u:u, total:arr(u.reduce(function(s, x){ return s + x.rem; }, 0))};
+}
+function calculOffre(){
+  var act = offresActives(), res = act.map(evaluer), best = null;
+  res.forEach(function(r){ if(r.total > 0 && (!best || r.total > best.total)) best = r; });
+  var sel = null;
+  if(offreChoix === 'auto') sel = best;
+  else if(offreChoix !== 'none') sel = res.filter(function(r){ return r.o.id === offreChoix; })[0] || null;
+  if(offreChoix !== 'auto' && offreChoix !== 'none' && !sel) offreChoix = 'auto';
+  offreSel = sel && sel.total > 0 ? sel : null;
+  return {act:act, res:res, sel:offreSel};
+}
+function gammeOffre(){
+  var on = offresActives().some(function(o){ return o.id === 'exh-bf'; }), opt = sg.querySelector('option[value="bfexh"]');
+  if(on && !opt){ var o = document.createElement('option'); o.value = 'bfexh'; o.textContent = 'Offre Black Friday EXHALESSENCE'; sg.appendChild(o); }
+  if(!on && opt){
+    if(sg.value === 'bfexh'){ sg.value = ''; fillProduits(); }
+    opt.remove();
+  }
+  if(!on){
+    var n0 = cart.length; cart = cart.filter(function(l){ return l.gk !== 'bfexh'; });
+    if(cart.length !== n0){ var mz = $('exhc-form-msg'); if(mz){ mz.style.display = 'block'; mz.style.color = '#ff6b6b'; mz.textContent = 'Les produits de l\'offre Black Friday EXHALESSENCE ne sont plus disponibles : ils ont été retirés de votre commande.'; } return true; }
+  }
+  return false;
+}
+var offBloc = null;
+function dessinerOffres(c){
+  var tot = $('exhc-total'); if(!tot) return;
+  if(!offBloc){
+    offBloc = document.createElement('fieldset'); offBloc.id = 'bc-offres'; offBloc.hidden = true;
+    offBloc.style.cssText = 'border:1px solid rgba(201,169,110,.5);border-radius:12px;padding:10px 12px;margin:8px 0 0;background:rgba(201,169,110,.08)';
+    tot.parentNode.insertBefore(offBloc, tot);
+    offBloc.addEventListener('change', function(e){ if(e.target && e.target.name === 'bc-offre'){ offreChoix = e.target.value; window.rafraichirListeCommande(); } });
+  }
+  var show = c.act.length > 0 && cart.length > 0;
+  offBloc.hidden = !show;
+  if(!show){ offreSig = ''; offBloc.innerHTML = ''; return; }
+  var selId = c.sel ? c.sel.o.id : 'none', h = '<legend style="font-size:13px;font-weight:700;color:var(--brun);padding:0 6px">Mes offres du moment <span style="font-weight:400">(une seule offre à la fois)</span></legend>';
+  function opt(id, titre, sous, coche){
+    return '<label style="display:flex;gap:8px;align-items:flex-start;padding:6px 2px;font-size:13px;color:var(--brun);cursor:pointer"><input type="radio" name="bc-offre" value="' + id + '"' + (coche ? ' checked' : '') + ' style="margin-top:3px;flex:0 0 auto"/><span><strong>' + esc(titre) + '</strong>' + (sous ? '<br><span style="font-size:12px;color:var(--gris)">' + sous + '</span>' : '') + '</span></label>';
+  }
+  h += opt('none', 'Aucune offre', '', selId === 'none');
+  c.res.forEach(function(r){
+    var s = esc(r.o.regle) + '<br>' + (r.total > 0 ? '<strong style="color:var(--terra)">Vous économisez ' + eur(r.total) + '</strong>' : 'Ne s\'applique pas à votre commande pour le moment.');
+    h += opt(r.o.id, r.o.titre, s, selId === r.o.id);
+  });
+  if(h !== offreSig){ offreSig = h; offBloc.innerHTML = h; }
+}
+function lignesOffre(){
+  var c = calculOffre(), parLigne = {};
+  if(c.sel) c.sel.u.forEach(function(x){ parLigne[x.i] = (parLigne[x.i] || 0) + x.rem; });
+  return cart.map(function(l, i){
+    var r = arr(parLigne[i] || 0), p = arr(l.prix * l.qte - r);
+    return {categorie:l.categorie, nom:l.nom + (l.qte > 1 ? ' × ' + l.qte : '') + (r > 0 ? ' (offre −' + eur(r) + ')' : ''), prix:p};
+  });
+}
+var _rl = window.rafraichirListeCommande;
+window.rafraichirListeCommande = function(){
+  var retire = gammeOffre();
+  _rl();
+  var c = calculOffre();
+  dessinerOffres(c);
+  var tot = $('exhc-total');
+  if(c.sel && tot && cart.length){
+    var lv = document.querySelector('input[name="exhc-livraison"]:checked'), port = lv && lv.value === 'Point relais' ? 6 : 0;
+    var st = cart.reduce(function(a, l){ return a + l.prix * l.qte; }, 0);
+    tot.innerHTML = 'Sous-total produits : ' + eur(st) + '<br>Offre « ' + esc(c.sel.o.titre) + ' » : −' + eur(c.sel.total) + '<br>' + (port ? 'Frais de port (point relais) : ' + eur(port) + '<br>' : '') + 'Total estimé : ' + eur(arr(st - c.sel.total + port));
+  }
+};
+setInterval(function(){ try{ var ov = $('exh-commande-overlay'); if(ov && getComputedStyle(ov).display !== 'none') window.rafraichirListeCommande(); }catch(e){} }, 60000);
+
 /* date de naissance : on tape les chiffres, les / se mettent tout seuls (pas de calendrier) */
 var nai = $('exhc-naissance');
 if(nai){
@@ -2654,10 +2790,13 @@ window.envoyerExhCommande = async function(){
   if(!cl){ if(mz){ mz.style.display = 'block'; mz.style.color = '#ff6b6b'; mz.textContent = 'Pour envoyer votre commande, créez d\'abord votre compte avec le bouton « Créer mon compte » ci-dessus (ou connectez-vous si vous en avez déjà un).'; } return; }
   if(!nai || !nai.value.trim()){ if(mz){ mz.style.display = 'block'; mz.style.color = '#ff6b6b'; mz.textContent = 'Merci d\'indiquer votre date de naissance.'; } return; }
   if(!naissanceOk()){ var mm = $('exhc-form-msg'); if(mm){ mm.style.display = 'block'; mm.style.color = '#ff6b6b'; mm.textContent = 'Date de naissance : merci de l\'écrire sous la forme jour/mois/année, par exemple 24/10/1977.'; } return; }
-  exhcLignesCommande = cart.map(function(l){ return {categorie:l.categorie, nom:l.nom + (l.qte > 1 ? ' × ' + l.qte : ''), prix:l.prix * l.qte}; });
+  exhcLignesCommande = lignesOffre();
+  var offEnvoi = offreSel, zn = $('exhc-commande-notes'), znV = zn ? zn.value : '';
+  if(offEnvoi && zn) zn.value = 'Offre appliquée : ' + offEnvoi.o.titre + ' (−' + eur(offEnvoi.total) + ').' + (znV ? '\n' + znV : '');
   var ad = $('exhc-adresse'), cp = $('exhc-complement'), av = ad ? ad.value : '', comb = null;
   if(ad && cp && cp.value.trim() && av.trim()){ comb = av.trim() + ' (' + cp.value.trim() + ')'; ad.value = comb; }
   await _envoi();
+  if(zn && offEnvoi){ if(exhcLignesCommande.length === 0) offreChoix = 'auto'; else zn.value = znV; }
   if(ad && comb !== null && ad.value === comb) ad.value = av;
   if(cp && $('exhc-prenom') && !$('exhc-prenom').value) cp.value = '';
   if(exhcLignesCommande.length === 0){ cart = []; window.rafraichirListeCommande(); }
