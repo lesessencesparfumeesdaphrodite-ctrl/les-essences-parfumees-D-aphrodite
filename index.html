@@ -3688,7 +3688,7 @@ function maj(){try{var t=paris(),dt=t.date,h=t.h;
  var noel=(dt>="2026-11-14"&&dt<="2026-12-31");
  show("exh-exh-actif",exh);show("exh-exh-vide",!exh);
  show("exh-bf-offre",bf);show("exh-offres-noel",noel);show("exh-mes-actif",bf||noel);show("exh-mes-vide",!(bf||noel))}catch(e){}}
-maj();setInterval(maj,60000)})();
+maj();document.addEventListener("DOMContentLoaded",maj);window.addEventListener("load",maj);window.addEventListener("pageshow",maj);document.addEventListener("visibilitychange",maj);setInterval(maj,30000)})();
 
 (function(){
 "use strict";
