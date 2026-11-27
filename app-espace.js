@@ -266,6 +266,24 @@ ESPACE.ouvrirAn=function(i){
   if(!f){var z=$('an-zone');if(z&&!z.querySelector('.msg.intr'))z.insertAdjacentHTML('afterbegin','<p class="msg intr" style="color:#a3301f">Fiche de '+esc(a.nom)+' introuvable (le nom n\'est pas écrit pareil dans les fiches).</p>');return;}
   if(fil){fiPend=f.id;fiQ='';fiFrom=true;aller('filleules');}else{CL=liste;clPend=f.id;clFrom='anniv';aller('clients');}
 };
+ESPACE.annivSms=function(i){
+  var a=AN[i];if(!a)return;
+  var src=cacheGet('clients'),liste=src&&src.d?src.d.clients||[]:[],k=cleN(a.nom),c=null;
+  for(var n=0;n<liste.length;n++){if(cleN(liste[n].nom)===k){c=liste[n];break;}}
+  if(!c||!c.tel){var z=$('an-zone');if(z&&!z.querySelector('.msg.intr'))z.insertAdjacentHTML('afterbegin','<p class="msg intr" style="color:#a3301f">Fiche ou téléphone de '+esc(a.nom)+' introuvable.</p>');return;}
+  var pre=chipNom(a.nom).split(' ')[0],auj=new Date().toISOString().slice(0,10);
+  var bons=(c.bons||[]).filter(function(b){return b.type==='Anniversaire'&&!b.utilise&&(!b.fin||b.fin>=auj);}).sort(function(x,y){return (y.fin||'').localeCompare(x.fin||'');});
+  var bon=bons[0]||null,tel=String(c.tel).replace(/\s/g,'');
+  function partir(tok){
+    var q='?p='+encodeURIComponent(pre)+(bon?'&c='+encodeURIComponent(bon.code)+(bon.fin?'&f='+encodeURIComponent(bon.fin.split('-').reverse().join('/')):''):'')+(tok?'&t='+encodeURIComponent(tok):'');
+    var txt='Joyeux anniversaire '+pre+' ! J\'ai une petite surprise pour vous : https://www.lesessencesparfumeesdaphrodite.fr/carte-anniversaire.html'+q+'\nZulay, Les Essences Parfumées d\'Aphrodite';
+    location.href='sms:'+tel+'?&body='+encodeURIComponent(txt);
+  }
+  post('/app/lien-compte',{id:c.id}).then(function(r){
+    var tok='';if(r&&r.ok&&r.j&&r.j.lien){var m=String(r.j.lien).match(/#creer=(.+)$/);if(m)tok=m[1];}
+    partir(tok);
+  },function(){partir('');});
+};
 ESPACE.moisAn=function(d){var t=new Date();if(!ANM)ANM={y:t.getFullYear(),m:t.getMonth()};if(d===0){ANM={y:t.getFullYear(),m:t.getMonth()};}else{var x=new Date(ANM.y,ANM.m+d,1);ANM={y:x.getFullYear(),m:x.getMonth()};}dessAn();};
 function dessAn(){
   var z=$('an-zone');if(!z)return;var now=new Date();now.setHours(0,0,0,0);
@@ -281,8 +299,8 @@ function dessAn(){
   }
   var L=[];Object.keys(jm).forEach(function(d){jm[d].forEach(function(a){L.push({a:a,j:+d});});});L.sort(function(x,y){return x.j-y.j;});
   var liste=L.map(function(x){var a=x.a,pr=chipNom(a.nom).split(' ')[0],c=contactAn(a),dt=new Date(Y,M,x.j),n=Math.round((dt-now)/864e5);
-    var btn=c.k==='mail'?'<a class="mini" href="mailto:'+esc(c.mail)+'?subject='+encodeURIComponent('Joyeux anniversaire !')+'&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':c.k==='sms'?'<a class="mini" href="sms:'+esc(c.tel.replace(/\s/g,''))+'?&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':'';
-    return '<div class="tache" style="cursor:pointer" onclick="if(!event.target.closest(\'a\'))ESPACE.ouvrirAn('+a._i+')"><div class="jour '+(a.qui==='Filleule'?'fil':'cli')+(n===0?' auj':'')+'">'+(n===0?'🎉':x.j+'<small>'+dt.toLocaleDateString('fr-FR',{month:'short'})+'</small>')+'</div><div style="flex:1"><div class="tn">'+esc(a.nom)+'</div><div class="ts">'+(a.qui==='Filleule'?'Filleul(e)':'Client(e)')+(n>=0?' · '+(n===0?'aujourd\'hui':n===1?'demain':'dans '+n+' jours'):'')+'</div><div class="ts"><span class="stat">'+c.t+'</span></div></div>'+btn+'</div>';}).join('');
+    var btn=c.k==='mail'?'<a class="mini" href="mailto:'+esc(c.mail)+'?subject='+encodeURIComponent('Joyeux anniversaire !')+'&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':c.k==='sms'?(a.qui==='Filleule'?'<a class="mini" href="sms:'+esc(c.tel.replace(/\s/g,''))+'?&body='+encodeURIComponent('Joyeux anniversaire '+pr+' ! Je pense à vous. Zulay — Les Essences Parfumées d\'Aphrodite')+'">Envoyer</a>':'<button class="mini" type="button" onclick="ESPACE.annivSms('+a._i+')">Envoyer</button>'):'';
+    return '<div class="tache" style="cursor:pointer" onclick="if(!event.target.closest(\'a,button\'))ESPACE.ouvrirAn('+a._i+')"><div class="jour '+(a.qui==='Filleule'?'fil':'cli')+(n===0?' auj':'')+'">'+(n===0?'🎉':x.j+'<small>'+dt.toLocaleDateString('fr-FR',{month:'short'})+'</small>')+'</div><div style="flex:1"><div class="tn">'+esc(a.nom)+'</div><div class="ts">'+(a.qui==='Filleule'?'Filleul(e)':'Client(e)')+(n>=0?' · '+(n===0?'aujourd\'hui':n===1?'demain':'dans '+n+' jours'):'')+'</div><div class="ts"><span class="stat">'+c.t+'</span></div></div>'+btn+'</div>';}).join('');
   z.innerHTML='<h2 class="titre-g">Anniversaires</h2>'+etat(anInfo)+(AN.length?'':'<p class="msg" style="color:#a3301f">Notion n\'a renvoyé aucun anniversaire (0 reçu). Dis-le moi : la connexion de l\'appli à cette base est à vérifier.</p>')
    +'<div class="cal-nav"><button class="mini" onclick="ESPACE.moisAn(-1)" aria-label="Mois précédent">‹</button><b>'+MOIS[M]+' '+Y+'</b><button class="mini" onclick="ESPACE.moisAn(1)" aria-label="Mois suivant">›</button><button class="mini" onclick="ESPACE.moisAn(0)">Aujourd\'hui</button></div>'
    +'<div class="chips"><span class="ev cli" style="font-size:12px">Client(e)s</span><span class="ev fil" style="font-size:12px">Filleul(e)s</span></div>'
