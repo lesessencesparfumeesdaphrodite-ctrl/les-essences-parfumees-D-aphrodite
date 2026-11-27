@@ -276,7 +276,7 @@ ESPACE.annivSms=function(i){
   var bon=bons[0]||null,tel=String(c.tel).replace(/\s/g,'');
   function partir(tok){
     var q='?p='+encodeURIComponent(pre)+(bon?'&c='+encodeURIComponent(bon.code)+(bon.fin?'&f='+encodeURIComponent(bon.fin.split('-').reverse().join('/')):''):'')+(tok?'&t='+encodeURIComponent(tok):'');
-    var txt='Joyeux anniversaire '+pre+' ! J\'ai une petite surprise pour vous : https://www.lesessencesparfumeesdaphrodite.fr/carte-anniversaire.html'+q+'\nZulay, Les Essences Parfumées d\'Aphrodite';
+    var txt='Joyeux anniversaire '+pre+',\n\nJ\'ai une petite surprise pour vous :\nhttps://www.lesessencesparfumeesdaphrodite.fr/carte-anniversaire.html'+q+'\n\nJe vous souhaite une excellente journée.';
     location.href='sms:'+tel+'?&body='+encodeURIComponent(txt);
   }
   post('/app/lien-compte',{id:c.id}).then(function(r){
